@@ -1,0 +1,61 @@
+#include "VertexBuffer.h"
+
+namespace Ablaze
+{
+
+	const VertexBuffer* VertexBuffer::s_CurrentlyBound = nullptr;
+
+	VertexBuffer::VertexBuffer(int64 byteSize, BufferUsage usage) : Buffer(byteSize, BufferTarget::ArrayBuffer, usage),
+		m_Layout()
+	{
+		
+	}
+
+	VertexBuffer::VertexBuffer(void* buffer, int64 numBytes, BufferUsage usage) : Buffer(buffer, numBytes, BufferTarget::ArrayBuffer, usage),
+		m_Layout()
+	{
+		
+	}
+
+	void VertexBuffer::Bind() const
+	{
+		if (s_CurrentlyBound != this)
+		{
+			Buffer::Bind();
+			s_CurrentlyBound = this;
+		}
+	}
+
+	void VertexBuffer::Unbind() const
+	{
+		Buffer::Unbind();
+	}
+
+	const BufferLayout& VertexBuffer::GetLayout() const
+	{
+		return m_Layout;
+	}
+
+	BufferLayout& VertexBuffer::GetLayout()
+	{
+		return m_Layout;
+	}
+
+	void VertexBuffer::SetLayout(const BufferLayout& layout)
+	{
+		m_Layout = layout;
+		ApplyLayout();
+	}
+
+	void VertexBuffer::ApplyLayout() const
+	{
+		Bind();
+		for (VertexAttrib attrib : m_Layout.GetAllAttributes())
+		{
+			glVertexAttribPointer(attrib.index, attrib.count, attrib.dataType, attrib.normalized, m_Layout.GetStride(), (const GLvoid*)attrib.offset);
+			glEnableVertexAttribArray(attrib.index);
+		}
+		Unbind();
+	}
+
+}
