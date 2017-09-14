@@ -11,6 +11,11 @@ namespace Ablaze
 		glGenVertexArrays(1, &m_Id);
 	}
 
+	VertexArray::VertexArray(IndexBuffer* indexBuffer, RenderMode renderMode) : VertexArray(renderMode)
+	{
+		SetIndexBuffer(indexBuffer);
+	}
+
 	VertexArray::~VertexArray()
 	{
 		for (VertexBuffer* vertexBuffer : m_VertexBuffers)

@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Application\Input\Input.h"
 
 namespace Ablaze
 {
@@ -11,6 +12,7 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLEW");
 			return false;
 		}
+		Input::Initialise();
 		return true;
 	}
 

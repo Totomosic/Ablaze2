@@ -5,14 +5,14 @@ namespace Ablaze
 
 	const VertexBuffer* VertexBuffer::s_CurrentlyBound = nullptr;
 
-	VertexBuffer::VertexBuffer(int64 byteSize, BufferUsage usage) : Buffer(byteSize, BufferTarget::ArrayBuffer, usage),
-		m_Layout()
+	VertexBuffer::VertexBuffer(int64 byteSize, const BufferLayout& layout, BufferUsage usage) : Buffer(byteSize, BufferTarget::ArrayBuffer, usage),
+		m_Layout(layout)
 	{
 		
 	}
 
-	VertexBuffer::VertexBuffer(void* buffer, int64 numBytes, BufferUsage usage) : Buffer(buffer, numBytes, BufferTarget::ArrayBuffer, usage),
-		m_Layout()
+	VertexBuffer::VertexBuffer(void* buffer, int64 numBytes, const BufferLayout& layout, BufferUsage usage) : Buffer(buffer, numBytes, BufferTarget::ArrayBuffer, usage),
+		m_Layout(layout)
 	{
 		
 	}

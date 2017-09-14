@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Graphics\__Graphics__.h"
 #include "System\Engine.h"
+#include "Input\Input.h"
 
 namespace Ablaze
 {
@@ -27,11 +28,12 @@ namespace Ablaze
 
 		virtual void Init(); // Called once
 		virtual void Tick(); // Called once per second
-		virtual void Update(); // Called 60 times per second
+		virtual void Update(); // Called as many times as possible
 		virtual void Render(); // Called as many times as possible
 
 	private:
 		void Run();
+		void ClearEvents();
 
 	};
 

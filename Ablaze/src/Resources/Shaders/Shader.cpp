@@ -9,6 +9,12 @@ namespace Ablaze
 		m_UniformLocations(), m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
 	{
 		Create();
+
+		Handle vertexFile = FileSystem::Open(vertexPath, OpenMode::Read);
+		Handle fragmentFile = FileSystem::Open(fragmentPath, OpenMode::Read);
+		BuildProgram(FileSystem::ReadText(vertexFile), FileSystem::ReadText(fragmentFile));
+		FileSystem::Close(vertexFile);
+		FileSystem::Close(fragmentFile);
 	}
 
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),

@@ -3,6 +3,8 @@
 namespace Ablaze
 {
 
+	const IndexBuffer* IndexBuffer::s_CurrentlyBound = nullptr;
+
 	IndexBuffer::IndexBuffer(int64 byteSize, BufferUsage usage) : Buffer(byteSize, BufferTarget::ElementBuffer, usage)
 	{
 

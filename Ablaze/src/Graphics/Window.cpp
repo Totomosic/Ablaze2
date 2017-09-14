@@ -1,7 +1,10 @@
 #include "Window.h"
+#include "Application\Input\Input.h"
 
 namespace Ablaze
 {
+
+	const Window* Window::s_CurrentContext = nullptr;
 	
 	Window::Window(int width, int height, const String& title, const Color& clearColor) : Object(),
 		m_Framebuffer(*Framebuffer::WindowFramebuffer(width, height)), m_Title(title)
@@ -98,6 +101,11 @@ namespace Ablaze
 		return m_Title;
 	}
 
+	const Window* Window::Current()
+	{
+		return s_CurrentContext;
+	}
+
 	void Window::Create()
 	{
 		int glfwResult = glfwInit();
@@ -113,6 +121,12 @@ namespace Ablaze
 	void Window::MakeCurrentContext()
 	{
 		glfwMakeContextCurrent(m_WindowPtr);
+		s_CurrentContext = this;
+
+		glfwSetKeyCallback(WindowHandle(), Input::KeyPressedCallback);
+		glfwSetCursorPosCallback(WindowHandle(), Input::MousePositionCallback);
+		glfwSetScrollCallback(WindowHandle(), Input::MouseScrollCallback);
+		glfwSetMouseButtonCallback(WindowHandle(), Input::MousePressedCallback);
 	}
 
 }

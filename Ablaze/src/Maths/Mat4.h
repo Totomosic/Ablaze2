@@ -10,10 +10,13 @@ namespace Ablaze
 {
 	namespace Maths
 	{
+
 		struct AB_API Mat4 : public Object
 		{
+		public:
 			float values[4 * 4];
 
+		public:
 			Mat4();
 			Mat4(float diagonal);
 			Mat4(float values[16]);
@@ -58,5 +61,6 @@ namespace Ablaze
 			friend std::ostream& operator<<(std::ostream& stream, const Mat4& matrix);
 
 		};
+
 	}
 }

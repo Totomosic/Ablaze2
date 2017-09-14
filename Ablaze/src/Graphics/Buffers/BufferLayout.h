@@ -19,6 +19,7 @@ namespace Ablaze
 	private:
 		std::unordered_map<String, VertexAttrib> m_Attributes;
 		int m_Stride;
+		int m_AttribCount;
 
 	public:
 		BufferLayout();
@@ -35,6 +36,7 @@ namespace Ablaze
 		VertexAttrib& GetAttribute(Attribute attributeName);
 		const VertexAttrib& GetAttribute(Attribute attributeName) const;
 		const std::vector<VertexAttrib>& GetAllAttributes() const;
+		int GetAttribCount() const;
 
 		void AddAttribute(const String& attributeName, const VertexAttrib& attribute);
 		void AddAttribute(const String& attributeName, int index, int count, GLenum dataType, bool normalized = false);
@@ -42,8 +44,16 @@ namespace Ablaze
 		void AddAttribute(Attribute attributeName, const VertexAttrib& attribute);
 		void AddAttribute(Attribute attributeName, int index, int count, GLenum dataType, bool normalized = false);
 		void AddAttribute(Attribute attributeName, int index, int count, bool normalized = false);
+		void AddAttribute(const String& attributeName, int count, GLenum dataType, bool normalized = false);
+		void AddAttribute(const String& attributeName, int count, bool normalized = false);
+		void AddAttribute(Attribute attributeName, int count, GLenum dataType, bool normalized = false);
+		void AddAttribute(Attribute attributeName, int count, bool normalized = false);
 
 		String ToString() const override;
+
+	public:
+		static BufferLayout Default();
+		static BufferLayout Vertex();
 
 	};
 

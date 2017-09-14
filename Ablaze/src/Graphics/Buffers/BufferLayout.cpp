@@ -3,7 +3,8 @@
 namespace Ablaze
 {
 
-	BufferLayout::BufferLayout() : Object()
+	BufferLayout::BufferLayout() : Object(),
+		m_Stride(0), m_AttribCount(0)
 	{
 
 	}
@@ -73,6 +74,11 @@ namespace Ablaze
 		return attribs;
 	}
 
+	int BufferLayout::GetAttribCount() const
+	{
+		return m_AttribCount;
+	}
+
 	void BufferLayout::AddAttribute(const String& attributeName, const VertexAttrib& attribute)
 	{
 		m_Attributes[attributeName] = attribute;
@@ -104,9 +110,45 @@ namespace Ablaze
 		AddAttribute(std::to_string((int)attributeName), index, count, normalized);
 	}
 
+	void BufferLayout::AddAttribute(const String& attributeName, int count, GLenum dataType, bool normalized)
+	{
+		AddAttribute(attributeName, VertexAttrib(m_AttribCount++, count, dataType, normalized, m_Stride));
+	}
+
+	void BufferLayout::AddAttribute(const String& attributeName, int count, bool normalized)
+	{
+		AddAttribute(attributeName, m_AttribCount++, count, GL_FLOAT, normalized);
+	}
+
+	void BufferLayout::AddAttribute(Attribute attributeName, int count, GLenum dataType, bool normalized)
+	{
+		AddAttribute(attributeName, m_AttribCount++, count, dataType, normalized);
+	}
+
+	void BufferLayout::AddAttribute(Attribute attributeName, int count, bool normalized)
+	{
+		AddAttribute(attributeName, m_AttribCount++, count, normalized);
+	}
+
 	String BufferLayout::ToString() const
 	{
 		return "Buffer Layout";
+	}
+
+	BufferLayout BufferLayout::Default()
+	{
+		BufferLayout layout;
+		layout.AddAttribute(Attribute::Position, 3);
+		layout.AddAttribute(Attribute::Normal, 3);
+		layout.AddAttribute(Attribute::TexCoord, 2);
+		layout.AddAttribute(Attribute::Color, 4);
+		layout.AddAttribute(Attribute::Tangent, 3);
+		return layout;
+	}
+
+	BufferLayout BufferLayout::Vertex()
+	{
+		return Default();
 	}
 
 }

@@ -137,7 +137,10 @@
     <ClInclude Include="src\Ablaze.h" />
     <ClInclude Include="src\AblazeGL.h" />
     <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Application\Input\Input.h" />
     <ClInclude Include="src\Application\Input\__Input__.h" />
+    <ClInclude Include="src\Application\Time.h" />
+    <ClInclude Include="src\Application\Timer.h" />
     <ClInclude Include="src\Application\__Application__.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\GameObject\GameObject.h" />
@@ -168,15 +171,20 @@
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Rendering\__Rendering__.h" />
     <ClInclude Include="src\Resources\Asset.h" />
+    <ClInclude Include="src\Resources\Meshes\__Meshes__.h" />
     <ClInclude Include="src\Resources\Resource.h" />
     <ClInclude Include="src\Resources\Shaders\Shader.h" />
     <ClInclude Include="src\Resources\Shaders\__Shaders__.h" />
+    <ClInclude Include="src\Resources\Textures\__Textures__.h" />
     <ClInclude Include="src\Resources\__Resources__.h" />
     <ClInclude Include="src\Scene\__Scene__.h" />
     <ClInclude Include="src\System\Engine.h" />
     <ClInclude Include="src\System\__System__.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Utils\FileSystem\FileSystem.h" />
+    <ClInclude Include="src\Utils\FileSystem\VFS.h" />
     <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h" />
+    <ClInclude Include="src\Utils\Functions.h" />
     <ClInclude Include="src\Utils\structs\Color.h" />
     <ClInclude Include="src\Utils\structs\Vertex.h" />
     <ClInclude Include="src\Utils\structs\__structs__.h" />
@@ -184,6 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Application\Input\Input.cpp" />
+    <ClCompile Include="src\Application\Time.cpp" />
+    <ClCompile Include="src\Application\Timer.cpp" />
     <ClCompile Include="src\GameObject\GameObject.cpp" />
     <ClCompile Include="src\Graphics\Buffers\Buffer.cpp" />
     <ClCompile Include="src\Graphics\Buffers\BufferLayout.cpp" />
@@ -206,6 +217,9 @@
     <ClCompile Include="src\Resources\Asset.cpp" />
     <ClCompile Include="src\Resources\Shaders\Shader.cpp" />
     <ClCompile Include="src\System\Engine.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\VFS.cpp" />
+    <ClCompile Include="src\Utils\Functions.cpp" />
     <ClCompile Include="src\Utils\structs\Color.cpp" />
     <ClCompile Include="src\Utils\structs\Vertex.cpp" />
   </ItemGroup>

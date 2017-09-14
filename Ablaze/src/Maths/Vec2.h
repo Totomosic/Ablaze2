@@ -3,6 +3,7 @@
 
 namespace Ablaze
 {
+
 	namespace Maths
 	{
 		struct AB_API Vec2 : public Object

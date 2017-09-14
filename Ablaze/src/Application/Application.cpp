@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Time.h"
 
 namespace Ablaze
 {
@@ -23,6 +24,7 @@ namespace Ablaze
 			AB_FATAL("Use BuildWindow() to create window");
 			return;
 		}
+		Time::Reset();
 		Run();
 	}
 
@@ -82,9 +84,16 @@ namespace Ablaze
 	{
 		while (!m_Window->ShouldClose())
 		{
+			Time::Update();
 			Update();
 			Render();
+			ClearEvents();
 		}
+	}
+
+	void Application::ClearEvents()
+	{
+		Input::Update();
 	}
 
 }

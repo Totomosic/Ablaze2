@@ -28,6 +28,7 @@ namespace Ablaze
 
 	public:
 		VertexArray(RenderMode renderMode = RenderMode::Triangles);
+		VertexArray(IndexBuffer* indexBuffer, RenderMode renderMode = RenderMode::Triangles);
 		~VertexArray() override;
 
 		const std::vector<VertexBuffer*>& GetVertexBuffers() const;

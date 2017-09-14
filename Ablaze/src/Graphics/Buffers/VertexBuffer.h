@@ -14,8 +14,8 @@ namespace Ablaze
 		BufferLayout m_Layout;
 
 	public:
-		VertexBuffer(int64 byteSize, BufferUsage usage = BufferUsage::StaticDraw);
-		VertexBuffer(void* buffer, int64 numBytes, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(int64 byteSize, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(void* buffer, int64 numBytes, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
 
 		void Bind() const override;
 		void Unbind() const override;
