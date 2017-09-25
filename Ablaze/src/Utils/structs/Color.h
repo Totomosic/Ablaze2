@@ -24,7 +24,6 @@ namespace Ablaze
 		Maths::Vec2 rb() const;
 
 		float* ToFloat() const;
-		float* ToVertexBuffer(const long long& vertexCount) const;
 
 		String ToString() const override;
 

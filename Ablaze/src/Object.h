@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "Utils\structs\String.h"
 
 namespace Ablaze
 {

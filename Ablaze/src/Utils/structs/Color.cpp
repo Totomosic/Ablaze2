@@ -76,23 +76,6 @@ namespace Ablaze
 		return new float[4]{ r, g, b, a };
 	}
 
-	float* Color::ToVertexBuffer(const long long& vertexCount) const
-	{
-		float* values = new float[4 * vertexCount];
-		float* color = ToFloat();
-
-		for (int i = 0; i < vertexCount; i++)
-		{
-			values[i * 4 + 0] = color[0];
-			values[i * 4 + 1] = color[1];
-			values[i * 4 + 2] = color[2];
-			values[i * 4 + 3] = color[3];
-		}
-
-		delete[] color;
-		return values;
-	}
-
 	Color Color::FromFloats(float r, float g, float b, float a)
 	{
 		Color c((int)(r * 255), (int)(g * 255), (int)(b * 255), (int)(a * 255));

@@ -169,7 +169,7 @@ namespace Ablaze
 			return !(q1 == q2);
 		}
 
-		std::string Quaternion::ToString() const
+		String Quaternion::ToString() const
 		{
 			return "Quaternion(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
 		}

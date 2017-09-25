@@ -36,19 +36,19 @@ namespace Ablaze
 
 	enum class KeyMod
 	{
-		None = 1,
-		LShift = 2,
-		RShift = 4,
-		Shift = 8,
-		LALT = 16,
-		RALT = 32,
-		ALT = 64,
-		RCTRL = 128,
-		LCTRL = 256,
-		CTRL = 512,
-		NoShift = 1024,
-		NoALT = 2048,
-		NoCTRL = 4096
+		None = BIT(0),
+		LShift = BIT(1),
+		RShift = BIT(2),
+		Shift = BIT(3),
+		LALT = BIT(4),
+		RALT = BIT(5),
+		ALT = BIT(6),
+		RCTRL = BIT(7),
+		LCTRL = BIT(8),
+		CTRL = BIT(9),
+		NoShift = BIT(10),
+		NoALT = BIT(11),
+		NoCTRL = BIT(12)
 	};
 
 	KeyMod operator|(KeyMod a, KeyMod b);

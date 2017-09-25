@@ -5,3 +5,4 @@
 
 #include "Asset.h"
 #include "Resource.h"
+#include "ResourceManager.h"

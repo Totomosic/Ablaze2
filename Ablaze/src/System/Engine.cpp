@@ -12,6 +12,7 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLEW");
 			return false;
 		}
+		Random::Initialise();
 		Input::Initialise();
 		return true;
 	}

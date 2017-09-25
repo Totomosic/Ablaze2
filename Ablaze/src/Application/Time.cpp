@@ -52,6 +52,16 @@ namespace Ablaze
 		s_Frames.clear();
 	}
 
+	Timer* Time::CreateNewTimer(double seconds, TimerMode mode)
+	{
+		return new Timer(seconds, mode);
+	}
+
+	Timer* Time::CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode)
+	{
+		return new Timer(seconds, callback, mode);
+	}
+
 	void Time::Update()
 	{
 		s_TotalSeconds = glfwGetTime();
@@ -63,6 +73,11 @@ namespace Ablaze
 		if (s_AvgTimer > 0.5)
 		{
 			CalcAvgFPS();
+		}
+
+		for (auto timer : Timer::s_ActiveTimers)
+		{
+			timer->Update(s_ElapsedSeconds);
 		}
 	}
 

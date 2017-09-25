@@ -5,6 +5,7 @@
 #include <map>
 #include <unordered_map>
 #include <deque>
+#include <algorithm>
 #include <string>
 
 #define _USE_MATH_DEFINES
@@ -12,11 +13,12 @@
 #include <cmath>
 
 #define _CRT_SECURE_NO_WARNINGS
+#define STB_IMAGE_IMPLEMENTATION
 
 #define AB_API
 
-typedef std::string String;
 typedef void* Handle;
 typedef uint8_t byte;
 typedef uint32_t uint;
 typedef int64_t int64;
+typedef uint64_t uint64;

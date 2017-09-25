@@ -66,7 +66,7 @@ namespace Ablaze
 			return (a - b).GetLength();
 		}
 
-		std::string Vec2::ToString() const
+		String Vec2::ToString() const
 		{
 			return "Vec2(" + std::to_string(x) + ", " + std::to_string(y) + ")";
 		}

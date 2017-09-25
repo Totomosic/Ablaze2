@@ -50,7 +50,7 @@ namespace Ablaze
 
 	void Window::Close() const
 	{
-		glfwDestroyWindow(m_WindowPtr);
+		glfwSetWindowShouldClose(m_WindowPtr, true);
 	}
 
 	void Window::Clear(ClearBuffer buffer) const

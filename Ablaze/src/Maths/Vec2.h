@@ -32,7 +32,7 @@ namespace Ablaze
 
 			static float Distance(const Maths::Vec2& a, const Maths::Vec2& b);
 
-			std::string ToString() const override;
+			String ToString() const override;
 
 			friend Vec2 operator+(const Vec2& left, const Vec2& right);
 			friend Vec2 operator-(const Vec2& left, const Vec2& right);

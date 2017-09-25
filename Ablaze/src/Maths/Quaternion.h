@@ -45,7 +45,7 @@ namespace Ablaze
 			friend bool operator==(const Quaternion& q1, const Quaternion& q2);
 			friend bool operator!=(const Quaternion& q1, const Quaternion& q2);
 
-			std::string ToString() const override;
+			String ToString() const override;
 
 			static Quaternion Log(const Quaternion& q);
 			static Quaternion Exp(const Quaternion& q);

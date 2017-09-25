@@ -29,12 +29,12 @@ namespace Ablaze
 
 	float ToRadians(float degrees)
 	{
-		return degrees * ((float)PI / 180.0f);
+		return degrees * ((float)Maths::PI / 180.0f);
 	}
 
 	float ToDegrees(float radians)
 	{
-		return radians / (float)PI * 180.0f;
+		return radians / (float)Maths::PI * 180.0f;
 	}
 
 }

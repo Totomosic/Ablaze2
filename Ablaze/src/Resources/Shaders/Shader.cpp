@@ -10,8 +10,8 @@ namespace Ablaze
 	{
 		Create();
 
-		Handle vertexFile = FileSystem::Open(vertexPath, OpenMode::Read);
-		Handle fragmentFile = FileSystem::Open(fragmentPath, OpenMode::Read);
+		File vertexFile = FileSystem::Open(vertexPath, OpenMode::Read);
+		File fragmentFile = FileSystem::Open(fragmentPath, OpenMode::Read);
 		BuildProgram(FileSystem::ReadText(vertexFile), FileSystem::ReadText(fragmentFile));
 		FileSystem::Close(vertexFile);
 		FileSystem::Close(fragmentFile);
@@ -28,6 +28,11 @@ namespace Ablaze
 		m_UniformLocations(), m_VertexPath("-"), m_FragmentPath("-")
 	{
 		Create();
+	}
+
+	Shader::~Shader()
+	{
+		glDeleteProgram(m_Id);
 	}
 
 	void Shader::Bind() const

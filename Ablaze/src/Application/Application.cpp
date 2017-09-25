@@ -25,6 +25,7 @@ namespace Ablaze
 			return;
 		}
 		Time::Reset();
+		Time::CreateNewTimer(1.0, std::bind(&Application::Tick, this));
 		Run();
 	}
 
@@ -59,6 +60,11 @@ namespace Ablaze
 		m_Window->SwapBuffers();
 	}
 
+	void Application::Quit()
+	{
+		m_Window->Close();
+	}
+
 	void Application::Init()
 	{
 	
@@ -66,7 +72,7 @@ namespace Ablaze
 
 	void Application::Tick()
 	{
-	
+		
 	}
 
 	void Application::Update()

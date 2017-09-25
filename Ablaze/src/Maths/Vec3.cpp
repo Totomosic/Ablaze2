@@ -91,7 +91,7 @@ namespace Ablaze
 			return Vec3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
 		}
 
-		std::string Vec3::ToString() const
+		String Vec3::ToString() const
 		{
 			return "Vec3(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
 		}

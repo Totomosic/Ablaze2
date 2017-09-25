@@ -23,6 +23,7 @@ namespace Ablaze
 
 		void Start();
 		void UpdateDisplay();
+		void Quit();
 
 		String ToString() const override;
 

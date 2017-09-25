@@ -39,7 +39,7 @@ namespace Ablaze
 			static float Distance(const Maths::Vec3& a, const Maths::Vec3& b);
 			static Vec3 Cross(const Vec3& a, const Vec3& b);
 
-			std::string ToString() const override;
+			String ToString() const override;
 
 			friend Vec3 operator+(const Vec3& left, const Vec3& right);
 			friend Vec3 operator-(const Vec3& left, const Vec3& right);

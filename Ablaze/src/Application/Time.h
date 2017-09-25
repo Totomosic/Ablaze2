@@ -30,8 +30,14 @@ namespace Ablaze
 
 		static void Reset();
 
-		static Timer* CreateNewTimer(double seconds);
-		static Timer* CreateNewTimer(double seconds, const std::function<void()>& callback);
+		static Timer* CreateNewTimer(double seconds, TimerMode mode = TimerMode::Repeat);
+		static Timer* CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode = TimerMode::Repeat);
+
+		template<class C, void(C::*M)()>
+		static Timer* CreateNewTimer(double seconds, C* const instance)
+		{
+			return CreateNewTimer(seconds, std::bind(M, instance));
+		}
 
 		friend class Application;
 
