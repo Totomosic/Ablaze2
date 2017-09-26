@@ -171,6 +171,9 @@
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Rendering\__Rendering__.h" />
     <ClInclude Include="src\Resources\Asset.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\Material.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\Texture2DSet.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\__Materials__.h" />
     <ClInclude Include="src\Resources\Meshes\Model.h" />
     <ClInclude Include="src\Resources\Meshes\__Meshes__.h" />
     <ClInclude Include="src\Resources\Resource.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="src\Resources\Shaders\Shader.h" />
     <ClInclude Include="src\Resources\Shaders\__Shaders__.h" />
     <ClInclude Include="src\Resources\Textures\ImageLoader.h" />
+    <ClInclude Include="src\Resources\Textures\RenderTexture.h" />
     <ClInclude Include="src\Resources\Textures\Texture.h" />
     <ClInclude Include="src\Resources\Textures\Texture2D.h" />
     <ClInclude Include="src\Resources\Textures\__Textures__.h" />
@@ -226,10 +230,13 @@
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Resources\Asset.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\Material.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\Texture2DSet.cpp" />
     <ClCompile Include="src\Resources\Meshes\Model.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Resources\Shaders\Shader.cpp" />
     <ClCompile Include="src\Resources\Textures\ImageLoader.cpp" />
+    <ClCompile Include="src\Resources\Textures\RenderTexture.cpp" />
     <ClCompile Include="src\Resources\Textures\Texture.cpp" />
     <ClCompile Include="src\Resources\Textures\Texture2D.cpp" />
     <ClCompile Include="src\System\Engine.cpp" />

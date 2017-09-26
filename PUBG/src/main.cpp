@@ -15,8 +15,9 @@ public:
 		Shader* s = ResourceManager::Get()->CreateShader("base_v.glsl", "base_f.glsl");
 		s->Bind();
 
-		Texture2D* tex = ResourceManager::Get()->CreateTexture2D("image.png");
-		tex->Bind();
+		Texture2D* tex = ResourceManager::Get()->CreateTexture2D("image.png", MipmapMode::Enabled);
+		Texture2D* normalTex = ResourceManager::Get()->CreateTexture2D("normal.png", MipmapMode::Enabled);
+		Resource<Texture2D> normal(normalTex);
 
 		float* data = new float[2 * 2 * 4]{ -0.5f, 0.5f, 0.0, 1.0f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, -0.5f, 1.0f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f };
 		uint* indices = new uint[6]{ 0, 1, 2, 0, 2, 3 };
@@ -33,6 +34,8 @@ public:
 
 		File f = FileSystem::CreateNew("test.txt");
 		FileSystem::WriteText(f, "Hi");
+
+		tex->Bind();
 
 		delete[] data;
 		delete[] indices;

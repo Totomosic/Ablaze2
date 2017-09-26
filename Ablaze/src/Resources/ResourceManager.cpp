@@ -24,9 +24,9 @@ namespace Ablaze
 		return Shader::FromFile(vFile, fFile);
 	}
 
-	Texture2D* ResourceManager::CreateTexture2D(const String& file)
+	Texture2D* ResourceManager::CreateTexture2D(const String& file, MipmapMode mm)
 	{
-		return new Texture2D(file, Mipmaps::Enabled);
+		return new Texture2D(file, mm);
 	}
 
 	String ResourceManager::ToString() const

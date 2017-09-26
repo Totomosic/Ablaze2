@@ -13,7 +13,6 @@ namespace Ablaze
 
 	private:
 		Model();
-		Model();
 		~Model(); // Prevent stack objects and can only be deleted by ResourceManager
 
 	public:

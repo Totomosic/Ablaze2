@@ -22,7 +22,7 @@ namespace Ablaze
 
 	public:
 		Shader* CreateShader(const String& vFile, const String& fFile);
-		Texture2D* CreateTexture2D(const String& file);
+		Texture2D* CreateTexture2D(const String& file, MipmapMode mm = MipmapMode::Enabled);
 
 		String ToString() const override;
 

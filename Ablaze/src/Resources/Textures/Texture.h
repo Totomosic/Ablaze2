@@ -26,7 +26,7 @@ namespace Ablaze
 		Alpha = GL_ALPHA
 	};
 
-	enum class Mipmaps
+	enum class MipmapMode
 	{
 		Enabled,
 		Disabled
@@ -51,7 +51,8 @@ namespace Ablaze
 		uint m_Height;
 		TextureTarget m_Target;
 		ImageFormat m_Format;
-		Mipmaps m_Mipmap;
+		MipmapMode m_Mipmap;
+		int m_BindPort;
 
 	protected:
 		Texture(const String& filepath, TextureTarget target);
@@ -64,8 +65,9 @@ namespace Ablaze
 		float GetAspect() const;
 		TextureTarget GetTarget() const;
 		ImageFormat GetFormat() const;
+		int GetBindPort() const;
 
-		virtual void GenerateMipmaps();
+		virtual void GenerateMipmapMode();
 		virtual void SetMinFilter(MinFilter filter) const = 0;
 		virtual void SetMagFilter(MagFilter filter) const = 0;
 
@@ -73,6 +75,7 @@ namespace Ablaze
 
 	private:
 		void Create();
+		void SetBindPort(int port);
 		virtual void Populate(byte* pixelData) = 0;
 
 	};

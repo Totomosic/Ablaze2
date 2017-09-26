@@ -76,6 +76,17 @@ namespace Ablaze
 		return new float[4]{ r, g, b, a };
 	}
 
+	byte* Color::ToByte() const
+	{
+		return new byte[4]{ (byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255) };
+	}
+
+	std::ostream& operator<<(std::ostream& stream, const Color& color)
+	{
+		stream << color.ToString();
+		return stream;
+	}
+
 	Color Color::FromFloats(float r, float g, float b, float a)
 	{
 		Color c((int)(r * 255), (int)(g * 255), (int)(b * 255), (int)(a * 255));

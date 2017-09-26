@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Resources\Asset.h"
 #include "Utils\FileSystem\FileSystem.h"
+#include "Resources\Resource.h"
 
 namespace Ablaze
 {
@@ -44,6 +45,13 @@ namespace Ablaze
 		void SetUniform(const String& uniformName, const T& value) const
 		{
 			SetUniform(uniformName, value);
+		}
+
+		template<typename T>
+		void SetTexture(const String& samplerName, const Resource<T>& texture)
+		{
+			texture->Bind();
+			SetUniform<int>(samplerName, texture->GetBindPort());
 		}
 
 		String ToString() const override;

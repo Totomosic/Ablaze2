@@ -4,13 +4,13 @@ namespace Ablaze
 {
 
 	Texture::Texture(const String& filepath, TextureTarget target) : Asset(filepath), GLObject(),
-		m_Target(target), m_Mipmap(Mipmaps::Disabled)
+		m_Target(target), m_Mipmap(MipmapMode::Disabled), m_BindPort(-1)
 	{
 		Create();
 	}
 
 	Texture::Texture(uint width, uint height, TextureTarget target, ImageFormat format) : Asset(), GLObject(),
-		m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmap(Mipmaps::Disabled)
+		m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmap(MipmapMode::Disabled), m_BindPort(-1)
 	{
 		Create();
 	}
@@ -45,9 +45,14 @@ namespace Ablaze
 		return m_Target;
 	}
 
-	void Texture::GenerateMipmaps()
+	int Texture::GetBindPort() const
 	{
-		m_Mipmap = Mipmaps::Enabled;
+		return m_BindPort;
+	}
+
+	void Texture::GenerateMipmapMode()
+	{
+		m_Mipmap = MipmapMode::Enabled;
 		Bind();
 		glGenerateMipmap((GLenum)m_Target);
 	}
@@ -55,6 +60,11 @@ namespace Ablaze
 	void Texture::Create()
 	{
 		glGenTextures(1, &m_Id);
+	}
+
+	void Texture::SetBindPort(int port)
+	{
+		m_BindPort = port;
 	}
 
 }

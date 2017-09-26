@@ -12,12 +12,18 @@ namespace Ablaze
 		T* m_ResourcePtr;
 
 	private:
-		Resource(T* resource) 
-		{ 
-			m_ResourcePtr = resource; 
-		}
 
 	public:
+		Resource(T* resource)
+		{
+			m_ResourcePtr = resource;
+		}
+
+		Resource(const Resource<T>& other)
+		{
+
+		}
+
 		~Resource()
 		{
 			// Dereference resource ptr
