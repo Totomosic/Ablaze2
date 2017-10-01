@@ -27,9 +27,6 @@
     <ClInclude Include="src\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObject\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AblazeGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -39,13 +36,7 @@
     <ClInclude Include="src\Graphics\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObject\__GameObject__.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\__Graphics__.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\__Rendering__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\__Resources__.h">
@@ -112,9 +103,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\structs\Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\structs\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\System\Engine.h">
@@ -225,11 +213,47 @@
     <ClInclude Include="src\Resources\Meshes\Materials\Texture2DSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\GameObject\__GameObject__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\GameObject\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Structs\__Structs__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Structs\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Rendering\Interfaces\__Interfaces__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Rendering\Renderers\__Renderers__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Rendering\Structs\__Structs__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Rendering\__Rendering__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\GraphicsPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Shapes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\structs\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameObject\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -270,9 +294,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\structs\Color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utils\structs\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\System\Engine.cpp">
@@ -351,6 +372,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Meshes\Materials\Texture2DSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\GameObject\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Structs\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Shapes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\structs\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

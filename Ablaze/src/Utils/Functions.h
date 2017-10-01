@@ -14,4 +14,6 @@ namespace Ablaze
 	float ToRadians(float degrees);
 	float ToDegrees(float radians);
 
+	std::vector<String> SplitString(const String& str, const String& delimeters);
+
 }

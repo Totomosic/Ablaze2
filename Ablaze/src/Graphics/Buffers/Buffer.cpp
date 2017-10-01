@@ -98,6 +98,7 @@ namespace Ablaze
 
 	bool Buffer::Unmap() const
 	{
+		Bind();
 		return glUnmapBuffer((GLenum)m_Target);
 	}
 

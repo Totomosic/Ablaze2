@@ -1,11 +1,11 @@
 #include "Application.h"
 #include "Time.h"
+#include "Graphics\Graphics.h"
 
 namespace Ablaze
 {
 
-	Application::Application() : Object(),
-		m_Window(nullptr)
+	Application::Application() : Object()
 	{
 
 	}
@@ -18,36 +18,24 @@ namespace Ablaze
 	void Application::Start()
 	{
 		Init();
-		if (m_Window == nullptr)
-		{
-			AB_FATAL("No window was created during the Init method.");
-			AB_FATAL("Use BuildWindow() to create window");
-			return;
-		}
 		Time::Reset();
 		Time::CreateNewTimer(1.0, std::bind(&Application::Tick, this));
 		Run();
 	}
 
-	Window* Application::WindowHandle()
-	{
-		return m_Window;
-	}
-
 	int Application::WindowWidth()
 	{
-		return m_Window->GetWidth();
+		return Graphics::CurrentContext()->GetWidth();
 	}
 
 	int Application::WindowHeight()
 	{
-		return m_Window->GetHeight();
+		return Graphics::CurrentContext()->GetHeight();
 	}
 
 	Window* Application::BuildWindow(int width, int height, const String& title, const Color& clearColor)
 	{
-		m_Window = new Window(width, height, title, clearColor);
-		return m_Window;
+		return new Window(width, height, title, clearColor);
 	}
 
 	String Application::ToString() const
@@ -57,12 +45,12 @@ namespace Ablaze
 
 	void Application::UpdateDisplay()
 	{
-		m_Window->SwapBuffers();
+		Graphics::CurrentContext()->SwapBuffers();
 	}
 
 	void Application::Quit()
 	{
-		m_Window->Close();
+		Graphics::CurrentContext()->Close();
 	}
 
 	void Application::Init()
@@ -82,17 +70,20 @@ namespace Ablaze
 
 	void Application::Render()
 	{
-		m_Window->Update();
-		m_Window->Clear();
+		Graphics::CurrentContext()->Update();
+		Graphics::CurrentContext()->Clear();
 	}
 
 	void Application::Run()
 	{
-		while (!m_Window->ShouldClose())
+		while (!Graphics::CurrentContext()->ShouldClose())
 		{
 			Time::Update();
 			Update();
-			Render();
+			if (Graphics::IsInitialised())
+			{
+				Render();
+			}
 			ClearEvents();
 		}
 	}

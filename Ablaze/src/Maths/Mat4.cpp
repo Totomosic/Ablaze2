@@ -5,7 +5,7 @@ namespace Ablaze
 {
 	namespace Maths
 	{
-		Mat4::Mat4() : Object()
+		Mat4::Mat4()
 		{
 			// instantiate every value to 0
 			for (int i = 0; i < 4 * 4; i++)
@@ -14,7 +14,7 @@ namespace Ablaze
 			}
 		}
 
-		Mat4::Mat4(float vals[16]) : Object()
+		Mat4::Mat4(float vals[16])
 		{
 			for (int i = 0; i < 4 * 4; i++)
 			{

@@ -1,4 +1,5 @@
 #include "Texture2DSet.h"
+#include "Resources\Resource.h"
 
 namespace Ablaze
 {

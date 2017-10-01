@@ -10,7 +10,7 @@ namespace Ablaze
 
 		}
 
-		Vec3::Vec3(const Vec2& vector, float z) : Vec3::Vec3(vector.x, vector.y, z)
+		Vec3::Vec3(const Vec2& vector, float z) : Vec3(vector.x, vector.y, z)
 		{
 
 		}

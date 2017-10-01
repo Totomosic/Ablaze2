@@ -10,7 +10,7 @@ FOLDER STRUCTURE:
 	Strictly one class/struct per file, enums may be declared alongside classes and structs
 
 OBJECTS:
-	All Classes and Structs must derive from class Object (except static classes)
+	All Classes and Structs must derive from class Object (except static classes) EXCEPTION: Basic data types such as Color and Maths:: Vectors do not inherit from Object in order to keep their size consistant (No extra size from VTable)
 	All non-static members must be declared with m_ prefix (except public members)
 	All static members must be declared with s_ prefix (except public members)
 
@@ -55,6 +55,10 @@ OBJECTS:
 			void SetName(const String& name);
 
 		}
+
+	INTERFACES:
+		Must begin name with I (eg IRenderable)
+		No implementation at all
 
 	TEMPLATES:
 		Template classes and methods are to be completely defined in the header file

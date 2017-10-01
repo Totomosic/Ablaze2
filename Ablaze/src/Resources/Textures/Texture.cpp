@@ -50,7 +50,7 @@ namespace Ablaze
 		return m_BindPort;
 	}
 
-	void Texture::GenerateMipmapMode()
+	void Texture::GenerateMipmaps()
 	{
 		m_Mipmap = MipmapMode::Enabled;
 		Bind();

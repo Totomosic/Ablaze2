@@ -1,6 +1,8 @@
 #pragma once
 #include "Buffers\__Buffers__.h"
+#include "Rendering\__Rendering__.h"
 #include "structs\__structs__.h"
 
-#include "Window.h"
 #include "Framebuffer.h"
+#include "Graphics.h"
+#include "Window.h"

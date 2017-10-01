@@ -11,7 +11,7 @@ namespace Ablaze
 	namespace Maths
 	{
 
-		struct AB_API Mat4 : public Object
+		struct AB_API Mat4
 		{
 		public:
 			float values[4 * 4];
@@ -34,7 +34,7 @@ namespace Ablaze
 			Vec3 Multiply(const Vec3& other) const;
 			Mat4 Inverse() const;
 
-			String ToString() const override;
+			String ToString() const;
 			
 			static Mat4 FromRows(const Vec4& r1, const Vec4& r2, const Vec4& r3, const Vec4& r4);
 			static Mat4 FromCols(const Vec4& c1, const Vec4& c2, const Vec4& c3, const Vec4& c4);

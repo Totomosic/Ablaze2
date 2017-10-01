@@ -5,40 +5,29 @@ using namespace Ablaze;
 class Game : public Application
 {
 private:
+	Window* m_Window;
 	VertexArray* vao;
+	Texture2D* texture;
 
 public:
 	void Init() override
 	{
-		BuildWindow(1280, 720, "Ablaze: 60", Color::White());
+		m_Window = BuildWindow(1280, 720, "Ablaze: 60", Color::White());
+		Graphics::Initialise(m_Window);
 
-		Shader* s = ResourceManager::Get()->CreateShader("base_v.glsl", "base_f.glsl");
+		Resource<Shader> s = ResourceManager::Library().LoadShader("base_v.glsl", "base_f.glsl");
+		s.Increment();
 		s->Bind();
 
-		Texture2D* tex = ResourceManager::Get()->CreateTexture2D("image.png", MipmapMode::Enabled);
-		Texture2D* normalTex = ResourceManager::Get()->CreateTexture2D("normal.png", MipmapMode::Enabled);
-		Resource<Texture2D> normal(normalTex);
+		Resource<Texture2D> tex = ResourceManager::Library().LoadTexture2D("image.png", MipmapMode::Enabled);
+		tex.Increment();
+		texture = *tex;
 
-		float* data = new float[2 * 2 * 4]{ -0.5f, 0.5f, 0.0, 1.0f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, -0.5f, 1.0f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f };
-		uint* indices = new uint[6]{ 0, 1, 2, 0, 2, 3 };
-
-		BufferLayout layout;
-		layout.AddAttribute(Attribute::Position, 2);
-		layout.AddAttribute(Attribute::TexCoord, 2);
-
-		VertexBuffer* vbo = new VertexBuffer(data, 2 * 2 * 4 * sizeof(float), layout);
-		IndexBuffer* indexBuffer = new IndexBuffer(indices, 6 * sizeof(uint));
-
-		vao = new VertexArray(indexBuffer);
-		vao->AddVertexBuffer(vbo);
+		vao = ResourceManager::Library().CreateRectangle(2, 2).Get()->GetVertexArray();
 
 		File f = FileSystem::CreateNew("test.txt");
 		FileSystem::WriteText(f, "Hi");
 
-		tex->Bind();
-
-		delete[] data;
-		delete[] indices;
 	}
 
 	void Tick() override
@@ -54,6 +43,8 @@ public:
 	void Render() override
 	{
 		Application::Render();
+		
+		texture->Bind();
 
 		vao->Bind();
 		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);

@@ -6,10 +6,8 @@
 #include "Common.h"
 
 #include "Application\__Application__.h"
-#include "GameObject\__GameObject__.h"
 #include "Graphics\__Graphics__.h"
 #include "Maths\__Maths__.h"
-#include "Rendering\__Rendering__.h"
 #include "Resources\__Resources__.h"
 #include "Scene\__Scene__.h"
 #include "System\__System__.h"

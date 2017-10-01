@@ -5,10 +5,13 @@
 namespace Ablaze
 {
 
-	struct AB_API Color : public Object
+	struct AB_API Color
 	{
 	public:
-		float r, g, b, a;
+		float r;
+		float g;
+		float b;
+		float a;
 
 	public:
 		Color(byte r, byte g, byte b, byte a = 255);
@@ -28,7 +31,7 @@ namespace Ablaze
 		float* ToFloat() const;
 		byte* ToByte() const;
 
-		String ToString() const override;
+		String ToString() const;
 
 		friend std::ostream& operator<<(std::ostream& stream, const Color& color);
 

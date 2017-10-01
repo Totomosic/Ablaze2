@@ -6,7 +6,7 @@ namespace Ablaze
 {
 
 	// Class that represents a dynamically created texture, rendered from the scene
-	class RenderTexture : public Texture2D
+	class AB_API RenderTexture : public Texture2D
 	{
 
 

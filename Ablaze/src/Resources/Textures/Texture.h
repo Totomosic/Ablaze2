@@ -57,7 +57,7 @@ namespace Ablaze
 	protected:
 		Texture(const String& filepath, TextureTarget target);
 		Texture(uint width, uint height, TextureTarget target, ImageFormat format);
-		~Texture(); // Prevent stack objects and can only be deleted by ResourceManager
+		virtual ~Texture(); // Prevent stack objects and can only be deleted by ResourceManager
 
 	public:
 		uint GetWidth() const;
@@ -67,7 +67,7 @@ namespace Ablaze
 		ImageFormat GetFormat() const;
 		int GetBindPort() const;
 
-		virtual void GenerateMipmapMode();
+		virtual void GenerateMipmaps();
 		virtual void SetMinFilter(MinFilter filter) const = 0;
 		virtual void SetMagFilter(MagFilter filter) const = 0;
 

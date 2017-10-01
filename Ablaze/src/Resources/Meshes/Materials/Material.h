@@ -5,7 +5,7 @@
 namespace Ablaze
 {
 
-	class Material : public Asset
+	class AB_API Material : public Asset
 	{
 	private:
 

@@ -1,13 +1,14 @@
 #pragma once
 #include "Common.h"
-#include "Resources\Resource.h"
 #include "Resources\Textures\__Textures__.h"
 #include "Resources\Shaders\__Shaders__.h"
 
 namespace Ablaze
 {
 
-	class Texture2DSet : public Object
+	template<typename> class Resource;
+
+	class AB_API Texture2DSet : public Object
 	{
 	private:
 		std::vector<Resource<Texture2D>> m_Textures; // std::vector<std::pair<String, Resource<Texture2D>>> said that pair constructor with Resource<Texture2D> was deleted function

@@ -5,7 +5,7 @@ namespace Ablaze
 {
 	namespace Maths
 	{
-		struct AB_API Vec4 : public Object
+		struct AB_API Vec4
 		{
 		public:
 			float x;
@@ -42,7 +42,7 @@ namespace Ablaze
 
 			static float Distance(const Maths::Vec4& a, const Maths::Vec4& b);
 
-			String ToString() const override;
+			String ToString() const;
 
 			friend Vec4 operator+(const Vec4& left, const Vec4& right);
 			friend Vec4 operator-(const Vec4& left, const Vec4& right);

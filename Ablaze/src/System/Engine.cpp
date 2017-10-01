@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Application\Input\Input.h"
+#include "Graphics\Graphics.h"
 
 namespace Ablaze
 {
@@ -19,6 +20,7 @@ namespace Ablaze
 
 	bool Engine::Shutdown()
 	{
+		Graphics::Terminate();
 		glfwTerminate();
 		return true;
 	}

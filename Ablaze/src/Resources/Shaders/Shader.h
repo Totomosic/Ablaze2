@@ -2,10 +2,11 @@
 #include "Common.h"
 #include "Resources\Asset.h"
 #include "Utils\FileSystem\FileSystem.h"
-#include "Resources\Resource.h"
 
 namespace Ablaze
 {
+
+	template<typename> class Resource;
 
 	class AB_API Shader : public Asset, public GLObject
 	{

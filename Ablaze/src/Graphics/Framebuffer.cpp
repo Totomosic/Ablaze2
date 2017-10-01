@@ -1,20 +1,25 @@
 #include "Framebuffer.h"
+#include "Resources\ResourceManager.h"
+#include "Graphics\Graphics.h"
+#include "Resources\Resource.h"
 
 namespace Ablaze
 {
 
 	const Framebuffer* Framebuffer::s_CurrentlyBound = nullptr;
 
-	Framebuffer::Framebuffer(int width, int height, bool window)
+	Framebuffer::Framebuffer(int width, int height)
 		: m_Viewport(Viewport(width, height)), m_ClearColor(Color::Black())
 	{
 	
 	}
 
-	Framebuffer::Framebuffer(int width, int height, const Color& clearColor)
+	Framebuffer::Framebuffer(int width, int height, bool createOnLoad, const Color& clearColor)
 		: m_Viewport(Viewport(width, height)), m_ClearColor(clearColor)
 	{
 		glGenFramebuffers(1, &m_Id);
+		CreateColorTextureAttachment();
+		CreateDepthTextureAttachment();
 	}
 
 	Framebuffer::~Framebuffer()
@@ -83,6 +88,50 @@ namespace Ablaze
 		m_Viewport.SetHeight(height);
 	}
 
+	void Framebuffer::CopyToScreen(ClearBuffer buffer)
+	{
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id);
+		glReadBuffer(GL_COLOR_ATTACHMENT0);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext()->GetWidth(), Graphics::CurrentContext()->GetHeight(), (GLbitfield)buffer, GL_NEAREST);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	}
+
+	void Framebuffer::CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer)
+	{
+		Bind();
+		texture->Bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->GetWidth(), texture->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		texture->SetMagFilter(MagFilter::Linear);
+		texture->SetMinFilter(MinFilter::Linear);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->GetID(), 0);
+		glDrawBuffer((GLenum)buffer);
+		m_Textures[buffer] = texture;
+	}
+
+	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
+	{
+		CreateColorTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight()), buffer);
+	}
+
+	void Framebuffer::CreateDepthTextureAttachment(const Resource<Texture2D>& texture)
+	{
+		Bind();
+		texture->Bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, texture->GetWidth(), texture->GetHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		texture->SetMagFilter(MagFilter::Linear);
+		texture->SetMinFilter(MinFilter::Linear);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->GetID(), 0);
+		m_Textures[ColorBuffer::Depth] = texture;
+	}
+
+	void Framebuffer::CreateDepthTextureAttachment()
+	{
+		CreateDepthTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight()));
+	}
+
 	String Framebuffer::ToString() const
 	{
 		return "Framebuffer";
@@ -90,7 +139,7 @@ namespace Ablaze
 
 	Framebuffer* Framebuffer::WindowFramebuffer(int width, int height)
 	{
-		return new Framebuffer(width, height, true);
+		return new Framebuffer(width, height);
 	}
 
 }

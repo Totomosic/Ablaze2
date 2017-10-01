@@ -1,4 +1,5 @@
 #include "Texture2D.h"
+#include "Resources\Resource.h"
 
 namespace Ablaze
 {
@@ -16,7 +17,7 @@ namespace Ablaze
 
 		if (mm == MipmapMode::Enabled)
 		{
-			GenerateMipmapMode();
+			GenerateMipmaps();
 			SetMinFilter(MinFilter::Linear);
 		}
 	}
@@ -24,6 +25,11 @@ namespace Ablaze
 	Texture2D::Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm) : Texture(width, height, TextureTarget::Texture2D, format)
 	{
 	
+	}
+
+	Texture2D::~Texture2D()
+	{
+		Texture::~Texture();
 	}
 
 	byte* Texture2D::GetImage(int mipmap) const
@@ -100,6 +106,12 @@ namespace Ablaze
 		// Does nothing
 	}
 
+	void Texture2D::GenerateMipmaps()
+	{
+		Texture::GenerateMipmaps();
+		SetMinFilter(m_MinFilter);
+	}
+
 	void Texture2D::SetMinFilter(MinFilter filter) const
 	{
 		Bind();
@@ -119,11 +131,13 @@ namespace Ablaze
 			glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, (GLenum)filter);
 		}
 		Unbind();
+		m_MinFilter = filter;
 	}
 
 	void Texture2D::SetMagFilter(MagFilter filter) const
 	{
 		glTexParameteri((GLenum)m_Target, GL_TEXTURE_MAG_FILTER, (GLenum)filter);
+		m_MagFilter = filter;
 	}
 
 	void Texture2D::SetPixel(int x, int y, const Color& color, bool applyToMipmaps) const

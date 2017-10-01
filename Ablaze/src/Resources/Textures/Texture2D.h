@@ -1,19 +1,25 @@
 #pragma once
 #include "Common.h"
 #include "Texture.h"
-#include "Resources\Resource.h"
 
 namespace Ablaze
 {
+
+	template<typename> class Resource;
 
 	class AB_API Texture2D : public Texture
 	{
 	private:
 		static const Texture2D* s_CurrentlyBound;
 
-	private:
+	protected:
+		mutable MinFilter m_MinFilter;
+		mutable MagFilter m_MagFilter;
+
+	protected:
 		Texture2D(const String& filepath, MipmapMode mm);
 		Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm);
+		~Texture2D();
 
 	public:
 		byte* GetImage(int mipmap = 0) const;
@@ -23,6 +29,8 @@ namespace Ablaze
 
 		void Bind() const override;
 		void Unbind() const override;
+
+		void GenerateMipmaps() override;
 
 		void SetMinFilter(MinFilter filter) const override;
 		void SetMagFilter(MagFilter filter) const override;

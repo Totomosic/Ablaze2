@@ -1,6 +1,8 @@
 #pragma once
 #include "Common.h"
 #include "structs\__structs__.h"
+#include "Resources\Textures\__Textures__.h"
+#include "Resources\Resource.h"
 
 namespace Ablaze
 {
@@ -17,6 +19,18 @@ namespace Ablaze
 		return (ClearBuffer)((int)c1 | (int)c2);
 	}
 
+	enum class ColorBuffer : GLenum
+	{
+		Color0 = GL_COLOR_ATTACHMENT0,
+		Color1 = GL_COLOR_ATTACHMENT1,
+		Color2 = GL_COLOR_ATTACHMENT2,
+		Color3 = GL_COLOR_ATTACHMENT3,
+		Color4 = GL_COLOR_ATTACHMENT4,
+		Color5 = GL_COLOR_ATTACHMENT5,
+
+		Depth = GL_DEPTH_ATTACHMENT
+	};
+
 	class AB_API Framebuffer : public GLObject
 	{
 	private:
@@ -25,12 +39,13 @@ namespace Ablaze
 	private:
 		Viewport m_Viewport;
 		Color m_ClearColor;
+		std::unordered_map<ColorBuffer, Resource<Texture2D>> m_Textures;
 
 	private:
-		Framebuffer(int width, int height, bool window); // Window Framebuffer constructor
+		Framebuffer(int width, int height); // Window Framebuffer constructor
 
 	public:
-		Framebuffer(int width, int height, const Color& clearColor = Color::Black());
+		Framebuffer(int width, int height, bool createOnLoad, const Color& clearColor = Color::Black());
 		~Framebuffer() override;
 
 		const Color& GetClearColor() const;
@@ -46,6 +61,12 @@ namespace Ablaze
 		void SetClearColor(const Color& clearColor);
 		void SetWidth(int width);
 		void SetHeight(int height);
+
+		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth);
+		void CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		void CreateColorTextureAttachment(ColorBuffer buffer = ColorBuffer::Color0);
+		void CreateDepthTextureAttachment(const Resource<Texture2D>& texture);
+		void CreateDepthTextureAttachment();
 
 		String ToString() const override;
 

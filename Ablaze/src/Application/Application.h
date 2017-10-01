@@ -9,15 +9,11 @@ namespace Ablaze
 
 	class AB_API Application : public Object
 	{
-	protected:
-		Window* m_Window;
-
 	public:
 		Application();
 		~Application();
 
 		Window* BuildWindow(int width, int height, const String& title, const Color& clearColor = Color::Black());
-		Window* WindowHandle();
 		int WindowWidth();
 		int WindowHeight();
 

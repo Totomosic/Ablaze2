@@ -1,7 +1,7 @@
 #pragma once
 #include "Allocator.h"
 
-#define AB_USE_CUSTOM_ALLOCATOR 0
+#define AB_USE_CUSTOM_ALLOCATOR 1
 
 #if AB_USE_CUSTOM_ALLOCATOR
 

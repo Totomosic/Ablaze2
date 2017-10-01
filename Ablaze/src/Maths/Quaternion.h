@@ -6,7 +6,7 @@ namespace Ablaze
 	namespace Maths
 	{
 
-		struct AB_API Quaternion : public Object
+		struct AB_API Quaternion
 		{
 		public:
 			float x;
@@ -45,7 +45,7 @@ namespace Ablaze
 			friend bool operator==(const Quaternion& q1, const Quaternion& q2);
 			friend bool operator!=(const Quaternion& q1, const Quaternion& q2);
 
-			String ToString() const override;
+			String ToString() const;
 
 			static Quaternion Log(const Quaternion& q);
 			static Quaternion Exp(const Quaternion& q);

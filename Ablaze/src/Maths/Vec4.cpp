@@ -15,7 +15,7 @@ namespace Ablaze
 		Vec4::Vec4(const Vec3& vector, float w) : Vec4::Vec4(vector.x, vector.y, vector.z, w)
 		{
 		
-			}
+		}
 
 		Vec4::Vec4(const Vec2& vector, float z, float w) : Vec4::Vec4(vector.x, vector.y, z, w)
 		{
