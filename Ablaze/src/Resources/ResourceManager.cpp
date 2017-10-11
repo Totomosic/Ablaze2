@@ -4,8 +4,6 @@
 namespace Ablaze
 {
 
-	ResourceManager* ResourceManager::s_Instance = nullptr;
-
 	ResourceManager::ResourceManager() : Object()
 	{
 	
@@ -13,11 +11,8 @@ namespace Ablaze
 
 	ResourceManager& ResourceManager::Library()
 	{
-		if (s_Instance == nullptr)
-		{
-			s_Instance = new ResourceManager();
-		}
-		return *s_Instance;
+		static ResourceManager* instance = new ResourceManager();
+		return *instance;
 	}
 
 	Resource<Texture2D> ResourceManager::CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap)

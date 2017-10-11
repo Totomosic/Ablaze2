@@ -148,6 +148,7 @@ namespace Ablaze
 		static bool* s_ButtonsDown;
 		static std::vector<std::pair<int, Keystate>> s_KeysPressed;
 		static std::vector<std::pair<int, Keystate>> s_ButtonsPressed;
+		static std::vector<char> s_CharsPressed;
 
 		static Maths::Vec3 s_MousePosition; // Represented as TopLeft Origin
 		static Maths::Vec3 s_RelMousePosition; // Represented as TopLeft Origin
@@ -185,6 +186,8 @@ namespace Ablaze
 		static bool KeyReleased(Keycode key, KeyMod mods = KeyMod::None);
 		static bool KeyReleased(int key, KeyMod mods = KeyMod::None);
 
+		static const std::vector<char>& CharsPressed();
+
 		friend class Window;
 		friend class Application;
 		friend class Engine;
@@ -198,6 +201,7 @@ namespace Ablaze
 		static void MousePressedCallback(GLFWwindow* window, int button, int action, int mods);
 		static void KeyPressedCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void MouseScrollCallback(GLFWwindow* window, double scrollX, double scrollY);
+		static void CharPressedCallback(GLFWwindow* window, uint c);
 
 	};
 

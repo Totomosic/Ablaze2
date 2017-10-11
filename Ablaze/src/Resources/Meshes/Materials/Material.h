@@ -13,7 +13,9 @@ namespace Ablaze
 		Material(const String& filename); // TODO: Create custom Material file
 
 	public:
+		void Reload() override;
 
+		String ToString() const override;
 
 	};
 

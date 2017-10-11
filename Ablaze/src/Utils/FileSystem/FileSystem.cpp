@@ -38,7 +38,7 @@ namespace Ablaze
 		LARGE_INTEGER size = { 0 };
 		if (!GetFileSizeEx(file.GetHandle(), &size))
 		{
-			AB_ERROR("Could not determine size of file");
+			AB_ERROR("Could not determine size of file: " + file.GetPath());
 		}
 
 		file.Close();
@@ -75,12 +75,23 @@ namespace Ablaze
 
 	void FileSystem::Clear(const File& file)
 	{
-	
+		File f = file;
+		if (!file.IsOpen())
+		{
+			f = Open(file.GetPath(), OpenMode::WriteOverride);
+		}
+		WriteText(f, "");
 	}
 
 	bool FileSystem::Delete(const File& file)
 	{
 		file.Delete();
+		return true;
+	}
+
+	bool FileSystem::Delete(const String& filename)
+	{
+		DeleteInternal(filename);
 		return true;
 	}
 
@@ -169,7 +180,7 @@ namespace Ablaze
 
 	Handle FileSystem::OpenFileForOverride(const String& filename)
 	{
-		return CreateFile(filename.c_str(), GENERIC_WRITE, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		return CreateFile(filename.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 	}
 
 	Handle FileSystem::OpenInternal(const String& filename, OpenMode mode)

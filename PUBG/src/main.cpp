@@ -13,6 +13,7 @@ public:
 	void Init() override
 	{
 		m_Window = BuildWindow(1280, 720, "Ablaze: 60", Color::White());
+		m_Window->SetIcon("normal.png");
 		Graphics::Initialise(m_Window);
 
 		Resource<Shader> s = ResourceManager::Library().LoadShader("base_v.glsl", "base_f.glsl");
@@ -23,7 +24,7 @@ public:
 		tex.Increment();
 		texture = *tex;
 
-		vao = ResourceManager::Library().CreateRectangle(2, 2).Get()->GetVertexArray();
+		vao = ResourceManager::Library().CreateRectangle(1, 1).Get()->GetVertexArray();
 
 		File f = FileSystem::CreateNew("test.txt");
 		FileSystem::WriteText(f, "Hi");

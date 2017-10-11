@@ -15,6 +15,7 @@ namespace Ablaze
 	bool* Input::s_KeysDown = new bool[s_MaxKeys];
 	std::vector<std::pair<int, Keystate>> Input::s_ButtonsPressed = std::vector<std::pair<int, Keystate>>();
 	std::vector<std::pair<int, Keystate>> Input::s_KeysPressed = std::vector<std::pair<int, Keystate>>();
+	std::vector<char> Input::s_CharsPressed = std::vector<char>();
 
 	Maths::Vec3 Input::s_MousePosition = Maths::Vec3(0.0f);
 	Maths::Vec3 Input::s_RelMousePosition = Maths::Vec3(0.0f);
@@ -184,6 +185,11 @@ namespace Ablaze
 		return false;
 	}
 
+	const std::vector<char>& Input::CharsPressed()
+	{
+		return s_CharsPressed;
+	}
+
 	void Input::Initialise()
 	{
 		for (int i = 0; i < s_MaxButtons; i++)
@@ -202,6 +208,7 @@ namespace Ablaze
 		s_RelMouseScroll = Maths::Vec2(0);
 		s_KeysPressed.clear();
 		s_ButtonsPressed.clear();
+		s_CharsPressed.clear();
 	}
 
 	bool Input::SatisfiesModifiers(KeyMod mods)
@@ -315,6 +322,11 @@ namespace Ablaze
 	{
 		s_RelMouseScroll = Maths::Vec2((float)xScroll, (float)yScroll);
 		s_MouseScroll += s_RelMouseScroll;
+	}
+
+	void Input::CharPressedCallback(GLFWwindow* window, uint c)
+	{
+		s_CharsPressed.push_back((char)c);
 	}
 
 }

@@ -3,6 +3,7 @@
 #include "Graphics\__Graphics__.h"
 #include "System\Engine.h"
 #include "Input\Input.h"
+#include "Utils\Debug\__Debug__.h"
 
 namespace Ablaze
 {

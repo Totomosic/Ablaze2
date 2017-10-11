@@ -7,6 +7,7 @@
 #include <deque>
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

@@ -96,6 +96,25 @@ namespace Ablaze
 		glfwSetWindowTitle(m_WindowPtr, m_Title.c_str());
 	}
 
+	void Window::SetClearColor(const Color& color)
+	{
+		m_Framebuffer.SetClearColor(color);
+	}
+
+	void Window::SetIcon(const String& filename)
+	{
+		uint width;
+		uint height;
+		int comp;
+		byte* pixelData = ImageLoader::Load(filename, &width, &height, &comp, false);
+		GLFWimage image;
+		image.width = width;
+		image.height = height;
+		image.pixels = pixelData;
+		glfwSetWindowIcon(m_WindowPtr, 1, &image);
+		ImageLoader::FreeData(pixelData);
+	}
+
 	String Window::ToString() const
 	{
 		return m_Title;
@@ -127,6 +146,7 @@ namespace Ablaze
 		glfwSetCursorPosCallback(WindowHandle(), Input::MousePositionCallback);
 		glfwSetScrollCallback(WindowHandle(), Input::MouseScrollCallback);
 		glfwSetMouseButtonCallback(WindowHandle(), Input::MousePressedCallback);
+		glfwSetCharCallback(WindowHandle(), Input::CharPressedCallback);
 	}
 
 }

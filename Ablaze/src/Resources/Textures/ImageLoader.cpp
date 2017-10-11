@@ -4,11 +4,11 @@
 namespace Ablaze
 {
 
-	byte* ImageLoader::Load(const String& filename, uint* width, uint* height, int* components)
+	byte* ImageLoader::Load(const String& filename, uint* width, uint* height, int* components, bool flipImage)
 	{
 		int w = 0;
 		int h = 0;
-		stbi_set_flip_vertically_on_load(true);
+		stbi_set_flip_vertically_on_load(flipImage);
 		byte* image = stbi_load(filename.c_str(), &w, &h, components, STBI_rgb_alpha);
 		*width = (uint)(abs(w));
 		*height = (uint)(abs(h));

@@ -14,9 +14,6 @@ namespace Ablaze
 	class AB_API ResourceManager : public Object
 	{
 	private:
-		static ResourceManager* s_Instance;
-
-	private:
 		std::unordered_map<String, std::pair<int, Asset*>> m_Resources;
 
 	private:

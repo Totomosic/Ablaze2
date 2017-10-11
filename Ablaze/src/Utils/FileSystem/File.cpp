@@ -61,7 +61,7 @@ namespace Ablaze
 			if (m_Handle == INVALID_HANDLE_VALUE)
 			{
 				AB_ERROR("File failed to open: " + m_Path);
-				AB_ERROR("Error: " + std::to_string(GetLastError()));
+				AB_ERROR("Error: " + std::to_string(GetLastError()));	
 			}
 		}
 		else

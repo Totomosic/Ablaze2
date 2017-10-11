@@ -11,6 +11,7 @@ namespace Ablaze
 		WriteAppend
 	};
 
+	// Class that represents a physical system file
 	class AB_API File : public Object
 	{
 	private:

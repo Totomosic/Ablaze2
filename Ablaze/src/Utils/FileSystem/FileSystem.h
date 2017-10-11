@@ -20,6 +20,7 @@ namespace Ablaze
 		static bool Close(const File& fileHandle);
 		static void Clear(const File& fileHandle);
 		static bool Delete(const File& fileHandle);
+		static bool Delete(const String& filename);
 		static bool Rename(const File& fileHandle, const String& filename);
 
 		static void Read(const File& file, int64 byteCount, void* buffer);

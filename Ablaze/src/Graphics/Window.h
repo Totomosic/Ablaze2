@@ -38,6 +38,8 @@ namespace Ablaze
 		void SetWidth(int width);
 		void SetHeight(int height);
 		void SetTitle(const String& title);
+		void SetClearColor(const Color& color);
+		void SetIcon(const String& filename);
 
 		String ToString() const override;
 
