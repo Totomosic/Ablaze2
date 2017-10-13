@@ -15,7 +15,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 
-#define AB_API
+#define AB_API __declspec(dllexport)
 
 typedef void* Handle;
 typedef uint8_t byte;

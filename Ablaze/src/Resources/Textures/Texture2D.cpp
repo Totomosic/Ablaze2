@@ -140,6 +140,14 @@ namespace Ablaze
 		m_MagFilter = filter;
 	}
 
+	void Texture2D::SetWrapMode(WrapMode mode) const
+	{
+		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_S, (GLenum)mode);
+		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_T, (GLenum)mode);
+		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_R, (GLenum)mode);
+		m_WrapMode = mode;
+	}
+
 	void Texture2D::SetPixel(int x, int y, const Color& color, bool applyToMipmaps) const
 	{
 		byte* c = color.ToByte();

@@ -15,6 +15,7 @@ namespace Ablaze
 	protected:
 		mutable MinFilter m_MinFilter;
 		mutable MagFilter m_MagFilter;
+		mutable WrapMode m_WrapMode;
 
 	protected:
 		Texture2D(const String& filepath, MipmapMode mm);
@@ -34,6 +35,7 @@ namespace Ablaze
 
 		void SetMinFilter(MinFilter filter) const override;
 		void SetMagFilter(MagFilter filter) const override;
+		void SetWrapMode(WrapMode mode) const override;
 		void SetPixel(int x, int y, const Color& color, bool applyToMipmaps = true) const;
 		void SetRegion(int xOffset, int yOffset, int width, int height, const Color& color, bool applyToMipmaps = true) const; // Specified from lower left corner
 		void SetRegion(int xOffset, int yOffset, int width, int height, int mipmap, const byte* image) const;

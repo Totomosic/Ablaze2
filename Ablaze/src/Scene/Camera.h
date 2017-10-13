@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Entity.h"
+#include "Actor.h"
 
 namespace Ablaze
 {
@@ -10,14 +10,13 @@ namespace Ablaze
 		Perspective, Orthographic
 	};
 
-	class AB_API Camera : public Entity
+	class AB_API Camera : public Actor
 	{
 	protected:
 		float m_Fov;
 		Projection m_ProjectionType;
 		float m_NearPlane;
 		float m_FarPlane;
-
 		Maths::Mat4 m_Projection;
 
 	public:
@@ -56,6 +55,7 @@ namespace Ablaze
 		Maths::Vec3 ScreenToWorldPoint(const Maths::Vec3& screenpoint) const;
 		Maths::Vec3 WorldToScreenPoint(const Maths::Vec3& worldpoint) const;
 
+		void Update(double elapsedSeconds) override;
 		void UpdateProjectionMatrix();
 
 		String ToString() const override;

@@ -5,24 +5,16 @@
 namespace Ablaze
 {
 
-	Camera::Camera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Entity(transform, mesh, false),
+	Camera::Camera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, mesh, false),
 		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
 		CreateProjectionMatrix();
-		if (SceneManager::Instance().HasScene())
-		{
-			SceneManager::Instance().CurrentScene().AddCamera(this);
-		}
 	}
 
-	Camera::Camera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane) : Entity(transform, false),
+	Camera::Camera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, false),
 		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
 		CreateProjectionMatrix();
-		if (SceneManager::Instance().HasScene())
-		{
-			SceneManager::Instance().CurrentScene().AddCamera(this);
-		}
 	}
 
 	Camera::Camera(const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(), mesh, projection, fov, nearPlane, farPlane)
@@ -162,6 +154,11 @@ namespace Ablaze
 	{
 		m_ProjectionType = projection;
 		UpdateProjectionMatrix();
+	}
+
+	void Camera::Update(double elapsedSeconds)
+	{
+		Actor::Update(elapsedSeconds);
 	}
 
 	void Camera::UpdateProjectionMatrix()

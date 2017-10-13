@@ -97,7 +97,7 @@ namespace Ablaze
 
 	bool FileSystem::Rename(const File& file, const String& newName)
 	{
-	
+		return true;
 	}
 
 	void FileSystem::Read(const File& file, int64 numBytes, void* buffer)

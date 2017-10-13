@@ -149,6 +149,7 @@
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\Graphics\GraphicsPipeline.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
     <ClInclude Include="src\Scene\Camera.h" />
@@ -199,6 +200,8 @@
     <ClInclude Include="src\Resources\Textures\Texture2D.h" />
     <ClInclude Include="src\Resources\Textures\__Textures__.h" />
     <ClInclude Include="src\Resources\__Resources__.h" />
+    <ClInclude Include="src\Scene\Layer.h" />
+    <ClInclude Include="src\Scene\Actor.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scene\Structs\Transform.h" />
@@ -232,6 +235,7 @@
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Logging.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
     <ClCompile Include="src\Resources\Meshes\Mesh.cpp" />
     <ClCompile Include="src\Resources\Meshes\Shapes.cpp" />
     <ClCompile Include="src\Scene\Camera.cpp" />
@@ -265,6 +269,8 @@
     <ClCompile Include="src\Resources\Textures\RenderTexture.cpp" />
     <ClCompile Include="src\Resources\Textures\Texture.cpp" />
     <ClCompile Include="src\Resources\Textures\Texture2D.cpp" />
+    <ClCompile Include="src\Scene\Layer.cpp" />
+    <ClCompile Include="src\Scene\Actor.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\Structs\Transform.cpp" />

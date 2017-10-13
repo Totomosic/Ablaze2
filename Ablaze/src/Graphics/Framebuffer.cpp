@@ -18,8 +18,11 @@ namespace Ablaze
 		: m_Viewport(Viewport(width, height)), m_ClearColor(clearColor)
 	{
 		glGenFramebuffers(1, &m_Id);
-		CreateColorTextureAttachment();
-		CreateDepthTextureAttachment();
+		if (createOnLoad)
+		{
+			CreateColorTextureAttachment();
+			CreateDepthTextureAttachment();
+		}
 	}
 
 	Framebuffer::~Framebuffer()
@@ -54,6 +57,7 @@ namespace Ablaze
 
 	void Framebuffer::Clear(ClearBuffer buffer) const
 	{
+		Bind();
 		glClearColor(m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
 		glClear((GLbitfield)buffer);
 	}
@@ -88,6 +92,16 @@ namespace Ablaze
 		m_Viewport.SetHeight(height);
 	}
 
+	const Resource<Texture2D>& Framebuffer::GetTexture(ColorBuffer buffer) const
+	{
+		return m_Textures.at(buffer);
+	}
+
+	Resource<Texture2D>& Framebuffer::GetTexture(ColorBuffer buffer)
+	{
+		return m_Textures[buffer];
+	}
+
 	void Framebuffer::CopyToScreen(ClearBuffer buffer)
 	{
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -103,9 +117,10 @@ namespace Ablaze
 	{
 		Bind();
 		texture->Bind();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->GetWidth(), texture->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		texture->SetMagFilter(MagFilter::Linear);
 		texture->SetMinFilter(MinFilter::Linear);
+		texture->SetWrapMode(WrapMode::Clamp);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->GetID(), 0);
 		glDrawBuffer((GLenum)buffer);
 		m_Textures[buffer] = texture;
@@ -113,7 +128,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
 	{
-		CreateColorTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight()), buffer);
+		CreateColorTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled), buffer);
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment(const Resource<Texture2D>& texture)
@@ -123,13 +138,14 @@ namespace Ablaze
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, texture->GetWidth(), texture->GetHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 		texture->SetMagFilter(MagFilter::Linear);
 		texture->SetMinFilter(MinFilter::Linear);
+		texture->SetWrapMode(WrapMode::Clamp);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->GetID(), 0);
 		m_Textures[ColorBuffer::Depth] = texture;
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment()
 	{
-		CreateDepthTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight()));
+		CreateDepthTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled));
 	}
 
 	String Framebuffer::ToString() const

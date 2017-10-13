@@ -104,13 +104,17 @@ namespace Ablaze
 			{
 				Graphics::CurrentContext()->SetClearColor(Color(std::stoi(argList[0]), std::stoi(argList[1]), std::stoi(argList[2]), std::stoi(argList[3])));
 			}
+			else if (command == "ClearColorHSB")
+			{
+				Graphics::CurrentContext()->SetClearColor(Color::FromHSB(std::stof(argList[0]), std::stof(argList[1]), std::stof(argList[2])));
+			}
 			else if (command == "GameTime")
 			{
 				AB_INFO("GameTime: " + std::to_string(Time::TotalTime()) + "s");
 			}
 			else if (command == "Help")
 			{
-				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), GameTime(), Help()");
+				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), ClearColorHSB(h, s, b), GameTime(), Help()");
 			}
 			else
 			{

@@ -1,7 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Entity.h"
-#include "Camera.h"
+#include "Layer.h"
 
 namespace Ablaze
 {
@@ -10,32 +9,33 @@ namespace Ablaze
 	class AB_API Scene : public Object
 	{
 	private:
-		std::vector<Entity*> m_Entities;
-		std::vector<Camera*> m_Cameras;
+		std::unordered_map<String, Layer*> m_Layers;
+		std::vector<Layer*> m_LayerOrder;
+		Layer* m_CurrentLayer;
 
 	public:
 		Scene();
+		Scene(const String& layerName, Camera* layerCamera = nullptr);
 		~Scene();
 
-		const std::vector<Entity*>& GetEntities() const;
-		const std::vector<Camera*>& GetCameras() const;
-		int EntityCount() const;
-		int CameraCount() const;
+		bool HasLayer() const;
+		const Layer& CurrentLayer() const;
+		Layer& CurrentLayer();
+		const Layer& GetLayer(const String& layer) const;
+		const Layer& GetLayer(int index) const;
+		Layer& GetLayer(const String& layer);
+		Layer& GetLayer(int index);
+		const std::vector<Layer*>& GetLayers() const;
 
-		// Adding an entity transfers complete ownership to scene object
+		void CreateLayer(const String& name, Camera* camera = nullptr);
+		void CreateLayer(Camera* camera = nullptr); // Assigned random name
+		void SetCurrentLayer(const String& name);
+		void SetCurrentLayer(Layer* layer);
+		void SetCurrentLayer(int index);
+
 		void AddEntity(Entity* entity);
-		void AddCamera(Camera* camera);
-		void RemoveEntity(Entity* entity);
-		void RemoveEntity(int index);
-		void RemoveCamera(Camera* camera);
-		void RemoveCamera(int index);
-		void ClearEntities();
-		void ClearCameras();
 
-		const Entity& GetEntity(int index) const;
-		Entity& GetEntity(int index);
-		const Camera& GetCamera(int index) const;
-		Camera& GetCamera(int index);
+		void Update(double elapsedSeconds);
 
 		String ToString() const override;
 

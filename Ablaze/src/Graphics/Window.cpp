@@ -4,8 +4,6 @@
 namespace Ablaze
 {
 
-	const Window* Window::s_CurrentContext = nullptr;
-	
 	Window::Window(int width, int height, const String& title, const Color& clearColor) : Object(),
 		m_Framebuffer(*Framebuffer::WindowFramebuffer(width, height)), m_Title(title)
 	{
@@ -41,6 +39,16 @@ namespace Ablaze
 	GLFWwindow* Window::WindowHandle() const
 	{
 		return m_WindowPtr;
+	}
+
+	const Framebuffer& Window::GetFramebuffer() const
+	{
+		return m_Framebuffer;
+	}
+
+	Framebuffer& Window::GetFramebuffer()
+	{
+		return m_Framebuffer;
 	}
 
 	bool Window::ShouldClose() const
@@ -120,11 +128,6 @@ namespace Ablaze
 		return m_Title;
 	}
 
-	const Window* Window::Current()
-	{
-		return s_CurrentContext;
-	}
-
 	void Window::Create()
 	{
 		int glfwResult = glfwInit();
@@ -140,7 +143,6 @@ namespace Ablaze
 	void Window::MakeCurrentContext()
 	{
 		glfwMakeContextCurrent(m_WindowPtr);
-		s_CurrentContext = this;
 
 		glfwSetKeyCallback(WindowHandle(), Input::KeyPressedCallback);
 		glfwSetCursorPosCallback(WindowHandle(), Input::MousePositionCallback);

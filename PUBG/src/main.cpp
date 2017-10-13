@@ -8,6 +8,7 @@ private:
 	Window* m_Window;
 	VertexArray* vao;
 	Texture2D* texture;
+	Framebuffer* fbo;
 
 public:
 	void Init() override
@@ -24,11 +25,9 @@ public:
 		tex.Increment();
 		texture = *tex;
 
-		vao = ResourceManager::Library().CreateRectangle(1, 1).Get()->GetVertexArray();
+		vao = ResourceManager::Library().CreateRectangle(1, 1)->GetVertexArray();
 
-		File f = FileSystem::CreateNew("test.txt");
-		FileSystem::WriteText(f, "Hi");
-
+		fbo = new Framebuffer(1280, 720, true);
 	}
 
 	void Tick() override
@@ -44,10 +43,15 @@ public:
 	void Render() override
 	{
 		Application::Render();
-		
+
+		fbo->Clear();
 		texture->Bind();
 
 		vao->Bind();
+		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
+
+		m_Window->GetFramebuffer().Bind();
+		fbo->GetTexture(ColorBuffer::Color0)->Bind();
 		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
 
 		UpdateDisplay();

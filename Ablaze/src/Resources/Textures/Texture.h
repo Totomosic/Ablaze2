@@ -44,6 +44,12 @@ namespace Ablaze
 		Nearest = GL_NEAREST
 	};
 
+	enum class WrapMode : GLenum
+	{
+		Repeat = GL_REPEAT,
+		Clamp = GL_CLAMP
+	};
+
 	class AB_API Texture : public Asset, public GLObject
 	{
 	protected:
@@ -70,6 +76,7 @@ namespace Ablaze
 		virtual void GenerateMipmaps();
 		virtual void SetMinFilter(MinFilter filter) const = 0;
 		virtual void SetMagFilter(MagFilter filter) const = 0;
+		virtual void SetWrapMode(WrapMode mode) const = 0;
 
 		friend class ResourceManager;
 

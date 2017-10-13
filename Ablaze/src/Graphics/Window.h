@@ -9,9 +9,6 @@ namespace Ablaze
 	class AB_API Window : public Object
 	{
 	private:
-		static const Window* s_CurrentContext;
-
-	private:
 		Framebuffer m_Framebuffer;
 		String m_Title;
 		GLFWwindow* m_WindowPtr;
@@ -25,6 +22,8 @@ namespace Ablaze
 		const String& GetTitle() const;
 		float GetAspect() const;
 		GLFWwindow* WindowHandle() const;
+		const Framebuffer& GetFramebuffer() const;
+		Framebuffer& GetFramebuffer();
 
 		bool ShouldClose() const;
 		void Close() const;
@@ -42,9 +41,6 @@ namespace Ablaze
 		void SetIcon(const String& filename);
 
 		String ToString() const override;
-
-	public:
-		static const Window* Current();
 
 	private:
 		void Create();

@@ -89,8 +89,52 @@ namespace Ablaze
 
 	Color Color::FromFloats(float r, float g, float b, float a)
 	{
-		Color c((int)(r * 255), (int)(g * 255), (int)(b * 255), (int)(a * 255));
+		Color c((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255));
 		return c;
+	}
+
+	Color Color::FromHSB(float hue, float saturation, float brightness)
+	{
+		float h = hue * 360;
+		float c = brightness * saturation;
+		float x = c * (1 - abs(((int)h / 60) % 2 - 1));
+		float m = brightness - c;
+
+		float rd = 0;
+		float gd = 0;
+		float bd = 0;
+
+		if (h < 60)
+		{
+			rd = c;
+			gd = x;
+		}
+		else if (h < 120)
+		{
+			rd = x;
+			gd = c;
+		}
+		else if (h < 180)
+		{
+			gd = c;
+			bd = x;
+		}
+		else if (h < 240)
+		{
+			gd = x;
+			bd = c;
+		}
+		else if (h < 300)
+		{
+			rd = x;
+			bd = c;
+		}
+		else
+		{
+			rd = c;
+			bd = x;
+		}
+		return Color((rd + m) * 255, (gd + m) * 255, (bd + m) * 255, 255);
 	}
 
 	Color Color::White()

@@ -5,109 +5,105 @@ namespace Ablaze
 
 	Scene::Scene() : Object()
 	{
-	
+		m_CurrentLayer = nullptr;
+	}
+
+	Scene::Scene(const String& layerName, Camera* layerCamera) : Scene()
+	{
+		CreateLayer(layerName, layerCamera);
 	}
 
 	Scene::~Scene()
 	{
-		for (auto ent : m_Entities)
+		for (Layer* layer : m_LayerOrder)
 		{
-			delete ent;
-		}
-		for (auto cam : m_Cameras)
-		{
-			delete cam;
+			delete layer;
 		}
 	}
 
-	const std::vector<Entity*>& Scene::GetEntities() const
+	bool Scene::HasLayer() const
 	{
-		return m_Entities;
+		return m_CurrentLayer != nullptr;
 	}
 
-	const std::vector<Camera*>& Scene::GetCameras() const
+	const Layer& Scene::CurrentLayer() const
 	{
-		return m_Cameras;
+		return *m_CurrentLayer;
 	}
 
-	int Scene::EntityCount() const
+	Layer& Scene::CurrentLayer()
 	{
-		return m_Entities.size();
+		return *m_CurrentLayer;
 	}
 
-	int Scene::CameraCount() const
+	const Layer& Scene::GetLayer(const String& name) const
 	{
-		return m_Cameras.size();
+		return *m_Layers.at(name);
+	}
+
+	const Layer& Scene::GetLayer(int index) const
+	{
+		return *m_LayerOrder[index];
+	}
+
+	Layer& Scene::GetLayer(const String& name)
+	{
+		return *m_Layers.at(name);
+	}
+
+	Layer& Scene::GetLayer(int index)
+	{
+		return *m_LayerOrder[index];
+	}
+
+	const std::vector<Layer*>& Scene::GetLayers() const
+	{
+		return m_LayerOrder;
+	}
+
+	void Scene::CreateLayer(const String& name, Camera* camera)
+	{
+		Layer* layer = new Layer(name, camera);
+		m_Layers[name] = layer;
+		m_LayerOrder.push_back(layer);
+		if (m_CurrentLayer == nullptr)
+		{
+			SetCurrentLayer(layer);
+		}
+	}
+
+	void Scene::CreateLayer(Camera* camera)
+	{
+		String name = std::to_string(m_LayerOrder.size()) + "_LAYER_NAMELESS_";
+		CreateLayer(name, camera);
+	}
+
+	void Scene::SetCurrentLayer(const String& name)
+	{
+		m_CurrentLayer = m_Layers[name];
+	}
+
+	void Scene::SetCurrentLayer(int index)
+	{
+		m_CurrentLayer = m_LayerOrder[index];
+	}
+
+	void Scene::SetCurrentLayer(Layer* layer)
+	{
+		m_CurrentLayer = layer;
 	}
 
 	void Scene::AddEntity(Entity* entity)
 	{
-		m_Entities.push_back(entity);
-	}
-
-	void Scene::AddCamera(Camera* camera)
-	{
-		m_Cameras.push_back(camera);
-	}
-
-	void Scene::RemoveEntity(Entity* entity)
-	{
-		auto it = std::find(m_Entities.begin(), m_Entities.end(), entity);
-		m_Entities.erase(it);
-	}
-
-	void Scene::RemoveEntity(int index)
-	{
-		m_Entities.erase(m_Entities.begin() + index);
-	}
-
-	void Scene::RemoveCamera(Camera* camera)
-	{
-		auto it = std::find(m_Cameras.begin(), m_Cameras.end(), camera);
-		m_Cameras.erase(it);
-	}
-
-	void Scene::RemoveCamera(int index)
-	{
-		m_Cameras.erase(m_Cameras.begin() + index);
-	}
-
-	void Scene::ClearEntities()
-	{
-		for (auto ent : m_Entities)
+		if (HasLayer())
 		{
-			delete ent;
+			CurrentLayer().AddEntity(entity);
 		}
-		m_Entities.clear();
 	}
 
-	void Scene::ClearCameras()
+	void Scene::Update(double elapsedSeconds)
 	{
-		for (auto cam : m_Cameras)
-		{
-			delete cam;
-		}
-		m_Cameras.clear();
-	}
-
-	const Entity& Scene::GetEntity(int index) const
-	{
-		return *m_Entities[index];
-	}
-
-	Entity& Scene::GetEntity(int index)
-	{
-		return *m_Entities[index];
-	}
-
-	const Camera& Scene::GetCamera(int index) const
-	{
-		return *m_Cameras[index];
-	}
-
-	Camera& Scene::GetCamera(int index)
-	{
-		return *m_Cameras[index];
+	
 	}
 
 	String Scene::ToString() const

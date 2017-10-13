@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Graphics\Graphics.h"
 
 namespace Ablaze
 {
@@ -29,7 +30,7 @@ namespace Ablaze
 
 	Maths::Vec2 Input::ScreenSize()
 	{
-		return Maths::Vec2(Window::Current()->GetWidth(), Window::Current()->GetHeight());
+		return Maths::Vec2(Graphics::CurrentContext()->GetWidth(), Graphics::CurrentContext()->GetHeight());
 	}
 
 	Maths::Vec3 Input::MousePosition(Origin origin)
