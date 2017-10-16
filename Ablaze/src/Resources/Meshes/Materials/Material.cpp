@@ -8,63 +8,63 @@ namespace Ablaze
 		// Load from file
 	}
 
-	Material::Material(const Color& baseColor, const RenderState& renderState, const Texture2DSet& textures) : Asset(),
-		m_BaseColor(baseColor), m_RenderState(renderState), m_Textures(textures)
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures) : Asset(),
+		m_BaseColor(baseColor), m_RenderState(renderState), m_Textures(textures), m_Shader(shader)
 	{
 	
 	}
 
-	Material::Material(const Color& baseColor, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture) : Material(baseColor, renderState, Texture2DSet(samplerName, texture))
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture) : Material(baseColor, shader, renderState, Texture2DSet(samplerName, texture))
 	{
 		
 	}
 
-	Material::Material(const Color& baseColor, const RenderState& renderState) : Material(baseColor, renderState, Texture2DSet())
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState) : Material(baseColor, shader, renderState, Texture2DSet())
 	{
 	
 	}
 
-	Material::Material(const Color& baseColor, const Texture2DSet& textures) : Material(baseColor, RenderState(), textures)
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const Texture2DSet& textures) : Material(baseColor, shader, RenderState(), textures)
 	{
 	
 	}
 
-	Material::Material(const Color& baseColor, const String& samplerName, const Resource<Texture2D>& texture) : Material(baseColor, Texture2DSet(samplerName, texture))
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture) : Material(baseColor, shader, Texture2DSet(samplerName, texture))
 	{
 	
 	}
 
-	Material::Material(const Color& baseColor) : Material(baseColor, RenderState())
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader) : Material(baseColor, shader, RenderState())
 	{
 	
 	}
 
-	Material::Material(const RenderState& renderState, const Texture2DSet& textures) : Material(Color::White(), renderState, textures)
+	Material::Material(const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures) : Material(Color::White(), shader, renderState, textures)
 	{
 	
 	}
 
-	Material::Material(const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture) : Material(renderState, Texture2DSet(samplerName, texture))
+	Material::Material(const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture) : Material(shader, renderState, Texture2DSet(samplerName, texture))
 	{
 	
 	}
 
-	Material::Material(const RenderState& renderState) : Material(renderState, Texture2DSet())
+	Material::Material(const Resource<Shader>& shader, const RenderState& renderState) : Material(shader, renderState, Texture2DSet())
 	{
 	
 	}
 
-	Material::Material(const Texture2DSet& textures) : Material(RenderState(), textures)
+	Material::Material(const Resource<Shader>& shader, const Texture2DSet& textures) : Material(shader, RenderState(), textures)
 	{
 	
 	}
 
-	Material::Material(const String& samplerName, const Resource<Texture2D>& texture) : Material(Texture2DSet(samplerName, texture))
+	Material::Material(const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture) : Material(shader, Texture2DSet(samplerName, texture))
 	{
 	
 	}
 
-	Material::Material() : Material(Color::White())
+	Material::Material(const Resource<Shader>& shader) : Material(Color::White(), shader)
 	{
 	
 	}
@@ -97,6 +97,16 @@ namespace Ablaze
 	Texture2DSet& Material::Textures()
 	{
 		return m_Textures;
+	}
+
+	const Resource<Shader>& Material::GetShader() const
+	{
+		return m_Shader;
+	}
+
+	Resource<Shader>& Material::GetShader()
+	{
+		return m_Shader;
 	}
 
 	void Material::Reload()

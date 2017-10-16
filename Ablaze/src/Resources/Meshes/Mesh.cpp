@@ -4,60 +4,64 @@ namespace Ablaze
 {
 
 	Mesh::Mesh() : Object(),
-		m_Models(), m_Materials()
+		m_Models()
 	{
 	
 	}
 
-	Mesh::Mesh(const Resource<Model>& model, const Material& material) : Mesh()
+	Mesh::Mesh(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform) : Mesh()
 	{
-		AddModel(model, material);
+		AddModel(model, material, transform);
 	}
 
 	const Resource<Model>& Mesh::GetModel(int index) const
 	{
-		return m_Models[index];
+		return m_Models[index].model;
 	}
 
 	Resource<Model>& Mesh::GetModel(int index)
 	{
-		return m_Models[index];
+		return m_Models[index].model;
 	}
 
 	const Material& Mesh::GetMaterial(int index) const
 	{
-		return m_Materials[index];
+		return m_Models[index].material;
 	}
 
 	Material& Mesh::GetMaterial(int index)
 	{
-		return m_Materials[index];
+		return m_Models[index].material;
 	}
 
-	std::pair<Resource<Model>&, Material&> Mesh::GetPair(int index)
+	const Maths::Mat4& Mesh::GetTransform(int index) const
 	{
-		return std::pair<Resource<Model>&, Material&>(GetModel(index), GetMaterial(index));
+		return m_Models[index].transform;
 	}
 
-	std::pair<const Resource<Model>&, const Material&> Mesh::GetPair(int index) const
+	Maths::Mat4& Mesh::GetTransform(int index)
 	{
-		return std::pair<const Resource<Model>&, const Material&>(GetModel(index), GetMaterial(index));
+		return m_Models[index].transform;
 	}
 
-	const std::vector<Resource<Model>>& Mesh::GetAllModels() const
+	const ModelSet& Mesh::GetModelSet(int index) const
+	{
+		return m_Models[index];
+	}
+
+	const std::vector<ModelSet>& Mesh::GetModelSets() const
 	{
 		return m_Models;
 	}
 
-	const std::vector<Material>& Mesh::GetAllMaterials() const
+	int Mesh::ModelCount() const
 	{
-		return m_Materials;
+		return m_Models.size();
 	}
 
-	void Mesh::AddModel(const Resource<Model>& model, const Material& material)
+	void Mesh::AddModel(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform)
 	{
-		m_Models.push_back(model);
-		m_Materials.push_back(material);
+		m_Models.push_back({ model, material, transform });
 	}
 
 	String Mesh::ToString() const

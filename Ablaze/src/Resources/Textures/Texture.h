@@ -58,7 +58,7 @@ namespace Ablaze
 		TextureTarget m_Target;
 		ImageFormat m_Format;
 		MipmapMode m_Mipmap;
-		int m_BindPort;
+		mutable int m_BindPort;
 
 	protected:
 		Texture(const String& filepath, TextureTarget target);
@@ -79,6 +79,7 @@ namespace Ablaze
 		virtual void SetWrapMode(WrapMode mode) const = 0;
 
 		friend class ResourceManager;
+		friend class TextureManager;
 
 	private:
 		void Create();

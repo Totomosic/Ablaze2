@@ -152,6 +152,7 @@
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
+    <ClInclude Include="src\Resources\Textures\TextureManager.h" />
     <ClInclude Include="src\Scene\Camera.h" />
     <ClInclude Include="src\Scene\Entity.h" />
     <ClInclude Include="src\Scene\GameObject\GameObject.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
     <ClCompile Include="src\Resources\Meshes\Mesh.cpp" />
     <ClCompile Include="src\Resources\Meshes\Shapes.cpp" />
+    <ClCompile Include="src\Resources\Textures\TextureManager.cpp" />
     <ClCompile Include="src\Scene\Camera.cpp" />
     <ClCompile Include="src\Scene\Entity.cpp" />
     <ClCompile Include="src\Scene\GameObject\GameObject.cpp" />

@@ -1,5 +1,6 @@
 #include "Texture2D.h"
 #include "Resources\Resource.h"
+#include "TextureManager.h"
 
 namespace Ablaze
 {
@@ -96,7 +97,7 @@ namespace Ablaze
 	{
 		if (s_CurrentlyBound != this)
 		{
-			glBindTexture((GLenum)m_Target, m_Id);
+			TextureManager::Instance().Bind(this);
 			s_CurrentlyBound = this;
 		}
 	}

@@ -7,27 +7,36 @@
 namespace Ablaze
 {
 
+	struct AB_API ModelSet
+	{
+	public:
+		Resource<Model> model;
+		Material material;
+		Maths::Mat4 transform;
+
+	};
+
 	class AB_API Mesh : public Object
 	{
 	private:
-		std::vector<Resource<Model>> m_Models;
-		std::vector<Material> m_Materials;
+		std::vector<ModelSet> m_Models;
 
 	public:
 		Mesh();
-		Mesh(const Resource<Model>& model, const Material& material);
+		Mesh(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
 
 		const Resource<Model>& GetModel(int index) const;
 		Resource<Model>& GetModel(int index);
 		const Material& GetMaterial(int index) const;
 		Material& GetMaterial(int index);
-		std::pair<const Resource<Model>&, const Material&> GetPair(int index) const;
-		std::pair<Resource<Model>&, Material&> GetPair(int index);
+		const Maths::Mat4& GetTransform(int index) const;
+		Maths::Mat4& GetTransform(int index);
+		const ModelSet& GetModelSet(int index) const;
+		int ModelCount() const;
 
-		const std::vector<Resource<Model>>& GetAllModels() const;
-		const std::vector<Material>& GetAllMaterials() const;
+		const std::vector<ModelSet>& GetModelSets() const;
 
-		void AddModel(const Resource<Model>& model, const Material& material);
+		void AddModel(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
 
 		String ToString() const override;
 

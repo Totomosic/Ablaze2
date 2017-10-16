@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "SceneManager.h"
 
 namespace Ablaze
 {
@@ -6,6 +7,8 @@ namespace Ablaze
 	Scene::Scene() : Object()
 	{
 		m_CurrentLayer = nullptr;
+		SceneManager::Instance().AddScene(this);
+		SceneManager::Instance().LoadScene(this);
 	}
 
 	Scene::Scene(const String& layerName, Camera* layerCamera) : Scene()

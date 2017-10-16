@@ -85,8 +85,8 @@ namespace Ablaze
 	void ResourceManager::DeleteResource(const String& filename)
 	{
 		auto res = GetResource(filename);
-		delete res.second;
 		m_Resources.erase(filename);
+		delete res.second;
 	}
 
 	std::pair<int, Asset*>& ResourceManager::GetResource(const String& filename)
@@ -103,6 +103,7 @@ namespace Ablaze
 	{
 		if (refCount <= 0)
 		{
+			//AB_INFO("Deleted Resource: " + filename);
 			DeleteResource(filename);
 		}
 	}

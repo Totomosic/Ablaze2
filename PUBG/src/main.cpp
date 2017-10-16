@@ -6,9 +6,6 @@ class Game : public Application
 {
 private:
 	Window* m_Window;
-	VertexArray* vao;
-	Texture2D* texture;
-	Framebuffer* fbo;
 
 public:
 	void Init() override
@@ -22,12 +19,22 @@ public:
 		s->Bind();
 
 		Resource<Texture2D> tex = ResourceManager::Library().LoadTexture2D("image.png", MipmapMode::Enabled);
-		tex.Increment();
-		texture = *tex;
+		Resource<Texture2D> tex2 = ResourceManager::Library().LoadTexture2D("normal.png");
 
-		vao = ResourceManager::Library().CreateRectangle(1, 1)->GetVertexArray();
+		Material mat(Color::White(), s, "Tex0", tex);
+		Resource<Model> model = ResourceManager::Library().CreateRectangle(1, 1, Color::White());
+		Mesh mesh(model, mat);
 
-		fbo = new Framebuffer(1280, 720, true);
+		Material mat2(Color::White(), s, "Tex0", tex2);
+		Resource<Model> model2 = ResourceManager::Library().CreateRectangle(0.5f, 0.5f);
+		Mesh mesh2(model2, mat2);
+
+		Scene& scene = SceneManager::Instance().CreateScene();
+		scene.CreateLayer("World", new Camera());
+
+		Entity* entity = new Entity(mesh);
+		Entity* entity2 = new Entity(mesh2);
+
 	}
 
 	void Tick() override
@@ -44,17 +51,25 @@ public:
 	{
 		Application::Render();
 
-		fbo->Clear();
-		texture->Bind();
-
-		vao->Bind();
-		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
-
-		m_Window->GetFramebuffer().Bind();
-		fbo->GetTexture(ColorBuffer::Color0)->Bind();
-		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
+		for (auto entity : SceneManager::Instance().CurrentScene().CurrentLayer().GetEntities())
+		{
+			RenderMesh(entity->GetMesh());
+		}
 
 		UpdateDisplay();
+	}
+
+	void RenderMesh(Mesh& mesh)
+	{
+		for (int i = 0; i < mesh.ModelCount(); i++)
+		{
+			const ModelSet& modelSet = mesh.GetModelSet(i);
+			modelSet.material.GetShader()->Bind();
+			modelSet.material.Textures().BindAll(modelSet.material.GetShader());
+			VertexArray* vao = modelSet.model->GetVertexArray();
+			vao->Bind();
+			glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
+		}
 	}
 
 };

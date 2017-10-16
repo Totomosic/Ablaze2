@@ -3,6 +3,7 @@
 #include "Resources\Asset.h"
 #include "RenderState.h"
 #include "Texture2DSet.h"
+#include "Resources\Shaders\Shader.h"
 
 namespace Ablaze
 {
@@ -15,21 +16,22 @@ namespace Ablaze
 		Color m_BaseColor;
 		RenderState m_RenderState;
 		Texture2DSet m_Textures;
+		Resource<Shader> m_Shader;
 
 	public:
 		Material(const String& filename); // TODO: Create custom Material file
-		Material(const Color& baseColor, const RenderState& renderState, const Texture2DSet& textures);
-		Material(const Color& baseColor, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
-		Material(const Color& baseColor, const RenderState& renderState);
-		Material(const Color& baseColor, const Texture2DSet& textures);
-		Material(const Color& baseColor, const String& samplerName, const Resource<Texture2D>& texture);
-		Material(const Color& baseColor);
-		Material(const RenderState& renderState, const Texture2DSet& textures);
-		Material(const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
-		Material(const RenderState& renderState);
-		Material(const Texture2DSet& textures);
-		Material(const String& samplerName, const Resource<Texture2D>& texture);
-		Material();
+		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const Texture2DSet& textures);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const Resource<Shader>& shader);
+		Material(const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures);
+		Material(const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Resource<Shader>& shader, const RenderState& renderState);
+		Material(const Resource<Shader>& shader, const Texture2DSet& textures);
+		Material(const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Resource<Shader>& shader);
 
 		const Color& BaseColor() const;
 		Color& BaseColor();
@@ -37,6 +39,8 @@ namespace Ablaze
 		RenderState& RenderSettings();
 		const Texture2DSet& Textures() const;
 		Texture2DSet& Textures();
+		const Resource<Shader>& GetShader() const;
+		Resource<Shader>& GetShader();
 
 		void Reload() override;
 

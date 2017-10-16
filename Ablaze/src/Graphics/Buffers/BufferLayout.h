@@ -35,7 +35,7 @@ namespace Ablaze
 		int CountOf(Attribute attributeName) const;
 		VertexAttrib& GetAttribute(Attribute attributeName);
 		const VertexAttrib& GetAttribute(Attribute attributeName) const;
-		const std::vector<VertexAttrib>& GetAllAttributes() const;
+		std::vector<VertexAttrib> GetAllAttributes() const;
 		int GetAttribCount() const;
 
 		void AddAttribute(const String& attributeName, const VertexAttrib& attribute);

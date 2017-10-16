@@ -64,7 +64,7 @@ namespace Ablaze
 		return GetAttribute(std::to_string((int)attributeName));
 	}
 
-	const std::vector<VertexAttrib>& BufferLayout::GetAllAttributes() const
+	std::vector<VertexAttrib> BufferLayout::GetAllAttributes() const
 	{
 		std::vector<VertexAttrib> attribs;
 		for (auto key : m_Attributes)

@@ -50,7 +50,7 @@ namespace Ablaze
 	void VertexBuffer::ApplyLayout() const
 	{
 		Bind();
-		for (VertexAttrib attrib : m_Layout.GetAllAttributes())
+		for (const VertexAttrib& attrib : m_Layout.GetAllAttributes())
 		{
 			glVertexAttribPointer(attrib.index, attrib.count, attrib.dataType, attrib.normalized, m_Layout.GetStride(), (const GLvoid*)attrib.offset);
 			glEnableVertexAttribArray(attrib.index);

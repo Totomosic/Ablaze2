@@ -24,6 +24,7 @@ namespace Ablaze
 		const std::vector<Entity*>& GetEntities() const;
 		Camera* GetCamera() const;
 		bool HasCamera() const;
+		int EntityCount() const;
 
 		void SetCamera(Camera* camera);
 		void AddEntity(Entity* entity);

@@ -13,11 +13,12 @@ namespace Ablaze
 		std::vector<Layer*> m_LayerOrder;
 		Layer* m_CurrentLayer;
 
-	public:
+	private:
 		Scene();
 		Scene(const String& layerName, Camera* layerCamera = nullptr);
 		~Scene();
 
+	public:
 		bool HasLayer() const;
 		const Layer& CurrentLayer() const;
 		Layer& CurrentLayer();
@@ -38,6 +39,8 @@ namespace Ablaze
 		void Update(double elapsedSeconds);
 
 		String ToString() const override;
+
+		friend class SceneManager;
 
 	};
 

@@ -29,6 +29,8 @@ namespace Ablaze
 		void RemoveScene(Scene* scene);
 		void RemoveScene(int index);
 
+		Scene& CreateScene();
+
 		String ToString() const override;
 
 	};

@@ -43,6 +43,11 @@ namespace Ablaze
 		return m_Camera != nullptr;
 	}
 
+	int Layer::EntityCount() const
+	{
+		return m_Entities.size();
+	}
+
 	void Layer::SetCamera(Camera* camera)
 	{
 		m_Camera = camera;

@@ -60,6 +60,12 @@ namespace Ablaze
 		m_Scenes.erase(it);
 	}
 
+	Scene& SceneManager::CreateScene()
+	{
+		Scene* s = new Scene();
+		return *s;
+	}
+
 	String SceneManager::ToString() const
 	{
 		return "SceneManager";

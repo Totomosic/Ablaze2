@@ -12,8 +12,6 @@ namespace Ablaze
 	private:
 		T* m_ResourcePtr;
 
-	private:
-
 	public:
 		Resource(T* resource)
 		{
