@@ -19,7 +19,7 @@ namespace Ablaze
 
 	Buffer::~Buffer()
 	{
-		glDeleteBuffers(1, &m_Id);
+		GL_CALL(glDeleteBuffers(1, &m_Id));
 	}
 
 	int64 Buffer::GetSize() const
@@ -39,7 +39,7 @@ namespace Ablaze
 
 	void Buffer::Bind() const
 	{
-		glBindBuffer((GLenum)m_Target, m_Id);
+		GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
 	}
 
 	void Buffer::Unbind() const
@@ -66,7 +66,7 @@ namespace Ablaze
 	void Buffer::Upload(const void* const buffer, int64 numBytes, int64 offset) const
 	{
 		Bind();
-		glBufferSubData((GLenum)m_Target, offset, numBytes, buffer);
+		GL_CALL(glBufferSubData((GLenum)m_Target, offset, numBytes, buffer));
 	}
 
 	void Buffer::Upload(const void* const buffer, int64 numBytes) const
@@ -77,7 +77,7 @@ namespace Ablaze
 	void Buffer::Download(void* buffer, int64 numBytes, int64 offset) const
 	{
 		Bind();
-		glGetBufferSubData((GLenum)m_Target, offset, numBytes, buffer);
+		GL_CALL(glGetBufferSubData((GLenum)m_Target, offset, numBytes, buffer));
 	}
 
 	void Buffer::Download(void* buffer, int64 numBytes) const
@@ -93,13 +93,15 @@ namespace Ablaze
 	void* Buffer::Map(AccessMode access) const
 	{
 		Bind();
-		return glMapBuffer((GLenum)m_Target, (GLenum)access);
+		void* result = GL_CALL(glMapBuffer((GLenum)m_Target, (GLenum)access));
+		return result;
 	}
 
 	bool Buffer::Unmap() const
 	{
 		Bind();
-		return glUnmapBuffer((GLenum)m_Target);
+		bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
+		return result;
 	}
 
 	String Buffer::ToString() const
@@ -109,13 +111,13 @@ namespace Ablaze
 
 	void Buffer::GenBuffer()
 	{
-		glGenBuffers(1, &m_Id);
+		GL_CALL(glGenBuffers(1, &m_Id));
 	}
 
 	void Buffer::CreateBuffer(void* buffer)
 	{
 		Bind();
-		glBufferData((GLenum)m_Target, GetSize(), buffer, (GLenum)m_Usage);
+		GL_CALL(glBufferData((GLenum)m_Target, GetSize(), buffer, (GLenum)m_Usage));
 	}
 	
 }

@@ -54,12 +54,12 @@ namespace Ablaze
 	{
 		m_Mipmap = MipmapMode::Enabled;
 		Bind();
-		glGenerateMipmap((GLenum)m_Target);
+		GL_CALL(glGenerateMipmap((GLenum)m_Target));
 	}
 
 	void Texture::Create()
 	{
-		glGenTextures(1, &m_Id);
+		GL_CALL(glGenTextures(1, &m_Id));
 	}
 
 	void Texture::SetBindPort(int port)

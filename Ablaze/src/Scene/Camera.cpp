@@ -99,7 +99,7 @@ namespace Ablaze
 
 	Maths::Mat4 Camera::ViewMatrix() const
 	{
-		return Transform().ToMatrix().Inverse();
+		return m_Transform.ToMatrix().Inverse();
 	}
 
 	float Camera::NearPlane() const

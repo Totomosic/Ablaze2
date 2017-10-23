@@ -61,7 +61,7 @@ namespace Ablaze
 
 	void Viewport::Bind() const
 	{
-		glViewport(GetX(), GetY(), GetWidth(), GetHeight());
+		GL_CALL(glViewport(GetX(), GetY(), GetWidth(), GetHeight()));
 	}
 
 	void Viewport::Unbind() const

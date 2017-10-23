@@ -4,9 +4,13 @@
 namespace Ablaze
 {
 
-	Window::Window(int width, int height, const String& title, const Color& clearColor) : Object(),
+	Window::Window(int width, int height, const String& title, const Color& clearColor, bool useDefaultHints) : Object(),
 		m_Framebuffer(*Framebuffer::WindowFramebuffer(width, height)), m_Title(title)
 	{
+		if (useDefaultHints)
+		{
+			glfwWindowHint(GLFW_SAMPLES, 4);
+		}
 		m_Framebuffer.SetClearColor(clearColor);
 		Create();
 	}
@@ -130,11 +134,6 @@ namespace Ablaze
 
 	void Window::Create()
 	{
-		int glfwResult = glfwInit();
-		if (glfwResult != GLFW_TRUE)
-		{
-			AB_FATAL("Failed to initialise GLFW");
-		}
 		m_WindowPtr = glfwCreateWindow(GetWidth(), GetHeight(), m_Title.c_str(), nullptr, nullptr);
 		MakeCurrentContext();
 		Engine::Initialise();

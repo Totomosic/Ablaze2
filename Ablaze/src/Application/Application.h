@@ -14,7 +14,6 @@ namespace Ablaze
 		Application();
 		~Application();
 
-		Window* BuildWindow(int width, int height, const String& title, const Color& clearColor = Color::Black());
 		int WindowWidth();
 		int WindowHeight();
 

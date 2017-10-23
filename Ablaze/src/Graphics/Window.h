@@ -14,7 +14,7 @@ namespace Ablaze
 		GLFWwindow* m_WindowPtr;
 
 	public:
-		Window(int width, int height, const String& title, const Color& clearColor = Color::Black());
+		Window(int width, int height, const String& title, const Color& clearColor = Color::Black(), bool useDefaultHints = true);
 		~Window();
 
 		int GetWidth() const;

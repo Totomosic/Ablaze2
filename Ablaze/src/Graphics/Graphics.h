@@ -43,6 +43,7 @@ namespace Ablaze
 
 		static bool s_DepthEnabled;
 		static bool s_BlendEnabled;
+		static bool s_CullEnabled;
 		static DepthFunction s_DepthFunction;
 		static BlendSrc s_BlendSrcFunction;
 		static BlendDst s_BlendDstFunction;
@@ -56,6 +57,7 @@ namespace Ablaze
 
 		static bool IsDepthEnabled();
 		static bool IsBlendEnabled();
+		static bool IsCullEnabled();
 		static DepthFunction GetDepthFunction();
 		static BlendSrc GetBlendSrcFunction();
 		static BlendDst GetBlendDstFunction();
@@ -72,6 +74,7 @@ namespace Ablaze
 		static void ResetGLStates();
 		static void SetDepth(bool enabled);
 		static void SetBlend(bool enabled);
+		static void SetCull(bool enabled);
 		static void SetDepthFunction(DepthFunction depthFunction);
 		static void SetBlendSrcFunction(BlendSrc blendFunction);
 		static void SetBlendDstFunction(BlendDst blendFunction);
@@ -79,6 +82,8 @@ namespace Ablaze
 		static void DisableDepthTest();
 		static void EnableBlend();
 		static void DisableBlend();
+		static void EnableCull();
+		static void DisableCull();
 
 	private:
 		static void ApplyGLStates();

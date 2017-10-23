@@ -8,7 +8,7 @@ namespace Ablaze
 	VertexArray::VertexArray(RenderMode renderMode) : GLObject(),
 		m_VertexBuffers(), m_IndexBuffer(nullptr), m_RenderMode(renderMode), m_VertexCount(0), m_RenderCount(0)
 	{
-		glGenVertexArrays(1, &m_Id);
+		GL_CALL(glGenVertexArrays(1, &m_Id));
 	}
 
 	VertexArray::VertexArray(IndexBuffer* indexBuffer, RenderMode renderMode) : VertexArray(renderMode)
@@ -26,7 +26,7 @@ namespace Ablaze
 		{
 			delete m_IndexBuffer;
 		}
-		glDeleteVertexArrays(1, &m_Id);
+		GL_CALL(glDeleteVertexArrays(1, &m_Id));
 	}
 
 	const std::vector<VertexBuffer*>& VertexArray::GetVertexBuffers() const
@@ -78,7 +78,7 @@ namespace Ablaze
 	{
 		if (s_CurrentlyBound != this)
 		{
-			glBindVertexArray(m_Id);
+			GL_CALL(glBindVertexArray(m_Id));
 			if (HasIndexBuffer())
 			{
 				m_IndexBuffer->Bind();

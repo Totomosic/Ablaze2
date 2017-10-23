@@ -39,7 +39,7 @@ namespace Ablaze
 		int mipHeight = m_Height / (int)pow(2, mipmap);
 		byte* data = new byte[mipWidth * mipHeight * 4];
 		Bind();
-		glGetTexImage((GLenum)m_Target, mipmap, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		GL_CALL(glGetTexImage((GLenum)m_Target, mipmap, GL_RGBA, GL_UNSIGNED_BYTE, data));
 		Unbind();
 		return data;
 	}
@@ -120,16 +120,16 @@ namespace Ablaze
 		{
 			if (filter == MinFilter::Linear)
 			{
-				glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 			}
 			else if (filter == MinFilter::Nearest)
 			{
-				glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+				GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST));
 			}
 		}
 		else
 		{
-			glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, (GLenum)filter);
+			GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, (GLenum)filter));
 		}
 		Unbind();
 		m_MinFilter = filter;
@@ -137,15 +137,17 @@ namespace Ablaze
 
 	void Texture2D::SetMagFilter(MagFilter filter) const
 	{
-		glTexParameteri((GLenum)m_Target, GL_TEXTURE_MAG_FILTER, (GLenum)filter);
+		Bind();
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MAG_FILTER, (GLenum)filter));
 		m_MagFilter = filter;
 	}
 
 	void Texture2D::SetWrapMode(WrapMode mode) const
 	{
-		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_S, (GLenum)mode);
-		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_T, (GLenum)mode);
-		glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_R, (GLenum)mode);
+		Bind();
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_S, (GLenum)mode));
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_T, (GLenum)mode));
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_R, (GLenum)mode));
 		m_WrapMode = mode;
 	}
 
@@ -153,7 +155,7 @@ namespace Ablaze
 	{
 		byte* c = color.ToByte();
 		Bind();
-		glTexSubImage2D((GLenum)m_Target, 0, x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, c);
+		GL_CALL(glTexSubImage2D((GLenum)m_Target, 0, x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, c));
 		if (applyToMipmaps)
 		{
 			int max = max(m_Width, m_Height);
@@ -161,7 +163,7 @@ namespace Ablaze
 			int mip = 1;
 			while (max > 1)
 			{
-				glTexSubImage2D((GLenum)m_Target, mip, x / level, y / level, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, c);
+				GL_CALL(glTexSubImage2D((GLenum)m_Target, mip, x / level, y / level, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, c));
 				max /= 2;
 				level *= 2;
 				mip++;
@@ -183,7 +185,7 @@ namespace Ablaze
 			data += 4;
 		}
 		Bind();
-		glTexSubImage2D((GLenum)m_Target, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, d);
+		GL_CALL(glTexSubImage2D((GLenum)m_Target, 0, x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, d));
 		if (applyToMipmaps)
 		{
 			int max = max(m_Width, m_Height);
@@ -203,7 +205,7 @@ namespace Ablaze
 	void Texture2D::SetRegion(int xOffset, int yOffset, int width, int height, int mipmap, const byte* image) const
 	{
 		Bind();
-		glTexSubImage2D((GLenum)m_Target, mipmap, xOffset / (int)pow(2, mipmap), yOffset / (int)pow(2, mipmap), width / (int)pow(2, mipmap), height / (int)pow(2, mipmap), GL_RGBA, GL_UNSIGNED_BYTE, image);
+		GL_CALL(glTexSubImage2D((GLenum)m_Target, mipmap, xOffset / (int)pow(2, mipmap), yOffset / (int)pow(2, mipmap), width / (int)pow(2, mipmap), height / (int)pow(2, mipmap), GL_RGBA, GL_UNSIGNED_BYTE, image));
 		Unbind();
 	}
 
@@ -243,7 +245,7 @@ namespace Ablaze
 			Bind();
 			SetMinFilter(MinFilter::Linear);
 			SetMagFilter(MagFilter::Linear);
-			glTexImage2D((GLenum)m_Target, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+			GL_CALL(glTexImage2D((GLenum)m_Target, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData));
 			Unbind();
 		}
 	}

@@ -35,7 +35,7 @@ namespace Ablaze
 		~Resource()
 		{
 			// Dereference resource ptr
-			if (m_ResourcePtr->IsFromFile())
+			if (m_ResourcePtr != nullptr && m_ResourcePtr->IsFromFile())
 			{
 				ResourceManager::Library().DecrementRefCount(m_ResourcePtr->GetFilename());
 			}

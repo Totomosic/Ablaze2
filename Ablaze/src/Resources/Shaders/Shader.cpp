@@ -32,14 +32,14 @@ namespace Ablaze
 
 	Shader::~Shader()
 	{
-		glDeleteProgram(m_Id);
+		GL_CALL(glDeleteProgram(m_Id));
 	}
 
 	void Shader::Bind() const
 	{
 		if (s_CurrentlyBound != this)
 		{
-			glUseProgram(m_Id);
+			GL_CALL(glUseProgram(m_Id));
 			s_CurrentlyBound = this;
 		}
 	}
@@ -62,12 +62,12 @@ namespace Ablaze
 
 	void Shader::SetUniform(const String& uniformName, int value) const
 	{
-		glUniform1i(GetUniformLocation(uniformName), value);
+		GL_CALL(glUniform1i(GetUniformLocation(uniformName), value));
 	}
 
 	void Shader::SetUniform(const String& uniformName, float value) const
 	{
-		glUniform1f(GetUniformLocation(uniformName), value);
+		GL_CALL(glUniform1f(GetUniformLocation(uniformName), value));
 	}
 
 	void Shader::SetUniform(const String& uniformName, bool value) const
@@ -77,37 +77,37 @@ namespace Ablaze
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec2& value) const
 	{
-		glUniform2f(GetUniformLocation(uniformName), value.x, value.y);
+		GL_CALL(glUniform2f(GetUniformLocation(uniformName), value.x, value.y));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec3& value) const
 	{
-		glUniform3f(GetUniformLocation(uniformName), value.x, value.y, value.z);
+		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec4& value) const
 	{
-		glUniform4f(GetUniformLocation(uniformName), value.x, value.y, value.z, value.w);
+		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Plane& value) const
 	{
-		glUniform4f(GetUniformLocation(uniformName), value.normal.x, value.normal.y, value.normal.z, value.height);
+		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.normal.x, value.normal.y, value.normal.z, value.height));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Ray& value) const
 	{
-		glUniform3f(GetUniformLocation(uniformName), value.direction.x, value.direction.y, value.direction.z);
+		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.direction.x, value.direction.y, value.direction.z));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Mat4& value) const
 	{
-		glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, value.values);
+		GL_CALL(glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Color& value) const
 	{
-		glUniform4f(GetUniformLocation(uniformName), value.r, value.g, value.b, value.a);
+		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.r, value.g, value.b, value.a));
 	}
 
 	String Shader::ToString() const
@@ -132,43 +132,43 @@ namespace Ablaze
 
 	void Shader::Create()
 	{
-		m_Id = glCreateProgram();
+		m_Id = GL_CALL(glCreateProgram());
 	}
 
 	void Shader::BuildProgram(const String& vertexSrc, const String& fragmentSrc)
 	{
 		uint vertex = AttachShader(vertexSrc, GL_VERTEX_SHADER);
 		uint fragment = AttachShader(fragmentSrc, GL_FRAGMENT_SHADER);
-		glLinkProgram(m_Id);
+		GL_CALL(glLinkProgram(m_Id));
 
-		glDetachShader(m_Id, vertex);
-		glDetachShader(m_Id, fragment);
-		glDeleteShader(vertex);
-		glDeleteShader(fragment);
+		GL_CALL(glDetachShader(m_Id, vertex));
+		GL_CALL(glDetachShader(m_Id, fragment));
+		GL_CALL(glDeleteShader(vertex));
+		GL_CALL(glDeleteShader(fragment));
 	}
 
 	uint Shader::AttachShader(const String& shaderSrc, GLenum shaderType)
 	{
-		uint shader = glCreateShader(shaderType);
+		uint shader = GL_CALL(glCreateShader(shaderType));
 		const char* cstr = shaderSrc.c_str();
-		glShaderSource(shader, 1, &cstr, nullptr);
-		glCompileShader(shader);
+		GL_CALL(glShaderSource(shader, 1, &cstr, nullptr));
+		GL_CALL(glCompileShader(shader));
 
 		int result;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+		GL_CALL(glGetShaderiv(shader, GL_COMPILE_STATUS, &result));
 		if (result == GL_FALSE)
 		{
 			int length;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+			GL_CALL(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length));
 			std::vector<char> error(length);
-			glGetShaderInfoLog(shader, length, &length, &error[0]);
+			GL_CALL(glGetShaderInfoLog(shader, length, &length, &error[0]));
 			String errorMessage(&error[0]);
-			glDeleteShader(shader);
+			GL_CALL(glDeleteShader(shader));
 			AB_ERROR(errorMessage);
 			return 0;
 		}
 
-		glAttachShader(m_Id, shader);
+		GL_CALL(glAttachShader(m_Id, shader));
 		return shader;
 	}
 
@@ -181,7 +181,7 @@ namespace Ablaze
 		}
 		else
 		{
-			location = glGetUniformLocation(m_Id, uniformName.c_str());
+			location = GL_CALL(glGetUniformLocation(m_Id, uniformName.c_str()));
 			m_UniformLocations[uniformName] = location;
 			if (location == -1)
 			{

@@ -9,6 +9,7 @@ namespace Ablaze
 
 	bool Graphics::s_DepthEnabled = false;
 	bool Graphics::s_BlendEnabled = false;
+	bool Graphics::s_CullEnabled = false;
 	DepthFunction Graphics::s_DepthFunction = DepthFunction::Less;
 	BlendSrc Graphics::s_BlendSrcFunction = BlendSrc::SrcAlpha;
 	BlendDst Graphics::s_BlendDstFunction = BlendDst::OneMinusSrcAlpha;
@@ -40,6 +41,11 @@ namespace Ablaze
 	bool Graphics::IsBlendEnabled()
 	{
 		return s_BlendEnabled;
+	}
+
+	bool Graphics::IsCullEnabled()
+	{
+		return s_CullEnabled;
 	}
 
 	DepthFunction Graphics::GetDepthFunction()
@@ -88,6 +94,7 @@ namespace Ablaze
 	{
 		s_DepthEnabled = false;
 		s_BlendEnabled = false;
+		s_CullEnabled = false;
 		s_DepthFunction = DepthFunction::Less;
 		s_BlendSrcFunction = BlendSrc::SrcAlpha;
 		s_BlendDstFunction = BlendDst::OneMinusSrcAlpha;
@@ -101,11 +108,11 @@ namespace Ablaze
 			s_DepthEnabled = enabled;
 			if (s_DepthEnabled)
 			{
-				glEnable(GL_DEPTH_TEST);
+				GL_CALL(glEnable(GL_DEPTH_TEST));
 			}
 			else
 			{
-				glDisable(GL_DEPTH_TEST);
+				GL_CALL(glDisable(GL_DEPTH_TEST));
 			}
 		}
 	}
@@ -117,11 +124,27 @@ namespace Ablaze
 			s_BlendEnabled = enabled;
 			if (s_BlendEnabled)
 			{
-				glEnable(GL_BLEND);
+				GL_CALL(glEnable(GL_BLEND));
 			}
 			else
 			{
-				glDisable(GL_BLEND);
+				GL_CALL(glDisable(GL_BLEND));
+			}
+		}
+	}
+
+	void Graphics::SetCull(bool enabled)
+	{
+		if (s_CullEnabled != enabled)
+		{
+			s_CullEnabled = enabled;
+			if (s_CullEnabled)
+			{
+				GL_CALL(glEnable(GL_CULL_FACE));
+			}
+			else
+			{
+				GL_CALL(glDisable(GL_CULL_FACE));
 			}
 		}
 	}
@@ -131,7 +154,7 @@ namespace Ablaze
 		if (s_DepthFunction != depthFunction)
 		{
 			s_DepthFunction = depthFunction;
-			glDepthFunc((GLenum)s_DepthFunction);
+			GL_CALL(glDepthFunc((GLenum)s_DepthFunction));
 		}
 	}
 
@@ -140,7 +163,7 @@ namespace Ablaze
 		if (s_BlendSrcFunction != function)
 		{
 			s_BlendSrcFunction = function;
-			glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction);
+			GL_CALL(glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction));
 		}
 	}
 
@@ -149,7 +172,7 @@ namespace Ablaze
 		if (s_BlendDstFunction != function)
 		{
 			s_BlendDstFunction = function;
-			glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction);
+			GL_CALL(glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction));
 		}
 	}
 
@@ -173,27 +196,46 @@ namespace Ablaze
 		SetBlend(false);
 	}
 
+	void Graphics::EnableCull()
+	{
+		SetCull(true);
+	}
+
+	void Graphics::DisableCull()
+	{
+		SetCull(false);
+	}
+
 	void Graphics::ApplyGLStates()
 	{
 		if (s_DepthEnabled)
 		{
-			glEnable(GL_DEPTH_TEST);
+			GL_CALL(glEnable(GL_DEPTH_TEST));
 		}
 		else
 		{
-			glDisable(GL_DEPTH_TEST);
+			GL_CALL(glDisable(GL_DEPTH_TEST));
 		}
 
 		if (s_BlendEnabled)
 		{
-			glEnable(GL_BLEND);
+			GL_CALL(glEnable(GL_BLEND));
 		}
 		else
 		{
-			glDisable(GL_BLEND);
+			GL_CALL(glDisable(GL_BLEND));
 		}
-		glDepthFunc((GLenum)s_DepthFunction);
-		glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction);
+
+		if (s_CullEnabled)
+		{
+			GL_CALL(glEnable(GL_CULL_FACE));
+		}
+		else
+		{
+			GL_CALL(glDisable(GL_CULL_FACE));
+		}
+		GL_CALL(glDepthFunc((GLenum)s_DepthFunction));
+		GL_CALL(glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction));
 	}
 
 }

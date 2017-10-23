@@ -106,7 +106,17 @@ namespace Ablaze
 
 	void Scene::Update(double elapsedSeconds)
 	{
-	
+		for (Layer* layer : m_LayerOrder)
+		{
+			for (Entity* entity : layer->GetEntities())
+			{
+				entity->Update(elapsedSeconds);
+			}
+			if (layer->HasCamera())
+			{
+				layer->GetCamera()->Update(elapsedSeconds);
+			}
+		}
 	}
 
 	String Scene::ToString() const

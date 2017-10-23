@@ -70,25 +70,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediate\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\FreeImage\include\;$(SolutionDir)Dependencies\FreeType\include\;$(SolutionDir)Dependencies\FreeType-GL\include\;$(SolutionDir)Dependencies\GLEW\include\;$(SolutionDir)Dependencies\GLFW\include\;$(SolutionDir)Dependencies\STB_Image\include\;$(SolutionDir)Ablaze\src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\FreeImage\lib\;$(SolutionDir)Dependencies\FreeType\lib\;$(SolutionDir)Dependencies\FreeType-GL\lib\;$(SolutionDir)Dependencies\GLEW\lib\;$(SolutionDir)Dependencies\GLFW\lib-vc2015\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediate\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\FreeImage\include\;$(SolutionDir)Dependencies\FreeType\include\;$(SolutionDir)Dependencies\FreeType-GL\include\;$(SolutionDir)Dependencies\GLEW\include\;$(SolutionDir)Dependencies\GLFW\include\;$(SolutionDir)Dependencies\STB_Image\include\;$(SolutionDir)Ablaze\src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\FreeImage\lib\;$(SolutionDir)Dependencies\FreeType\lib\;$(SolutionDir)Dependencies\FreeType-GL\lib\;$(SolutionDir)Dependencies\GLEW\lib\;$(SolutionDir)Dependencies\GLFW\lib-vc2015\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediate\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\FreeImage\include\;$(SolutionDir)Dependencies\FreeType\include\;$(SolutionDir)Dependencies\FreeType-GL\include\;$(SolutionDir)Dependencies\GLEW\include\;$(SolutionDir)Dependencies\GLFW\include\;$(SolutionDir)Dependencies\STB_Image\include\;$(SolutionDir)Ablaze\src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\FreeImage\lib\;$(SolutionDir)Dependencies\FreeType\lib\;$(SolutionDir)Dependencies\FreeType-GL\lib\;$(SolutionDir)Dependencies\GLEW\lib\;$(SolutionDir)Dependencies\GLFW\lib-vc2015\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediate\</IntDir>
     <IncludePath>$(SolutionDir)Dependencies\FreeImage\include\;$(SolutionDir)Dependencies\FreeType\include\;$(SolutionDir)Dependencies\FreeType-GL\include\;$(SolutionDir)Dependencies\GLEW\include\;$(SolutionDir)Dependencies\GLFW\include\;$(SolutionDir)Dependencies\STB_Image\include\;$(SolutionDir)Ablaze\src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\FreeImage\lib\;$(SolutionDir)Dependencies\FreeType\lib\;$(SolutionDir)Dependencies\FreeType-GL\lib\;$(SolutionDir)Dependencies\GLEW\lib\;$(SolutionDir)Dependencies\GLFW\lib-vc2015\;$(LibraryPath)</LibraryPath>
@@ -143,6 +143,7 @@
     <ClInclude Include="src\Application\Application.h" />
     <ClInclude Include="src\Application\Input\Input.h" />
     <ClInclude Include="src\Application\Input\__Input__.h" />
+    <ClInclude Include="src\Application\Stopwatch.h" />
     <ClInclude Include="src\Application\Time.h" />
     <ClInclude Include="src\Application\Timer.h" />
     <ClInclude Include="src\Application\__Application__.h" />
@@ -209,10 +210,15 @@
     <ClInclude Include="src\Scene\Structs\__Structs__.h" />
     <ClInclude Include="src\Scene\__Scene__.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\System\BytecodeVM\Instructions.h" />
+    <ClInclude Include="src\System\BytecodeVM\VirtualMachine.h" />
+    <ClInclude Include="src\System\BytecodeVM\VMStack.h" />
+    <ClInclude Include="src\System\BytecodeVM\VMValue.h" />
     <ClInclude Include="src\System\Engine.h" />
     <ClInclude Include="src\System\Memory\Allocator.h" />
     <ClInclude Include="src\System\Memory\Memory.h" />
     <ClInclude Include="src\System\Memory\__Memory__.h" />
+    <ClInclude Include="src\System\BytecodeVM\__BytecodeVM__.h" />
     <ClInclude Include="src\System\__System__.h" />
     <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Utils\Debug\Debugger.h" />
@@ -231,6 +237,7 @@
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
     <ClCompile Include="src\Application\Input\Input.cpp" />
+    <ClCompile Include="src\Application\Stopwatch.cpp" />
     <ClCompile Include="src\Application\Time.cpp" />
     <ClCompile Include="src\Application\Timer.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
@@ -276,6 +283,9 @@
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\Structs\Transform.cpp" />
+    <ClCompile Include="src\System\BytecodeVM\Instructions.cpp" />
+    <ClCompile Include="src\System\BytecodeVM\VirtualMachine.cpp" />
+    <ClCompile Include="src\System\BytecodeVM\VMStack.cpp" />
     <ClCompile Include="src\System\Engine.cpp" />
     <ClCompile Include="src\System\Memory\Allocator.cpp" />
     <ClCompile Include="src\Utils\Debug\Debugger.cpp" />

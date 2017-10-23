@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Timer.h"
+#include "Stopwatch.h"
 
 namespace Ablaze
 {
@@ -24,17 +25,20 @@ namespace Ablaze
 		static double TotalTime();
 		static double ElapsedTime();
 		static double DeltaTime();
+		static double CurrentTime();
 
 		static double FramesPerSecond();
 		static double AvgFPS();
 
 		static void Reset();
 
-		static Timer* CreateNewTimer(double seconds, TimerMode mode = TimerMode::Repeat);
-		static Timer* CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode = TimerMode::Repeat);
+		static Stopwatch& CreateNewStopwatch(bool start = false);
+
+		static Timer& CreateNewTimer(double seconds, TimerMode mode = TimerMode::Repeat);
+		static Timer& CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode = TimerMode::Repeat);
 
 		template<class C, void(C::*M)()>
-		static Timer* CreateNewTimer(double seconds, C* const instance)
+		static Timer& CreateNewTimer(double seconds, C* const instance)
 		{
 			return CreateNewTimer(seconds, std::bind(M, instance));
 		}

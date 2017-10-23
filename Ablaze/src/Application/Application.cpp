@@ -17,6 +17,11 @@ namespace Ablaze
 
 	void Application::Start()
 	{
+		int glfwResult = glfwInit();
+		if (glfwResult != GLFW_TRUE)
+		{
+			AB_FATAL("Failed to initialise GLFW");
+		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
 		Init();
 		Time::Reset();
@@ -32,11 +37,6 @@ namespace Ablaze
 	int Application::WindowHeight()
 	{
 		return Graphics::CurrentContext()->GetHeight();
-	}
-
-	Window* Application::BuildWindow(int width, int height, const String& title, const Color& clearColor)
-	{
-		return new Window(width, height, title, clearColor);
 	}
 
 	String Application::ToString() const
@@ -87,11 +87,6 @@ namespace Ablaze
 			}
 			Debugger::Update();
 			ClearEvents();
-			GLenum result = glGetError();
-			if (result != GL_NO_ERROR)
-			{
-				AB_ERROR(String("GLerror: ") + (const char*)glewGetErrorString(result) + " (" + std::to_string(result) + ")");
-			}
 		}
 	}
 

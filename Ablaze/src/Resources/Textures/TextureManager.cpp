@@ -5,7 +5,7 @@ namespace Ablaze
 
 	TextureManager::TextureManager()
 	{
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &m_MaxBindPorts);
+		GL_CALL(glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &m_MaxBindPorts));
 		m_TextureArray = new const Texture*[m_MaxBindPorts];
 		Initialise();
 	}
@@ -24,7 +24,7 @@ namespace Ablaze
 		}
 		else
 		{
-			glActiveTexture(GL_TEXTURE0 + texture->m_BindPort);
+			GL_CALL(glActiveTexture(GL_TEXTURE0 + texture->m_BindPort));
 		}
 	}
 
@@ -42,8 +42,8 @@ namespace Ablaze
 	{
 		int unit = GetNextAvailableUnit();
 		texture->m_BindPort = unit;
-		glActiveTexture(GL_TEXTURE0 + unit);
-		glBindTexture((GLenum)texture->GetTarget(), texture->GetID());
+		GL_CALL(glActiveTexture(GL_TEXTURE0 + unit));
+		GL_CALL(glBindTexture((GLenum)texture->GetTarget(), texture->GetID()));
 		m_TextureArray[unit] = texture;
 	}
 

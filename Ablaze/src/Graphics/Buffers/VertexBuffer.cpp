@@ -52,8 +52,8 @@ namespace Ablaze
 		Bind();
 		for (const VertexAttrib& attrib : m_Layout.GetAllAttributes())
 		{
-			glVertexAttribPointer(attrib.index, attrib.count, attrib.dataType, attrib.normalized, m_Layout.GetStride(), (const GLvoid*)attrib.offset);
-			glEnableVertexAttribArray(attrib.index);
+			GL_CALL(glVertexAttribPointer(attrib.index, attrib.count, attrib.dataType, attrib.normalized, m_Layout.GetStride(), (const GLvoid*)attrib.offset));
+			GL_CALL(glEnableVertexAttribArray(attrib.index));
 		}
 		Unbind();
 	}

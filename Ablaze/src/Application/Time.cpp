@@ -31,6 +31,11 @@ namespace Ablaze
 		return DeltaTime();
 	}
 
+	double Time::CurrentTime()
+	{
+		return glfwGetTime();
+	}
+
 	double Time::FramesPerSecond()
 	{
 		return 1.0 / ElapsedTime();
@@ -52,14 +57,19 @@ namespace Ablaze
 		s_Frames.clear();
 	}
 
-	Timer* Time::CreateNewTimer(double seconds, TimerMode mode)
+	Stopwatch& Time::CreateNewStopwatch(bool start)
 	{
-		return new Timer(seconds, mode);
+		return *(new Stopwatch(start));
 	}
 
-	Timer* Time::CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode)
+	Timer& Time::CreateNewTimer(double seconds, TimerMode mode)
 	{
-		return new Timer(seconds, callback, mode);
+		return *(new Timer(seconds, mode));
+	}
+
+	Timer& Time::CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode)
+	{
+		return *(new Timer(seconds, callback, mode));
 	}
 
 	void Time::Update()
@@ -75,7 +85,7 @@ namespace Ablaze
 			CalcAvgFPS();
 		}
 
-		for (auto timer : Timer::s_ActiveTimers)
+		for (Timer* timer : Timer::s_ActiveTimers)
 		{
 			timer->Update(s_ElapsedSeconds);
 		}

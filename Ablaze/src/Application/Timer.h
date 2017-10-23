@@ -28,6 +28,7 @@ namespace Ablaze
 	public:
 		Timer(double totalTimeSeconds, TimerMode mode = TimerMode::Repeat);
 		Timer(double totalTimeSeconds, const std::function<void()>& callback, TimerMode mode = TimerMode::Repeat);
+		Timer(const Timer& other) = delete;
 		~Timer();
 
 		double CurrentTime() const;

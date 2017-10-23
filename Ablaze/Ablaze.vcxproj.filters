@@ -282,6 +282,24 @@
     <ClInclude Include="src\Resources\Textures\TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Application\Stopwatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\__BytecodeVM__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\Instructions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\VMValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\VirtualMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\VMStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -453,6 +471,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Textures\TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application\Stopwatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\BytecodeVM\VirtualMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\BytecodeVM\VMStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\BytecodeVM\Instructions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
