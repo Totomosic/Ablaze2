@@ -18,7 +18,7 @@ namespace Ablaze
 		static File CreateNew(const String& filename);
 		static File Open(const String& filename, OpenMode mode);
 		static bool Close(const File& fileHandle);
-		static void Clear(const File& fileHandle);
+		static void Clear(File& fileHandle);
 		static bool Delete(const File& fileHandle);
 		static bool Delete(const String& filename);
 		static bool Rename(const File& fileHandle, const String& filename);

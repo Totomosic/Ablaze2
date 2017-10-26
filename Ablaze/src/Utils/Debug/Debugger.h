@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Application\Input\__Input__.h"
+#include "System\BytecodeVM\__BytecodeVM__.h"
 
 namespace Ablaze
 {

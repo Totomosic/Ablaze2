@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
-#include "VMStack.h"
+#include "VMstack.h"
+#include "VMoperation.h"
 
 namespace Ablaze
 {
@@ -10,14 +11,19 @@ namespace Ablaze
 		class VirtualMachine : public Object
 		{
 		private:
-			VMStack m_Stack;
-			int m_Ip;
+			static VMoperation** s_Ops;
+
+		private:
+			VMstack m_Stack;
 
 			int* m_Bytecode;
+			int* m_Ip;
+
+			bool m_TraceStack;
 
 		public:
-			VirtualMachine(int* code);
-			VirtualMachine(const String& codeFile);
+			VirtualMachine(int* code, bool traceStack = false);
+			VirtualMachine(const String& codeFile, bool traceStack = false);
 			~VirtualMachine();
 
 			void Execute();
@@ -26,8 +32,19 @@ namespace Ablaze
 
 			String ToString() const override;
 
+			friend class Engine;
+
+		public:
+			static VMoperation** GetOperations();
+			static VMoperation& FindOperation(VMopcode opcode);
+			static VMoperation& FindOperation(const String& opName);
+
+		private:
+			static void Initialise();
+
 		private:
 			int* LoadFile(const String& file);
+			void StoreValue(std::vector<int>* code, const String& arg, VMtype type);
 
 		};
 

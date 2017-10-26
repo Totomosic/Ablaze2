@@ -7,7 +7,6 @@ class Game : public Application
 {
 private:
 	Window* m_Window;
-	Stopwatch* m_Sw;
 
 public:
 	void Init() override
@@ -30,21 +29,12 @@ public:
 		Scene& scene = SceneManager::Instance().CreateScene();
 		scene.CreateLayer("World", new Camera(Projection::Perspective));
 
-		m_Sw = &Time::CreateNewStopwatch(false);
-
-		Actor* entity = new Actor(0, 0, -500, mesh);
-
-		VirtualMachine vm("test.txt");
-		vm.Execute();
-		
+		Actor* entity = new Actor(0, 0, -500, mesh);		
 	}
 
 	void Tick() override
 	{
-		m_Sw->Stop();
-		AB_INFO(m_Sw->Milliseconds());
-		m_Sw->Reset();
-		m_Sw->Start();
+
 	}
 
 	void Update() override

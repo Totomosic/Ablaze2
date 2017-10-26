@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Application\Input\Input.h"
 #include "Graphics\Graphics.h"
+#include "BytecodeVM\__BytecodeVM__.h"
 
 namespace Ablaze
 {
@@ -15,6 +16,7 @@ namespace Ablaze
 		}
 		Random::Initialise();
 		Input::Initialise();
+		VM::VirtualMachine::Initialise();
 		return true;
 	}
 

@@ -60,4 +60,18 @@ namespace Ablaze
 		return result;
 	}
 
+	String CleanString(const String& str)
+	{
+		std::stringstream ss;
+		for (auto chr : str)
+		{
+			if (chr != '\n' && chr != ' ' && chr != '\r')
+			{
+				ss << chr;
+			}
+		}
+		String s = ss.str();
+		return s;
+	}
+
 }

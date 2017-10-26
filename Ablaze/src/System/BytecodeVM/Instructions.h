@@ -6,51 +6,107 @@ namespace Ablaze
 	namespace VM
 	{
 
-		struct VMValue;
+		struct VMvalue;
+		class VMstack;
 
-		const int INT = 0x00;
-		const int FLOAT = 0x01;
-		const int CHAR = 0x02;
+		enum VMtype : int
+		{
+			INT,
+			FLOAT,
+			CHAR
+		};
 
-		const int INT_LITERAL = 0x00;
-		const int FLT_LITERAL = 0x01;
-		const int CHR_LITERAL = 0x02;
+		enum Register : int
+		{
+			A,
+			B,
+			C,
+			D,
+			E,
+			F,
+			G,
+			H,
+			I,
+			J,
+			MAX_REGISTERS
+		};
 
-		const int POP = 0x04;
-		const int STORE = 0x05;
-		const int GSTORE = 0x06;
-		const int LOAD = 0x07;
-		const int GLOAD = 0x08;
-		const int LDARG = 0x09;
+		enum VMopcode : int
+		{
+			 INT_LITERAL,
+			 FLT_LITERAL,
+			 CHR_LITERAL,
 
-		const int ADD = 0x0a;
-		const int SUB = 0x0b;
-		const int MUL = 0x0c;
-		const int DIV = 0x0d;
-		const int POW = 0x0e;
-		const int MOD = 0x0f;
+			 PUSH,
+			 POP,
+			 STORE,
+			 GSTORE,
+			 LOAD,
+			 GLOAD,
+			 LDARG,
+			 LDREG,
+			 STREG,
 
-		const int EQL = 0x10;
-		const int GRT = 0x11;
-		const int LESS = 0x12;
-		const int LEQL = 0x13;
-		const int GEQL = 0x14;
+			 ADD,
+			 SUB,
+			 MUL,
+			 DIV,
+			 POW,
+			 MOD,
 
-		const int JMP = 0x15;
-		const int JMPT = 0x16;
-		const int JMPF = 0x17;
+			 EQL,
+			 GRT,
+			 LSS,
+			 GEQL,
+			 LEQL,
 
-		const int CALL = 0x18;
-		const int RET = 0x19;
-		const int HALT = 0x1a;
+			 JMP,
+			 JMPT,
+			 JMPF,
 
-		const int PRINT = 0x1b;
+			 CALL,
+			 RET,
+			 HALT,
 
-		void Inst_Print(VMValue* v);
-		VMValue* Inst_Add(VMValue* l, VMValue* r);
-		VMValue* Inst_Sub(VMValue* l, VMValue* r);
-		VMValue* Inst_Mul(VMValue* l, VMValue* r);
-		VMValue* INst_Div(VMValue* l, VMValue* r);
+			 PRINT,
+			 EMIT
+		};
+
+		int* Inst_IntLiteral(int* ip, VMstack* stack, int* code);
+		int* Inst_FltLiteral(int* ip, VMstack* stack, int* code);
+		int* Inst_ChrLiteral(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Push(int* ip, VMstack* stack, int* code);
+		int* Inst_Pop(int* ip, VMstack* stack, int* code);
+
+		int* Inst_LDArg(int* ip, VMstack* stack, int* code);
+		int* Inst_LDReg(int* ip, VMstack* stack, int* code);
+		int* Inst_STReg(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Add(int* ip, VMstack* stack, int* code);
+		int* Inst_Sub(int* ip, VMstack* stack, int* code);
+		int* Inst_Mul(int* ip, VMstack* stack, int* code);
+		int* Inst_Div(int* ip, VMstack* stack, int* code);
+		int* Inst_Pow(int* ip, VMstack* stack, int* code);
+		int* Inst_Mod(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Eql(int* ip, VMstack* stack, int* code);
+		int* Inst_Grt(int* ip, VMstack* stack, int* code);
+		int* Inst_Lss(int* ip, VMstack* stack, int* code);
+		int* Inst_Leql(int* ip, VMstack* stack, int* code);
+		int* Inst_Geql(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Jmp(int* ip, VMstack* stack, int* code);
+		int* Inst_JmpT(int* ip, VMstack* stack, int* code);
+		int* Inst_JmpF(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Call(int* ip, VMstack* stack, int* code);
+		int* Inst_Ret(int* ip, VMstack* stack, int* code);
+
+		int* Inst_Print(int* ip, VMstack* stack, int* code);
+		int* Inst_Emit(int* ip, VMstack* stack, int* code);
+
+		inline int* Inst_None(int* ip, VMstack* stack, int* code) { return ip; }
 
 	}
 }

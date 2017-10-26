@@ -57,7 +57,12 @@ namespace Ablaze
 
 	File FileSystem::CreateNew(const String& filepath)
 	{
-		return Get(filepath);
+		if (FileExists(filepath))
+		{
+			Delete(filepath);
+		}
+		File f = Get(filepath);
+		return f;
 	}
 
 	File FileSystem::Open(const String& filepath, OpenMode mode)
@@ -73,14 +78,12 @@ namespace Ablaze
 		return true;
 	}
 
-	void FileSystem::Clear(const File& file)
+	void FileSystem::Clear(File& file)
 	{
-		File f = file;
-		if (!file.IsOpen())
-		{
-			f = Open(file.GetPath(), OpenMode::WriteOverride);
-		}
-		WriteText(f, "");
+		OpenMode mode = file.GetMode();
+		Delete(file);
+		file = CreateNew(file.GetPath());
+		file.Open(mode);
 	}
 
 	bool FileSystem::Delete(const File& file)
@@ -102,10 +105,6 @@ namespace Ablaze
 
 	void FileSystem::Read(const File& file, int64 numBytes, void* buffer)
 	{
-		if (!file.IsOpen())
-		{
-			file.Open(OpenMode::Read);
-		}
 		OVERLAPPED ol = { 0 };
 		ReadFileEx(file.GetHandle(), buffer, numBytes, &ol, FileIOCompletionRoutine);
 	}
@@ -140,10 +139,6 @@ namespace Ablaze
 
 	void FileSystem::Write(const File& file, int64 numBytes, byte* buffer)
 	{
-		if (!file.IsOpen())
-		{
-			file.Open(OpenMode::WriteOverride);
-		}
 		DWORD written;
 		bool result = ::WriteFile(file.GetHandle(), buffer, numBytes, &written, nullptr);
 	}
@@ -175,12 +170,28 @@ namespace Ablaze
 
 	Handle FileSystem::OpenFileForAppending(const String& filename)
 	{
-		return CreateFile(filename.c_str(), FILE_APPEND_DATA, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (FileExists(filename))
+		{
+			return CreateFile(filename.c_str(), FILE_APPEND_DATA, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		}
+		else
+		{
+			return CreateFile(filename.c_str(), FILE_APPEND_DATA, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		}
+		return nullptr;
 	}
 
 	Handle FileSystem::OpenFileForOverride(const String& filename)
 	{
-		return CreateFile(filename.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (FileExists(filename))
+		{
+			return CreateFile(filename.c_str(), GENERIC_WRITE, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		}
+		else
+		{
+			return CreateFile(filename.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		}
+		return nullptr;
 	}
 
 	Handle FileSystem::OpenInternal(const String& filename, OpenMode mode)

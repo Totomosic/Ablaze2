@@ -1,28 +1,39 @@
 #pragma once
 #include "Common.h"
-#include "VMValue.h"
+#include "VMvalue.h"
 
 namespace Ablaze
 {
 	namespace VM
 	{
 
-		class VMStack : public Object
+		class VMstack : public Object
 		{
 		private:
 			int m_MaxSize;
-			VMValue** m_Stack;
+			int m_MaxRegisters;
+			VMvalue** m_Stack;
+			VMvalue** m_Registers;
+
 			int m_StackPtr;
+			int m_FramePtr;
 
 		public:
-			VMStack(int maxSize);
-			~VMStack();
+			VMstack(int maxSize);
+			~VMstack();
 
-			VMValue* Pop();
-			void Push(VMValue* value);
+			int GetFramePtr();
+			int GetStackPtr();
 
-			VMValue* Load(int offset);
+			VMvalue* Pop();
+			void Push(VMvalue* value);
+			VMvalue* Load(int offset);
+
+			VMvalue* GetRegister(Register r);
+			void SetRegister(Register r, VMvalue* value);
+
 			void Reset();
+			void SetFramePtr(int ptr);
 
 			String ToString() const override;
 

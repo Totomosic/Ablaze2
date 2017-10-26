@@ -48,6 +48,7 @@ namespace Ablaze
 		File f = FileSystem::Open(AB_LOG_FILE, OpenMode::WriteAppend);
 		FileSystem::WriteText(f, "[" + LevelToString(level) + "] " + message + "\n");
 		f.Close();
+		SetupConsole(AB_LOG_LEVEL_INFO);
 	}
 
 	void ClearLogFile()

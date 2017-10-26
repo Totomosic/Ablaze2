@@ -210,8 +210,10 @@
     <ClInclude Include="src\Scene\Structs\__Structs__.h" />
     <ClInclude Include="src\Scene\__Scene__.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\System\BytecodeVM\Assembler.h" />
     <ClInclude Include="src\System\BytecodeVM\Instructions.h" />
     <ClInclude Include="src\System\BytecodeVM\VirtualMachine.h" />
+    <ClInclude Include="src\System\BytecodeVM\VMoperation.h" />
     <ClInclude Include="src\System\BytecodeVM\VMStack.h" />
     <ClInclude Include="src\System\BytecodeVM\VMValue.h" />
     <ClInclude Include="src\System\Engine.h" />
@@ -283,8 +285,10 @@
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\Structs\Transform.cpp" />
+    <ClCompile Include="src\System\BytecodeVM\Assembler.cpp" />
     <ClCompile Include="src\System\BytecodeVM\Instructions.cpp" />
     <ClCompile Include="src\System\BytecodeVM\VirtualMachine.cpp" />
+    <ClCompile Include="src\System\BytecodeVM\VMoperation.cpp" />
     <ClCompile Include="src\System\BytecodeVM\VMStack.cpp" />
     <ClCompile Include="src\System\Engine.cpp" />
     <ClCompile Include="src\System\Memory\Allocator.cpp" />

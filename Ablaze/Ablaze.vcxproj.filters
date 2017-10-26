@@ -300,6 +300,12 @@
     <ClInclude Include="src\System\BytecodeVM\VMStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\Assembler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System\BytecodeVM\VMoperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -483,6 +489,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\System\BytecodeVM\Instructions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\BytecodeVM\Assembler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\BytecodeVM\VMoperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

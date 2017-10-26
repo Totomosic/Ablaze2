@@ -14,12 +14,11 @@ namespace Ablaze
 			char chr;
 		};
 
-		struct VMValue
+		struct VMvalue
 		{
 		public:
-			int type;
+			VMtype type;
 			ValueData value;
-
 		};
 
 	}

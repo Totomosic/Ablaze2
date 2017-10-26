@@ -112,9 +112,45 @@ namespace Ablaze
 			{
 				AB_INFO("GameTime: " + std::to_string(Time::TotalTime()) + "s");
 			}
+			else if (command == "Bytecode")
+			{
+				bool debug = false;
+				String file = args;
+				if (argList.size() == 2)
+				{
+					debug = (bool)std::stoi(argList[1]);
+					file = argList[0];
+				}
+				VM::VirtualMachine vm(file, debug);
+				vm.Execute();
+			}
+			else if (command == "Assemble")
+			{
+				VM::VMassembler a(argList[0]);
+				a.Assemble(CleanString(argList[1]));
+			}
+			else if (command == "aexec")
+			{
+				bool debug = false;
+				std::vector<String> parts = SplitString(argList[0], ".");
+				String outFile = parts[0] + ".byte";
+				if (argList.size() == 2)
+				{
+					outFile = argList[1];
+				}
+				if (argList.size() == 3)
+				{
+					outFile = argList[1];
+					debug = (bool)std::stoi(argList[2]);
+				}
+				VM::VMassembler a(argList[0]);
+				a.Assemble(CleanString(outFile));
+				VM::VirtualMachine vm(CleanString(outFile), debug);
+				vm.Execute();
+			}
 			else if (command == "Help")
 			{
-				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), ClearColorHSB(h, s, b), GameTime(), Help()");
+				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), ClearColorHSB(h, s, b), GameTime(), Bytecode(filename, debug = 0), Assemble(filename, outfile), aexec(filename, outfile = null, debug = 0), Help()");
 			}
 			else
 			{
