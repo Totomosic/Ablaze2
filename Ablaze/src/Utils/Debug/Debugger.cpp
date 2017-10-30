@@ -82,19 +82,19 @@ namespace Ablaze
 			else if (command == "WriteFile")
 			{
 				argList[1].erase(argList[1].begin(), std::find_if(argList[1].begin(), argList[1].end(), std::bind1st(std::not_equal_to<char>(), ' ')));
-				File f = FileSystem::Open(argList[0], OpenMode::WriteOverride);
-				FileSystem::WriteText(f, argList[1]);
+				File f = Filesystem::OpenFile(argList[0]);
+				f.WriteText(argList[1]);
 				f.Close();
 			}
 			else if (command == "ReadFile")
 			{
-				File f = FileSystem::Open(args, OpenMode::Read);
-				std::cout << FileSystem::ReadText(f) << std::endl;
+				File f = Filesystem::OpenFile(args, OpenFlags::Read);
+				std::cout << f.ReadText() << std::endl;
 				f.Close();
 			}
 			else if (command == "DeleteFile")
 			{
-				FileSystem::Delete(args);
+				//FileSystem::Delete(args);
 			}
 			else if (command == "Clear")
 			{

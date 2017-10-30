@@ -14,12 +14,12 @@ namespace Ablaze
 
 		const String& VMassembler::Assemble(const String& outputFile)
 		{
-			File f = FileSystem::Open(m_Filename, OpenMode::Read);
-			String fileData = FileSystem::ReadText(f);
+			File f = Filesystem::OpenFile(m_Filename, OpenFlags::Read);
+			String fileData = f.ReadText();
 			f.Close();
 
-			File output = FileSystem::CreateNew(outputFile);
-			output = FileSystem::Open(outputFile, OpenMode::WriteAppend);
+			File output = Filesystem::CreateNewFile(outputFile);
+			output = Filesystem::OpenFile(outputFile);
 
 			std::vector<String> lines = SplitString(fileData, ";");
 			for (String line : lines)
@@ -30,12 +30,12 @@ namespace Ablaze
 					String cStr = CleanString(comps[0]);
 					if (!cStr.empty())
 					{
-						FileSystem::WriteText(output, std::to_string(VirtualMachine::FindOperation(cStr).opCode));
+						output << std::to_string(VirtualMachine::FindOperation(cStr).opCode);
 						for (int i = 1; i < comps.size(); i++)
 						{
-							FileSystem::WriteText(output, "," + comps[i]);
+							output << "," + comps[i];
 						}
-						FileSystem::WriteText(output, ";");
+						output << ";";
 					}
 				}
 				else
@@ -43,7 +43,7 @@ namespace Ablaze
 					String cStr = CleanString(line);
 					if (!cStr.empty())
 					{
-						FileSystem::WriteText(output, std::to_string(VirtualMachine::FindOperation(cStr).opCode) + ";");
+						output << std::to_string(VirtualMachine::FindOperation(cStr).opCode) << ";";
 					}
 				}
 			}

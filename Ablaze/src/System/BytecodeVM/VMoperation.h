@@ -8,7 +8,7 @@ namespace Ablaze
 
 		typedef int*(*VMopfunc)(int*, VMstack*, int*);
 
-		struct VMoperation
+		struct AB_API VMoperation
 		{
 		public:
 			String opName;

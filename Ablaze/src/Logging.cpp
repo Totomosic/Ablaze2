@@ -45,16 +45,18 @@ namespace Ablaze
 	{
 		SetupConsole(level);
 		std::cout << "Ablaze:     " << message << std::endl;
-		File f = FileSystem::Open(AB_LOG_FILE, OpenMode::WriteAppend);
-		FileSystem::WriteText(f, "[" + LevelToString(level) + "] " + message + "\n");
-		f.Close();
+		if (level <= AB_LOG_LEVEL_ERROR) // Only log errors or fatals
+		{
+			File f = Filesystem::OpenFile(AB_LOG_FILE, OpenFlags::Read);
+			f.WriteText("[" + LevelToString(level) + "] " + message + "\n");
+			f.Close();
+		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
 	}
 
 	void ClearLogFile()
 	{
-		File f = FileSystem::Open(AB_LOG_FILE, OpenMode::WriteOverride);
-		FileSystem::Clear(f);
+		File f = Filesystem::OpenFile(AB_LOG_FILE);
 		f.Close();
 	}
 

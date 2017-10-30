@@ -7,7 +7,7 @@ Further namespacing can be applied as see fit
 
 FOLDER STRUCTURE:
 	All folders must contain __FOLDERNAME__.h which includes all files in the folder
-	Strictly one class/struct per file, enums may be declared alongside classes and structs
+	One class/struct per file, enums may be declared alongside classes and structs
 
 OBJECTS:
 	All Classes must derive from class Object (except static classes)

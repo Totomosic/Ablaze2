@@ -177,9 +177,9 @@ namespace Ablaze
 	{
 		int total = width * height;
 		byte* data = new byte[total * 4];
-		void* d = data;
+		byte* d = data;
 		byte* c = color.ToByte();
-		for (int i = 0; i < total; i += 1)
+		for (int i = 0; i < total; i++)
 		{
 			memcpy(data, c, 4 * sizeof(byte));
 			data += 4;
@@ -192,7 +192,7 @@ namespace Ablaze
 			int mip = 1;
 			while (max > 1)
 			{
-				SetRegion(x, y, width, height, mip, data);
+				SetRegion(x, y, width, height, mip, d);
 				max /= 2;
 				mip++;
 			}

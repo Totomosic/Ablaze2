@@ -90,10 +90,10 @@ namespace Ablaze
 
 	void Model::LoadOBJModel(const String& filename)
 	{
-		File f = FileSystem::Open(filename, OpenMode::Read);
-		String data = FileSystem::ReadText(f);
+		File f = Filesystem::OpenFile(filename, OpenFlags::Read);
+		String data = f.ReadText();
 		std::vector<String> lines = SplitString(data, "\n");
-		FileSystem::Close(f);
+		f.Close();
 		VertexSet inputVertices;
 		std::vector<Vertex> vertices;
 		std::vector<uint> indices;

@@ -14,7 +14,7 @@ namespace Ablaze
 			char chr;
 		};
 
-		struct VMvalue
+		struct AB_API VMvalue
 		{
 		public:
 			VMtype type;

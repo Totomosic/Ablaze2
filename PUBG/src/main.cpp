@@ -11,25 +11,23 @@ private:
 public:
 	void Init() override
 	{
-		m_Window = new Window(1280, 720, "Ablaze: 60", Color::White());
+		m_Window = new Window(1280, 720, "Ablaze: 60", Color::CornflowerBlue());
 		m_Window->SetIcon("normal.png");
 		Graphics::Initialise(m_Window);
+		Graphics::EnableCull();
 
-		Resource<Shader> s = ResourceManager::Library().LoadShader("base_v.glsl", "base_f.glsl");
-		s->Bind();
-
+		Resource<Shader> s = ResourceManager::Library().LoadShader("base.shader");
 		Resource<Texture2D> tex = ResourceManager::Library().LoadTexture2D("image.png", MipmapMode::Enabled);
-		Resource<Texture2D> tex2 = ResourceManager::Library().LoadTexture2D("normal.png");
 
 		Material mat(Color::White(), s, "Tex0", tex);
-		Resource<Model> model = ResourceManager::Library().CreateRectangle(300, 300, Color::White());
-		Resource<Model> obj = ResourceManager::Library().LoadOBJModel("");
+		Resource<Model> model = ResourceManager::Library().CreateEllipse(5, 4, Color::White());
 		Mesh mesh(model, mat);
 
 		Scene& scene = SceneManager::Instance().CreateScene();
 		scene.CreateLayer("World", new Camera(Projection::Perspective));
 
-		Actor* entity = new Actor(0, 0, -500, mesh);		
+		Actor* entity = new Actor(0, 0, -5, mesh);
+
 	}
 
 	void Tick() override
@@ -41,7 +39,7 @@ public:
 	{
 		m_Window->SetTitle("Ablaze: " + std::to_string((int)Time::AvgFPS()));
 		
-		float speed = 50;
+		float speed = 3;
 		Camera* camera = SceneManager::Instance().CurrentScene().CurrentLayer().GetCamera();
 		if (Input::KeyDown(Keycode::W))
 		{

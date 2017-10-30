@@ -26,32 +26,17 @@ namespace Ablaze
 		Resource(const Resource<T>& other)
 		{
 			m_ResourcePtr = other.m_ResourcePtr;
-			if (m_ResourcePtr->IsFromFile())
-			{
-				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->GetFilename());
-			}
+			ResourceManager::Library().IncrementRefCount(*this);
 		}
 
 		~Resource()
 		{
-			// Dereference resource ptr
-			if (m_ResourcePtr != nullptr && m_ResourcePtr->IsFromFile())
-			{
-				ResourceManager::Library().DecrementRefCount(m_ResourcePtr->GetFilename());
-			}
+			ResourceManager::Library().DecrementRefCount(*this);
 		}
 
 		T* Get() const { return m_ResourcePtr; }
 		T* operator*() const { return Get(); }
 		T* operator->() const { return Get(); }
-
-		void Increment()
-		{
-			if (m_ResourcePtr->IsFromFile())
-			{
-				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->GetFilename());
-			}
-		}
 
 		String ToString() const override
 		{

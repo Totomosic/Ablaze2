@@ -185,4 +185,10 @@ namespace Ablaze
 		return c;
 	}
 
+	Color Color::CornflowerBlue()
+	{
+		Color c(100, 200, 255, 255);
+		return c;
+	}
+
 }

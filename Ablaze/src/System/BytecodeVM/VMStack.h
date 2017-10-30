@@ -7,7 +7,7 @@ namespace Ablaze
 	namespace VM
 	{
 
-		class VMstack : public Object
+		class AB_API VMstack : public Object
 		{
 		private:
 			int m_MaxSize;

@@ -3,8 +3,6 @@
 namespace Ablaze
 {
 
-	const VertexBuffer* VertexBuffer::s_CurrentlyBound = nullptr;
-
 	VertexBuffer::VertexBuffer(int64 byteSize, const BufferLayout& layout, BufferUsage usage) : Buffer(byteSize, BufferTarget::ArrayBuffer, usage),
 		m_Layout(layout)
 	{
@@ -19,11 +17,7 @@ namespace Ablaze
 
 	void VertexBuffer::Bind() const
 	{
-		if (s_CurrentlyBound != this)
-		{
-			Buffer::Bind();
-			s_CurrentlyBound = this;
-		}
+		Buffer::Bind();
 	}
 
 	void VertexBuffer::Unbind() const

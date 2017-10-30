@@ -5,29 +5,59 @@ namespace Ablaze
 
 	const Shader* Shader::s_CurrentlyBound = nullptr;
 
-	Shader::Shader(const String& vertexPath, const String& fragmentPath, bool file) : GLObject(), Asset(),
+	Shader::Shader(const String& vertexPath, const String& fragmentPath, bool file) : GLObject(), Asset(vertexPath),
 		m_UniformLocations(), m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
 	{
 		Create();
 
-		File vertexFile = FileSystem::Open(vertexPath, OpenMode::Read);
-		File fragmentFile = FileSystem::Open(fragmentPath, OpenMode::Read);
-		BuildProgram(FileSystem::ReadText(vertexFile), FileSystem::ReadText(fragmentFile));
-		FileSystem::Close(vertexFile);
-		FileSystem::Close(fragmentFile);
+		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
+		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);
+		BuildProgram(vertexFile.ReadText(), fragmentFile.ReadText());
+		vertexFile.Close();
+		fragmentFile.Close();
 	}
 
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),
-		m_UniformLocations(), m_VertexPath("-"), m_FragmentPath("-")
+		m_UniformLocations(), m_VertexPath(""), m_FragmentPath("")
 	{
 		Create();
 		BuildProgram(vertexSrc, fragmentSrc);
 	}
 
-	Shader::Shader(const String& shaderSrc) : GLObject(), Asset(shaderSrc),
-		m_UniformLocations(), m_VertexPath("-"), m_FragmentPath("-")
+	Shader::Shader(const String& shaderFile) : GLObject(), Asset(shaderFile),
+		m_UniformLocations(), m_VertexPath(""), m_FragmentPath("")
 	{
 		Create();
+
+		const int NONE_SHADER_TYPE = -1;
+		const int VERTEX_SHADER_TYPE = 0;
+		const int FRAGMENT_SHADER_TYPE = 1;
+
+		std::stringstream ss[2];
+		int currentType = NONE_SHADER_TYPE;
+
+		File f = Filesystem::OpenFile(shaderFile, OpenFlags::Read);
+		String line;
+		while (f.ReadTextLine(&line))
+		{
+			if (line.find("#shader") != String::npos)
+			{
+				if (line.find("vertex") != String::npos)
+				{
+					currentType = VERTEX_SHADER_TYPE;
+				}
+				else if (line.find("fragment") != String::npos)
+				{
+					currentType = FRAGMENT_SHADER_TYPE;
+				}
+			}
+			else
+			{
+				ss[currentType] << line << '\n';
+			}
+		}
+
+		BuildProgram(ss[VERTEX_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
 	}
 
 	Shader::~Shader()
@@ -53,11 +83,6 @@ namespace Ablaze
 	{
 		Create();
 		//BuildProgram();
-	}
-
-	bool Shader::IsFromFile() const
-	{
-		return Asset::IsFromFile() | (m_VertexPath != "-") | (m_FragmentPath != "-");
 	}
 
 	void Shader::SetUniform(const String& uniformName, int value) const
@@ -120,9 +145,9 @@ namespace Ablaze
 		return new Shader(vertexPath, fragmentPath, true);
 	}
 
-	Shader* Shader::FromFile(const String& shaderPath)
+	Shader* Shader::FromFile(const String& shaderFile)
 	{
-		return new Shader(shaderPath);
+		return new Shader(shaderFile);
 	}
 
 	Shader* Shader::FromSource(const String& vertexSrc, const String& fragmentSrc)

@@ -6,7 +6,7 @@
 namespace Ablaze
 {
 
-	class Debugger
+	class AB_API Debugger
 	{
 	private:
 		static bool m_IsTyping;

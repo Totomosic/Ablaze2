@@ -1,101 +1,136 @@
 #include "File.h"
-#include "FileSystem.h"
+#include "Filesystem.h"
 
 namespace Ablaze
 {
 
-	File::File(const String& filepath) : Object(),
-		m_Path(filepath), m_Handle(nullptr)
+	OpenFlags operator|(OpenFlags l, OpenFlags r)
+	{
+		return (OpenFlags)((int)l | (int)r);
+	}
+
+	File::File(const String& filename) : Object(),
+		m_Filename(filename)
 	{
 	
 	}
 
-	File::File(Handle handle) : Object(),
-		m_Path(""), m_Handle(handle)
+	File::File() : File("")
 	{
-
+	
 	}
 
-	File::~File()
+	const String& File::Filename() const
 	{
-
-	}
-
-	const String& File::GetPath() const
-	{
-		return m_Path;
-	}
-
-	Handle File::GetHandle() const
-	{
-		return m_Handle;
+		return m_Filename;
 	}
 
 	bool File::IsOpen() const
 	{
-		return m_Handle != nullptr;
+		return m_Out.is_open() || m_In.is_open();
 	}
 
-	bool File::IsValid() const
+	int File::FileSize() const
 	{
-		return IsOpen();
+		return Filesystem::FileSize(m_Filename);
 	}
 
-	OpenMode File::GetMode() const
+	void File::Open(OpenFlags flags)
 	{
-		return m_Mode;
-	}
-
-	uint64 File::GetSize() const
-	{
-		return FileSystem::SizeOf(*this);
-	}
-
-	void File::Open(OpenMode mode) const
-	{
-		if (!IsOpen())
+		if (flags == OpenFlags::None)
 		{
-			m_Handle = FileSystem::OpenInternal(m_Path, mode);
-			m_Mode = mode;
-
-			if (m_Handle == INVALID_HANDLE_VALUE)
-			{
-				AB_ERROR("File failed to open: " + m_Path);
-				AB_ERROR("Error: " + std::to_string(GetLastError()));	
-			}
+			m_Out.open(m_Filename.c_str());
+			m_In.open(m_Filename.c_str());
 		}
 		else
 		{
-			AB_WARN("File is already open: " + m_Path);
+			m_Out.open(m_Filename.c_str(), (std::ios::openmode)flags);
+			m_In.open(m_Filename.c_str(), (std::ios::openmode)flags);
 		}
 	}
 
-	void File::Close() const
+	void File::Open(const String& filename, OpenFlags flags)
+	{
+		m_Filename = filename;
+		Open(flags);
+	}
+
+	void File::Close()
+	{
+		m_Out.close();
+		m_In.close();
+	}
+
+	void File::Rename(const String& newFilename)
+	{
+		Filesystem::Rename(m_Filename, newFilename);
+	}
+
+	void File::Clear()
+	{
+		Open(OpenFlags::None);
+	}
+
+	void File::Read(char* buffer, int size)
 	{
 		if (IsOpen())
 		{
-			if (!FileSystem::CloseInternal(m_Handle))
-			{
-				AB_ERROR("File failed to close: " + m_Path);
-				AB_ERROR("Error: " + std::to_string(GetLastError()));
-			}
-			m_Handle = nullptr;
+			m_In.read(buffer, size);
+		}
+		else
+		{
+			AB_ERROR("File was not opened before reading from it. File: " + m_Filename);
 		}
 	}
 
-	void File::Delete() const
+	void File::Read(char* buffer)
 	{
-		FileSystem::DeleteInternal(m_Path);
+		Read(buffer, FileSize());
 	}
 
-	void File::SetPath(const String& path)
+	char* File::Read(int size)
 	{
-		m_Path = path;
+		char* buffer = new char[size];
+		Read(buffer, size);
+		return buffer;
+	}
+
+	char* File::Read()
+	{
+		return Read(FileSize());
+	}
+
+	void File::ReadText(String* outString)
+	{
+		String str((std::istreambuf_iterator<char>(m_In)), std::istreambuf_iterator<char>());
+		*outString = str;
+	}
+
+	String File::ReadText()
+	{
+		String str;
+		ReadText(&str);
+		return str;
+	}
+
+	std::basic_istream<char, std::char_traits<char>>& File::ReadTextLine(String* outText)
+	{
+		return getline(m_In, *outText);
+	}
+
+	void File::Write(const char* buffer, int size)
+	{
+		m_Out.write(buffer, size);
+	}
+
+	void File::WriteText(const String& text)
+	{
+		Write(&text[0], text.size() * sizeof(char));
 	}
 
 	String File::ToString() const
 	{
-		return m_Path;
+		return "File";
 	}
 
 }

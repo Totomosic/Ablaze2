@@ -4,40 +4,80 @@
 namespace Ablaze
 {
 
-	enum class OpenMode
+	enum class OpenFlags : int
 	{
-		Read,
-		WriteOverride,
-		WriteAppend
+		None,
+		Override = std::ios::trunc,
+		Read = std::ios::app,
+		Append = std::ios::app
 	};
 
-	// Class that represents a physical system file
+	OpenFlags operator|(OpenFlags l, OpenFlags r);
+
 	class AB_API File : public Object
 	{
 	private:
-		String m_Path;
-		mutable Handle m_Handle;
-		mutable OpenMode m_Mode;
+		String m_Filename;
+		std::ofstream m_Out;
+		std::ifstream m_In;
+
+	private:
+		File();
+		File(const String& filename);
 
 	public:
-		File(const String& filepath);
-		File(Handle fileHandle);
-		~File();
-
-		const String& GetPath() const;
-		Handle GetHandle() const;
+		const String& Filename() const;
 		bool IsOpen() const;
-		bool IsValid() const;
-		OpenMode GetMode() const;
-		uint64 GetSize() const;
+		int FileSize() const;
 
-		void Open(OpenMode mode = OpenMode::Read) const;
-		void Close() const;
-		void Delete() const;
+		void Open(OpenFlags flags = OpenFlags::Read);
+		void Open(const String& filename, OpenFlags flags = OpenFlags::Read);
+		void Close();
+		void Rename(const String& newFilename);
+		void Clear();
 
-		void SetPath(const String& path);
+		void Read(char* buffer, int size);
+		void Read(char* buffer);
+		char* Read(int size);
+		char* Read();
+		void ReadText(String* outString);
+		String ReadText();
+		std::basic_istream<char, std::char_traits<char>>& ReadTextLine(String* outString);
+
+		void Write(const char* buffer, int size);
+		void WriteText(const String& text);
+
+		template<typename T>
+		File& operator>>(T& out)
+		{
+			if (IsOpen())
+			{
+				m_In >> out;
+			}
+			else
+			{
+				AB_ERROR("File was not opened. File: " + m_Filename);
+			}
+			return *this;
+		}
+
+		template<typename T>
+		File& operator<<(const T& data)
+		{
+			if (IsOpen())
+			{
+				m_Out << data;
+			}
+			else
+			{
+				AB_ERROR("File was not opened. File: " + m_Filename);
+			}
+			return *this;
+		}
 
 		String ToString() const override;
+
+		friend class Filesystem;
 
 	};
 

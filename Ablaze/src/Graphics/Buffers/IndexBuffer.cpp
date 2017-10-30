@@ -2,9 +2,6 @@
 
 namespace Ablaze
 {
-
-	const IndexBuffer* IndexBuffer::s_CurrentlyBound = nullptr;
-
 	IndexBuffer::IndexBuffer(int64 byteSize, BufferUsage usage) : Buffer(byteSize, BufferTarget::ElementBuffer, usage)
 	{
 
@@ -17,11 +14,7 @@ namespace Ablaze
 
 	void IndexBuffer::Bind() const
 	{
-		if (s_CurrentlyBound != this)
-		{
-			Buffer::Bind();
-			s_CurrentlyBound = this;
-		}
+		Buffer::Bind();
 	}
 
 	void IndexBuffer::Unbind() const

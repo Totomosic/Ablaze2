@@ -133,8 +133,8 @@ namespace Ablaze
 		int* VirtualMachine::LoadFile(const String& file)
 		{
 			std::vector<int>* code = new std::vector<int>; // needs to be deleted
-			File f = FileSystem::Open(file, OpenMode::Read);
-			String data = FileSystem::ReadText(f);
+			File f = Filesystem::OpenFile(file, OpenFlags::Read);
+			String data = f.ReadText();
 			f.Close();
 
 			std::vector<String> lines = SplitString(data, ";");

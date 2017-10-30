@@ -8,7 +8,7 @@ namespace Ablaze
 	namespace VM
 	{
 
-		class VirtualMachine : public Object
+		class AB_API VirtualMachine : public Object
 		{
 		private:
 			static VMoperation** s_Ops;

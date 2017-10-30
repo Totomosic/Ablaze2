@@ -6,7 +6,7 @@ namespace Ablaze
 	namespace VM
 	{
 
-		class VMassembler : public Object
+		class AB_API VMassembler : public Object
 		{
 		private:
 			String m_Filename;

@@ -141,12 +141,6 @@
     <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\FileSystem\FileSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\FileSystem\VFS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Resources\Meshes\__Meshes__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -172,9 +166,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\Meshes\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\FileSystem\File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\System\Memory\__Memory__.h">
@@ -306,6 +297,12 @@
     <ClInclude Include="src\System\BytecodeVM\VMoperation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\FileSystem\Filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FileSystem\File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -374,12 +371,6 @@
     <ClCompile Include="src\Resources\Shaders\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\FileSystem\FileSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utils\FileSystem\VFS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application\Input\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -399,9 +390,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Meshes\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utils\FileSystem\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\System\Memory\Allocator.cpp">
@@ -495,6 +483,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\System\BytecodeVM\VMoperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FileSystem\Filesystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FileSystem\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

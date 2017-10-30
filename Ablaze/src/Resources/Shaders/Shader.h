@@ -21,13 +21,12 @@ namespace Ablaze
 	private:
 		Shader(const String& vertexPath, const String& fragmentPath, bool fromFile);
 		Shader(const String& vertexSrc, const String& fragmentSrc);
-		Shader(const String& ShaderSrc);
+		Shader(const String& shaderFile);
 		~Shader(); // Prevent stack objects and can only be deleted by ResourceManager
 
 	public:
 		void Bind() const override;
 		void Unbind() const override;
-		bool IsFromFile() const override;
 
 		void Reload() override;
 
@@ -62,7 +61,7 @@ namespace Ablaze
 	private:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);
 		static Shader* FromFile(const String& vertexFile, const String& fragmentFile);
-		static Shader* FromFile(const String& shaderFile); // Create custom file format with both vertex and fragment shaders in it
+		static Shader* FromFile(const String& shaderFile);
 		
 	private:
 		void Create();

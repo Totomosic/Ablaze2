@@ -8,9 +8,6 @@ namespace Ablaze
 	class AB_API VertexBuffer : public Buffer
 	{
 	private:
-		static const VertexBuffer* s_CurrentlyBound;
-
-	private:
 		BufferLayout m_Layout;
 
 	public:

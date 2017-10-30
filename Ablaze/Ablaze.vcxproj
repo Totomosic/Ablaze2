@@ -226,8 +226,7 @@
     <ClInclude Include="src\Utils\Debug\Debugger.h" />
     <ClInclude Include="src\Utils\Debug\__Debug__.h" />
     <ClInclude Include="src\Utils\FileSystem\File.h" />
-    <ClInclude Include="src\Utils\FileSystem\FileSystem.h" />
-    <ClInclude Include="src\Utils\FileSystem\VFS.h" />
+    <ClInclude Include="src\Utils\FileSystem\Filesystem.h" />
     <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h" />
     <ClInclude Include="src\Utils\Functions.h" />
     <ClInclude Include="src\Utils\structs\Color.h" />
@@ -294,8 +293,7 @@
     <ClCompile Include="src\System\Memory\Allocator.cpp" />
     <ClCompile Include="src\Utils\Debug\Debugger.cpp" />
     <ClCompile Include="src\Utils\FileSystem\File.cpp" />
-    <ClCompile Include="src\Utils\FileSystem\FileSystem.cpp" />
-    <ClCompile Include="src\Utils\FileSystem\VFS.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\Filesystem.cpp" />
     <ClCompile Include="src\Utils\Functions.cpp" />
     <ClCompile Include="src\Utils\structs\Color.cpp" />
     <ClCompile Include="src\Utils\structs\String.cpp" />

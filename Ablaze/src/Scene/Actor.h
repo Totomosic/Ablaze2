@@ -4,7 +4,7 @@
 namespace Ablaze
 {
 
-	class Actor : public Entity
+	class AB_API Actor : public Entity
 	{
 	protected:
 		Maths::Vec3 m_Velocity;

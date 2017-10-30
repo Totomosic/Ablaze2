@@ -3,6 +3,8 @@
 namespace Ablaze
 {
 
+	const Buffer* Buffer::s_CurrentlyBound = nullptr;
+
 	Buffer::Buffer(int64 byteSize, BufferTarget target, BufferUsage usage) : GLObject(),
 		m_ByteSize(byteSize), m_Target(target), m_Usage(usage)
 	{
@@ -39,7 +41,11 @@ namespace Ablaze
 
 	void Buffer::Bind() const
 	{
-		GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
+		if (s_CurrentlyBound != this)
+		{
+			GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
+			s_CurrentlyBound = this;
+		}
 	}
 
 	void Buffer::Unbind() const
@@ -101,6 +107,10 @@ namespace Ablaze
 	{
 		Bind();
 		bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
+		if (!result)
+		{
+			AB_FATAL("Buffer failed to unmap");
+		}
 		return result;
 	}
 
@@ -118,6 +128,7 @@ namespace Ablaze
 	{
 		Bind();
 		GL_CALL(glBufferData((GLenum)m_Target, GetSize(), buffer, (GLenum)m_Usage));
+		Unbind();
 	}
 	
 }

@@ -49,6 +49,9 @@ namespace Ablaze
 		static Color Yellow();
 		static Color Cyan();
 		static Color Magenta();
+
+		static Color CornflowerBlue();
+
 	};
 
 }
