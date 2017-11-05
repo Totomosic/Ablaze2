@@ -10,11 +10,10 @@ namespace Ablaze
 	Texture2D::Texture2D(const String& filepath, MipmapMode mm) : Texture(filepath, TextureTarget::Texture2D)
 	{
 		m_Format = ImageFormat::Rgba;
-		int temp = 0;
 
-		byte* imageData = ImageLoader::Load(filepath, &m_Width, &m_Height, &temp);
+		byte* imageData = LoadImageFile(filepath, &m_Width, &m_Height);
 		Populate(imageData);
-		ImageLoader::FreeData(imageData);
+		FreeImageData(imageData);
 
 		if (mm == MipmapMode::Enabled)
 		{

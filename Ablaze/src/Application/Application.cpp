@@ -80,19 +80,15 @@ namespace Ablaze
 		while (!Graphics::CurrentContext()->ShouldClose())
 		{
 			Time::Update();
+			Input::Start();
 			Update();
 			if (Graphics::IsInitialised())
 			{
 				Render();
 			}
 			Debugger::Update();
-			ClearEvents();
+			Input::End();
 		}
-	}
-
-	void Application::ClearEvents()
-	{
-		Input::Update();
 	}
 
 }

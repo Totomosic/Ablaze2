@@ -1,4 +1,5 @@
 #include "Functions.h"
+#include "stb_image.h"
 
 namespace Ablaze
 {
@@ -72,6 +73,39 @@ namespace Ablaze
 		}
 		String s = ss.str();
 		return s;
+	}
+
+	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, int* outCompCount, int desiredCompCount, bool flipImage)
+	{
+		int width;
+		int height;
+		int comp;
+		stbi_set_flip_vertically_on_load(flipImage);
+		byte* data = stbi_load(filename.c_str(), &width, &height, &comp, desiredCompCount);
+		if (outWidth) *outWidth = (uint)width;
+		if (outHeight) *outHeight = (uint)height;
+		if (outCompCount) *outCompCount = comp;
+		return data;
+	}
+
+	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, int desiredCompCount, bool flipImage)
+	{
+		return LoadImageFile(filename, outWidth, outHeight, nullptr, desiredCompCount, flipImage);
+	}
+
+	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage)
+	{
+		return LoadImageFile(filename, outWidth, outHeight, outCompCount, 4, flipImage);
+	}
+
+	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, bool flipImage)
+	{
+		return LoadImageFile(filename, outWidth, outHeight, nullptr, flipImage);
+	}
+
+	void FreeImageData(byte* imageData)
+	{
+		stbi_image_free(imageData);
 	}
 
 }

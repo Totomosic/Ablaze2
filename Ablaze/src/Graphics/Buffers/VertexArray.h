@@ -50,6 +50,11 @@ namespace Ablaze
 		void RemoveVertexBuffer(int index);
 		void SetRenderMode(RenderMode renderMode);
 
+		VertexBuffer* CreateAttribute(int64 byteSize, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer* CreateAttribute(void* buffer, int64 numBytes, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
+		IndexBuffer* CreateIndexBuffer(int64 byteSize, BufferUsage usage = BufferUsage::StaticDraw);
+		IndexBuffer* CreateIndexBuffer(void* buffer, int64 numBytes, BufferUsage = BufferUsage::StaticDraw);
+
 		String ToString() const override;
 
 	public:

@@ -17,4 +17,11 @@ namespace Ablaze
 	std::vector<String> SplitString(const String& str, const String& delimeters);
 	String CleanString(const String& str);
 
+	// Image loading
+	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, int desiredComponents, bool flipImage = true);
+	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int desiredComponents, bool flipImage = true);
+	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage = true);
+	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, bool flipImage = true);
+	void FreeImageData(byte* imageData);
+
 }

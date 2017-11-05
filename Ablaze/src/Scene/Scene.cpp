@@ -64,36 +64,48 @@ namespace Ablaze
 		return m_LayerOrder;
 	}
 
-	void Scene::CreateLayer(const String& name, Camera* camera)
+	Layer& Scene::CreateLayer(const String& name, Camera* camera)
 	{
-		Layer* layer = new Layer(name, camera);
+		Layer* layer = nullptr;
+		if (camera != nullptr)
+		{
+			layer = new Layer(name, camera);
+		}
+		else
+		{
+			layer = new Layer(name);
+		}
 		m_Layers[name] = layer;
 		m_LayerOrder.push_back(layer);
 		if (m_CurrentLayer == nullptr)
-		{
+		{   
 			SetCurrentLayer(layer);
 		}
+		return *layer;
 	}
 
-	void Scene::CreateLayer(Camera* camera)
+	Layer& Scene::CreateLayer(Camera* camera)
 	{
 		String name = std::to_string(m_LayerOrder.size()) + "_LAYER_NAMELESS_";
-		CreateLayer(name, camera);
+		return CreateLayer(name, camera);
 	}
 
-	void Scene::SetCurrentLayer(const String& name)
+	Layer& Scene::SetCurrentLayer(const String& name)
 	{
 		m_CurrentLayer = m_Layers[name];
+		return *m_CurrentLayer;
 	}
 
-	void Scene::SetCurrentLayer(int index)
+	Layer& Scene::SetCurrentLayer(int index)
 	{
 		m_CurrentLayer = m_LayerOrder[index];
+		return *m_CurrentLayer;
 	}
 
-	void Scene::SetCurrentLayer(Layer* layer)
+	Layer& Scene::SetCurrentLayer(Layer* layer)
 	{
 		m_CurrentLayer = layer;
+		return *m_CurrentLayer;
 	}
 
 	void Scene::AddEntity(Entity* entity)
@@ -112,9 +124,13 @@ namespace Ablaze
 			{
 				entity->Update(elapsedSeconds);
 			}
+			for (Light* light : layer->GetLights())
+			{
+				light->Update(elapsedSeconds);
+			}
 			if (layer->HasCamera())
 			{
-				layer->GetCamera()->Update(elapsedSeconds);
+				layer->GetActiveCamera()->Update(elapsedSeconds);
 			}
 		}
 	}

@@ -22,15 +22,19 @@ namespace Ablaze
 		Material(const String& filename); // TODO: Create custom Material file
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const String& textureFile);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const Texture2DSet& textures);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const String& textureFile);
 		Material(const Color& baseColor, const Resource<Shader>& shader);
 		Material(const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures);
 		Material(const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const String& textureFile);
 		Material(const Resource<Shader>& shader, const RenderState& renderState);
 		Material(const Resource<Shader>& shader, const Texture2DSet& textures);
 		Material(const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Resource<Shader>& shader, const String& samplerName, const String& textureFile);
 		Material(const Resource<Shader>& shader);
 
 		const Color& BaseColor() const;

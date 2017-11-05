@@ -13,6 +13,8 @@ namespace Ablaze
 		void Bind() const override;
 		void Unbind() const override;
 
+		friend class VertexArray;
+
 	};
 
 }

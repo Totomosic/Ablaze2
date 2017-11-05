@@ -5,13 +5,13 @@
 namespace Ablaze
 {
 
-	Camera::Camera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, mesh, false),
+	Camera::Camera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, mesh),
 		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
 		CreateProjectionMatrix();
 	}
 
-	Camera::Camera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, false),
+	Camera::Camera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform),
 		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
 		CreateProjectionMatrix();
@@ -22,67 +22,7 @@ namespace Ablaze
 
 	}
 
-	Camera::Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position, rotation, scale), mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position, rotation, scale), projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position, rotation), mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position, rotation), projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(const Maths::Vec3& position, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position), mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(const Maths::Vec3& position, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(position), projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), rotation, scale, mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), rotation, scale, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), rotation, mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, const Maths::Quaternion& rotation, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), rotation, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(float x, float y, float z, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Maths::Vec3(x, y, z), projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(Projection projection, float fov, float nearPlane, float farPlane) : Camera(0, 0, 0, projection, fov, nearPlane, farPlane)
+	Camera::Camera(Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(), projection, fov, nearPlane, farPlane)
 	{
 
 	}

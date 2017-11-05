@@ -28,11 +28,11 @@ namespace Ablaze
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
 
-		void CreateLayer(const String& name, Camera* camera = nullptr);
-		void CreateLayer(Camera* camera = nullptr); // Assigned random name
-		void SetCurrentLayer(const String& name);
-		void SetCurrentLayer(Layer* layer);
-		void SetCurrentLayer(int index);
+		Layer& CreateLayer(const String& name, Camera* camera = nullptr);
+		Layer& CreateLayer(Camera* camera = nullptr); // Assigned random name
+		Layer& SetCurrentLayer(const String& name);
+		Layer& SetCurrentLayer(Layer* layer);
+		Layer& SetCurrentLayer(int index);
 
 		void AddEntity(Entity* entity);
 

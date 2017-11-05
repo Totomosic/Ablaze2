@@ -30,7 +30,6 @@ namespace Ablaze
 
 	private:
 		void Run();
-		void ClearEvents();
 
 	};
 

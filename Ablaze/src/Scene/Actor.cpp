@@ -3,82 +3,22 @@
 namespace Ablaze
 {
 
-	Actor::Actor(const Transform& transform, const Mesh& mesh, bool addToScene) : Entity(transform, mesh, addToScene)
+	Actor::Actor(const Transform& transform, const Mesh& mesh) : Entity(transform, mesh)
 	{
 
 	}
 
-	Actor::Actor(const Transform& transform, bool addToScene) : Entity(transform, addToScene)
+	Actor::Actor(const Transform& transform) : Entity(transform)
 	{
 		
 	}
 
-	Actor::Actor(const Mesh& mesh, bool addToScene) : Actor(Transform(), mesh, addToScene)
+	Actor::Actor(const Mesh& mesh) : Actor(Transform(), mesh)
 	{
 
 	}
 
-	Actor::Actor(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene) : Actor(Transform(position, rotation, scale), mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene) : Actor(Transform(position, rotation, scale), addToScene)
-	{
-
-	}
-
-	Actor::Actor(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene) : Actor(Transform(position, rotation), mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(const Maths::Vec3& position, const Maths::Quaternion& rotation, bool addToScene) : Actor(Transform(position, rotation), addToScene)
-	{
-
-	}
-
-	Actor::Actor(const Maths::Vec3& position, const Mesh& mesh, bool addToScene) : Actor(Transform(position), mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(const Maths::Vec3& position, bool addToScene) : Actor(Transform(position), addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene) : Actor(Maths::Vec3(x, y, z), rotation, scale, mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene) : Actor(Maths::Vec3(x, y, z), rotation, scale, addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene) : Actor(Maths::Vec3(x, y, z), rotation, mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, const Maths::Quaternion& rotation, bool addToScene) : Actor(Maths::Vec3(x, y, z), rotation, addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, const Mesh& mesh, bool addToScene) : Actor(Maths::Vec3(x, y, z), mesh, addToScene)
-	{
-
-	}
-
-	Actor::Actor(float x, float y, float z, bool addToScene) : Actor(Maths::Vec3(x, y, z), addToScene)
-	{
-
-	}
-
-	Actor::Actor(bool addToScene) : Actor(0, 0, 0, addToScene)
+	Actor::Actor() : Actor(Transform())
 	{
 
 	}

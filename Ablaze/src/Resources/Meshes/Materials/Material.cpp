@@ -19,6 +19,11 @@ namespace Ablaze
 		
 	}
 
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const String& textureFile) : Material(baseColor, shader, renderState, Texture2DSet(samplerName, textureFile))
+	{
+
+	}
+
 	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState) : Material(baseColor, shader, renderState, Texture2DSet())
 	{
 	
@@ -32,6 +37,11 @@ namespace Ablaze
 	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture) : Material(baseColor, shader, Texture2DSet(samplerName, texture))
 	{
 	
+	}
+
+	Material::Material(const Color& baseColor, const Resource<Shader>& shader, const String& samplerName, const String& textureFile) : Material(baseColor, shader, Texture2DSet(samplerName, textureFile))
+	{
+
 	}
 
 	Material::Material(const Color& baseColor, const Resource<Shader>& shader) : Material(baseColor, shader, RenderState())
@@ -49,6 +59,11 @@ namespace Ablaze
 	
 	}
 
+	Material::Material(const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const String& textureFile) : Material(shader, renderState, Texture2DSet(samplerName, textureFile))
+	{
+
+	}
+
 	Material::Material(const Resource<Shader>& shader, const RenderState& renderState) : Material(shader, renderState, Texture2DSet())
 	{
 	
@@ -62,6 +77,11 @@ namespace Ablaze
 	Material::Material(const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture) : Material(shader, Texture2DSet(samplerName, texture))
 	{
 	
+	}
+
+	Material::Material(const Resource<Shader>& shader, const String& samplerName, const String& textureFile) : Material(shader, Texture2DSet(samplerName, textureFile))
+	{
+
 	}
 
 	Material::Material(const Resource<Shader>& shader) : Material(Color::White(), shader)

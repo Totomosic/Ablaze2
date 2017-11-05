@@ -81,7 +81,26 @@ namespace Ablaze
 
 	Resource<Model> ResourceManager::CreateCircle(float radius, const Color& color)
 	{
-		return CreateEllipse(radius, radius, color);
+		return CreateEllipse(radius * 2.0f, radius * 2.0f, color);
+	}
+
+	Resource<Model> ResourceManager::CreateCuboid(float width, float height, float depth, const Color& color)
+	{
+		Model* cuboid = Internal::Shapes::Cuboid(width, height, depth, color);
+		CreateNewGeneratedResource(cuboid);
+		return Resource<Model>(cuboid);
+	}
+
+	Resource<Model> ResourceManager::CreateGrid(float width, float depth, int xVertices, int zVertices, const Color& color)
+	{
+		Model* grid = Internal::Shapes::Grid(width, depth, xVertices, zVertices, color);
+		CreateNewGeneratedResource(grid);
+		return Resource<Model>(grid);
+	}
+
+	Resource<Model> ResourceManager::CreatePlane(float width, float depth, const Color& color)
+	{
+		return CreateGrid(width, depth, 2, 2, color);
 	}
 
 	String ResourceManager::ToString() const

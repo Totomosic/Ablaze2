@@ -17,12 +17,14 @@ namespace Ablaze
 	public:
 		Texture2DSet();
 		Texture2DSet(const String& samplerName, const Resource<Texture2D>& texture);
+		Texture2DSet(const String& samplerName, const String& textureFile);
 
 		const String& GetSampler(int index) const;
 		const Resource<Texture2D>& GetTexture(int index) const;
 		int GetTextureCount() const;
 
 		void AddTexture(const String& samplerName, const Resource<Texture2D>& texture);
+		void AddTexture(const String& samplerName, const String& textureFile);
 		void RemoveTexture(int index);
 		void Clear();
 

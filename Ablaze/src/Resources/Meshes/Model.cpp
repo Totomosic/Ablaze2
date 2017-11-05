@@ -27,7 +27,7 @@ namespace Ablaze
 	Model::Model(const String& filename) : Asset(filename),
 		m_VertexArray(nullptr)
 	{
-		// Load OBJ File
+		LoadOBJModel(filename);
 	}
 
 	Model::~Model()
@@ -249,14 +249,11 @@ namespace Ablaze
 				}
 			}
 		}
-		VertexBuffer* vbo = new VertexBuffer(vertices.size() * sizeof(Vertex), BufferLayout::Vertex());
-		vbo->Bind();
+
+		m_VertexArray = new VertexArray;
+		VertexBuffer* vbo = m_VertexArray->CreateAttribute(vertices.size() * sizeof(Vertex), BufferLayout::Vertex());
 		vbo->Upload(&vertices[0], vertices.size() * sizeof(Vertex));
-
-		IndexBuffer* ib = new IndexBuffer(&indices[0], indices.size() * sizeof(GLuint));
-
-		m_VertexArray = new VertexArray(ib);
-		m_VertexArray->AddVertexBuffer(vbo);
+		m_VertexArray->CreateIndexBuffer(&indices[0], indices.size() * sizeof(GLuint));
 	}
 
 	void Model::InsertVertex(std::vector<Vertex>& vertices, std::vector<uint>& indices, std::unordered_map<IndexSet, int>& mapping, VertexSet& inputVertices, IndexSet& indexSet)

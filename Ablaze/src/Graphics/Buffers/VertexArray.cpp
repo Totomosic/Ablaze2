@@ -136,6 +136,34 @@ namespace Ablaze
 		DetermineRenderCount();
 	}
 
+	VertexBuffer* VertexArray::CreateAttribute(int64 byteSize, const BufferLayout& layout, BufferUsage usage)
+	{
+		VertexBuffer* vbo = new VertexBuffer(byteSize, layout, usage);
+		AddVertexBuffer(vbo);
+		return vbo;
+	}
+
+	VertexBuffer* VertexArray::CreateAttribute(void* buffer, int64 byteSize, const BufferLayout& layout, BufferUsage usage)
+	{
+		VertexBuffer* vbo = new VertexBuffer(buffer, byteSize, layout, usage);
+		AddVertexBuffer(vbo);
+		return vbo;
+	}
+
+	IndexBuffer* VertexArray::CreateIndexBuffer(int64 byteSize, BufferUsage usage)
+	{
+		IndexBuffer* ibo = new IndexBuffer(byteSize, usage);
+		SetIndexBuffer(ibo);
+		return ibo;
+	}
+
+	IndexBuffer* VertexArray::CreateIndexBuffer(void* buffer, int64 byteSize, BufferUsage usage)
+	{
+		IndexBuffer* ibo = new IndexBuffer(buffer, byteSize, usage);
+		SetIndexBuffer(ibo);
+		return ibo;
+	}
+
 	String VertexArray::ToString() const
 	{
 		return "Vertex Array";
@@ -166,7 +194,7 @@ namespace Ablaze
 		}
 		else
 		{
-			AB_WARN("Vertex Array has no Index buffer bound, ID: " + std::to_string(m_Id));
+			//AB_WARN("Vertex Array has no Index buffer bound, ID: " + std::to_string(m_Id));
 		}
 	}
 

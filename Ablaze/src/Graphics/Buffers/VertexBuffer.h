@@ -22,6 +22,8 @@ namespace Ablaze
 		void SetLayout(const BufferLayout& layout);
 		void ApplyLayout() const;
 
+		friend class VertexArray;
+
 	};
 
 }

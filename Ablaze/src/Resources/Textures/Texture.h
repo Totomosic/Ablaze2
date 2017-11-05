@@ -1,7 +1,6 @@
 #pragma once
 #include "Common.h"
 #include "Resources\Asset.h"
-#include "ImageLoader.h"
 
 namespace Ablaze
 {

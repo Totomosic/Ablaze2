@@ -53,7 +53,7 @@ namespace Ablaze
 
 	KeyMod operator|(KeyMod a, KeyMod b);
 
-	enum class Keycode
+	enum class Keycode : int
 	{
 		UNKNOWN = GLFW_KEY_UNKNOWN,
 
@@ -117,6 +117,7 @@ namespace Ablaze
 		CAPSLOCK = GLFW_KEY_CAPS_LOCK,
 		GRAVEACCENT = GLFW_KEY_GRAVE_ACCENT,
 		ESCAPE = GLFW_KEY_ESCAPE,
+		SPACE = GLFW_KEY_SPACE,
 
 		Left = GLFW_KEY_LEFT,
 		Up = GLFW_KEY_UP,
@@ -141,6 +142,8 @@ namespace Ablaze
 	class AB_API Input : public Object
 	{
 	private:
+		static bool s_Started;
+
 		static int s_MaxKeys;
 		static int s_MaxButtons;
 
@@ -186,6 +189,9 @@ namespace Ablaze
 		static bool KeyReleased(Keycode key, KeyMod mods = KeyMod::None);
 		static bool KeyReleased(int key, KeyMod mods = KeyMod::None);
 
+		static void CaptureCursor();
+		static void ReleaseCursor();
+
 		static const std::vector<char>& CharsPressed();
 
 		friend class Window;
@@ -194,7 +200,8 @@ namespace Ablaze
 
 	private:
 		static void Initialise();
-		static void Update();
+		static void Start();
+		static void End();
 		static bool SatisfiesModifiers(KeyMod modifier);
 
 		static void MousePositionCallback(GLFWwindow* window, double mouseX, double mouseY);

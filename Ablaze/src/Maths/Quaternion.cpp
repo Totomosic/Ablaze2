@@ -159,6 +159,42 @@ namespace Ablaze
 			return q1 * q2.Inverse();
 		}
 
+		Quaternion& Quaternion::operator+=(const Quaternion& q2)
+		{
+			*this = *this + q2;
+			return *this;
+		}
+
+		Quaternion& Quaternion::operator-=(const Quaternion& q2)
+		{
+			*this = *this - q2;
+			return *this;
+		}
+
+		Quaternion& Quaternion::operator*=(const Quaternion& q2)
+		{
+			*this = *this * q2;
+			return *this;
+		}
+
+		Quaternion& Quaternion::operator*=(float s)
+		{
+			*this = *this * s;
+			return *this;
+		}
+
+		Quaternion& Quaternion::operator/=(const Quaternion& q2)
+		{
+			*this = *this / q2;
+			return *this;
+		}
+
+		Quaternion& Quaternion::operator/=(float s)
+		{
+			*this = *this / s;
+			return *this;
+		}
+
 		bool operator==(const Quaternion& q1, const Quaternion& q2)
 		{
 			return (q1.w == q2.w && q1.x == q2.x && q1.y == q2.y && q1.z == q2.z);

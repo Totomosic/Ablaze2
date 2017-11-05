@@ -9,6 +9,8 @@ namespace Ablaze
 		return (KeyMod)((int)a | (int)b);
 	}
 
+	bool Input::s_Started = false;
+
 	int Input::s_MaxButtons = 32;
 	int Input::s_MaxKeys = 512;
 
@@ -64,15 +66,15 @@ namespace Ablaze
 		switch (origin)
 		{
 		case Origin::BottomLeft:
-			return Maths::Vec3(s_RelMousePosition.x, ScreenSize().y - s_RelMousePosition.y, 0);
+			return Maths::Vec3(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopLeft:
 			return s_RelMousePosition;
 		case Origin::Centre:
-			return Maths::Vec3(s_RelMousePosition.x * 2 - ScreenSize().x / 2.0f, -(s_RelMousePosition.y * 2 - ScreenSize().y / 2.0f), 0);
+			return Maths::Vec3(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopRight:
-			return Maths::Vec3(ScreenSize().x - s_RelMousePosition.x, s_RelMousePosition.y, 0);
+			return Maths::Vec3(-s_RelMousePosition.x, s_RelMousePosition.y, 0);
 		case Origin::BottomRight:
-			return Maths::Vec3(ScreenSize().x - s_RelMousePosition.x, ScreenSize().y - s_RelMousePosition.y, 0);
+			return Maths::Vec3(-s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		}
 	}
 
@@ -186,6 +188,16 @@ namespace Ablaze
 		return false;
 	}
 
+	void Input::CaptureCursor()
+	{
+		glfwSetInputMode(Graphics::CurrentContext()->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	void Input::ReleaseCursor()
+	{
+		glfwSetInputMode(Graphics::CurrentContext()->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
 	const std::vector<char>& Input::CharsPressed()
 	{
 		return s_CharsPressed;
@@ -203,13 +215,21 @@ namespace Ablaze
 		}
 	}
 
-	void Input::Update()
+	void Input::Start()
+	{
+		s_Started = true;
+		glfwPollEvents();
+	}
+
+	void Input::End()
 	{
 		s_RelMousePosition = Maths::Vec3(0);
 		s_RelMouseScroll = Maths::Vec2(0);
 		s_KeysPressed.clear();
 		s_ButtonsPressed.clear();
 		s_CharsPressed.clear();
+
+		s_Started = false;
 	}
 
 	bool Input::SatisfiesModifiers(KeyMod mods)
@@ -310,12 +330,12 @@ namespace Ablaze
 		if (action == GLFW_PRESS)
 		{
 			s_KeysDown[key] = true;
-			s_KeysPressed.push_back(std::pair<int, Keystate>(key, Keystate::Pressed));
+			s_KeysPressed.emplace_back(key, Keystate::Pressed);
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			s_KeysDown[key] = false;
-			s_KeysPressed.push_back(std::pair<int, Keystate>(key, Keystate::Released));
+			s_KeysPressed.emplace_back(key, Keystate::Released);
 		}
 	}
 

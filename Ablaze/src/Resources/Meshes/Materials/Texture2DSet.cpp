@@ -1,5 +1,6 @@
 #include "Texture2DSet.h"
 #include "Resources\Resource.h"
+#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
@@ -16,6 +17,10 @@ namespace Ablaze
 		AddTexture(samplerName, texture);
 	}
 
+	Texture2DSet::Texture2DSet(const String& samplerName, const String& textureFile) : Texture2DSet(samplerName, ResourceManager::Library().LoadTexture2D(textureFile))
+	{
+		
+	}
 
 	const String& Texture2DSet::GetSampler(int index) const
 	{
@@ -37,6 +42,11 @@ namespace Ablaze
 		int index = m_Textures.size();
 		m_Textures.push_back(texture);
 		m_Lookup[index] = samplerName;
+	}
+
+	void Texture2DSet::AddTexture(const String& samplerName, const String& textureFile)
+	{
+		AddTexture(samplerName, ResourceManager::Library().LoadTexture2D(textureFile));
 	}
 
 	void Texture2DSet::RemoveTexture(int index)

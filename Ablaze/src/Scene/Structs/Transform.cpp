@@ -66,17 +66,17 @@ namespace Ablaze
 
 	Maths::Vec3 Transform::Forward() const
 	{
-		return Maths::Vec3(0, 0, -1); // TODO: fix
+		return m_Rotation * Maths::Vec3(0, 0, -1);
 	}
 
 	Maths::Vec3 Transform::Right() const
 	{
-		return Maths::Vec3(1, 0, 0); // TODO: fix
+		return m_Rotation * Maths::Vec3(1, 0, 0);
 	}
 
 	Maths::Vec3 Transform::Up() const
 	{
-		return Maths::Vec3(0, 1, 0); // TODO: fix
+		return m_Rotation * Maths::Vec3(0, 1, 0);
 	}
 
 	void Transform::Translate(const Maths::Vec3& translation)
@@ -86,7 +86,17 @@ namespace Ablaze
 
 	void Transform::Rotate(float angle, const Maths::Vec3& axis, Space space, Angle angleType)
 	{
-		// TODO: implement
+		Maths::Vec3 a = axis;
+		if (space == Space::World)
+		{
+			a = m_Rotation.Inverse() * a;
+		}
+		if (angleType == Angle::Degrees)
+		{
+			angle = ToRadians(angle);
+		}
+		Maths::Quaternion rotation = Maths::Quaternion::FromAngleAxis(angle, a);
+		m_Rotation *= rotation;
 	}
 
 	Maths::Mat4 Transform::ToMatrix() const

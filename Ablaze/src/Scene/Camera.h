@@ -23,18 +23,6 @@ namespace Ablaze
 		Camera(const Transform& transform, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 		Camera(const Transform& transform, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 		Camera(const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, const Maths::Quaternion& rotation, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Maths::Vec3& position, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, const Maths::Quaternion& rotation, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, const Maths::Quaternion& rotation, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(float x, float y, float z, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 		Camera(Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 
 		const Maths::Mat4& ProjectionMatrix() const;
@@ -59,6 +47,8 @@ namespace Ablaze
 		void UpdateProjectionMatrix();
 
 		String ToString() const override;
+
+		friend class Layer;
 
 	private:
 		void CreateProjectionMatrix();

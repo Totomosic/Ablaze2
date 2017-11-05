@@ -6,6 +6,8 @@
 namespace Ablaze
 {
 
+	class Layer;
+
 	// Base class for all Objects in the game
 	class AB_API Entity : public Object
 	{
@@ -13,24 +15,14 @@ namespace Ablaze
 		Transform m_Transform;
 		Mesh m_Mesh;
 		bool m_HasMesh; // m_Mesh will be invalid if this is false
+		Layer* m_Layer;
+		bool m_IsTagged;
 
 	public:
-		Entity(const Transform& transform, const Mesh& mesh, bool addToScene = true);
-		Entity(const Transform& transform, bool addToScene = true);
-		Entity(const Mesh& mesh, bool addToScene = true);
-		Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene = true);
-		Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene = true);
-		Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene = true);
-		Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, bool addToScene = true);
-		Entity(const Maths::Vec3& position, const Mesh& mesh, bool addToScene = true);
-		Entity(const Maths::Vec3& position, bool addToScene = true);
-		Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene = true);
-		Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene = true);
-		Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene = true);
-		Entity(float x, float y, float z, const Maths::Quaternion& rotation, bool addToScene = true);
-		Entity(float x, float y, float z, const Mesh& mesh, bool addToScene = true);
-		Entity(float x, float y, float z, bool addToScene = true);
-		Entity(bool addToScene = true);
+		Entity(const Transform& transform, const Mesh& mesh);
+		Entity(const Transform& transform);
+		Entity(const Mesh& mesh);
+		Entity();
 
 		const Transform& GetTransform() const;
 		Transform& GetTransform();
@@ -45,14 +37,26 @@ namespace Ablaze
 		const Maths::Vec3& Scale() const;
 		Maths::Vec3& Scale();
 
+		Maths::Vec3 Forward() const;
+		Maths::Vec3 Right() const;
+		Maths::Vec3 Up() const;
+
 		void SetTransform(const Transform& transform);
 		void SetMesh(const Mesh& mesh);
 		void DeleteMesh();
+		void SetName(const String& name);
+
+		void Rotate(float angle, const Maths::Vec3& axis, Space space = Space::World, Angle angleType = Angle::Degrees);
 
 		virtual void Update(double elapsedSeconds); // Every update
 		virtual void Tick(); // Every second
 
 		String ToString() const override;
+
+		friend class Layer;
+
+	private:
+		void SetLayer(Layer* layer);
 
 	};
 

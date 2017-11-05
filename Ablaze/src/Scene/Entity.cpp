@@ -4,92 +4,26 @@
 namespace Ablaze
 {
 
-	Entity::Entity(const Transform& transform, const Mesh& mesh, bool addToScene) : Object(),
-		m_Transform(transform), m_Mesh(mesh), m_HasMesh(true)
+	Entity::Entity(const Transform& transform, const Mesh& mesh) : Object(),
+		m_Transform(transform), m_Mesh(mesh), m_HasMesh(true), m_Layer(nullptr), m_IsTagged(false)
 	{
-		if (SceneManager::Instance().HasScene() && addToScene)
-		{
-			SceneManager::Instance().CurrentScene().AddEntity(this);
-		}
+		
 	}
 
-	Entity::Entity(const Transform& transform, bool addToScene) : Object(),
-		m_Transform(transform), m_HasMesh(false)
+	Entity::Entity(const Transform& transform) : Object(),
+		m_Transform(transform), m_HasMesh(false), m_Layer(nullptr), m_IsTagged(false)
 	{
-		if (SceneManager::Instance().HasScene() && addToScene)
-		{
-			SceneManager::Instance().CurrentScene().AddEntity(this);
-		}
+
 	}
 
-	Entity::Entity(const Mesh& mesh, bool addToScene) : Entity(Transform(), mesh, addToScene)
+	Entity::Entity(const Mesh& mesh) : Entity(Transform(), mesh)
 	{
 	
 	}
 
-	Entity::Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene) : Entity(Transform(position, rotation, scale), mesh, addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene) : Entity(Transform(position, rotation, scale), addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene) : Entity(Transform(position, rotation), mesh, addToScene)
+	Entity::Entity() : Entity(Transform())
 	{
-	
-	}
 
-	Entity::Entity(const Maths::Vec3& position, const Maths::Quaternion& rotation, bool addToScene) : Entity(Transform(position, rotation), addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(const Maths::Vec3& position, const Mesh& mesh, bool addToScene) : Entity(Transform(position), mesh, addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(const Maths::Vec3& position, bool addToScene) : Entity(Transform(position), addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, const Mesh& mesh, bool addToScene) : Entity(Maths::Vec3(x, y, z), rotation, scale, mesh, addToScene)
-	{
-	
-	}
-
-	Entity::Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Maths::Vec3& scale, bool addToScene) : Entity(Maths::Vec3(x, y, z), rotation, scale, addToScene)
-	{
-	
-	}
-
-	Entity::Entity(float x, float y, float z, const Maths::Quaternion& rotation, const Mesh& mesh, bool addToScene) : Entity(Maths::Vec3(x, y, z), rotation, mesh, addToScene)
-	{
-	
-	}
-
-	Entity::Entity(float x, float y, float z, const Maths::Quaternion& rotation, bool addToScene) : Entity(Maths::Vec3(x, y, z), rotation, addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(float x, float y, float z, const Mesh& mesh, bool addToScene) : Entity(Maths::Vec3(x, y, z), mesh, addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(float x, float y, float z, bool addToScene) : Entity(Maths::Vec3(x, y, z), addToScene)
-	{ 
-	
-	}
-
-	Entity::Entity(bool addToScene) : Entity(0, 0, 0, addToScene)
-	{ 
-	
 	}
 
 	const Transform& Entity::GetTransform() const
@@ -147,6 +81,21 @@ namespace Ablaze
 		return GetTransform().Scale();
 	}
 
+	Maths::Vec3 Entity::Forward() const
+	{
+		return m_Transform.Forward();
+	}
+
+	Maths::Vec3 Entity::Right() const
+	{
+		return m_Transform.Right();
+	}
+
+	Maths::Vec3 Entity::Up() const
+	{
+		return m_Transform.Up();
+	}
+
 	void Entity::SetTransform(const Transform& transform)
 	{
 		m_Transform = transform;
@@ -163,6 +112,20 @@ namespace Ablaze
 		m_HasMesh = false;
 	}
 
+	void Entity::SetName(const String& name)
+	{
+		if (!m_IsTagged && m_Layer != nullptr)
+		{
+			m_Layer->TagEntity(this, name);
+			m_IsTagged = true;
+		}
+	}
+
+	void Entity::Rotate(float angle, const Maths::Vec3& axis, Space space, Angle angleType)
+	{
+		m_Transform.Rotate(angle, axis, space, angleType);
+	}
+
 	void Entity::Update(double elapsedSeconds)
 	{
 	
@@ -176,6 +139,11 @@ namespace Ablaze
 	String Entity::ToString() const
 	{
 		return "Entity";
+	}
+
+	void Entity::SetLayer(Layer* layer)
+	{
+		m_Layer = layer;
 	}
 
 }
