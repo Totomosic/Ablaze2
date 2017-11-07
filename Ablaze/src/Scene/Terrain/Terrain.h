@@ -1,13 +1,13 @@
 #pragma once
 #include "Common.h"
-#include "Scene\Entity.h"
+#include "Scene\GameObject.h"
 #include "TerrainData.h"
 #include "Resources\__Resources__.h"
 
 namespace Ablaze
 {
 
-	class AB_API Terrain : public Entity
+	class AB_API Terrain : public GameObject
 	{
 	private:
 		TerrainData m_TerrainData;

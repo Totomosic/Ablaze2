@@ -19,7 +19,7 @@ namespace Ablaze
 		Resource<Shader> m_Shader;
 
 	public:
-		Material(const String& filename); // TODO: Create custom Material file
+		// TODO: Create material File
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const Texture2DSet& textures);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
 		Material(const Color& baseColor, const Resource<Shader>& shader, const RenderState& renderState, const String& samplerName, const String& textureFile);
@@ -36,6 +36,22 @@ namespace Ablaze
 		Material(const Resource<Shader>& shader, const String& samplerName, const Resource<Texture2D>& texture);
 		Material(const Resource<Shader>& shader, const String& samplerName, const String& textureFile);
 		Material(const Resource<Shader>& shader);
+		Material(const Color& baseColor, const String& shaderFile, const RenderState& renderState, const Texture2DSet& textures);
+		Material(const Color& baseColor, const String& shaderFile, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const String& shaderFile, const RenderState& renderState, const String& samplerName, const String& textureFile);
+		Material(const Color& baseColor, const String& shaderFile, const RenderState& renderState);
+		Material(const Color& baseColor, const String& shaderFile, const Texture2DSet& textures);
+		Material(const Color& baseColor, const String& shaderFile, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const Color& baseColor, const String& shaderFile, const String& samplerName, const String& textureFile);
+		Material(const Color& baseColor, const String& shaderFile);
+		Material(const String& shaderFile, const RenderState& renderState, const Texture2DSet& textures);
+		Material(const String& shaderFile, const RenderState& renderState, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const String& shaderFile, const RenderState& renderState, const String& samplerName, const String& textureFile);
+		Material(const String& shaderFile, const RenderState& renderState);
+		Material(const String& shaderFile, const Texture2DSet& textures);
+		Material(const String& shaderFile, const String& samplerName, const Resource<Texture2D>& texture);
+		Material(const String& shaderFile, const String& samplerName, const String& textureFile);
+		Material(const String& shaderFile);
 
 		const Color& BaseColor() const;
 		Color& BaseColor();

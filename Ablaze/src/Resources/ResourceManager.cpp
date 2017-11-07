@@ -91,6 +91,13 @@ namespace Ablaze
 		return Resource<Model>(cuboid);
 	}
 
+	Resource<Model> ResourceManager::CreateSphere(float radius, const Color& color)
+	{
+		Model* sphere = Internal::Shapes::Sphere(radius, 1, color);
+		CreateNewGeneratedResource(sphere);
+		return Resource<Model>(sphere);
+	}
+
 	Resource<Model> ResourceManager::CreateGrid(float width, float depth, int xVertices, int zVertices, const Color& color)
 	{
 		Model* grid = Internal::Shapes::Grid(width, depth, xVertices, zVertices, color);

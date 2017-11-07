@@ -4,9 +4,13 @@
 #include "Framebuffer.h"
 #include "GraphicsPipeline.h"
 #include "Window.h"
+#include "Scene\Components\Transform.h"
 
 namespace Ablaze
 {
+
+	class Material;
+	class Mesh;
 
 	enum class GraphicsAPI
 	{
@@ -65,12 +69,15 @@ namespace Ablaze
 		static void Initialise(Window* window, GraphicsAPI api = GraphicsAPI::OpenGL);
 		static void Terminate();
 
+		// Graphical window commands
 		static void Clear();
 		static void SetRenderTarget(const Framebuffer* const renderTarget);
 		static void Present();
 
-		static void ChangeGraphicsPipeline(GraphicsPipeline* pipeline);
+		// Drawing commands
 
+
+		// OpenGL state management
 		static void ResetGLStates();
 		static void SetDepth(bool enabled);
 		static void SetBlend(bool enabled);
@@ -85,8 +92,11 @@ namespace Ablaze
 		static void EnableCull();
 		static void DisableCull();
 
+		friend class Window;
+
 	private:
 		static void ApplyGLStates();
+		static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 	};
 

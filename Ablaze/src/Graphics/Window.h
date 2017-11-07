@@ -17,10 +17,10 @@ namespace Ablaze
 		Window(int width, int height, const String& title, const Color& clearColor = Color::Black(), bool useDefaultHints = true);
 		~Window();
 
-		int GetWidth() const;
-		int GetHeight() const;
-		const String& GetTitle() const;
-		float GetAspect() const;
+		int Width() const;
+		int Height() const;
+		const String& Title() const;
+		float Aspect() const;
 		GLFWwindow* WindowHandle() const;
 		const Framebuffer& GetFramebuffer() const;
 		Framebuffer& GetFramebuffer();

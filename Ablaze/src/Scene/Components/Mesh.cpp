@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	Mesh::Mesh() : Object(),
+	Mesh::Mesh() : Component(),
 		m_Models()
 	{
 	
@@ -67,6 +67,13 @@ namespace Ablaze
 	String Mesh::ToString() const
 	{
 		return "Mesh";
+	}
+
+	Component* Mesh::Clone() const
+	{
+		Mesh* mesh = new Mesh;
+		mesh->m_Models = m_Models;
+		return mesh;
 	}
 
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include "Common.h"
-#include "Materials\__Materials__.h"
-#include "Model.h"
+#include "Resources\Meshes\Materials\__Materials__.h"
+#include "Resources\Meshes\Model.h"
 #include "Resources\Resource.h"
+#include "Component.h"
 
 namespace Ablaze
 {
@@ -16,7 +17,7 @@ namespace Ablaze
 
 	};
 
-	class AB_API Mesh : public Object
+	class AB_API Mesh : public Component
 	{
 	private:
 		std::vector<ModelSet> m_Models;
@@ -39,6 +40,7 @@ namespace Ablaze
 		void AddModel(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
 
 		String ToString() const override;
+		Component* Clone() const override;
 
 	};
 

@@ -11,7 +11,7 @@ namespace Ablaze
 		this->a = a / 255.0f;
 	}
 
-	Color::Color(byte color) : Color(color, color, color, color)
+	Color::Color(byte color) : Color(color, color, color, 255)
 	{
 
 	}

@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "Application\Input\Input.h"
+#include "Graphics.h"
 
 namespace Ablaze
 {
@@ -20,22 +21,22 @@ namespace Ablaze
 	
 	}
 
-	int Window::GetWidth() const
+	int Window::Width() const
 	{
 		return m_Framebuffer.GetWidth();
 	}
 
-	int Window::GetHeight() const
+	int Window::Height() const
 	{
 		return m_Framebuffer.GetHeight();
 	}
 
-	float Window::GetAspect() const
+	float Window::Aspect() const
 	{
 		return m_Framebuffer.GetAspect();
 	}
 
-	const String& Window::GetTitle() const
+	const String& Window::Title() const
 	{
 		return m_Title;
 	}
@@ -93,13 +94,13 @@ namespace Ablaze
 	void Window::SetWidth(int width)
 	{
 		m_Framebuffer.SetWidth(width);
-		glfwSetWindowSize(m_WindowPtr, GetWidth(), GetHeight());
+		glfwSetWindowSize(m_WindowPtr, Width(), Height());
 	}
 
 	void Window::SetHeight(int height)
 	{
 		m_Framebuffer.SetHeight(height);
-		glfwSetWindowSize(m_WindowPtr, GetWidth(), GetHeight());
+		glfwSetWindowSize(m_WindowPtr, Width(), Height());
 	}
 
 	void Window::SetTitle(const String& title)
@@ -134,7 +135,7 @@ namespace Ablaze
 
 	void Window::Create()
 	{
-		m_WindowPtr = glfwCreateWindow(GetWidth(), GetHeight(), m_Title.c_str(), nullptr, nullptr);
+		m_WindowPtr = glfwCreateWindow(Width(), Height(), m_Title.c_str(), nullptr, nullptr);
 		MakeCurrentContext();
 		Engine::Initialise();
 	}
@@ -148,6 +149,7 @@ namespace Ablaze
 		glfwSetScrollCallback(WindowHandle(), Input::MouseScrollCallback);
 		glfwSetMouseButtonCallback(WindowHandle(), Input::MousePressedCallback);
 		glfwSetCharCallback(WindowHandle(), Input::CharPressedCallback);
+		glfwSetFramebufferSizeCallback(WindowHandle(), Graphics::FramebufferResizeCallback);
 	}
 
 }

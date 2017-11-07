@@ -36,7 +36,7 @@ namespace Ablaze
 			Vec3 Multiply(const Vec3& other) const;
 			Vec3 Divide(const Vec3& other) const;
 
-			static float Distance(const Maths::Vec3& a, const Maths::Vec3& b);
+			static float Distance(const Vec3& a, const Vec3& b);
 			static Vec3 Cross(const Vec3& a, const Vec3& b);
 
 			String ToString() const;

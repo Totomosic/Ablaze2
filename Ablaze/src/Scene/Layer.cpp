@@ -3,32 +3,23 @@
 namespace Ablaze
 {
 
-	Layer::Layer(const String& name, Camera* camera) : Object(),
-		m_Name(name)
+	Layer::Layer(const String& name, GameObject* camera) : Object(),
+		m_MaxGameObjects(100000), m_HighestID(0), m_GameObjects(new GameObject*[m_MaxGameObjects]), m_Name(name)
 	{
-		AddCamera(camera);
+		Init();
+		AddGameObject(camera);
+		SetActiveCamera(camera);
 	}
 
 	Layer::Layer(const String& name) : Object(),
-		m_Name(name), m_Camera(nullptr)
+		m_MaxGameObjects(100000), m_HighestID(0), m_GameObjects(new GameObject*[m_MaxGameObjects]), m_Name(name), m_Camera(nullptr)
 	{
-	
+		Init();
 	}
 
 	Layer::~Layer()
 	{
-		for (Entity* entity : m_Entities)
-		{
-			delete entity;
-		}
-		for (Camera* camera : m_Cameras)
-		{
-			delete camera;
-		}
-		for (Light* light : m_Lights)
-		{
-			delete light;
-		}
+		
 	}
 
 	const String& Layer::GetName() const
@@ -36,37 +27,7 @@ namespace Ablaze
 		return m_Name;
 	}
 
-	const std::vector<Entity*>& Layer::GetEntities() const
-	{
-		return m_Entities;
-	}
-
-	std::vector<Entity*>& Layer::GetEntities()
-	{
-		return m_Entities;
-	}
-
-	const std::vector<Camera*>& Layer::GetCameras() const
-	{
-		return m_Cameras;
-	}
-
-	std::vector<Camera*>& Layer::GetCameras()
-	{
-		return m_Cameras;
-	}
-
-	const std::vector<Light*>& Layer::GetLights() const
-	{
-		return m_Lights;
-	}	
-
-	std::vector<Light*>& Layer::GetLights()
-	{
-		return m_Lights;
-	}
-
-	Camera* Layer::GetActiveCamera() const
+	GameObject* Layer::GetActiveCamera() const
 	{
 		return m_Camera;
 	}
@@ -76,325 +37,51 @@ namespace Ablaze
 		return m_Camera != nullptr;
 	}
 
-	int Layer::EntityCount() const
+	std::vector<GameObject*> Layer::GameObjects() const
 	{
-		return m_Entities.size();
+		std::vector<GameObject*> objects;
+		for (uint i = 0; i < m_HighestID + 1; i++)
+		{
+			if (m_GameObjects[i] != nullptr)
+			{
+				objects.push_back(m_GameObjects[i]);
+			}
+		}
+		return objects;
 	}
 
-	int Layer::CameraCount() const
-	{
-		return m_Cameras.size();
-	}
-
-	int Layer::LightCount() const
-	{
-		return m_Lights.size();
-	}
-
-	void Layer::SetActiveCamera(Camera* camera)
+	void Layer::SetActiveCamera(GameObject* camera)
 	{
 		m_Camera = camera;
 	}
 
-	void Layer::AddEntity(Entity* entity)
+	void Layer::AddGameObject(GameObject* gameObject)
 	{
-		int index = m_Entities.size();
-		m_Entities.push_back(entity);
-		entity->SetLayer(this);
+		uint id = GetNextID();
+		gameObject->m_Id = id;
+		m_GameObjects[id] = gameObject;
+		gameObject->m_Layer = this;
 	}
 
-	void Layer::AddEntity(Entity* entity, const String& tag)
+	void Layer::AddGameObject(GameObject* gameObject, const String& tag)
 	{
-		int index = m_Entities.size();
-		AddEntity(entity);
-		TagEntity(entity, tag);
+		AddGameObject(gameObject);
+		TagGameObject(gameObject, tag);
 	}
 
-	void Layer::RemoveEntity(Entity* entity)
-	{
-		
-	}
-
-	void Layer::RemoveEntity(int index)
-	{
-		m_Entities.erase(m_Entities.begin() + index);
-	}
-
-	void Layer::AddCamera(Camera* camera)
-	{
-		int index = m_Cameras.size();
-		m_Cameras.push_back(camera);
-		camera->SetLayer(this);
-		if (!HasCamera())
-		{
-			SetActiveCamera(m_Cameras[index]);
-		}
-		camera = m_Cameras[index];
-	}
-
-	void Layer::AddCamera(Camera* camera, const String& tag)
-	{
-		AddCamera(camera);
-		TagEntity(camera, tag);
-	}
-
-	void Layer::RemoveCamera(Camera* camera)
-	{
-		
-	}
-
-	void Layer::RemoveCamera(int index)
-	{
-		m_Cameras.erase(m_Cameras.begin() + index);
-	}
-
-	void Layer::AddLight(Light* light)
-	{
-		int index = m_Lights.size();
-		m_Lights.push_back(light);
-		light->SetLayer(this);
-		light = m_Lights[index];
-	}
-
-	void Layer::AddLight(Light* light, const String& tag)
-	{
-		AddLight(light);
-		TagEntity(light, tag);
-	}
-
-	void Layer::RemoveLight(Light* light)
-	{
-		
-	}
-
-	void Layer::RemoveLight(int index)
-	{
-		m_Lights.erase(m_Lights.begin() + index);
-	}
-
-	void Layer::Clear()
-	{
-		m_Entities.clear();
-	}
-
-	const Entity& Layer::GetEntity(int index) const
-	{
-		return *m_Entities[index];
-	}
-
-	Entity& Layer::GetEntity(int index)
-	{
-		return *m_Entities[index];
-	}
-
-	const Camera& Layer::GetCamera(int index) const
-	{
-		return *m_Cameras[index];
-	}
-
-	Camera& Layer::GetCamera(int index)
-	{
-		return *m_Cameras[index];
-	}
-
-	const Light& Layer::GetLight(int index) const
-	{
-		return *m_Lights[index];
-	}
-
-	Light& Layer::GetLight(int index)
-	{
-		return *m_Lights[index];
-	}
-
-	const Entity& Layer::GetNamedEntity(const String& tag, int index) const
+	const GameObject& Layer::GetNamedGameObject(const String& tag, int index) const
 	{
 		return *m_NamedEntities.at(tag)[index];
 	}
 
-	Entity& Layer::GetNamedEntity(const String& tag, int index)
+	GameObject& Layer::GetNamedGameObject(const String& tag, int index)
 	{
 		if (!TagExists(tag))
 		{
-			AB_ERROR("Entity with tag: " + tag + " does not exist");
-			return *(Entity*)nullptr;
+			AB_ERROR("GameObject with tag: " + tag + " does not exist");
+			return *(GameObject*)nullptr;
 		}
 		return *m_NamedEntities.at(tag)[index];
-	}
-
-	Entity& Layer::CreateEntity(const Transform& transform, const Mesh& mesh)
-	{
-		Entity* entity = new Entity(transform, mesh);
-		AddEntity(entity);
-		return *entity;
-	}
-
-	Entity& Layer::CreateEntity(const Transform& transform)
-	{
-		Entity* entity = new Entity(transform);
-		AddEntity(entity);
-		return *entity;
-	}
-
-	Entity& Layer::CreateEntity(const Mesh& mesh)
-	{
-		return CreateEntity(Transform(), mesh);
-	}
-
-	Entity& Layer::CreateEntity()
-	{ 
-		return CreateEntity(Transform());
-	}
-
-	Entity& Layer::CreateEntity(const Maths::Vec3& position, const Mesh& mesh)
-	{ 
-		return CreateEntity(Transform(position), mesh);
-	}
-
-	Entity& Layer::CreateEntity(const Maths::Vec3& position)
-	{
-		return CreateEntity(Transform(position));
-	}
-
-	Entity& Layer::CreateEntity(float x, float y, float z, const Mesh& mesh)
-	{ 
-		return CreateEntity(Maths::Vec3(x, y, z), mesh);
-	}
-
-	Entity& Layer::CreateEntity(float x, float y, float z)
-	{ 
-		return CreateEntity(Maths::Vec3(x, y, z));
-	}
-
-
-	Actor& Layer::CreateActor(const Transform& transform, const Mesh& mesh)
-	{ 
-		Actor* actor = new Actor(transform, mesh);
-		AddEntity(actor);
-		return *actor;
-	}
-
-	Actor& Layer::CreateActor(const Transform& transform)
-	{
-		Actor* actor = new Actor(transform);
-		AddEntity(actor);
-		return *actor;
-	}
-
-	Actor& Layer::CreateActor(const Mesh& mesh)
-	{ 
-		return CreateActor(Transform(), mesh);
-	}
-
-	Actor& Layer::CreateActor()
-	{ 
-		return CreateActor(Transform());
-	}
-
-	Actor& Layer::CreateActor(const Maths::Vec3& position, const Mesh& mesh)
-	{ 
-		return CreateActor(Transform(position), mesh);
-	}
-
-	Actor& Layer::CreateActor(const Maths::Vec3& position)
-	{
-		return CreateActor(Transform(position));
-	}
-
-	Actor& Layer::CreateActor(float x, float y, float z, const Mesh& mesh)
-	{
-		return CreateActor(Maths::Vec3(x, y, z), mesh);
-	}
-
-	Actor& Layer::CreateActor(float x, float y, float z)
-	{ 
-		return CreateActor(Maths::Vec3(x, y, z));
-	}
-
-
-	Camera& Layer::CreateCamera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane)
-	{
-		Camera* camera = new Camera(transform, mesh, projection, fov, nearPlane, farPlane);
-		AddCamera(camera);
-		return *camera;
-	}
-
-	Camera& Layer::CreateCamera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane)
-	{
-		Camera* camera = new Camera(transform, projection, fov, nearPlane, farPlane);
-		AddCamera(camera);
-		return *camera;
-	}
-
-	Camera& Layer::CreateCamera(const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane)
-	{
-		return CreateCamera(Transform(), mesh, projection, fov, nearPlane, farPlane);
-	}
-
-	Camera& Layer::CreateCamera(Projection projection, float fov, float nearPlane, float farPlane)
-	{ 
-		return CreateCamera(Transform(), projection, fov, nearPlane, farPlane);
-	}
-
-	Camera& Layer::CreateCamera(const Maths::Vec3& position, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane)
-	{ 
-		return CreateCamera(Transform(position), mesh, projection, fov, nearPlane, farPlane);
-	}
-
-	Camera& Layer::CreateCamera(const Maths::Vec3& position, Projection projection, float fov, float nearPlane, float farPlane)
-	{ 
-		return CreateCamera(Transform(position), projection, fov, nearPlane, farPlane);
-	}
-
-	Camera& Layer::CreateCamera(float x, float y, float z, const Mesh& mesh, Projection projection, float fov, float nearPlane , float farPlane)
-	{ 
-		return CreateCamera(Maths::Vec3(x, y, z), mesh, projection, fov, nearPlane, farPlane);
-	}
-
-	Camera& Layer::CreateCamera(float x, float y, float z, Projection projection, float fov, float nearPlane, float farPlane)
-	{ 
-		return CreateCamera(Maths::Vec3(x, y, z), projection, fov, nearPlane, farPlane);
-	}
-
-	Light& Layer::CreateLight(const Transform& transform, LightType type, const Color& color, float intensity, const Maths::Vec3& attenuation)
-	{ 
-		Light* light = new Light(transform, type, color, intensity, attenuation);
-		AddLight(light);
-		return *light;
-	}
-
-	Light& Layer::CreateLight(LightType type , const Color& color, float intensity, const Maths::Vec3& attenuation)
-	{
-		return CreateLight(Transform(), type, color, intensity, attenuation);
-	}
-
-	Light& Layer::CreateLight(const Maths::Vec3& position, LightType type, const Color& color, float intensity, const Maths::Vec3& attenuation)
-	{ 
-		return CreateLight(Transform(position), type, color, intensity, attenuation);
-	}
-
-	Light& Layer::CreateLight(float x, float y, float z, LightType type, const Color& color, float intensity, const Maths::Vec3& attenuation)
-	{ 
-		return CreateLight(Maths::Vec3(x, y, z), type, color, intensity, attenuation);
-	}
-
-	Light& Layer::CreateSun(const Transform& transform)
-	{ 
-		Light* light = Light::Sun(transform.Position());
-		AddLight(light);
-		return *light;
-	}
-
-	Light& Layer::CreateSun(const Maths::Vec3& position)
-	{ 
-		Light* light = Light::Sun(position);
-		AddLight(light);
-		return *light;
-	}
-
-	Light& Layer::CreateSun(float x, float y, float z)
-	{ 
-		return CreateSun(Maths::Vec3(x, y, z));
 	}
 
 	String Layer::ToString() const
@@ -402,7 +89,7 @@ namespace Ablaze
 		return "Layer";
 	}
 
-	void Layer::TagEntity(Entity* entity, const String& tag)
+	void Layer::TagGameObject(GameObject* entity, const String& tag)
 	{
 		if (TagExists(tag))
 		{
@@ -410,7 +97,7 @@ namespace Ablaze
 		}
 		else
 		{
-			m_NamedEntities[tag] = std::vector<Entity*>();
+			m_NamedEntities[tag] = std::vector<GameObject*>();
 			m_NamedEntities[tag].push_back(entity);
 		}
 	}
@@ -418,6 +105,31 @@ namespace Ablaze
 	bool Layer::TagExists(const String& tag)
 	{
 		return m_NamedEntities.find(tag) != m_NamedEntities.end();
+	}
+
+	uint Layer::GetNextID()
+	{
+		for (uint i = 0; i < m_HighestID + 2; i++)
+		{
+			if (m_GameObjects[i] == nullptr)
+			{
+				if (i > m_HighestID)
+				{
+					m_HighestID = i;
+				}
+				return i;
+			}
+		}
+		AB_ERROR("Unable to find available ID for GameObject");
+		return 0;
+	}
+
+	void Layer::Init()
+	{
+		for (uint i = 0; i < m_MaxGameObjects; i++)
+		{
+			m_GameObjects[i] = nullptr;
+		}
 	}
 
 }

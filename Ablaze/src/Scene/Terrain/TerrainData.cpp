@@ -98,8 +98,8 @@ namespace Ablaze
 
 	void TerrainData::ApplyVertex(int index, float height)
 	{
-		VertexBuffer* vbo = m_Owner->GetMesh().GetModel(0)->GetVertexArray()->GetVertexBuffer(0);
-		vbo->Upload(&height, sizeof(float), (int64)GetVBOIndex(index, vbo));
+		//VertexBuffer* vbo = m_Owner->GetMesh().GetModel(0)->GetVertexArray()->GetVertexBuffer(0);
+		//vbo->Upload(&height, sizeof(float), (int64)GetVBOIndex(index, vbo));
 	}
 
 	int TerrainData::GetVBOIndex(int vertexIndex, VertexBuffer* vbo) const

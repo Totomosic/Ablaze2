@@ -1,10 +1,8 @@
 #pragma once
-#include "GameObject\__GameObject__.h"
-#include "Lighting\__Lighting__.h"
-#include "Structs\__Structs__.h"
+#include "Components\__Components__.h"
 #include "Terrain\__Terrain__.h"
 
-#include "Camera.h"
-#include "Entity.h"
+#include "ComponentSet.h"
+#include "GameObject.h"
 #include "Scene.h"
 #include "SceneManager.h"

@@ -43,6 +43,9 @@ namespace Ablaze
 		Resource<Model> CreatePlane(float width, float depth, const Color& color = Color::White());
 		Resource<Model> CreateGrid(float width, float height, int xVertices, int zVertices, const Color& color = Color::White()); // x and yVertices must be >= 2
 
+		int GetLoadedRefCount(const String& assetName);
+		int GetGeneratedRefCount(int resourceID);
+
 		template<typename T>
 		int GetRefCount(const Resource<T>& resource)
 		{
@@ -50,10 +53,7 @@ namespace Ablaze
 			{
 				return GetLoadedRefCount(resource->Filename());
 			}
-			else
-			{
-				return GetGeneratedRefCount(resource->ResourceID());
-			}
+			return GetGeneratedRefCount(resource->ResourceID());
 		}
 
 		String ToString() const override;
@@ -67,11 +67,9 @@ namespace Ablaze
 			if (resource->GetAssetType() == AssetType::Loaded)
 			{
 				IncrementLoadedRefCount(resource->Filename());
+				return;
 			}
-			else
-			{
-				IncrementGeneratedRefCount(resource->ResourceID());
-			}
+			IncrementGeneratedRefCount(resource->ResourceID());
 		}
 
 		template<typename T>
@@ -88,7 +86,6 @@ namespace Ablaze
 		}
 
 		bool LoadedResourceExists(const String& assetName);
-		int GetLoadedRefCount(const String& assetName);
 		void IncrementLoadedRefCount(const String& assetName);
 		void DecrementLoadedRefCount(const String& assetName);
 		void DeleteLoadedResource(const String& assetName);
@@ -99,7 +96,6 @@ namespace Ablaze
 
 		bool GeneratedResourceExists(int resourceID);
 		void CreateNewGeneratedResource(Asset* asset);
-		int GetGeneratedRefCount(int resourceID);
 		void IncrementGeneratedRefCount(int resourceID);
 		void DecrementGeneratedRefCount(int resourceID);
 		void DeleteGeneratedResource(int resourceID);

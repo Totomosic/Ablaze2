@@ -15,7 +15,7 @@ namespace Ablaze
 
 	private:
 		Scene();
-		Scene(const String& layerName, Camera* layerCamera = nullptr);
+		Scene(const String& layerName, GameObject* layerCamera = nullptr);
 		~Scene();
 
 	public:
@@ -28,15 +28,13 @@ namespace Ablaze
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
 
-		Layer& CreateLayer(const String& name, Camera* camera = nullptr);
-		Layer& CreateLayer(Camera* camera = nullptr); // Assigned random name
+		Layer& CreateLayer(const String& name, GameObject* camera = nullptr);
+		Layer& CreateLayer(GameObject* camera = nullptr); // Assigned random name
 		Layer& SetCurrentLayer(const String& name);
 		Layer& SetCurrentLayer(Layer* layer);
 		Layer& SetCurrentLayer(int index);
 
-		void AddEntity(Entity* entity);
-
-		void Update(double elapsedSeconds);
+		void AddGameObject(GameObject* entity);
 
 		String ToString() const override;
 

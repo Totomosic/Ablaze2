@@ -1,4 +1,6 @@
 #include "Graphics.h"
+#include "Resources\ResourceManager.h"
+#include "Resources\Meshes\__Meshes__.h"
 
 namespace Ablaze
 {
@@ -236,6 +238,12 @@ namespace Ablaze
 		}
 		GL_CALL(glDepthFunc((GLenum)s_DepthFunction));
 		GL_CALL(glBlendFunc((GLenum)s_BlendSrcFunction, (GLenum)s_BlendDstFunction));
+	}
+
+	void Graphics::FramebufferResizeCallback(GLFWwindow* window, int width, int height)
+	{
+		CurrentContext()->SetWidth(width);
+		CurrentContext()->SetHeight(height);
 	}
 
 }

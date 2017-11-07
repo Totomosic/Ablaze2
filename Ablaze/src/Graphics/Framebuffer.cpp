@@ -64,9 +64,9 @@ namespace Ablaze
 
 	void Framebuffer::Bind() const
 	{
+		m_Viewport.Bind();
 		if (s_CurrentlyBound != this)
 		{
-			m_Viewport.Bind();
 			GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, m_Id));
 			s_CurrentlyBound = this;
 		}
@@ -108,7 +108,7 @@ namespace Ablaze
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id));
 		GL_CALL(glReadBuffer(GL_COLOR_ATTACHMENT0));
 		//GL_CALL(glDrawBuffer(GL_COLOR_ATTACHMENT0));
-		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext()->GetWidth(), Graphics::CurrentContext()->GetHeight(), (GLbitfield)buffer, GL_NEAREST));
+		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext()->Width(), Graphics::CurrentContext()->Height(), (GLbitfield)buffer, GL_NEAREST));
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	}

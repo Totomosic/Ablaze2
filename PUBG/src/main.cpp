@@ -7,7 +7,8 @@ class Game : public Application
 {
 private:
 	Window* m_Window;
-	bool m_FPS;
+	bool m_FPS = false;
+	Scene* scene;
 
 public:
 	void Init() override
@@ -17,24 +18,23 @@ public:
 		Graphics::Initialise(m_Window);
 		Graphics::EnableCull();
 
-		Resource<Shader> s = ResourceManager::Library().LoadShader("base.shader");
-		Resource<Shader> basic = ResourceManager::Library().LoadShader("default.shader");
+		scene = &SceneManager::Instance().CreateScene();
+		Layer& world = scene->CreateLayer("World");
+		Layer& ui = scene->CreateLayer("UI");
 
-		Scene& scene = SceneManager::Instance().CreateScene();
-		Layer& world = scene.CreateLayer("World", new Camera(Projection::Perspective));
-		Layer& ui = scene.CreateLayer("UI", new Camera(Projection::Orthographic));
+		Resource<Model> cube = ResourceManager::Library().CreateCuboid(1, 1, 1);
 
-		world.AddEntity(new Terrain(500, 500, 512, 512, Material(Color::White(), s, "Tex0", "image.png")), "Terrain");
-		world.CreateEntity(0, 0, 0, Mesh(ResourceManager::Library().CreatePlane(500, 500), Material(Color(20, 50, 180, 200), basic)));
-		ui.CreateEntity(m_Window->GetWidth() / 2, m_Window->GetHeight() / 2, -5, Mesh(ResourceManager::Library().CreateRectangle(50, 50), Material(Color::White(), basic)));
+		GameObject* camera = new GameObject;
+		camera->Components().AddComponent(new Transform(Maths::Vec3(0, 5, 5), Maths::Quaternion::FromAngleAxis(-Maths::PI / 4.0, Maths::Vec3(1, 0, 0))));
+		camera->Components().AddComponent(new Camera());
 
-		HeightmapFunction func("defaultTerrain.png", -50, 50);
+		GameObject* obj = new GameObject;
+		obj->Components().AddComponent(new Transform());
+		obj->Components().AddComponent(new Mesh(cube, Material(Color::White(), "base.shader", "Tex0", "border.png")));
 
-		TerrainData& data = world.GetNamedEntity<Terrain>("Terrain").BeginEditing();
-		data.SetRegion(0, 0, 512, 512, func);
-		world.GetNamedEntity<Terrain>("Terrain").EndEditing(data);
-
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		world.SetActiveCamera(camera);
+		world.AddGameObject(camera);
+		world.AddGameObject(obj, "Player");
 
 	}
 
@@ -46,9 +46,28 @@ public:
 	void Update() override
 	{
 		m_Window->SetTitle("Ablaze: " + std::to_string((int)Time::AvgFPS()));
-		
-		float speed = 10;
-		Camera* camera = SceneManager::Instance().CurrentScene().GetLayer("World").GetActiveCamera();
+
+		GameObject& camera = *scene->GetLayer("World").GetActiveCamera();
+		Transform& t = *camera.Components().GetComponent<Transform>();
+		float speed = 3;
+
+		if (Input::KeyDown(Keycode::D))
+		{
+			t.Position() += t.Right() * speed * Time::DeltaTime();
+		}
+		if (Input::KeyDown(Keycode::A))
+		{
+			t.Position() -= t.Right() * speed * Time::DeltaTime();
+		}
+		if (Input::KeyDown(Keycode::W))
+		{
+			t.Position() += t.Forward() * speed * Time::DeltaTime();
+		}
+		if (Input::KeyDown(Keycode::S))
+		{
+			t.Position() -= t.Forward() * speed * Time::DeltaTime();
+		}
+
 		if (Input::KeyPressed(Keycode::C))
 		{
 			m_FPS = !m_FPS;
@@ -61,86 +80,45 @@ public:
 				Input::ReleaseCursor();
 			}
 		}
-
-		if (Input::KeyDown(Keycode::W))
-		{
-			camera->Velocity() += camera->GetTransform().Forward() * speed;
-		}
-		else if (Input::KeyDown(Keycode::S))
-		{
-			camera->Velocity() += camera->GetTransform().Forward() * -speed;
-		}
-
-		if (Input::KeyDown(Keycode::D))
-		{
-			camera->Velocity() += camera->GetTransform().Right() * speed;
-		}
-		else if (Input::KeyDown(Keycode::A))
-		{
-			camera->Velocity() += camera->GetTransform().Right() * -speed;
-		}
-
-		if (Input::KeyDown(Keycode::Left))
-		{
-			camera->GetTransform().Rotate(45 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World, Angle::Degrees);
-		}
-		if (Input::KeyDown(Keycode::Right))
-		{
-			camera->GetTransform().Rotate(-45 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World, Angle::Degrees);
-		}
-		if (Input::KeyDown(Keycode::Up))
-		{
-			camera->GetTransform().Rotate(45 * Time::DeltaTime(), Maths::Vec3(1, 0, 0), Space::Local, Angle::Degrees);
-		}
-		if (Input::KeyDown(Keycode::Down))
-		{
-			camera->GetTransform().Rotate(-45 * Time::DeltaTime(), Maths::Vec3(1, 0, 0), Space::Local, Angle::Degrees);
-		}
-
 		if (m_FPS)
 		{
-			camera->Rotate(Input::RelMousePosition().x * 0.2f, Maths::Vec3(0, 1, 0), Space::World, Angle::Degrees);
-			camera->Rotate(-Input::RelMousePosition().y * 0.2f, Maths::Vec3(1, 0, 0), Space::Local, Angle::Degrees);
+			t.Rotate(Input::RelMousePosition().x * 0.2f, Maths::Vec3(0, 1, 0), Space::World, Angle::Degrees);
+			t.Rotate(-Input::RelMousePosition().y * 0.2f, Maths::Vec3(1, 0, 0), Space::Local, Angle::Degrees);
 		}
 
-		SceneManager::Instance().CurrentScene().Update(Time::ElapsedTime());
-		camera->Velocity() = Maths::Vec3();
 	}
 
 	void Render() override
 	{
-
 		Application::Render();
 
-		if (SceneManager::Instance().HasScene())
+		for (GameObject* object : scene->GetLayer("World").GameObjects())
 		{
-			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+			if (object->Components().HasComponent<Transform>() && object->Components().HasComponent<Mesh>())
 			{
-				for (Entity* entity : layer->GetEntities())
-				{
-					RenderMesh(*entity, entity->GetMesh(), layer->GetActiveCamera());
-				}
+				RenderMesh(*object->Components().GetComponent<Transform>(), *object->Components().GetComponent<Mesh>(), scene->GetLayer("World").GetActiveCamera());
 			}
 		}
 
 		UpdateDisplay();
-
 	}
 
-	void RenderMesh(Entity& entity, Mesh& mesh, Camera* camera)
+	void RenderMesh(const Transform& transform, const Mesh& mesh, GameObject* camera)
 	{
-		for (int i = 0; i < mesh.ModelCount(); i++)
+		Camera* camComp = camera->Components().GetComponent<Camera>();
+		Transform* camT = camera->Components().GetComponent<Transform>();
+		for (const ModelSet& set : mesh.GetModelSets())
 		{
-			const ModelSet& modelSet = mesh.GetModelSet(i);
-			Resource<Shader> shader = modelSet.material.GetShader();
+			const Material& mat = set.material;
+			Resource<Model> model = set.model;
+			Resource<Shader> shader = mat.GetShader();
 			shader->Bind();
-			shader->SetUniform("modelMatrix", modelSet.transform * entity.GetTransform().ToMatrix());
-			shader->SetUniform("viewMatrix", camera->ViewMatrix());
-			shader->SetUniform("projectionMatrix", camera->ProjectionMatrix());
-			shader->SetUniform("color", modelSet.material.BaseColor());
-			modelSet.material.Textures().BindAll(modelSet.material.GetShader());
-			modelSet.material.RenderSettings().Apply();
-			VertexArray* vao = modelSet.model->GetVertexArray();
+			shader->SetUniform("modelMatrix", set.transform * transform.ToMatrix());
+			shader->SetUniform("viewMatrix", camT->ToMatrix().Inverse());
+			shader->SetUniform("projectionMatrix", camComp->ProjectionMatrix());
+			shader->SetUniform("color", mat.BaseColor());
+			mat.RenderSettings().Apply();
+			VertexArray* vao = model->GetVertexArray();
 			vao->Bind();
 			glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
 		}

@@ -36,20 +36,20 @@ OBJECTS:
 
 		Example Class:
 
-		class Entity : public Object
+		class GameObject : public Object
 		{
 		private:
 			int m_Age;
 			String m_Name;
 
 		public:
-			Entity(int age, const String& name);
+			GameObject(int age, const String& name);
 
 			int GetAge() const;
 			const String& GetName() const;
 
 		public:
-			static int EntityCount();
+			static int GameObjectCount();
 
 		private:
 			void SetAge(int age);

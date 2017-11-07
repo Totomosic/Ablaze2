@@ -1,30 +1,13 @@
 #include "Camera.h"
 #include "Graphics\Graphics.h"
-#include "SceneManager.h"
 
 namespace Ablaze
 {
 
-	Camera::Camera(const Transform& transform, const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform, mesh),
-		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
+	Camera::Camera(Projection projection, float fov, float nearPlane, float farPlane) : Component(),
+		m_ProjectionType(projection), m_Fov(fov), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
 		CreateProjectionMatrix();
-	}
-
-	Camera::Camera(const Transform& transform, Projection projection, float fov, float nearPlane, float farPlane) : Actor(transform),
-		m_Fov(fov), m_ProjectionType(projection), m_NearPlane(nearPlane), m_FarPlane(farPlane)
-	{
-		CreateProjectionMatrix();
-	}
-
-	Camera::Camera(const Mesh& mesh, Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(), mesh, projection, fov, nearPlane, farPlane)
-	{
-
-	}
-
-	Camera::Camera(Projection projection, float fov, float nearPlane, float farPlane) : Camera(Transform(), projection, fov, nearPlane, farPlane)
-	{
-
 	}
 
 	const Maths::Mat4& Camera::ProjectionMatrix() const
@@ -35,11 +18,6 @@ namespace Ablaze
 	Maths::Mat4& Camera::ProjectionMatrix()
 	{
 		return m_Projection;
-	}
-
-	Maths::Mat4 Camera::ViewMatrix() const
-	{
-		return m_Transform.ToMatrix().Inverse();
 	}
 
 	float Camera::NearPlane() const
@@ -96,11 +74,6 @@ namespace Ablaze
 		UpdateProjectionMatrix();
 	}
 
-	void Camera::Update(double elapsedSeconds)
-	{
-		Actor::Update(elapsedSeconds);
-	}
-
 	void Camera::UpdateProjectionMatrix()
 	{
 		CreateProjectionMatrix();
@@ -111,15 +84,21 @@ namespace Ablaze
 		return "Camera";
 	}
 
+	Component* Camera::Clone() const
+	{
+		Camera* camera = new Camera(m_ProjectionType, m_Fov, m_NearPlane, m_FarPlane);
+		return camera;
+	}
+
 	void Camera::CreateProjectionMatrix()
 	{
 		if (m_ProjectionType == Projection::Perspective)
 		{
-			m_Projection = Maths::Mat4::Perspective(m_Fov, Graphics::CurrentContext()->GetAspect(), m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Mat4::Perspective(m_Fov, Graphics::CurrentContext()->Aspect(), m_NearPlane, m_FarPlane);
 		}
 		else
 		{
-			m_Projection = Maths::Mat4::Orthographic(0, Graphics::CurrentContext()->GetWidth(), 0, Graphics::CurrentContext()->GetHeight(), m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Mat4::Orthographic(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height(), m_NearPlane, m_FarPlane);
 		}
 	}
 

@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	Transform::Transform::Transform(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale) : Object(),
+	Transform::Transform::Transform(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale) : Component(),
 		m_Position(position), m_Rotation(rotation), m_Scale(scale)
 	{
 	
@@ -107,6 +107,12 @@ namespace Ablaze
 	String Transform::ToString() const
 	{
 		return "Transform";
+	}
+
+	Component* Transform::Clone() const
+	{
+		Transform* t = new Transform(m_Position, m_Rotation, m_Scale);
+		return t;
 	}
 
 	Transform Transform::operator+(const Transform& other) const

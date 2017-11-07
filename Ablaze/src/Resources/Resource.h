@@ -18,20 +18,19 @@ namespace Ablaze
 			m_ResourcePtr = resource;
 		}
 
-		Resource()
-		{
-			m_ResourcePtr = nullptr;
-		}
+		Resource() = default;
 
 		Resource(const Resource<T>& other)
 		{
 			m_ResourcePtr = other.m_ResourcePtr;
-			ResourceManager::Library().IncrementRefCount(*this);
+			if (other.m_ResourcePtr != nullptr)
+				ResourceManager::Library().IncrementRefCount(*this);
 		}
 
 		~Resource()
 		{
-			ResourceManager::Library().DecrementRefCount(*this);
+			if (m_ResourcePtr != nullptr)
+				ResourceManager::Library().DecrementRefCount(*this);
 		}
 
 		T* Get() const { return m_ResourcePtr; }

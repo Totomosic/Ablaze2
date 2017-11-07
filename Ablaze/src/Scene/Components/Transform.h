@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include "Component.h"
 
 namespace Ablaze
 {
@@ -14,7 +14,7 @@ namespace Ablaze
 		Radians, Degrees
 	};
 
-	class AB_API Transform : public Object
+	class AB_API Transform : public Component
 	{
 	private:
 		Maths::Vec3 m_Position;
@@ -45,6 +45,8 @@ namespace Ablaze
 
 		Maths::Mat4 ToMatrix() const;
 		String ToString() const override;
+
+		Component* Clone() const override;
 
 		Transform operator+(const Transform& other) const;
 

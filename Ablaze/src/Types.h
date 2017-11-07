@@ -11,6 +11,8 @@
 #include <fstream>
 #include <experimental\filesystem>
 #include <memory>
+#include <typeindex>
+#include <typeinfo>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

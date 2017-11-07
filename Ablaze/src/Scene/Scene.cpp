@@ -11,7 +11,7 @@ namespace Ablaze
 		SceneManager::Instance().LoadScene(this);
 	}
 
-	Scene::Scene(const String& layerName, Camera* layerCamera) : Scene()
+	Scene::Scene(const String& layerName, GameObject* layerCamera) : Scene()
 	{
 		CreateLayer(layerName, layerCamera);
 	}
@@ -64,7 +64,7 @@ namespace Ablaze
 		return m_LayerOrder;
 	}
 
-	Layer& Scene::CreateLayer(const String& name, Camera* camera)
+	Layer& Scene::CreateLayer(const String& name, GameObject* camera)
 	{
 		Layer* layer = nullptr;
 		if (camera != nullptr)
@@ -84,7 +84,7 @@ namespace Ablaze
 		return *layer;
 	}
 
-	Layer& Scene::CreateLayer(Camera* camera)
+	Layer& Scene::CreateLayer(GameObject* camera)
 	{
 		String name = std::to_string(m_LayerOrder.size()) + "_LAYER_NAMELESS_";
 		return CreateLayer(name, camera);
@@ -108,30 +108,11 @@ namespace Ablaze
 		return *m_CurrentLayer;
 	}
 
-	void Scene::AddEntity(Entity* entity)
+	void Scene::AddGameObject(GameObject* entity)
 	{
 		if (HasLayer())
 		{
-			CurrentLayer().AddEntity(entity);
-		}
-	}
-
-	void Scene::Update(double elapsedSeconds)
-	{
-		for (Layer* layer : m_LayerOrder)
-		{
-			for (Entity* entity : layer->GetEntities())
-			{
-				entity->Update(elapsedSeconds);
-			}
-			for (Light* light : layer->GetLights())
-			{
-				light->Update(elapsedSeconds);
-			}
-			if (layer->HasCamera())
-			{
-				layer->GetActiveCamera()->Update(elapsedSeconds);
-			}
+			CurrentLayer().AddGameObject(entity);
 		}
 	}
 

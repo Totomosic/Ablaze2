@@ -31,12 +31,12 @@ namespace Ablaze
 
 	int Application::WindowWidth()
 	{
-		return Graphics::CurrentContext()->GetWidth();
+		return Graphics::CurrentContext()->Width();
 	}
 
 	int Application::WindowHeight()
 	{
-		return Graphics::CurrentContext()->GetHeight();
+		return Graphics::CurrentContext()->Height();
 	}
 
 	String Application::ToString() const

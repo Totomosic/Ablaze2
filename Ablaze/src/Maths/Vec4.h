@@ -40,7 +40,7 @@ namespace Ablaze
 			Vec4 Multiply(const Vec4& other) const;
 			Vec4 Divide(const Vec4& other) const;
 
-			static float Distance(const Maths::Vec4& a, const Maths::Vec4& b);
+			static float Distance(const Vec4& a, const Vec4& b);
 
 			String ToString() const;
 

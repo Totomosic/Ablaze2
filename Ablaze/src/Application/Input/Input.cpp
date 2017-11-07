@@ -32,7 +32,7 @@ namespace Ablaze
 
 	Maths::Vec2 Input::ScreenSize()
 	{
-		return Maths::Vec2(Graphics::CurrentContext()->GetWidth(), Graphics::CurrentContext()->GetHeight());
+		return Maths::Vec2(Graphics::CurrentContext()->Width(), Graphics::CurrentContext()->Height());
 	}
 
 	Maths::Vec3 Input::MousePosition(Origin origin)

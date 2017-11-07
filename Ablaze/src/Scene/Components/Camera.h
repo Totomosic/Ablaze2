@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Actor.h"
+#include "Transform.h"
 
 namespace Ablaze
 {
@@ -10,9 +10,9 @@ namespace Ablaze
 		Perspective, Orthographic
 	};
 
-	class AB_API Camera : public Actor
+	class AB_API Camera : public Component
 	{
-	protected:
+	private:
 		float m_Fov;
 		Projection m_ProjectionType;
 		float m_NearPlane;
@@ -20,14 +20,10 @@ namespace Ablaze
 		Maths::Mat4 m_Projection;
 
 	public:
-		Camera(const Transform& transform, const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Transform& transform, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
-		Camera(const Mesh& mesh, Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 		Camera(Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 
 		const Maths::Mat4& ProjectionMatrix() const;
 		Maths::Mat4& ProjectionMatrix();
-		Maths::Mat4 ViewMatrix() const;
 		float NearPlane() const;
 		float& NearPlane();
 		float FarPlane() const;
@@ -43,12 +39,10 @@ namespace Ablaze
 		Maths::Vec3 ScreenToWorldPoint(const Maths::Vec3& screenpoint) const;
 		Maths::Vec3 WorldToScreenPoint(const Maths::Vec3& worldpoint) const;
 
-		void Update(double elapsedSeconds) override;
 		void UpdateProjectionMatrix();
 
 		String ToString() const override;
-
-		friend class Layer;
+		Component* Clone() const override;
 
 	private:
 		void CreateProjectionMatrix();
