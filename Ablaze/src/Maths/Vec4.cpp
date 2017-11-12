@@ -185,11 +185,32 @@ namespace Ablaze
 			*this = *this / other;
 			return *this;
 		}
+		
+		Vec4 Vec4::operator-() const
+		{
+			return Vec4(-x, -y, -z, w);
+		}
 
 		std::ostream& operator<<(std::ostream& stream, const Vec4& vector)
 		{
 			stream << vector.ToString();
 			return stream;
 		}
+
+		Vec4 Vec4::Forward()
+		{
+			return Vec4(0, 0, -1, 0);
+		}
+
+		Vec4 Vec4::Right()
+		{
+			return Vec4(1, 0, 0, 0);
+		}
+
+		Vec4 Vec4::Up()
+		{
+			return Vec4(0, 1, 0, 0);
+		}
+
 	}
 }

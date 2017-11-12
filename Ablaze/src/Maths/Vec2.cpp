@@ -147,10 +147,26 @@ namespace Ablaze
 			return *this;
 		}
 
+		Vec2 Vec2::operator-() const
+		{
+			return Vec2(-x, -y);
+		}
+
 		std::ostream& operator<<(std::ostream& stream, const Vec2& vector)
 		{
 			stream << vector.ToString();
 			return stream;
 		}
+
+		Vec2 Vec2::Right()
+		{
+			return Vec2(1, 0);
+		}
+
+		Vec2 Vec2::Up()
+		{
+			return Vec2(0, 1);
+		}
+
 	}
 }

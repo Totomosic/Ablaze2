@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Time.h"
 #include "Graphics\Graphics.h"
+#include "Scene\Systems\Systems.h"
 
 namespace Ablaze
 {
@@ -66,7 +67,7 @@ namespace Ablaze
 
 	void Application::Update()
 	{
-	
+		Systems::Run();
 	}
 
 	void Application::Render()

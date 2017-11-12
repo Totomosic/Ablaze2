@@ -4,7 +4,9 @@
 #include "Framebuffer.h"
 #include "GraphicsPipeline.h"
 #include "Window.h"
-#include "Scene\Components\Transform.h"
+#include "Scene\Components\Motion\Transform.h"
+#include "Resources\Resource.h"
+#include "Resources\Textures\Fonts\Font.h"
 
 namespace Ablaze
 {
@@ -75,7 +77,7 @@ namespace Ablaze
 		static void Present();
 
 		// Drawing commands
-
+		static void DrawString(const String& text, const Resource<Font>& font);
 
 		// OpenGL state management
 		static void ResetGLStates();

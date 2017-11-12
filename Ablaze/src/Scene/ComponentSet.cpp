@@ -1,4 +1,5 @@
 #include "ComponentSet.h"
+#include "Components\__Components__.h"
 
 namespace Ablaze
 {
@@ -17,6 +18,21 @@ namespace Ablaze
 	GameObject* ComponentSet::Owner() const
 	{
 		return m_GameObject;
+	}
+
+	std::vector<Component*> ComponentSet::GetAll() const
+	{
+		std::vector<Component*> components;
+		for (auto pair : m_Components)
+		{
+			components.push_back(pair.second);
+		}
+		return components;
+	}
+
+	const std::unordered_map<std::type_index, Component*>& ComponentSet::GetComponentMap() const
+	{
+		return m_Components;
 	}
 
 	Component* ComponentSet::GetComponent(const std::type_index& type) const

@@ -36,9 +36,6 @@ namespace Ablaze
 			Vec3 Multiply(const Vec3& other) const;
 			Vec3 Divide(const Vec3& other) const;
 
-			static float Distance(const Vec3& a, const Vec3& b);
-			static Vec3 Cross(const Vec3& a, const Vec3& b);
-
 			String ToString() const;
 
 			friend Vec3 operator+(const Vec3& left, const Vec3& right);
@@ -57,8 +54,17 @@ namespace Ablaze
 			Vec3 operator-=(const Vec3& other);
 			Vec3 operator*=(const Vec3& other);
 			Vec3 operator/=(const Vec3& other);
+			Vec3 operator-() const;
 
 			friend std::ostream& operator<<(std::ostream& stream, const Vec3& vector);
+
+		public:
+			static float Distance(const Vec3& a, const Vec3& b);
+			static Vec3 Cross(const Vec3& a, const Vec3& b);
+			static Vec3 Forward();
+			static Vec3 Right();
+			static Vec3 Up();
+			
 		};
 	}
 }

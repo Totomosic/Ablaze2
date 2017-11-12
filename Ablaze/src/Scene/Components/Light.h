@@ -16,12 +16,12 @@ namespace Ablaze
 	protected:
 		LightType m_Type;
 		Color m_LightColor;
-		float m_Intensity;
+		float m_Ambient;
 		Maths::Vec3 m_Attenuation;
 
 	public:
-		Light(LightType type, const Color& color, float intensity, const Maths::Vec3& attenuation);
-		Light(LightType type, const Color& color, float intensity);
+		Light(LightType type, const Color& color, float ambient, const Maths::Vec3& attenuation);
+		Light(LightType type, const Color& color, float ambient);
 		Light(LightType type, const Color& color);
 		Light(LightType type);
 		Light();
@@ -30,11 +30,12 @@ namespace Ablaze
 		LightType& Type();
 		const Color& LightColor() const;
 		Color& LightColor();
-		const float& Intensity() const;
-		float& Intensity();
+		const float& Ambient() const;
+		float& Ambient();
 		const Maths::Vec3& Attenuation() const;
 		Maths::Vec3& Attenuation();
 
+		String ToString() const override;
 		Component* Clone() const override;
 
 	};

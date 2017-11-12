@@ -7,7 +7,6 @@ class Game : public Application
 {
 private:
 	Window* m_Window;
-	bool m_FPS = false;
 	Scene* scene;
 
 public:
@@ -21,20 +20,37 @@ public:
 		scene = &SceneManager::Instance().CreateScene();
 		Layer& world = scene->CreateLayer("World");
 		Layer& ui = scene->CreateLayer("UI");
+		Layer& backgroundLayer = scene->CreateLayer("Background");
 
-		Resource<Model> cube = ResourceManager::Library().CreateCuboid(1, 1, 1);
+		Systems::Lighting().AddShader(ResourceManager::Library().LoadShader("res/base.shader"));
 
-		GameObject* camera = new GameObject;
-		camera->Components().AddComponent(new Transform(Maths::Vec3(0, 5, 5), Maths::Quaternion::FromAngleAxis(-Maths::PI / 4.0, Maths::Vec3(1, 0, 0))));
-		camera->Components().AddComponent(new Camera());
+		scene->SetCurrentLayer("Background");
 
-		GameObject* obj = new GameObject;
-		obj->Components().AddComponent(new Transform());
-		obj->Components().AddComponent(new Mesh(cube, Material(Color::White(), "base.shader", "Tex0", "border.png")));
+		GameObject* backgroundCamera = GameObject::Instantiate(0, 0, 0);
+		backgroundCamera->Components().AddComponent(new Camera(Projection::Orthographic));
 
-		world.SetActiveCamera(camera);
-		world.AddGameObject(camera);
-		world.AddGameObject(obj, "Player");
+		GameObject* background = GameObject::Instantiate(WindowWidth() / 2, WindowHeight() / 2, -999);
+		background->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(WindowWidth(), WindowHeight(), Color::White()), Material(Color::White(), ResourceManager::Library().DefaultTextureShader(), "Tex0", "res/background.jpg")));
+
+		scene->SetCurrentLayer("World");
+
+		GameObject* worldCamera = GameObject::Instantiate(0, 0, 5);
+		worldCamera->Components().AddComponent(new Camera(Projection::Perspective));
+
+		GameObject* floor = GameObject::Instantiate(0, -7, -10);
+		floor->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(20, 3, 5), Material(Color::White(), ResourceManager::Library().LightingColorShader())));
+
+		GameObject* player = GameObject::Instantiate(0, -5, -10);
+		player->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(1, 1, 1), Material(Color::Green(), ResourceManager::Library().LightingColorShader())));
+		player->AddComponent(new RigidBody(false));
+		player->SetTag("Player");
+
+		GameObject* sun = GameObject::Instantiate();
+		sun->AddComponent(new Transform(Maths::Vec3(0, 100, -10)));
+		sun->AddComponent<Light>();
+
+		world.SetActiveCamera(worldCamera);
+		backgroundLayer.SetActiveCamera(backgroundCamera);
 
 	}
 
@@ -47,44 +63,21 @@ public:
 	{
 		m_Window->SetTitle("Ablaze: " + std::to_string((int)Time::AvgFPS()));
 
-		GameObject& camera = *scene->GetLayer("World").GetActiveCamera();
-		Transform& t = *camera.Components().GetComponent<Transform>();
-		float speed = 3;
+		GameObject& player = SceneManager::Instance().CurrentScene().GetLayer("World").GetNamedGameObject("Player");
+		Transform& transform = player.transform();
+		RigidBody& rb = player.GetComponent<RigidBody>();
+		float speed = 50;
 
 		if (Input::KeyDown(Keycode::D))
 		{
-			t.Position() += t.Right() * speed * Time::DeltaTime();
+			rb.Acceleration() += transform.Right() * speed;
 		}
 		if (Input::KeyDown(Keycode::A))
 		{
-			t.Position() -= t.Right() * speed * Time::DeltaTime();
-		}
-		if (Input::KeyDown(Keycode::W))
-		{
-			t.Position() += t.Forward() * speed * Time::DeltaTime();
-		}
-		if (Input::KeyDown(Keycode::S))
-		{
-			t.Position() -= t.Forward() * speed * Time::DeltaTime();
+			rb.Acceleration() += transform.Right() * -speed;
 		}
 
-		if (Input::KeyPressed(Keycode::C))
-		{
-			m_FPS = !m_FPS;
-			if (m_FPS)
-			{
-				Input::CaptureCursor();
-			}
-			else
-			{
-				Input::ReleaseCursor();
-			}
-		}
-		if (m_FPS)
-		{
-			t.Rotate(Input::RelMousePosition().x * 0.2f, Maths::Vec3(0, 1, 0), Space::World, Angle::Degrees);
-			t.Rotate(-Input::RelMousePosition().y * 0.2f, Maths::Vec3(1, 0, 0), Space::Local, Angle::Degrees);
-		}
+		Application::Update();
 
 	}
 
@@ -92,12 +85,9 @@ public:
 	{
 		Application::Render();
 
-		for (GameObject* object : scene->GetLayer("World").GameObjects())
+		for (GameObject* object : GameObject::GetAllWith<Transform, Mesh>())
 		{
-			if (object->Components().HasComponent<Transform>() && object->Components().HasComponent<Mesh>())
-			{
-				RenderMesh(*object->Components().GetComponent<Transform>(), *object->Components().GetComponent<Mesh>(), scene->GetLayer("World").GetActiveCamera());
-			}
+			RenderMesh(object->transform(), object->mesh(), object->GetLayer()->GetActiveCamera());
 		}
 
 		UpdateDisplay();
@@ -105,19 +95,20 @@ public:
 
 	void RenderMesh(const Transform& transform, const Mesh& mesh, GameObject* camera)
 	{
-		Camera* camComp = camera->Components().GetComponent<Camera>();
-		Transform* camT = camera->Components().GetComponent<Transform>();
+		Camera& camComp = camera->GetComponent<Camera>();
+		Transform& camT = camera->GetComponent<Transform>();
 		for (const ModelSet& set : mesh.GetModelSets())
 		{
 			const Material& mat = set.material;
-			Resource<Model> model = set.model;
-			Resource<Shader> shader = mat.GetShader();
+			const Resource<Model>& model = set.model;
+			const Resource<Shader>& shader = mat.GetShader();
 			shader->Bind();
 			shader->SetUniform("modelMatrix", set.transform * transform.ToMatrix());
-			shader->SetUniform("viewMatrix", camT->ToMatrix().Inverse());
-			shader->SetUniform("projectionMatrix", camComp->ProjectionMatrix());
+			shader->SetUniform("viewMatrix", camT.ToMatrix().Inverse());
+			shader->SetUniform("projectionMatrix", camComp.ProjectionMatrix());
 			shader->SetUniform("color", mat.BaseColor());
 			mat.RenderSettings().Apply();
+			mat.Textures().BindAll(shader);
 			VertexArray* vao = model->GetVertexArray();
 			vao->Bind();
 			glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);

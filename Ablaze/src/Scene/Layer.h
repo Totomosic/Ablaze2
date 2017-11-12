@@ -24,10 +24,10 @@ namespace Ablaze
 
 	public:
 		const String& GetName() const;
-		GameObject* GetActiveCamera() const;
 		bool HasCamera() const;
 		std::vector<GameObject*> GameObjects() const;
-
+		
+		GameObject* GetActiveCamera() const;
 		void SetActiveCamera(GameObject* camera);
 
 		const GameObject& GetNamedGameObject(const String& tag, int index = 0) const;

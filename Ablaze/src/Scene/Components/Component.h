@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Scene\GameObject.h"
+#include "Scene\ComponentSet.h"
 
 namespace Ablaze
 {

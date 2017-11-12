@@ -1,11 +1,11 @@
 #pragma once
-#include "Components\__Components__.h"
 #include "Common.h"
 
 namespace Ablaze
 {
 
 	class GameObject;
+	class Component;
 
 	class AB_API ComponentSet : public Object
 	{
@@ -18,7 +18,8 @@ namespace Ablaze
 
 		int ComponentCount() const;
 		GameObject* Owner() const;
-		const std::vector<Component*> GetAll() const;
+		std::vector<Component*> GetAll() const;
+		const std::unordered_map<std::type_index, Component*>& GetComponentMap() const;
 
 		Component* GetComponent(const std::type_index& type) const;
 		bool HasComponent(const std::type_index& type) const;
@@ -38,10 +39,12 @@ namespace Ablaze
 		template<typename T>
 		void AddComponent(T* component)
 		{
-			AddComponent(typeid(T), component);
+			AddComponent(typeid(*component), component);
 		}
 
 		String ToString() const override;
+
+		friend class GameObject;
 
 	private:
 		void AddComponent(const std::type_index& type, Component* component);

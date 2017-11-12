@@ -64,6 +64,19 @@ namespace Ablaze
 		return m_LayerOrder;
 	}
 
+	std::vector<Layer*> Scene::GetLayers(int layerMask) const
+	{
+		std::vector<Layer*> layers;
+		for (int i = 0; i < m_LayerOrder.size(); i++)
+		{
+			if (IsBitSet(layerMask, i))
+			{
+				layers.push_back(m_LayerOrder[i]);
+			}
+		}
+		return layers;
+	}
+
 	Layer& Scene::CreateLayer(const String& name, GameObject* camera)
 	{
 		Layer* layer = nullptr;

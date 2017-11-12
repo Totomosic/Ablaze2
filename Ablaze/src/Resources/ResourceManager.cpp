@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 #include "Resource.h"
 #include "Utils\FileSystem\__FileSystem__.h"
+#include "Scene\Systems\__Systems__.h"
 
 namespace Ablaze
 {
@@ -35,6 +36,16 @@ namespace Ablaze
 		return Resource<Texture2D>(CreateNewTexture2D(filename, mipmap));
 	}
 
+	Resource<Font> ResourceManager::LoadFont(const String& filename, float size)
+	{
+		if (LoadedResourceExists(filename))
+		{
+			IncrementLoadedRefCount(filename);
+			return Resource<Font>((Font*)GetLoadedResourcePtr(filename));
+		}
+		return Resource<Font>(CreateNewFont(filename, size));
+	}
+
 	Resource<Shader> ResourceManager::LoadShader(const String& vFile, const String& fFile)
 	{
 		if (LoadedResourceExists(vFile))
@@ -53,6 +64,82 @@ namespace Ablaze
 			return Resource<Shader>((Shader*)GetLoadedResourcePtr(shaderFile));
 		}
 		return Resource<Shader>(CreateNewShader(shaderFile));
+	}
+
+	Resource<Shader> ResourceManager::DefaultColorShader()
+	{
+		if (!LoadedResourceExists("DefaultColorShader"))
+		{
+			String vSource =
+#include "Shaders\Source\DefaultColor_v.glsl"
+				;
+			String fSource =
+#include "Shaders\Source\DefaultColor_f.glsl"
+				;
+			Shader* shader = Shader::FromSource(vSource, fSource);
+			CreateNewLoadedResource("DefaultColorShader", shader);
+			IncrementLoadedRefCount("DefaultColorShader");
+			return Resource<Shader>(shader);
+		}
+		return Resource<Shader>((Shader*)GetLoadedResourcePtr("DefaultColorShader"));
+	}
+
+	Resource<Shader> ResourceManager::DefaultTextureShader()
+	{
+		if (!LoadedResourceExists("DefaultTextureShader"))
+		{
+			String vSource =
+#include "Shaders\Source\DefaultTexture_v.glsl"
+				;
+			String fSource =
+#include "Shaders\Source\DefaultTexture_f.glsl"
+				;
+			Shader* shader = Shader::FromSource(vSource, fSource);
+			CreateNewLoadedResource("DefaultTextureShader", shader);
+			IncrementLoadedRefCount("DefaultTextureShader");
+			return Resource<Shader>(shader);
+		}
+		return Resource<Shader>((Shader*)GetLoadedResourcePtr("DefaultTextureShader"));
+	}
+
+	Resource<Shader> ResourceManager::LightingColorShader()
+	{
+		if (!LoadedResourceExists("LightingColorShader"))
+		{
+			String vSource =
+#include "Shaders\Source\LightColor_v.glsl"
+				;
+			String fSource =
+#include "Shaders\Source\LightColor_f.glsl"
+				;
+			Shader* shader = Shader::FromSource(vSource, fSource);
+			CreateNewLoadedResource("LightingColorShader", shader);
+			IncrementLoadedRefCount("LightingColorShader");
+			Resource<Shader> res = Resource<Shader>(shader);
+			Systems::Lighting().AddShader(res);
+			return res;
+		}
+		return Resource<Shader>((Shader*)GetLoadedResourcePtr("LightingColorShader"));
+	}
+
+	Resource<Shader> ResourceManager::LightingTextureShader()
+	{
+		if (!LoadedResourceExists("LightingTextureShader"))
+		{
+			String vSource =
+#include "Shaders\Source\LightTexture_v.glsl"
+				;
+			String fSource =
+#include "Shaders\Source\LightTexture_f.glsl"
+				;
+			Shader* shader = Shader::FromSource(vSource, fSource);
+			CreateNewLoadedResource("LightingTextureShader", shader);
+			IncrementLoadedRefCount("LightingTextureShader");
+			Resource<Shader> res = Resource<Shader>(shader);
+			Systems::Lighting().AddShader(res);
+			return res;
+		}
+		return Resource<Shader>((Shader*)GetLoadedResourcePtr("LightingTextureShader"));
 	}
 
 	Resource<Model> ResourceManager::LoadOBJModel(const String& objFile)
@@ -152,6 +239,7 @@ namespace Ablaze
 	void ResourceManager::CreateNewLoadedResource(const String& filename, Asset* asset)
 	{
 		m_LoadedResources[filename] = std::pair<int, Asset*>(1, asset);
+		asset->m_AssetType = AssetType::Loaded;
 	}
 
 	void ResourceManager::TestLoadedRefCount(int refCount, const String& filename)
@@ -177,6 +265,7 @@ namespace Ablaze
 		m_GeneratedResources[m_GeneratedResourceCount] = new std::pair<int, Asset*>(1, asset);
 		asset->SetResourceID(m_GeneratedResourceCount);
 		m_GeneratedResourceCount++;
+		asset->m_AssetType = AssetType::Generated;
 	}
 
 	int ResourceManager::GetGeneratedRefCount(int resourceID)
@@ -232,6 +321,13 @@ namespace Ablaze
 		Texture2D* tex = new Texture2D(filename, mipmap);
 		CreateNewLoadedResource(filename, tex);
 		return tex;
+	}
+
+	Font* ResourceManager::CreateNewFont(const String& filename, float size)
+	{
+		Font* font = new Font(filename, size);
+		CreateNewLoadedResource(filename, font);
+		return font;
 	}
 
 	Shader* ResourceManager::CreateNewShader(const String& vFile, const String& fFile)

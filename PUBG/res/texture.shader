@@ -2,7 +2,9 @@
 #version 430 core
 
 layout(location = 0) in vec4 position;
+layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoord;
+layout(location = 3) in vec4 color;
 
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
@@ -16,7 +18,7 @@ void main(void)
 	vec4 viewPosition = viewMatrix * worldPosition;
 	vec4 screenPosition = projectionMatrix * viewPosition;
 	gl_Position = screenPosition;
-	
+
 	f_TexCoord = texCoord;
 }
 
@@ -25,8 +27,8 @@ void main(void)
 
 in vec2 f_TexCoord;
 
-uniform sampler2D Tex0;
 uniform vec4 color;
+uniform sampler2D Tex0;
 
 layout(location = 0) out vec4 finalColor;
 

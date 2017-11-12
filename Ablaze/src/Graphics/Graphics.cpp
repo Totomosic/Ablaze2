@@ -92,6 +92,11 @@ namespace Ablaze
 		s_Context->SwapBuffers();
 	}
 
+	void Graphics::DrawString(const String& text, const Resource<Font>& font)
+	{
+		
+	}
+
 	void Graphics::ResetGLStates()
 	{
 		s_DepthEnabled = false;

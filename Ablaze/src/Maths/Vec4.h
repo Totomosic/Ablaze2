@@ -40,8 +40,6 @@ namespace Ablaze
 			Vec4 Multiply(const Vec4& other) const;
 			Vec4 Divide(const Vec4& other) const;
 
-			static float Distance(const Vec4& a, const Vec4& b);
-
 			String ToString() const;
 
 			friend Vec4 operator+(const Vec4& left, const Vec4& right);
@@ -60,8 +58,16 @@ namespace Ablaze
 			Vec4 operator-=(const Vec4& other);
 			Vec4 operator*=(const Vec4& other);
 			Vec4 operator/=(const Vec4& other);
+			Vec4 operator-() const;
 
 			friend std::ostream& operator<<(std::ostream& stream, const Vec4& vector);
+
+		public:
+			static float Distance(const Vec4& a, const Vec4& b);
+			static Vec4 Forward();
+			static Vec4 Right();
+			static Vec4 Up();
+			
 		};
 	}
 }

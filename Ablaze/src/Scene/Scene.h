@@ -27,6 +27,7 @@ namespace Ablaze
 		Layer& GetLayer(const String& layer);
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
+		std::vector<Layer*> GetLayers(int layerMask) const;
 
 		Layer& CreateLayer(const String& name, GameObject* camera = nullptr);
 		Layer& CreateLayer(GameObject* camera = nullptr); // Assigned random name

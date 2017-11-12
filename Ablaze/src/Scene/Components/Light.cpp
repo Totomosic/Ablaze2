@@ -3,18 +3,18 @@
 namespace Ablaze
 {
 
-	Light::Light(LightType type, const Color& color, float intensity, const Maths::Vec3& attenuation) : Component(),
-		m_Type(type), m_LightColor(color), m_Intensity(intensity), m_Attenuation(attenuation)
+	Light::Light(LightType type, const Color& color, float ambient, const Maths::Vec3& attenuation) : Component(),
+		m_Type(type), m_LightColor(color), m_Ambient(ambient), m_Attenuation(attenuation)
 	{ 
 	
 	}
 
-	Light::Light(LightType type, const Color& color, float intensity) : Light(type, color, intensity, Maths::Vec3(1.0f, 0.0f, 0.0f))
+	Light::Light(LightType type, const Color& color, float ambient) : Light(type, color, ambient, Maths::Vec3(1.0f, 0.0f, 0.0f))
 	{
 	
 	}
 
-	Light::Light(LightType type, const Color& color) : Light(type, color, 1.0f)
+	Light::Light(LightType type, const Color& color) : Light(type, color, 0.3f)
 	{ 
 	
 	}
@@ -49,14 +49,14 @@ namespace Ablaze
 		return m_LightColor;
 	}
 
-	const float& Light::Intensity() const
+	const float& Light::Ambient() const
 	{
-		return m_Intensity;
+		return m_Ambient;
 	}
 
-	float& Light::Intensity()
+	float& Light::Ambient()
 	{
-		return m_Intensity;
+		return m_Ambient;
 	}
 
 	const Maths::Vec3& Light::Attenuation() const
@@ -67,6 +67,17 @@ namespace Ablaze
 	Maths::Vec3& Light::Attenuation()
 	{
 		return m_Attenuation;
+	}
+
+	String Light::ToString() const
+	{
+		return "Light";
+	}
+
+	Component* Light::Clone() const
+	{
+		Light* light = new Light(m_Type, m_LightColor, m_Ambient, m_Attenuation);
+		return light;
 	}
 
 }

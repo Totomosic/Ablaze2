@@ -151,12 +151,19 @@
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\Graphics\GraphicsPipeline.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
+    <ClInclude Include="src\Resources\Textures\Fonts\Font.h" />
+    <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
+    <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
+    <ClInclude Include="src\Scene\Components\Colliders\Endpoint.h" />
+    <ClInclude Include="src\Scene\Components\Colliders\__Colliders__.h" />
     <ClInclude Include="src\Scene\Components\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
     <ClInclude Include="src\Resources\Textures\TextureManager.h" />
     <ClInclude Include="src\Scene\Components\Camera.h" />
     <ClInclude Include="src\Scene\Components\Component.h" />
     <ClInclude Include="src\Scene\ComponentSet.h" />
+    <ClInclude Include="src\Scene\Components\Motion\RigidBody.h" />
+    <ClInclude Include="src\Scene\Components\Motion\__Motion__.h" />
     <ClInclude Include="src\Scene\Components\__Components__.h" />
     <ClInclude Include="src\Scene\GameObject.h" />
     <ClInclude Include="src\Graphics\Buffers\Buffer.h" />
@@ -206,7 +213,13 @@
     <ClInclude Include="src\Scene\Components\Light.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
-    <ClInclude Include="src\Scene\Components\Transform.h" />
+    <ClInclude Include="src\Scene\Components\Motion\Transform.h" />
+    <ClInclude Include="src\Scene\Systems\CollisionSystem.h" />
+    <ClInclude Include="src\Scene\Systems\LightSystem.h" />
+    <ClInclude Include="src\Scene\Systems\PhysicsSystem.h" />
+    <ClInclude Include="src\Scene\Systems\System.h" />
+    <ClInclude Include="src\Scene\Systems\Systems.h" />
+    <ClInclude Include="src\Scene\Systems\__Systems__.h" />
     <ClInclude Include="src\Scene\Terrain\HeightFunctions\Heightfunction.h" />
     <ClInclude Include="src\Scene\Terrain\HeightFunctions\HeightmapFunction.h" />
     <ClInclude Include="src\Scene\Terrain\HeightFunctions\Plateaufunction.h" />
@@ -252,12 +265,15 @@
     <ClCompile Include="src\Graphics\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
+    <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp" />
+    <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="src\Scene\Components\Mesh.cpp" />
     <ClCompile Include="src\Resources\Meshes\Shapes.cpp" />
     <ClCompile Include="src\Resources\Textures\TextureManager.cpp" />
     <ClCompile Include="src\Scene\Components\Camera.cpp" />
     <ClCompile Include="src\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Scene\ComponentSet.cpp" />
+    <ClCompile Include="src\Scene\Components\Motion\RigidBody.cpp" />
     <ClCompile Include="src\Scene\GameObject.cpp" />
     <ClCompile Include="src\Graphics\Buffers\Buffer.cpp" />
     <ClCompile Include="src\Graphics\Buffers\BufferLayout.cpp" />
@@ -290,7 +306,11 @@
     <ClCompile Include="src\Scene\Components\Light.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
-    <ClCompile Include="src\Scene\Components\Transform.cpp" />
+    <ClCompile Include="src\Scene\Components\Motion\Transform.cpp" />
+    <ClCompile Include="src\Scene\Systems\CollisionSystem.cpp" />
+    <ClCompile Include="src\Scene\Systems\LightSystem.cpp" />
+    <ClCompile Include="src\Scene\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Scene\Systems\Systems.cpp" />
     <ClCompile Include="src\Scene\Terrain\HeightFunctions\HeightmapFunction.cpp" />
     <ClCompile Include="src\Scene\Terrain\HeightFunctions\Plateaufunction.cpp" />
     <ClCompile Include="src\Scene\Terrain\Terrain.cpp" />
@@ -312,6 +332,62 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Convention.md" />
+    <None Include="src\Resources\Shaders\Source\DefaultColor_f.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="src\Resources\Shaders\Source\DefaultColor_v.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="src\Resources\Shaders\Source\DefaultTexture_f.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="src\Resources\Shaders\Source\DefaultTexture_v.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="src\Resources\Shaders\Source\LightColor_f.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="src\Resources\Shaders\Source\LightColor_v.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="src\Resources\Shaders\Source\LightTexture_f.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="src\Resources\Shaders\Source\LightTexture_v.glsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

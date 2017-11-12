@@ -34,54 +34,61 @@ namespace Ablaze
 
 	}
 
-	const Maths::Vec3& Transform::Position() const
+	Maths::Vec3 Transform::Position() const
 	{
-		return m_Position;
+		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
+		{
+			return m_Position;
+		}
+		return ToMatrix().GetColumn(3).xyz();
 	}
 
-	Maths::Vec3& Transform::Position()
+	Maths::Quaternion Transform::Rotation() const
 	{
-		return m_Position;
+		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
+		{
+			return m_Rotation;
+		}
+		return m_GameObject->Parent()->GetComponent<Transform>().Rotation() * m_Rotation;
 	}
 
-	const Maths::Quaternion& Transform::Rotation() const
+	Maths::Vec3 Transform::Scale() const
 	{
-		return m_Rotation;
-	}
-
-	Maths::Quaternion& Transform::Rotation()
-	{
-		return m_Rotation;
-	}
-
-	const Maths::Vec3& Transform::Scale() const
-	{
-		return m_Scale;
-	}
-
-	Maths::Vec3& Transform::Scale()
-	{
-		return m_Scale;
+		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
+		{
+			return m_Scale;
+		}
+		return m_GameObject->Parent()->GetComponent<Transform>().Scale() * m_Scale;
 	}
 
 	Maths::Vec3 Transform::Forward() const
 	{
-		return m_Rotation * Maths::Vec3(0, 0, -1);
+		return Rotation() * Maths::Vec3(0, 0, -1);
 	}
 
 	Maths::Vec3 Transform::Right() const
 	{
-		return m_Rotation * Maths::Vec3(1, 0, 0);
+		return Rotation() * Maths::Vec3(1, 0, 0);
 	}
 
 	Maths::Vec3 Transform::Up() const
 	{
-		return m_Rotation * Maths::Vec3(0, 1, 0);
+		return Rotation() * Maths::Vec3(0, 1, 0);
 	}
 
 	void Transform::Translate(const Maths::Vec3& translation)
 	{
 		m_Position += translation;
+	}
+
+	void Transform::SetScale(const Maths::Vec3& scale)
+	{
+		m_Scale = scale;
+	}
+
+	void Transform::SetScale(float scale)
+	{
+		SetScale(Maths::Vec3(scale));
 	}
 
 	void Transform::Rotate(float angle, const Maths::Vec3& axis, Space space, Angle angleType)
@@ -101,7 +108,11 @@ namespace Ablaze
 
 	Maths::Mat4 Transform::ToMatrix() const
 	{
-		return Maths::Mat4::Translation(m_Position) * m_Rotation.ToMat4() * Maths::Mat4::Scale(m_Scale);
+		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
+		{
+			return Maths::Mat4::Translation(m_Position) * m_Rotation.ToMat4() * Maths::Mat4::Scale(m_Scale);
+		}
+		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Mat4::Translation(m_Position) * m_Rotation.ToMat4() * Maths::Mat4::Scale(m_Scale);
 	}
 
 	String Transform::ToString() const

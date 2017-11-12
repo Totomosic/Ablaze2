@@ -172,10 +172,31 @@ namespace Ablaze
 			return *this;
 		}
 
+		Vec3 Vec3::operator-() const
+		{
+			return Vec3(-x, -y, -z);
+		}
+
 		std::ostream& operator<<(std::ostream& stream, const Vec3& vector)
 		{
 			stream << vector.ToString();
 			return stream;
 		}
+
+		Vec3 Vec3::Forward()
+		{
+			return Maths::Vec3(0, 0, -1);
+		}
+
+		Vec3 Vec3::Right()
+		{
+			return Maths::Vec3(1, 0, 0);
+		}
+
+		Vec3 Vec3::Up()
+		{
+			return Maths::Vec3(0, 1, 0);
+		}
+
 	}
 }

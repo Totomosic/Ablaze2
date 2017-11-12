@@ -32,6 +32,8 @@ namespace Ablaze
 
 		virtual void Reload() = 0;
 
+		friend class ResourceManager;
+
 	};
 
 }

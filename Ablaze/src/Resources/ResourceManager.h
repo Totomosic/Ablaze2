@@ -9,6 +9,15 @@
 namespace Ablaze
 {
 
+	struct AB_API ResourceInfo
+	{
+	public:
+		AssetType type;
+		String resourceName;
+		int resourceID;
+
+	};
+
 	template<typename> class Resource;
 
 	// Manages all resources within Engine
@@ -19,6 +28,8 @@ namespace Ablaze
 		std::unordered_map<String, std::pair<int, Asset*>> m_LoadedResources;
 		std::pair<int, Asset*>** m_GeneratedResources;
 		int m_GeneratedResourceCount;
+		
+		std::unordered_map<String, ResourceInfo> m_SavedResources;
 
 	private:
 		ResourceManager();
@@ -30,8 +41,15 @@ namespace Ablaze
 		Resource<Texture2D> CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap = MipmapMode::Disabled);
 
 		Resource<Texture2D> LoadTexture2D(const String& filename, MipmapMode mipmap = MipmapMode::Enabled);
+		Resource<Font> LoadFont(const String& filename, float size);
+
 		Resource<Shader> LoadShader(const String& vFile, const String& fFile);
 		Resource<Shader> LoadShader(const String& shaderFile);
+		Resource<Shader> DefaultColorShader();
+		Resource<Shader> DefaultTextureShader();
+		Resource<Shader> LightingColorShader();
+		Resource<Shader> LightingTextureShader();
+
 		Resource<Model> LoadOBJModel(const String& objFile);
 
 		Resource<Model> CreateRectangle(float width, float height, const Color& color = Color::White());
@@ -42,6 +60,30 @@ namespace Ablaze
 		Resource<Model> CreateSphere(float radius, const Color& color = Color::White());
 		Resource<Model> CreatePlane(float width, float depth, const Color& color = Color::White());
 		Resource<Model> CreateGrid(float width, float height, int xVertices, int zVertices, const Color& color = Color::White()); // x and yVertices must be >= 2
+
+		template<typename T>
+		void SaveResource(const String& name, const Resource<T>& resource)
+		{
+			m_SavedResources[name] = { resource->GetAssetType(), resource->Filename(), resource->ResourceID() };
+			IncrementRefCount(resource);
+		}
+
+		template<typename T>
+		Resource<T> OpenResource(const String& name)
+		{
+			if (m_SavedResources[name].type == AssetType::Loaded)
+			{
+				std::pair<int, Asset*>& pair = m_LoadedResources[m_SavedResources[name].resourceName];
+				IncrementLoadedRefCount(m_SavedResources[name].resourceName);
+				return Resource<T>((T*)pair.second);
+			}
+			else
+			{
+				std::pair<int, Asset*>& pair = *m_GeneratedResources[m_SavedResources[name].resourceID];
+				IncrementGeneratedRefCount(m_SavedResources[name].resourceID);
+				return Resource<T>((T*)pair.second);
+			}
+		}
 
 		int GetLoadedRefCount(const String& assetName);
 		int GetGeneratedRefCount(int resourceID);
@@ -106,6 +148,7 @@ namespace Ablaze
 		void DeleteAssetPtr(Asset* ptr);
 
 		Texture2D* CreateNewTexture2D(const String& filename, MipmapMode mipmap);
+		Font* CreateNewFont(const String& filename, float size);
 		Shader* CreateNewShader(const String& vFile, const String& fFile);
 		Shader* CreateNewShader(const String& shaderFile);
 		Model* CreateNewOBJModel(const String& filename);

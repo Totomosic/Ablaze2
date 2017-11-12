@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "Scene\Components\Component.h"
 
 namespace Ablaze
 {
@@ -29,18 +29,17 @@ namespace Ablaze
 		Transform(const Maths::Vec3& position, const Maths::Vec3& scale);
 		Transform(const Maths::Quaternion& rotation, const Maths::Vec3& scale);
 
-		const Maths::Vec3& Position() const;
-		Maths::Vec3& Position();
-		const Maths::Quaternion& Rotation() const;
-		Maths::Quaternion& Rotation();
-		const Maths::Vec3& Scale() const;
-		Maths::Vec3& Scale();
+		Maths::Vec3 Position() const;
+		Maths::Quaternion Rotation() const;
+		Maths::Vec3 Scale() const;
 
 		Maths::Vec3 Forward() const;
 		Maths::Vec3 Right() const;
 		Maths::Vec3 Up() const;
 
 		void Translate(const Maths::Vec3& translation);
+		void SetScale(const Maths::Vec3& scale);
+		void SetScale(float scale);
 		void Rotate(float angle, const Maths::Vec3& axis, Space space = Space::World, Angle angleType = Angle::Radians);
 
 		Maths::Mat4 ToMatrix() const;

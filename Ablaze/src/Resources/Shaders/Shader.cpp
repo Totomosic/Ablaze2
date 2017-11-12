@@ -1,4 +1,6 @@
 #include "Shader.h"
+#include "Scene\Systems\__Systems__.h"
+#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
