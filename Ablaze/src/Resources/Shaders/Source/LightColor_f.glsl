@@ -33,5 +33,4 @@ void main(void)
 		lightColor.a = 1.0;
 	}
 	finalColor = color * f_Color * lightColor;
-
 })"

@@ -26,7 +26,7 @@ namespace Ablaze
 		SetupConsole(AB_LOG_LEVEL_INFO);
 		Init();
 		Time::Reset();
-		Time::CreateNewTimer(1.0, std::bind(&Application::Tick, this));
+		Time::CreateNewTimer(1.0, METHOD_0(Application::Tick));
 		Run();
 	}
 

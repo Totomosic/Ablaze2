@@ -1,27 +1,29 @@
 #pragma once
 #include "Common.h"
-#include "Resources\Asset.h"
+#include "Resources\Resource.h"
+#include "ShaderProgram.h"
 #include "Utils\FileSystem\FileSystem.h"
 
 namespace Ablaze
 {
-
-	template<typename> class Resource;
 
 	class AB_API Shader : public Asset, public GLObject
 	{
 	private:
 		static const Shader* s_CurrentlyBound;
 
-	private:
-		mutable std::unordered_map<String, int> m_UniformLocations;
-		String m_VertexPath;
-		String m_FragmentPath;
+	public:
+		static const int VertexShader = 0;
+		static const int GeometryShader = 1;
+		static const int FragmentShader = 2;
 
 	private:
-		Shader(const String& vertexPath, const String& fragmentPath, bool fromFile);
+		Resource<ShaderProgram> m_ShaderPrograms[3];
+		mutable std::unordered_map<String, int> m_UniformLocations;
+
+	private:
 		Shader(const String& vertexSrc, const String& fragmentSrc);
-		Shader(const String& shaderFile);
+		Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		~Shader(); // Prevent stack objects and can only be deleted by ResourceManager
 
 	public:
@@ -29,6 +31,7 @@ namespace Ablaze
 		void Unbind() const override;
 
 		void Reload() override;
+		void AttachShader(const Resource<ShaderProgram>& shader);
 
 		void SetUniform(const String& uniformName, bool value) const;
 		void SetUniform(const String& uniformName, int value) const;
@@ -44,6 +47,7 @@ namespace Ablaze
 		template<typename T>
 		void SetUniform(const String& uniformName, const T& value) const
 		{
+			Bind();
 			SetUniform(uniformName, value);
 		}
 
@@ -60,12 +64,15 @@ namespace Ablaze
 
 	private:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);
+		static Shader* FromSource(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		static Shader* FromFile(const String& vertexFile, const String& fragmentFile);
+		static Shader* FromFile(const String& vertexFile, const String& geometryFile, const String& fragmentFile);
 		static Shader* FromFile(const String& shaderFile);
 		
 	private:
 		void Create();
 		void BuildProgram(const String& vertexSrc, const String& fragmentSrc);
+		void BuildProgram(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		uint AttachShader(const String& shaderSource, GLenum shaderType);
 		int GetUniformLocation(const String& uniformName) const;
 

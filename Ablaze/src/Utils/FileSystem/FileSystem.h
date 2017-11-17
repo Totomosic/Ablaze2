@@ -5,10 +5,8 @@
 namespace Ablaze
 {
 
-	class AB_API Filesystem : public Object
+	class AB_API Filesystem
 	{
-	private:
-
 	public:
 		Filesystem() = delete;
 

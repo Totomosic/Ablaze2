@@ -9,9 +9,26 @@ namespace Ablaze
 	
 	}
 
-	Mesh::Mesh(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform) : Mesh()
+	Mesh::Mesh(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform) : Mesh()
 	{
 		AddModel(model, material, transform);
+	}
+
+	Mesh::Mesh(const Mesh& other)
+		: m_Models(other.m_Models)
+	{
+		for (ModelSet& set : m_Models)
+		{
+			set.material = set.material->Clone();
+		}
+	}
+
+	Mesh::~Mesh()
+	{
+		for (ModelSet& set : m_Models)
+		{
+			delete set.material;
+		}
 	}
 
 	const Resource<Model>& Mesh::GetModel(int index) const
@@ -24,14 +41,14 @@ namespace Ablaze
 		return m_Models[index].model;
 	}
 
-	const Material& Mesh::GetMaterial(int index) const
+	const MaterialBase& Mesh::Material(int index) const
 	{
-		return m_Models[index].material;
+		return *m_Models[index].material;
 	}
 
-	Material& Mesh::GetMaterial(int index)
+	MaterialBase& Mesh::Material(int index)
 	{
-		return m_Models[index].material;
+		return *m_Models[index].material;
 	}
 
 	const Maths::Mat4& Mesh::GetTransform(int index) const
@@ -59,9 +76,9 @@ namespace Ablaze
 		return m_Models.size();
 	}
 
-	void Mesh::AddModel(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform)
+	void Mesh::AddModel(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform)
 	{
-		m_Models.push_back({ model, material, transform });
+		m_Models.push_back({ model, material.Clone(), transform });
 	}
 
 	String Mesh::ToString() const

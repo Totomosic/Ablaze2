@@ -64,6 +64,12 @@ namespace Ablaze
 		void* Map(AccessMode access) const;
 		bool Unmap() const;
 
+		template<typename T>
+		T* Map(AccessMode access) const
+		{
+			return (T*)Map(access);
+		}
+
 		String ToString() const override;
 
 	private:

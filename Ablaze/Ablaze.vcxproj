@@ -150,7 +150,10 @@
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\Graphics\GraphicsPipeline.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h" />
+    <ClInclude Include="src\Resources\Shaders\ShaderProgram.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\Font.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
@@ -196,7 +199,6 @@
     <ClInclude Include="src\Graphics\Rendering\__Rendering__.h" />
     <ClInclude Include="src\Resources\Asset.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\Material.h" />
-    <ClInclude Include="src\Resources\Meshes\Materials\Texture2DSet.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\__Materials__.h" />
     <ClInclude Include="src\Resources\Meshes\Model.h" />
     <ClInclude Include="src\Resources\Meshes\__Meshes__.h" />
@@ -211,6 +213,8 @@
     <ClInclude Include="src\Resources\__Resources__.h" />
     <ClInclude Include="src\Scene\Layer.h" />
     <ClInclude Include="src\Scene\Components\Light.h" />
+    <ClInclude Include="src\Scene\Physics\PhysicsMaterial.h" />
+    <ClInclude Include="src\Scene\Physics\__Physics__.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
     <ClInclude Include="src\Scene\Components\Motion\Transform.h" />
@@ -219,6 +223,7 @@
     <ClInclude Include="src\Scene\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Scene\Systems\System.h" />
     <ClInclude Include="src\Scene\Systems\Systems.h" />
+    <ClInclude Include="src\Scene\Systems\UpdateSystem.h" />
     <ClInclude Include="src\Scene\Systems\__Systems__.h" />
     <ClInclude Include="src\Scene\Terrain\HeightFunctions\Heightfunction.h" />
     <ClInclude Include="src\Scene\Terrain\HeightFunctions\HeightmapFunction.h" />
@@ -264,7 +269,9 @@
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Logging.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
+    <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp" />
     <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp" />
     <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="src\Scene\Components\Mesh.cpp" />
@@ -294,8 +301,6 @@
     <ClCompile Include="src\Maths\Vec3.cpp" />
     <ClCompile Include="src\Maths\Vec4.cpp" />
     <ClCompile Include="src\Resources\Asset.cpp" />
-    <ClCompile Include="src\Resources\Meshes\Materials\Material.cpp" />
-    <ClCompile Include="src\Resources\Meshes\Materials\Texture2DSet.cpp" />
     <ClCompile Include="src\Resources\Meshes\Model.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Resources\Shaders\Shader.cpp" />
@@ -304,6 +309,7 @@
     <ClCompile Include="src\Resources\Textures\Texture2D.cpp" />
     <ClCompile Include="src\Scene\Layer.cpp" />
     <ClCompile Include="src\Scene\Components\Light.cpp" />
+    <ClCompile Include="src\Scene\Physics\PhysicsMaterial.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\Components\Motion\Transform.cpp" />
@@ -311,6 +317,7 @@
     <ClCompile Include="src\Scene\Systems\LightSystem.cpp" />
     <ClCompile Include="src\Scene\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Scene\Systems\Systems.cpp" />
+    <ClCompile Include="src\Scene\Systems\UpdateSystem.cpp" />
     <ClCompile Include="src\Scene\Terrain\HeightFunctions\HeightmapFunction.cpp" />
     <ClCompile Include="src\Scene\Terrain\HeightFunctions\Plateaufunction.cpp" />
     <ClCompile Include="src\Scene\Terrain\Terrain.cpp" />
@@ -364,6 +371,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_f.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_g.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_v.glsl" />
     <None Include="src\Resources\Shaders\Source\LightColor_f.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

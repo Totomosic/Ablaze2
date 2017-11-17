@@ -15,6 +15,14 @@ namespace Ablaze
 			{
 				SceneManager::Instance().CurrentScene().AddGameObject(this);
 			}
+			else
+			{
+				AB_WARN("GameObject created with no active layer in current scene");
+			}
+		}
+		else
+		{
+			AB_WARN("GameObject created with no active scene");
 		}
 	}
 
@@ -89,9 +97,14 @@ namespace Ablaze
 		return "GameObject";
 	}
 
+	GameObject* GameObject::Empty()
+	{
+		return new GameObject;
+	}
+
 	GameObject* GameObject::Instantiate()
 	{
-		return new GameObject();
+		return Instantiate(0, 0, 0);
 	}
 
 	GameObject* GameObject::Instantiate(float x, float y, float z)
@@ -138,23 +151,14 @@ namespace Ablaze
 		gameObject = nullptr;
 	}
 
-	std::vector<GameObject*> GameObject::GetAllWith(const std::vector<std::type_index>& componentTypes)
+	std::vector<GameObject*> GameObject::GetAll()
 	{
 		std::vector<GameObject*> objects;
-		for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+		if (SceneManager::Instance().HasScene())
 		{
-			for (GameObject* object : layer->GameObjects())
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
 			{
-				bool passed = true;
-				for (const std::type_index& type : componentTypes)
-				{
-					if (!object->Components().HasComponent(type))
-					{
-						passed = false;
-						break;
-					}
-				}
-				if (passed)
+				for (GameObject* object : layer->GameObjects())
 				{
 					objects.push_back(object);
 				}
@@ -163,9 +167,32 @@ namespace Ablaze
 		return objects;
 	}
 
-	std::vector<GameObject*> GameObject::GetAllWith(const std::type_index& componentType)
+	std::vector<GameObject*> GameObject::GetAllWith(const std::vector<std::type_index>& componentTypes)
 	{
-		return GetAllWith({ componentType });
+		std::vector<GameObject*> objects;
+		if (SceneManager::Instance().HasScene())
+		{
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+			{
+				for (GameObject* object : layer->GameObjects())
+				{
+					bool passed = true;
+					for (const std::type_index& type : componentTypes)
+					{
+						if (!object->Components().HasComponent(type))
+						{
+							passed = false;
+							break;
+						}
+					}
+					if (passed)
+					{
+						objects.push_back(object);
+					}
+				}
+			}
+		}
+		return objects;
 	}
 
 }

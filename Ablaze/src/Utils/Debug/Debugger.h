@@ -23,5 +23,5 @@ namespace Ablaze
 		static String ToString();
 
 	};
-
+	
 }

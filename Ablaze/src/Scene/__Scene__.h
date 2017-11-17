@@ -1,5 +1,6 @@
 #pragma once
 #include "Components\__Components__.h"
+#include "Physics\__Physics__.h"
 #include "Systems\__Systems__.h"
 #include "Terrain\__Terrain__.h"
 

@@ -7,59 +7,18 @@ namespace Ablaze
 
 	const Shader* Shader::s_CurrentlyBound = nullptr;
 
-	Shader::Shader(const String& vertexPath, const String& fragmentPath, bool file) : GLObject(), Asset(vertexPath),
-		m_UniformLocations(), m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
-	{
-		Create();
-
-		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
-		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);
-		BuildProgram(vertexFile.ReadText(), fragmentFile.ReadText());
-		vertexFile.Close();
-		fragmentFile.Close();
-	}
-
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),
-		m_UniformLocations(), m_VertexPath(""), m_FragmentPath("")
+		m_UniformLocations()
 	{
 		Create();
 		BuildProgram(vertexSrc, fragmentSrc);
 	}
 
-	Shader::Shader(const String& shaderFile) : GLObject(), Asset(shaderFile),
-		m_UniformLocations(), m_VertexPath(""), m_FragmentPath("")
+	Shader::Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc) : GLObject(), Asset(),
+		m_UniformLocations()
 	{
 		Create();
-
-		const int NONE_SHADER_TYPE = -1;
-		const int VERTEX_SHADER_TYPE = 0;
-		const int FRAGMENT_SHADER_TYPE = 1;
-
-		std::stringstream ss[2];
-		int currentType = NONE_SHADER_TYPE;
-
-		File f = Filesystem::OpenFile(shaderFile, OpenFlags::Read);
-		String line;
-		while (f.ReadTextLine(&line))
-		{
-			if (line.find("#shader") != String::npos)
-			{
-				if (line.find("vertex") != String::npos)
-				{
-					currentType = VERTEX_SHADER_TYPE;
-				}
-				else if (line.find("fragment") != String::npos)
-				{
-					currentType = FRAGMENT_SHADER_TYPE;
-				}
-			}
-			else
-			{
-				ss[currentType] << line << '\n';
-			}
-		}
-
-		BuildProgram(ss[VERTEX_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
+		BuildProgram(vertexSrc, geometrySrc, fragmentSrc);
 	}
 
 	Shader::~Shader()
@@ -89,11 +48,13 @@ namespace Ablaze
 
 	void Shader::SetUniform(const String& uniformName, int value) const
 	{
+		Bind();
 		GL_CALL(glUniform1i(GetUniformLocation(uniformName), value));
 	}
 
 	void Shader::SetUniform(const String& uniformName, float value) const
 	{
+		Bind();
 		GL_CALL(glUniform1f(GetUniformLocation(uniformName), value));
 	}
 
@@ -104,36 +65,43 @@ namespace Ablaze
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec2& value) const
 	{
+		Bind();
 		GL_CALL(glUniform2f(GetUniformLocation(uniformName), value.x, value.y));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec3& value) const
 	{
+		Bind();
 		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Vec4& value) const
 	{
+		Bind();
 		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Plane& value) const
 	{
+		Bind();
 		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.normal.x, value.normal.y, value.normal.z, value.height));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Ray& value) const
 	{
+		Bind();
 		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.direction.x, value.direction.y, value.direction.z));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Mat4& value) const
 	{
+		Bind();
 		GL_CALL(glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Color& value) const
 	{
+		Bind();
 		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.r, value.g, value.b, value.a));
 	}
 
@@ -144,17 +112,84 @@ namespace Ablaze
 
 	Shader* Shader::FromFile(const String& vertexPath, const String& fragmentPath)
 	{
-		return new Shader(vertexPath, fragmentPath, true);
+		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
+		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);		
+		Shader* shader = new Shader(vertexFile.ReadText(), fragmentFile.ReadText());
+		shader->m_AssetType = AssetType::Loaded;
+		vertexFile.Close();
+		fragmentFile.Close();
+		return shader;
+	}
+
+	Shader* Shader::FromFile(const String& vertexPath, const String& geometryPath, const String& fragmentPath)
+	{
+		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
+		File geometryFile = Filesystem::OpenFile(geometryPath, OpenFlags::Read);
+		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);
+		Shader* shader = new Shader(vertexFile.ReadText(), geometryFile.ReadText(), fragmentFile.ReadText());
+		shader->m_AssetType = AssetType::Loaded;
+		vertexFile.Close();
+		geometryFile.Close();
+		fragmentFile.Close();
+		return shader;
 	}
 
 	Shader* Shader::FromFile(const String& shaderFile)
 	{
-		return new Shader(shaderFile);
+		const int NONE_SHADER_TYPE = -1;
+		const int VERTEX_SHADER_TYPE = 0;
+		const int FRAGMENT_SHADER_TYPE = 1;
+		const int GEOMETRY_SHADER_TYPE = 2;
+
+		std::stringstream ss[3];
+		int currentType = NONE_SHADER_TYPE;
+		bool isGeometryShader = false;
+
+		File f = Filesystem::OpenFile(shaderFile, OpenFlags::Read);
+		String line;
+		while (f.ReadTextLine(&line))
+		{
+			if (line.find("#shader") != String::npos)
+			{
+				if (line.find("vertex") != String::npos)
+				{
+					currentType = VERTEX_SHADER_TYPE;
+				}
+				else if (line.find("fragment") != String::npos)
+				{
+					currentType = FRAGMENT_SHADER_TYPE;
+				}
+				else if (line.find("geometry") != String::npos)
+				{
+					currentType = GEOMETRY_SHADER_TYPE;
+					isGeometryShader = true;
+				}
+			}
+			else
+			{
+				ss[currentType] << line << '\n';
+			}
+		}
+		if (!isGeometryShader)
+		{
+			Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
+			shader->m_AssetType = AssetType::Loaded;
+			return shader;
+		}
+		// Use Geometry Shader
+		Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[GEOMETRY_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
+		shader->m_AssetType = AssetType::Loaded;
+		return shader;
 	}
 
 	Shader* Shader::FromSource(const String& vertexSrc, const String& fragmentSrc)
 	{
 		return new Shader(vertexSrc, fragmentSrc);
+	}
+
+	Shader* Shader::FromSource(const String& vertexSrc, const String& geometrySource, const String& fragmentSrc)
+	{
+		return new Shader(vertexSrc, geometrySource, fragmentSrc);
 	}
 
 	void Shader::Create()
@@ -165,6 +200,19 @@ namespace Ablaze
 	void Shader::BuildProgram(const String& vertexSrc, const String& fragmentSrc)
 	{
 		uint vertex = AttachShader(vertexSrc, GL_VERTEX_SHADER);
+		uint fragment = AttachShader(fragmentSrc, GL_FRAGMENT_SHADER);
+		GL_CALL(glLinkProgram(m_Id));
+
+		GL_CALL(glDetachShader(m_Id, vertex));
+		GL_CALL(glDetachShader(m_Id, fragment));
+		GL_CALL(glDeleteShader(vertex));
+		GL_CALL(glDeleteShader(fragment));
+	}
+
+	void Shader::BuildProgram(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc)
+	{
+		uint vertex = AttachShader(vertexSrc, GL_VERTEX_SHADER);
+		uint geometry = AttachShader(geometrySrc, GL_GEOMETRY_SHADER);
 		uint fragment = AttachShader(fragmentSrc, GL_FRAGMENT_SHADER);
 		GL_CALL(glLinkProgram(m_Id));
 

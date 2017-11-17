@@ -4,6 +4,7 @@
 namespace Ablaze
 {
 
+	class UpdateSystem;
 	class LightSystem;
 	class PhysicsSystem;
 	class CollisionSystem;
@@ -13,6 +14,7 @@ namespace Ablaze
 	private:
 		static std::vector<System*> s_Systems;
 
+		static UpdateSystem* s_UpdateSystem;
 		static LightSystem* s_LightSystem;
 		static PhysicsSystem* s_PhysicsSystem;
 		static CollisionSystem* s_CollisionSystem;
@@ -24,10 +26,12 @@ namespace Ablaze
 		static void RemoveSystem(System* system);
 		static void Run();
 
+		static UpdateSystem& Updating();
 		static LightSystem& Lighting();
 		static PhysicsSystem& Physics();
 		static CollisionSystem& Collision();
 
+		static void DisableUpdate();
 		static void DisableLighting();
 		static void DisablePhysics();
 		static void DisableCollision();

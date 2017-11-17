@@ -72,6 +72,7 @@ namespace Ablaze
 		friend class Engine;
 
 	public:
+		static GameObject* Empty();
 		static GameObject* Instantiate();
 		static GameObject* Instantiate(float x, float y, float z);
 		static GameObject* Instantiate(GameObject* prefab);
@@ -81,8 +82,8 @@ namespace Ablaze
 
 		static void Destroy(GameObject* gameObject);
 
+		static std::vector<GameObject*> GetAll();
 		static std::vector<GameObject*> GetAllWith(const std::vector<std::type_index>& componentTypes);
-		static std::vector<GameObject*> GetAllWith(const std::type_index& componentType);
 
 		template<typename T0>
 		static std::vector<GameObject*> GetAllWith()

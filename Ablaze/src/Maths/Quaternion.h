@@ -65,6 +65,7 @@ namespace Ablaze
 			static Quaternion Zero();
 			static Quaternion Identity();
 			static Quaternion FromAngleAxis(float angle, const Vec3& axis);
+			static Quaternion FromEuler(float pitch, float yaw, float roll);
 			static Quaternion FromRotationMat(const Mat4& rotation);
 
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);

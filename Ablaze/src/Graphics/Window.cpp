@@ -18,7 +18,7 @@ namespace Ablaze
 
 	Window::~Window()
 	{
-	
+		glfwDestroyWindow(m_WindowPtr);
 	}
 
 	int Window::Width() const

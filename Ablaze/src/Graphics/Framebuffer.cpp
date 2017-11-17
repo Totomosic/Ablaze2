@@ -27,7 +27,10 @@ namespace Ablaze
 
 	Framebuffer::~Framebuffer()
 	{
-		GL_CALL(glDeleteFramebuffers(1, &m_Id));
+		if (m_Id != 0)
+		{
+			GL_CALL(glDeleteFramebuffers(1, &m_Id));
+		}
 	}
 
 	const Color& Framebuffer::GetClearColor() const

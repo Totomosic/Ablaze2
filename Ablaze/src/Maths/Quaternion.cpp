@@ -310,6 +310,22 @@ namespace Ablaze
 			return Quaternion(Vec4(axis.Normalize() * (float)sin(angle * 0.5f), (float)cos(angle * 0.5f)));
 		}
 
+		Quaternion Quaternion::FromEuler(float roll, float pitch, float yaw)
+		{
+			double cy = cos(yaw * 0.5f);
+			double sy = sin(yaw * 0.5f);
+			double cr = cos(roll * 0.5f);
+			double sr = sin(roll * 0.5f);
+			double cp = cos(pitch * 0.5f);
+			double sp = sin(pitch * 0.5f);
+
+			double w = cy * cr * cp + sy * sr * sp;
+			double x = cy * sr * cp - sy * cr * sp;
+			double y = cy * cr * sp + sy * sr * cp;
+			double z = sy * cr * cp - cy * sr * sp;
+			return Quaternion((float)x, (float)y, (float)z, (float)w);
+		}
+
 		Quaternion Quaternion::FromRotationMat(const Mat4& rotation)
 		{
 			int rotationLookup[] = { 1, 2, 0 };

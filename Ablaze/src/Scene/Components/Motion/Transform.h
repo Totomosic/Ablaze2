@@ -33,6 +33,13 @@ namespace Ablaze
 		Maths::Quaternion Rotation() const;
 		Maths::Vec3 Scale() const;
 
+		const Maths::Vec3& LocalPosition() const;
+		Maths::Vec3& LocalPosition();
+		const Maths::Quaternion& LocalRotation() const;
+		Maths::Quaternion& LocalRotation();
+		const Maths::Vec3& LocalScale() const;
+		Maths::Vec3& LocalScale();
+
 		Maths::Vec3 Forward() const;
 		Maths::Vec3 Right() const;
 		Maths::Vec3 Up() const;
@@ -41,6 +48,7 @@ namespace Ablaze
 		void SetScale(const Maths::Vec3& scale);
 		void SetScale(float scale);
 		void Rotate(float angle, const Maths::Vec3& axis, Space space = Space::World, Angle angleType = Angle::Radians);
+		void Rotate(const Maths::Quaternion& quaternion);
 
 		Maths::Mat4 ToMatrix() const;
 		String ToString() const override;

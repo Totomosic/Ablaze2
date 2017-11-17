@@ -110,7 +110,7 @@ namespace Ablaze
 			vao->CreateIndexBuffer(indices, 36 * sizeof(uint));
 			delete[] indices;
 
-			Vertex* ptr = (Vertex*)vbo->Map(AccessMode::Write);
+			Vertex* ptr = vbo->Map<Vertex>(AccessMode::Write);
 
 			// Top Left Front - Front (0)
 			ptr->position = Maths::Vec3(-x, y, z);

@@ -1,4 +1,5 @@
 #pragma once
+#include "MaterialBase.h"
 #include "Material.h"
 #include "RenderState.h"
-#include "Texture2DSet.h"
+#include "TextureSet.h"

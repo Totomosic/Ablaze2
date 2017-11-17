@@ -138,9 +138,6 @@
     <ClInclude Include="src\Resources\Shaders\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Resources\Meshes\__Meshes__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -196,9 +193,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\Meshes\Materials\__Materials__.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resources\Meshes\Materials\Texture2DSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Rendering\Interfaces\__Interfaces__.h">
@@ -363,6 +357,27 @@
     <ClInclude Include="src\Scene\Components\Colliders\Endpoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\Physics\PhysicsMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Physics\__Physics__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Shaders\ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Systems\UpdateSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -465,12 +480,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Textures\RenderTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources\Meshes\Materials\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources\Meshes\Materials\Texture2DSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Graphics.cpp">
@@ -584,6 +593,18 @@
     <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Physics\PhysicsMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Systems\UpdateSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Convention.md" />
@@ -595,5 +616,8 @@
     <None Include="src\Resources\Shaders\Source\LightColor_v.glsl" />
     <None Include="src\Resources\Shaders\Source\LightTexture_f.glsl" />
     <None Include="src\Resources\Shaders\Source\LightTexture_v.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_v.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_g.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultWireframe_f.glsl" />
   </ItemGroup>
 </Project>

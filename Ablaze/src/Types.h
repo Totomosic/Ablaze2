@@ -9,7 +9,6 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <experimental\filesystem>
 #include <memory>
 #include <typeindex>
 #include <typeinfo>

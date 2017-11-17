@@ -11,7 +11,7 @@
 namespace Ablaze
 {
 
-	class Material;
+	class MaterialBase;
 	class Mesh;
 
 	enum class GraphicsAPI

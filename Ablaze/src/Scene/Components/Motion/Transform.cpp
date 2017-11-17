@@ -61,6 +61,36 @@ namespace Ablaze
 		return m_GameObject->Parent()->GetComponent<Transform>().Scale() * m_Scale;
 	}
 
+	const Maths::Vec3& Transform::LocalPosition() const
+	{
+		return m_Position;
+	}
+
+	Maths::Vec3& Transform::LocalPosition()
+	{
+		return m_Position;
+	}
+
+	const Maths::Quaternion& Transform::LocalRotation() const
+	{
+		return m_Rotation;
+	}
+
+	Maths::Quaternion& Transform::LocalRotation()
+	{
+		return m_Rotation;
+	}
+
+	const Maths::Vec3& Transform::LocalScale() const
+	{
+		return m_Scale;
+	}
+
+	Maths::Vec3& Transform::LocalScale()
+	{
+		return m_Scale;
+	}
+
 	Maths::Vec3 Transform::Forward() const
 	{
 		return Rotation() * Maths::Vec3(0, 0, -1);
@@ -104,6 +134,11 @@ namespace Ablaze
 		}
 		Maths::Quaternion rotation = Maths::Quaternion::FromAngleAxis(angle, a);
 		m_Rotation *= rotation;
+	}
+
+	void Transform::Rotate(const Maths::Quaternion& quaternion)
+	{
+		m_Rotation *= quaternion;
 	}
 
 	Maths::Mat4 Transform::ToMatrix() const

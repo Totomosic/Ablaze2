@@ -2,6 +2,7 @@
 #include "Resource.h"
 #include "Utils\FileSystem\__FileSystem__.h"
 #include "Scene\Systems\__Systems__.h"
+#include "Shaders\__Shaders__.h"
 
 namespace Ablaze
 {
@@ -44,6 +45,16 @@ namespace Ablaze
 			return Resource<Font>((Font*)GetLoadedResourcePtr(filename));
 		}
 		return Resource<Font>(CreateNewFont(filename, size));
+	}
+
+	Resource<ShaderProgram> ResourceManager::LoadShaderProgram(ShaderType type, const String& filename)
+	{
+		if (LoadedResourceExists(filename))
+		{
+			IncrementLoadedRefCount(filename);
+			return Resource<ShaderProgram>((ShaderProgram*)GetLoadedResourcePtr(filename));
+		}
+		return Resource<ShaderProgram>(CreateNewShaderProgram(type, filename, true));
 	}
 
 	Resource<Shader> ResourceManager::LoadShader(const String& vFile, const String& fFile)
@@ -142,6 +153,29 @@ namespace Ablaze
 		return Resource<Shader>((Shader*)GetLoadedResourcePtr("LightingTextureShader"));
 	}
 
+	Resource<Shader> ResourceManager::DefaultWireframeShader()
+	{
+		if (!LoadedResourceExists("DefaultWireframeShader"))
+		{
+			String vSource =
+#include "Shaders\Source\DefaultWireframe_v.glsl"
+				;
+			String gSource =
+#include "Shaders\Source\DefaultWireframe_g.glsl"
+				;
+			String fSource =
+#include "Shaders\Source\DefaultWireframe_f.glsl"
+				;
+			Shader* shader = Shader::FromSource(vSource, gSource, fSource);
+			CreateNewLoadedResource("DefaultWireframeShader", shader);
+			IncrementLoadedRefCount("DefaultWireframeShader");
+			Resource<Shader> res = Resource<Shader>(shader);
+			Systems::Lighting().AddShader(res);
+			return res;
+		}
+		return Resource<Shader>((Shader*)GetLoadedResourcePtr("LightingTextureShader"));
+	}
+
 	Resource<Model> ResourceManager::LoadOBJModel(const String& objFile)
 	{
 		if (LoadedResourceExists(objFile))
@@ -150,6 +184,12 @@ namespace Ablaze
 			return Resource<Model>((Model*)GetLoadedResourcePtr(objFile));
 		}
 		return Resource<Model>(CreateNewOBJModel(objFile));
+	}
+
+	Resource<ShaderProgram> ResourceManager::CreateShaderProgram(ShaderType type, const String& shaderSource)
+	{
+		ShaderProgram* program = CreateNewShaderProgram(type, shaderSource, false);
+		return Resource<ShaderProgram>(program);
 	}
 
 	Resource<Model> ResourceManager::CreateRectangle(float width, float height, const Color& color)
@@ -342,6 +382,19 @@ namespace Ablaze
 		Shader* shader = Shader::FromFile(shaderFile);
 		CreateNewLoadedResource(shaderFile, shader);
 		return shader;
+	}
+
+	ShaderProgram* ResourceManager::CreateNewShaderProgram(ShaderType type, const String& fileOrSource, bool isFile)
+	{
+		if (isFile)
+		{
+			ShaderProgram* program = ShaderProgram::FromFile(type, fileOrSource);
+			CreateNewLoadedResource(fileOrSource, program);
+			return program;
+		}
+		ShaderProgram* program = ShaderProgram::FromSource(type, fileOrSource);
+		CreateNewGeneratedResource(program);
+		return program;
 	}
 
 	Model* ResourceManager::CreateNewOBJModel(const String& filename)

@@ -29,4 +29,6 @@ namespace Ablaze
 #define AB_ERROR(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_ERROR)
 #define AB_FATAL(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_FATAL)
 
+#define AB_ASSERT(x) if (!(x)) __debugbreak()
+
 }

@@ -85,14 +85,14 @@ namespace Ablaze
 		m_Stride += attribute.count * sizeof(float); // TODO: create lookup for byte size of each data type
 	}
 
-	void BufferLayout::AddAttribute(const String& attributeName, int index, int count, GLenum dataType, bool normalized)
+	void BufferLayout::AddAttribute(const String& attributeName, int index, int count, DataType dataType, bool normalized)
 	{
-		AddAttribute(attributeName, VertexAttrib(index, count, dataType, normalized, m_Stride));
+		AddAttribute(attributeName, VertexAttrib(index, count, (GLenum)dataType, normalized, m_Stride));
 	}
 
 	void BufferLayout::AddAttribute(const String& attributeName, int index, int count, bool normalized)
 	{
-		AddAttribute(attributeName, index, count, GL_FLOAT, normalized);
+		AddAttribute(attributeName, index, count, DataType::Float, normalized);
 	}
 
 	void BufferLayout::AddAttribute(Attribute attributeName, const VertexAttrib& attribute)
@@ -100,7 +100,7 @@ namespace Ablaze
 		AddAttribute(std::to_string((int)attributeName), attribute);
 	}
 
-	void BufferLayout::AddAttribute(Attribute attributeName, int index, int count, GLenum dataType, bool normalized)
+	void BufferLayout::AddAttribute(Attribute attributeName, int index, int count, DataType dataType, bool normalized)
 	{
 		AddAttribute(std::to_string((int)attributeName), index, count, dataType, normalized);
 	}
@@ -110,17 +110,17 @@ namespace Ablaze
 		AddAttribute(std::to_string((int)attributeName), index, count, normalized);
 	}
 
-	void BufferLayout::AddAttribute(const String& attributeName, int count, GLenum dataType, bool normalized)
+	void BufferLayout::AddAttribute(const String& attributeName, int count, DataType dataType, bool normalized)
 	{
-		AddAttribute(attributeName, VertexAttrib(m_AttribCount++, count, dataType, normalized, m_Stride));
+		AddAttribute(attributeName, VertexAttrib(m_AttribCount++, count, (GLenum)dataType, normalized, m_Stride));
 	}
 
 	void BufferLayout::AddAttribute(const String& attributeName, int count, bool normalized)
 	{
-		AddAttribute(attributeName, m_AttribCount++, count, GL_FLOAT, normalized);
+		AddAttribute(attributeName, m_AttribCount++, count, DataType::Float, normalized);
 	}
 
-	void BufferLayout::AddAttribute(Attribute attributeName, int count, GLenum dataType, bool normalized)
+	void BufferLayout::AddAttribute(Attribute attributeName, int count, DataType dataType, bool normalized)
 	{
 		AddAttribute(attributeName, m_AttribCount++, count, dataType, normalized);
 	}

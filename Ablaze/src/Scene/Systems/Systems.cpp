@@ -2,12 +2,14 @@
 #include "LightSystem.h"
 #include "PhysicsSystem.h"
 #include "CollisionSystem.h"
+#include "UpdateSystem.h"
 
 namespace Ablaze
 {
 
 	std::vector<System*> Systems::s_Systems = std::vector<System*>();
 
+	UpdateSystem* Systems::s_UpdateSystem = new UpdateSystem();
 	LightSystem* Systems::s_LightSystem = new LightSystem();
 	PhysicsSystem* Systems::s_PhysicsSystem = new PhysicsSystem();
 	CollisionSystem* Systems::s_CollisionSystem = new CollisionSystem();
@@ -31,6 +33,11 @@ namespace Ablaze
 		}
 	}
 
+	UpdateSystem& Systems::Updating()
+	{
+		return *s_UpdateSystem;
+	}
+
 	LightSystem& Systems::Lighting()
 	{
 		return *s_LightSystem;
@@ -44,6 +51,11 @@ namespace Ablaze
 	CollisionSystem& Systems::Collision()
 	{
 		return *s_CollisionSystem;
+	}
+
+	void Systems::DisableUpdate()
+	{
+		RemoveSystem(s_UpdateSystem);
 	}
 
 	void Systems::DisableLighting()
@@ -63,6 +75,7 @@ namespace Ablaze
 
 	void Systems::Initialise()
 	{
+		AddSystem(s_UpdateSystem);
 		AddSystem(s_LightSystem);
 		AddSystem(s_PhysicsSystem);
 		AddSystem(s_CollisionSystem);

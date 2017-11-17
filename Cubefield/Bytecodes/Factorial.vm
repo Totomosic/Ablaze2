@@ -1,0 +1,19 @@
+int, 3;
+call, 7, 1;
+prnt;
+halt;
+
+ldarg, 0;
+int, 1;
+leql;
+jmpf, 18;
+int, 1;
+ret, 1;
+
+ldarg, 0;
+ldarg, 0;
+int, 1;
+sub;
+call, 7, 1;
+mul;
+ret, 1;

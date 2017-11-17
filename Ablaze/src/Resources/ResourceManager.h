@@ -3,8 +3,9 @@
 #include "Asset.h"
 #include "Meshes\Model.h"
 #include "Meshes\Shapes.h"
-#include "Shaders\__Shaders__.h"
+#include "Shaders\ShaderProgram.h"
 #include "Textures\__Textures__.h"
+#include "Resource.h"
 
 namespace Ablaze
 {
@@ -19,6 +20,7 @@ namespace Ablaze
 	};
 
 	template<typename> class Resource;
+	class Shader;
 
 	// Manages all resources within Engine
 	class AB_API ResourceManager : public Object
@@ -38,19 +40,50 @@ namespace Ablaze
 		static ResourceManager& Library();
 
 	public:
-		Resource<Texture2D> CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap = MipmapMode::Disabled);
+		template<typename T>
+		Resource<T> Load(const String& filename)
+		{
+			if (typeid(T) == typeid(Texture2D))
+			{
+				Resource<Texture2D> res = LoadTexture2D(filename);
+				Texture2D* texture = (Texture2D*)m_LoadedResources[filename].second;
+				IncrementLoadedRefCount(filename);
+				return Resource<T>((T*)texture);
+			}
+			else if (typeid(T) == typeid(Model))
+			{
+				Resource<Model> res = LoadOBJModel(filename);
+				Model* model = (Model*)m_LoadedResources[filename].second;
+				IncrementLoadedRefCount(filename);
+				return Resource<T>((T*)model);
+			}
+			else if (typeid(T) == typeid(Font))
+			{
+				Resource<Font> res = LoadFont(filename, 16);
+				Font* font = (Font*)m_LoadedResources[filename].second;
+				IncrementLoadedRefCount(filename);
+				return Resource<T>((T*)font);
+			}
+			AB_ERROR("Unable to load type");
+			return Resource<T>(nullptr);
+		}
 
 		Resource<Texture2D> LoadTexture2D(const String& filename, MipmapMode mipmap = MipmapMode::Enabled);
 		Resource<Font> LoadFont(const String& filename, float size);
 
+		Resource<ShaderProgram> LoadShaderProgram(ShaderType type, const String& filename);
 		Resource<Shader> LoadShader(const String& vFile, const String& fFile);
 		Resource<Shader> LoadShader(const String& shaderFile);
 		Resource<Shader> DefaultColorShader();
 		Resource<Shader> DefaultTextureShader();
 		Resource<Shader> LightingColorShader();
 		Resource<Shader> LightingTextureShader();
+		Resource<Shader> DefaultWireframeShader();
 
 		Resource<Model> LoadOBJModel(const String& objFile);
+
+		Resource<Texture2D> CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap = MipmapMode::Disabled);
+		Resource<ShaderProgram> CreateShaderProgram(ShaderType type, const String& shaderSource);
 
 		Resource<Model> CreateRectangle(float width, float height, const Color& color = Color::White());
 		Resource<Model> CreateCircle(float radius, const Color& color = Color::White());
@@ -108,10 +141,16 @@ namespace Ablaze
 		{
 			if (resource->GetAssetType() == AssetType::Loaded)
 			{
-				IncrementLoadedRefCount(resource->Filename());
+				if (LoadedResourceExists(resource->Filename()))
+				{
+					IncrementLoadedRefCount(resource->Filename());
+				}
 				return;
 			}
-			IncrementGeneratedRefCount(resource->ResourceID());
+			if (GeneratedResourceExists(resource->ResourceID()))
+			{
+				IncrementGeneratedRefCount(resource->ResourceID());
+			}
 		}
 
 		template<typename T>
@@ -119,9 +158,13 @@ namespace Ablaze
 		{
 			if (resource->GetAssetType() == AssetType::Loaded)
 			{
-				DecrementLoadedRefCount(resource->Filename());
+				if (LoadedResourceExists(resource->Filename()))
+				{
+					DecrementLoadedRefCount(resource->Filename());
+				}
+				return;
 			}
-			else
+			if (GeneratedResourceExists(resource->ResourceID()))
 			{
 				DecrementGeneratedRefCount(resource->ResourceID());
 			}
@@ -151,6 +194,7 @@ namespace Ablaze
 		Font* CreateNewFont(const String& filename, float size);
 		Shader* CreateNewShader(const String& vFile, const String& fFile);
 		Shader* CreateNewShader(const String& shaderFile);
+		ShaderProgram* CreateNewShaderProgram(ShaderType type, const String& fileOrSource, bool isFile);
 		Model* CreateNewOBJModel(const String& filename);
 
 

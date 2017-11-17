@@ -12,7 +12,7 @@ namespace Ablaze
 	{
 	public:
 		Resource<Model> model;
-		Material material;
+		MaterialBase* material;
 		Maths::Mat4 transform;
 
 	};
@@ -24,12 +24,14 @@ namespace Ablaze
 
 	public:
 		Mesh();
-		Mesh(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		Mesh(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		Mesh(const Mesh& other);
+		~Mesh();
 
 		const Resource<Model>& GetModel(int index) const;
 		Resource<Model>& GetModel(int index);
-		const Material& GetMaterial(int index) const;
-		Material& GetMaterial(int index);
+		const MaterialBase& Material(int index) const;
+		MaterialBase& Material(int index);
 		const Maths::Mat4& GetTransform(int index) const;
 		Maths::Mat4& GetTransform(int index);
 		const ModelSet& GetModelSet(int index) const;
@@ -37,7 +39,7 @@ namespace Ablaze
 
 		const std::vector<ModelSet>& GetModelSets() const;
 
-		void AddModel(const Resource<Model>& model, const Material& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		void AddModel(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
 
 		String ToString() const override;
 		Component* Clone() const override;

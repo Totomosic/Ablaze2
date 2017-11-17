@@ -1,5 +1,4 @@
-R"(
-#version 430 core
+R"(#version 430 core
 
 in vec2 f_TexCoord;
 in vec3 f_WorldPosition;
@@ -12,8 +11,5 @@ layout(location = 0) out vec4 finalColor;
 
 void main(void)
 {
-
 	finalColor = color * f_Color;
-
-}
-)"
+})"
