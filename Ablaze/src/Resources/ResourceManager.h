@@ -10,12 +10,16 @@
 namespace Ablaze
 {
 
+	struct AB_API AssetPtr
+	{
+		Asset* ptr;
+		int ref;
+	};
+
 	struct AB_API ResourceInfo
 	{
 	public:
-		AssetType type;
-		String resourceName;
-		int resourceID;
+		AssetLoadInfo info;
 
 	};
 
@@ -26,12 +30,7 @@ namespace Ablaze
 	class AB_API ResourceManager : public Object
 	{
 	private:
-		int m_MaxGenResources;
-		std::unordered_map<String, std::pair<int, Asset*>> m_LoadedResources;
-		std::pair<int, Asset*>** m_GeneratedResources;
-		int m_GeneratedResourceCount;
-		
-		std::unordered_map<String, ResourceInfo> m_SavedResources;
+		std::unordered_map<AssetLoadInfo, AssetPtr> m_Assets;
 
 	private:
 		ResourceManager();
@@ -45,24 +44,15 @@ namespace Ablaze
 		{
 			if (typeid(T) == typeid(Texture2D))
 			{
-				Resource<Texture2D> res = LoadTexture2D(filename);
-				Texture2D* texture = (Texture2D*)m_LoadedResources[filename].second;
-				IncrementLoadedRefCount(filename);
-				return Resource<T>((T*)texture);
+				return (Resource<T>)LoadTexture2D(filename);
 			}
 			else if (typeid(T) == typeid(Model))
 			{
-				Resource<Model> res = LoadOBJModel(filename);
-				Model* model = (Model*)m_LoadedResources[filename].second;
-				IncrementLoadedRefCount(filename);
-				return Resource<T>((T*)model);
+				return (Resource<T>)LoadOBJModel(filename);
 			}
 			else if (typeid(T) == typeid(Font))
 			{
-				Resource<Font> res = LoadFont(filename, 16);
-				Font* font = (Font*)m_LoadedResources[filename].second;
-				IncrementLoadedRefCount(filename);
-				return Resource<T>((T*)font);
+				return (Resource<T>)LoadFont(filename, 16);
 			}
 			AB_ERROR("Unable to load type");
 			return Resource<T>(nullptr);
@@ -94,101 +84,17 @@ namespace Ablaze
 		Resource<Model> CreatePlane(float width, float depth, const Color& color = Color::White());
 		Resource<Model> CreateGrid(float width, float height, int xVertices, int zVertices, const Color& color = Color::White()); // x and yVertices must be >= 2
 
-		template<typename T>
-		void SaveResource(const String& name, const Resource<T>& resource)
-		{
-			m_SavedResources[name] = { resource->GetAssetType(), resource->Filename(), resource->ResourceID() };
-			IncrementRefCount(resource);
-		}
-
-		template<typename T>
-		Resource<T> OpenResource(const String& name)
-		{
-			if (m_SavedResources[name].type == AssetType::Loaded)
-			{
-				std::pair<int, Asset*>& pair = m_LoadedResources[m_SavedResources[name].resourceName];
-				IncrementLoadedRefCount(m_SavedResources[name].resourceName);
-				return Resource<T>((T*)pair.second);
-			}
-			else
-			{
-				std::pair<int, Asset*>& pair = *m_GeneratedResources[m_SavedResources[name].resourceID];
-				IncrementGeneratedRefCount(m_SavedResources[name].resourceID);
-				return Resource<T>((T*)pair.second);
-			}
-		}
-
-		int GetLoadedRefCount(const String& assetName);
-		int GetGeneratedRefCount(int resourceID);
-
-		template<typename T>
-		int GetRefCount(const Resource<T>& resource)
-		{
-			if (resource->GetAssetType() == AssetType::Loaded)
-			{
-				return GetLoadedRefCount(resource->Filename());
-			}
-			return GetGeneratedRefCount(resource->ResourceID());
-		}
-
 		String ToString() const override;
 
 		template<typename> friend class Resource;
 
 	private:
-		template<typename T>
-		void IncrementRefCount(const Resource<T>& resource)
-		{
-			if (resource->GetAssetType() == AssetType::Loaded)
-			{
-				if (LoadedResourceExists(resource->Filename()))
-				{
-					IncrementLoadedRefCount(resource->Filename());
-				}
-				return;
-			}
-			if (GeneratedResourceExists(resource->ResourceID()))
-			{
-				IncrementGeneratedRefCount(resource->ResourceID());
-			}
-		}
-
-		template<typename T>
-		void DecrementRefCount(const Resource<T>& resource)
-		{
-			if (resource->GetAssetType() == AssetType::Loaded)
-			{
-				if (LoadedResourceExists(resource->Filename()))
-				{
-					DecrementLoadedRefCount(resource->Filename());
-				}
-				return;
-			}
-			if (GeneratedResourceExists(resource->ResourceID()))
-			{
-				DecrementGeneratedRefCount(resource->ResourceID());
-			}
-		}
-
-		bool LoadedResourceExists(const String& assetName);
-		void IncrementLoadedRefCount(const String& assetName);
-		void DecrementLoadedRefCount(const String& assetName);
-		void DeleteLoadedResource(const String& assetName);
-		std::pair<int, Asset*>& GetLoadedResource(const String& assetName);
-		void CreateNewLoadedResource(const String& assetName, Asset* asset);
-		void TestLoadedRefCount(int refCount, const String& assetName);
-		Asset* GetLoadedResourcePtr(const String& assetName);
-
-		bool GeneratedResourceExists(int resourceID);
-		void CreateNewGeneratedResource(Asset* asset);
-		void IncrementGeneratedRefCount(int resourceID);
-		void DecrementGeneratedRefCount(int resourceID);
-		void DeleteGeneratedResource(int resourceID);
-		std::pair<int, Asset*>& GetGeneratedResource(int resourceID);
-		void TestGeneratedRefCount(int refCount, int resourceID);
-		Asset* GetGeneratedResourcePtr(int resourceID);
-
-		void DeleteAssetPtr(Asset* ptr);
+		void AddNewAsset(const AssetLoadInfo& info, Asset* asset, int initalRefCount = 1);
+		void DecrementRefCount(const AssetLoadInfo& info, int count = 1);
+		void IncrementRefCount(const AssetLoadInfo& info, int count = 1);
+		void DeleteAsset(const AssetLoadInfo& info);
+		AssetPtr& GetAsset(const AssetLoadInfo& info);
+		bool AssetExists(const AssetLoadInfo& info);
 
 		Texture2D* CreateNewTexture2D(const String& filename, MipmapMode mipmap);
 		Font* CreateNewFont(const String& filename, float size);

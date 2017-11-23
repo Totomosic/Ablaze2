@@ -24,18 +24,33 @@ namespace Ablaze
 		{
 			m_ResourcePtr = other.m_ResourcePtr;
 			if (other.m_ResourcePtr != nullptr)
-				ResourceManager::Library().IncrementRefCount(*this);
+				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
+		}
+
+		template<typename Other>
+		Resource(const Resource<Other>& other)
+		{
+			m_ResourcePtr = (T*)other.m_ResourcePtr;
+			if (other.m_ResourcePtr != nullptr)
+				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
 		}
 
 		~Resource()
 		{
 			if (m_ResourcePtr != nullptr)
-				ResourceManager::Library().DecrementRefCount(*this);
+				ResourceManager::Library().DecrementRefCount(m_ResourcePtr->Info());
 		}
 
 		T* Get() const { return m_ResourcePtr; }
 		T* operator*() const { return Get(); }
 		T* operator->() const { return Get(); }
+
+		void Increment() const
+		{
+			ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
+		}
+
+		template<typename> friend class Resource;
 
 		String ToString() const override
 		{

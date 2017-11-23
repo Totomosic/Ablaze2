@@ -1,36 +1,26 @@
 #pragma once
 #include "Common.h"
+#include "AssetLoadInfo.h"
 
 namespace Ablaze
 {
 
-	enum class AssetType
-	{
-		Loaded,
-		Generated
-	};
-
 	class AB_API Asset : public Object
 	{
 	protected:
-		String m_Filename;
-		int m_ResourceID;
-		AssetType m_AssetType;
+		AssetLoadInfo m_LoadInfo;
+		int m_AssetID;
 
 	public:
-		Asset(const String& filename);
 		Asset();
-		virtual ~Asset();
 
-		virtual const String& Filename() const;
-		virtual AssetType GetAssetType() const;
-		virtual int ResourceID() const;
-
-		virtual void SetFilename(const String& filename);
-		virtual void SetAssetType(AssetType type);
-		virtual void SetResourceID(int id);
+		const int AssetID() const;
+		int& AssetID();
+		const AssetLoadInfo& Info() const;
+		AssetLoadInfo& Info();
 
 		virtual void Reload() = 0;
+		virtual void Serialize(JSONwriter& writer) const;
 
 		friend class ResourceManager;
 

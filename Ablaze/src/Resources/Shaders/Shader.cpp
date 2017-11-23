@@ -110,18 +110,11 @@ namespace Ablaze
 		return "Shader";
 	}
 
-	void Shader::Serialize(JSONwriter& writer) const
-	{
-		writer.BeginObject();
-		writer.EndObject();
-	}
-
 	Shader* Shader::FromFile(const String& vertexPath, const String& fragmentPath)
 	{
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
 		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);		
 		Shader* shader = new Shader(vertexFile.ReadText(), fragmentFile.ReadText());
-		shader->m_AssetType = AssetType::Loaded;
 		vertexFile.Close();
 		fragmentFile.Close();
 		return shader;
@@ -133,7 +126,6 @@ namespace Ablaze
 		File geometryFile = Filesystem::OpenFile(geometryPath, OpenFlags::Read);
 		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);
 		Shader* shader = new Shader(vertexFile.ReadText(), geometryFile.ReadText(), fragmentFile.ReadText());
-		shader->m_AssetType = AssetType::Loaded;
 		vertexFile.Close();
 		geometryFile.Close();
 		fragmentFile.Close();
@@ -179,12 +171,10 @@ namespace Ablaze
 		if (!isGeometryShader)
 		{
 			Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
-			shader->m_AssetType = AssetType::Loaded;
 			return shader;
 		}
 		// Use Geometry Shader
 		Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[GEOMETRY_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
-		shader->m_AssetType = AssetType::Loaded;
 		return shader;
 	}
 

@@ -122,6 +122,7 @@ namespace Ablaze
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->GetID(), 0));
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 		m_Textures[buffer] = texture;
+		texture.Increment(); // ????????????????
 	}
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
@@ -139,6 +140,7 @@ namespace Ablaze
 		texture->SetWrapMode(WrapMode::Clamp);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->GetID(), 0));
 		m_Textures[ColorBuffer::Depth] = texture;
+		texture.Increment(); // ????????????????? Crashes without this... Does the above line not call copy constructor?????????????????
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment()

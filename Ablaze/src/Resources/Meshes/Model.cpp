@@ -24,7 +24,7 @@ namespace Ablaze
 	
 	}
 
-	Model::Model(const String& filename) : Asset(filename),
+	Model::Model(const String& filename) : Asset(),
 		m_VertexArray(nullptr)
 	{
 		LoadOBJModel(filename);
@@ -58,12 +58,6 @@ namespace Ablaze
 	String Model::ToString() const
 	{
 		return "Model";
-	}
-
-	void Model::Serialize(JSONwriter& writer) const
-	{
-		writer.BeginObject();
-		writer.EndObject();
 	}
 
 	void UpdateMinMax(float x, float y, float z, float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ)

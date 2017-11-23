@@ -10,7 +10,6 @@ namespace Ablaze
 		m_Font = texture_font_new_from_file(m_Atlas, size, filepath.c_str());
 		glGenTextures(1, &m_Atlas->id);
 		m_Id = m_Atlas->id;
-		m_AssetType = AssetType::Loaded;
 	}
 
 	Font::~Font()

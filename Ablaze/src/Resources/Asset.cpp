@@ -3,51 +3,36 @@
 namespace Ablaze
 {
 
-	Asset::Asset(const String& filename) : Object(),
-		m_Filename(filename), m_AssetType(AssetType::Loaded), m_ResourceID(-1)
-	{
-	
-	}
-
-	Asset::Asset() : Object(),
-		m_Filename(""), m_AssetType(AssetType::Generated), m_ResourceID(-1)
-	{
-	
-	}
-
-	Asset::~Asset()
+	Asset::Asset() : Object()
 	{
 		
 	}
 
-	const String& Asset::Filename() const
+	const int Asset::AssetID() const
 	{
-		return m_Filename;
+		return m_AssetID;
 	}
 
-	AssetType Asset::GetAssetType() const
+	int& Asset::AssetID()
 	{
-		return m_AssetType;
+		return m_AssetID;
 	}
 
-	int Asset::ResourceID() const
+	const AssetLoadInfo& Asset::Info() const
 	{
-		return m_ResourceID;
+		return m_LoadInfo;
 	}
 
-	void Asset::SetFilename(const String& filename)
+	AssetLoadInfo& Asset::Info()
 	{
-		m_Filename = filename;
+		return m_LoadInfo;
 	}
 
-	void Asset::SetAssetType(AssetType type)
+	void Asset::Serialize(JSONwriter& writer) const
 	{
-		m_AssetType = type;
-	}
-
-	void Asset::SetResourceID(int id)
-	{
-		m_ResourceID = id;
+		writer.BeginObject();
+		writer.WriteObject("Info", m_LoadInfo);
+		writer.EndObject();
 	}
 
 }

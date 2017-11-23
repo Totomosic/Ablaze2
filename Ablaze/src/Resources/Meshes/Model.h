@@ -51,7 +51,6 @@ namespace Ablaze
 		void Unbind() const;
 
 		String ToString() const override;
-		void Serialize(JSONwriter& writer) const;
 
 		friend class ResourceManager;
 		friend class Internal::Shapes;

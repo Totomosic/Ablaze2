@@ -92,7 +92,6 @@ namespace Ablaze
 	{
 		File f = Filesystem::OpenFile(filename, OpenFlags::Read);
 		ShaderProgram* program = new ShaderProgram(type, f.ReadText());
-		program->m_AssetType = AssetType::Loaded;
 		f.Close();
 		return program;
 	}

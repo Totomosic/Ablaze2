@@ -399,6 +399,9 @@
     <ClInclude Include="src\Utils\JSON\JSONwriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Resources\AssetLoadInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -633,6 +636,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\JSON\JSONwriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\AssetLoadInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

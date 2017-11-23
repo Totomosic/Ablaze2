@@ -79,7 +79,7 @@ namespace Ablaze
 			{
 				writer.BeginObject();
 				writer.WriteAttribute("Sampler", m_Lookup.at(index));
-				writer.WriteObject(resource);
+				writer.WriteObject("Texture", resource);
 				writer.EndObject();
 				index++;
 			}

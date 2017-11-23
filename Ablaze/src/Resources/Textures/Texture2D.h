@@ -43,7 +43,6 @@ namespace Ablaze
 		void Reload() override;
 
 		String ToString() const override;
-		void Serialize(JSONwriter& writer) const;
 
 		friend class ResourceManager;
 

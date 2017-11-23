@@ -150,6 +150,7 @@
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\Graphics\GraphicsPipeline.h" />
+    <ClInclude Include="src\Resources\AssetLoadInfo.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Logging.cpp" />
+    <ClCompile Include="src\Resources\AssetLoadInfo.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
     <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp" />
