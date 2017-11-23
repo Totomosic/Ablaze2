@@ -1,6 +1,5 @@
 #include "ResourceManager.h"
 #include "Resource.h"
-#include "Utils\FileSystem\__FileSystem__.h"
 #include "Scene\Systems\__Systems__.h"
 #include "Shaders\__Shaders__.h"
 
@@ -24,7 +23,10 @@ namespace Ablaze
 
 	Resource<Texture2D> ResourceManager::CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap)
 	{
-		return Resource<Texture2D>(new Texture2D(width, height, ImageFormat::Rgba, mipmap));
+		Texture2D* texture = new Texture2D(width, height, ImageFormat::Rgba, mipmap);
+		CreateNewGeneratedResource(texture);
+		IncrementGeneratedRefCount(texture->m_ResourceID);
+		return Resource<Texture2D>(texture);
 	}
 
 	Resource<Texture2D> ResourceManager::LoadTexture2D(const String& filename, MipmapMode mipmap)
@@ -297,7 +299,7 @@ namespace Ablaze
 
 	bool ResourceManager::GeneratedResourceExists(int resourceID)
 	{
-		return m_GeneratedResources[resourceID]->second != nullptr;
+		return m_GeneratedResources[resourceID] != nullptr && m_GeneratedResources[resourceID]->second != nullptr;
 	}
 
 	void ResourceManager::CreateNewGeneratedResource(Asset* asset)

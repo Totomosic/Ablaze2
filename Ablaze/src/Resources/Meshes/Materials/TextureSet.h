@@ -70,6 +70,23 @@ namespace Ablaze
 			return "TextureSet";
 		}
 
+		void Serialize(JSONwriter& writer) const
+		{
+			writer.BeginObject();
+			writer.BeginArray("Textures");
+			int index = 0;
+			for (const Resource<T>& resource : m_Textures)
+			{
+				writer.BeginObject();
+				writer.WriteAttribute("Sampler", m_Lookup.at(index));
+				writer.WriteObject(resource);
+				writer.EndObject();
+				index++;
+			}
+			writer.EndArray();
+			writer.EndObject();
+		}
+
 	};
 
 }

@@ -10,17 +10,24 @@ namespace Ablaze
 	{
 	protected:
 		GameObject* m_GameObject;
+		bool m_Enabled;
 
 	public:
 		Component();
 		virtual ~Component();
 
 		GameObject* Owner() const;
+		const bool Enabled() const;
+		bool& Enabled();
+
+		void Enable();
+		void Disable();
 
 		virtual void Start();
 		virtual void Update(double elapsedSeconds);
 
 		virtual Component* Clone() const = 0;
+		virtual void Serialize(JSONwriter& writer) const;
 
 		friend class ComponentSet;
 

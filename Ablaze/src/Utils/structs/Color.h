@@ -5,6 +5,8 @@
 namespace Ablaze
 {
 
+	class JSONwriter;
+
 	struct AB_API Color
 	{
 	public:
@@ -32,6 +34,7 @@ namespace Ablaze
 		byte* ToByte() const;
 
 		String ToString() const;
+		void Serialize(JSONwriter& writer) const;
 
 		friend std::ostream& operator<<(std::ostream& stream, const Color& color);
 

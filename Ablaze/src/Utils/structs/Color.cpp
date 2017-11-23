@@ -1,4 +1,5 @@
 #include "Color.h"
+#include "Utils\JSON\__JSON__.h"
 
 namespace Ablaze
 {
@@ -69,6 +70,16 @@ namespace Ablaze
 	String Color::ToString() const
 	{
 		return "Color(" + std::to_string(r) + ", " + std::to_string(g) + ", " + std::to_string(b) + ", " + std::to_string(a) + ")";
+	}
+
+	void Color::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("r", r);
+		writer.WriteAttribute("g", g);
+		writer.WriteAttribute("b", b);
+		writer.WriteAttribute("a", a);
+		writer.EndObject();
 	}
 
 	float* Color::ToFloat() const

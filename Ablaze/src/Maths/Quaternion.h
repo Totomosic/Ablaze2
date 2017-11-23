@@ -53,6 +53,7 @@ namespace Ablaze
 			friend bool operator!=(const Quaternion& q1, const Quaternion& q2);
 
 			String ToString() const;
+			void Serialize(JSONwriter& writer) const;
 
 			static Quaternion Log(const Quaternion& q);
 			static Quaternion Exp(const Quaternion& q);

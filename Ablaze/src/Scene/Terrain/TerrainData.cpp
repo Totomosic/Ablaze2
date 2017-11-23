@@ -1,5 +1,6 @@
 #include "TerrainData.h"
 #include "Terrain.h"
+#include "Scene\Components\__Components__.h"
 
 namespace Ablaze
 {
@@ -17,6 +18,22 @@ namespace Ablaze
 
 	float TerrainData::GetHeight(int x, int z) const
 	{
+		if (x < 0)
+		{
+			return GetHeight(0, z);
+		}
+		if (x >= m_xVertices)
+		{
+			return GetHeight(m_xVertices - 1, z);
+		}
+		if (z < 0)
+		{
+			return GetHeight(x, 0);
+		}
+		if (z >= m_zVertices)
+		{
+			return GetHeight(x, m_zVertices - 1);
+		}
 		return m_HeightMap[GetVertexIndex(x, z)];
 	}
 
@@ -96,10 +113,25 @@ namespace Ablaze
 
 	}
 
+	void TerrainData::RecalculateNormals()
+	{
+		for (int j = 0; j < m_zVertices; j++)
+		{
+			for (int i = 0; i < m_xVertices; i++)
+			{
+				ApplyNormal(GetVertexIndex(i, j), CalculateNormal(i, j));
+			}
+		}
+	}
+
+	void TerrainData::ApplyNormal(int index, const Maths::Vec3& height)
+	{
+		m_VertexBuffer->Upload(&height.x, sizeof(float) * 3, (int64)GetNormalIndex(index, m_VertexBuffer));
+	}
+
 	void TerrainData::ApplyVertex(int index, float height)
 	{
-		//VertexBuffer* vbo = m_Owner->GetMesh().GetModel(0)->GetVertexArray()->GetVertexBuffer(0);
-		//vbo->Upload(&height, sizeof(float), (int64)GetVBOIndex(index, vbo));
+		m_VertexBuffer->Upload(&height, sizeof(float), (int64)GetVBOIndex(index, m_VertexBuffer));
 	}
 
 	int TerrainData::GetVBOIndex(int vertexIndex, VertexBuffer* vbo) const
@@ -109,6 +141,23 @@ namespace Ablaze
 		offset += layout.OffsetOf(Attribute::Position);
 		offset += sizeof(float);
 		return offset;
+	}
+
+	int TerrainData::GetNormalIndex(int vertexIndex, VertexBuffer* vbo) const
+	{
+		BufferLayout& layout = vbo->GetLayout();
+		int offset = vertexIndex * layout.GetStride();
+		offset += layout.OffsetOf(Attribute::Normal);
+		return offset;
+	}
+
+	Maths::Vec3 TerrainData::CalculateNormal(int x, int y) const
+	{
+		float heightL = GetHeight(x - 1, y);
+		float heightR = GetHeight(x + 1, y);
+		float heightD = GetHeight(x, y - 1);
+		float heightU = GetHeight(x, y + 1);
+		return Maths::Vec3(heightL - heightR, 2.0, heightD - heightU).Normalize();
 	}
 
 }

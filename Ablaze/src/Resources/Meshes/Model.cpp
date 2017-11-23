@@ -60,6 +60,12 @@ namespace Ablaze
 		return "Model";
 	}
 
+	void Model::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.EndObject();
+	}
+
 	void UpdateMinMax(float x, float y, float z, float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ)
 	{
 		if (x < *minX)

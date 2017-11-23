@@ -237,6 +237,13 @@ namespace Ablaze
 		return "Texture2D";
 	}
 
+	void Texture2D::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+
+		writer.EndObject();
+	}
+
 	void Texture2D::Populate(byte* pixelData)
 	{
 		if (m_Format == ImageFormat::Rgba)

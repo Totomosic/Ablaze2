@@ -54,4 +54,13 @@ namespace Ablaze
 		return "MaterialBase";
 	}
 
+	void MaterialBase::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteObject("Color", m_BaseColor);
+		writer.WriteObject("RenderSettings", m_RenderState);
+		writer.WriteObject("Shader", m_Shader);
+		writer.EndObject();
+	}
+
 }

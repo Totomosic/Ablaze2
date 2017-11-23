@@ -110,6 +110,12 @@ namespace Ablaze
 		return "Shader";
 	}
 
+	void Shader::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.EndObject();
+	}
+
 	Shader* Shader::FromFile(const String& vertexPath, const String& fragmentPath)
 	{
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);

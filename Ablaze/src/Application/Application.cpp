@@ -24,7 +24,9 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLFW");
 		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
+		double time = Time::CurrentTime();
 		Init();
+		AB_INFO("Init took: " + std::to_string(Time::CurrentTime() - time) + " seconds");
 		Time::Reset();
 		Time::CreateNewTimer(1.0, METHOD_0(Application::Tick));
 		Run();

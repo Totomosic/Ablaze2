@@ -43,6 +43,11 @@ namespace Ablaze
 		return f;
 	}
 
+	void Filesystem::CreateNewDirectory(const String& directoryPath)
+	{
+		std::experimental::filesystem::create_directory(directoryPath);
+	}
+
 	bool Filesystem::Delete(const String& filename)
 	{
 		return true;

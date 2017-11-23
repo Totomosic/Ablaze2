@@ -42,6 +42,11 @@ namespace Ablaze
 			return m_ResourcePtr->ToString();
 		}
 
+		void Serialize(JSONwriter& writer) const
+		{
+			m_ResourcePtr->Serialize(writer);
+		}
+
 	};
 
 }

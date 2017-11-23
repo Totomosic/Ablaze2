@@ -1,4 +1,5 @@
 #include "Vec4.h"
+#include "Utils\JSON\__JSON__.h"
 
 namespace Ablaze
 {
@@ -108,6 +109,16 @@ namespace Ablaze
 		String Vec4::ToString() const
 		{
 			return "Vec4(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
+		}
+
+		void Vec4::Serialize(JSONwriter& writer) const
+		{
+			writer.BeginObject();
+			writer.WriteAttribute("x", x);
+			writer.WriteAttribute("y", y);
+			writer.WriteAttribute("z", z);
+			writer.WriteAttribute("w", w);
+			writer.EndObject();
 		}
 
 		// operators

@@ -40,9 +40,11 @@ namespace Ablaze
 		const std::vector<ModelSet>& GetModelSets() const;
 
 		void AddModel(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		void SetMaterial(int index, const MaterialBase& material);
 
 		String ToString() const override;
 		Component* Clone() const override;
+		void Serialize(JSONwriter& writer) const override;
 
 	};
 

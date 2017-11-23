@@ -95,14 +95,9 @@ namespace Ablaze
 		m_Viewport.SetHeight(height);
 	}
 
-	const Resource<Texture2D>& Framebuffer::GetTexture(ColorBuffer buffer) const
+	Resource<Texture2D> Framebuffer::GetTexture(ColorBuffer buffer) const
 	{
 		return m_Textures.at(buffer);
-	}
-
-	Resource<Texture2D>& Framebuffer::GetTexture(ColorBuffer buffer)
-	{
-		return m_Textures[buffer];
 	}
 
 	void Framebuffer::CopyToScreen(ClearBuffer buffer)

@@ -43,6 +43,7 @@ namespace Ablaze
 		}
 
 		String ToString() const override;
+		void Serialize(JSONwriter& writer) const;
 
 		friend class GameObject;
 

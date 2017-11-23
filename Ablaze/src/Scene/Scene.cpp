@@ -129,9 +129,36 @@ namespace Ablaze
 		}
 	}
 
+	const Layer& Scene::operator[](const String& layer) const
+	{
+		return GetLayer(layer);
+	}
+
+	Layer& Scene::operator[](const String& layer)
+	{
+		return GetLayer(layer);
+	}
+
 	String Scene::ToString() const
 	{
 		return "Scene";
+	}
+
+	void Scene::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.BeginArray("Layers");
+		String filename = writer.Filename();
+		size_t slash = filename.find_last_of('/');
+		String dir = filename.substr(0, slash) + "/";
+		for (Layer* layer : m_LayerOrder)
+		{
+			String fullpath = dir + "Layers/" + layer->GetName() + ".layer";
+			layer->Serialize(JSONwriter(fullpath));
+			writer.WriteElement(fullpath);
+		}
+		writer.EndArray();
+		writer.EndObject();
 	}
 
 }

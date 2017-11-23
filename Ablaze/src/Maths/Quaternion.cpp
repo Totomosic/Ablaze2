@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include "Utils\JSON\__JSON__.h"
 
 namespace Ablaze
 {
@@ -208,6 +209,16 @@ namespace Ablaze
 		String Quaternion::ToString() const
 		{
 			return "Quaternion(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
+		}
+
+		void Quaternion::Serialize(JSONwriter& writer) const
+		{
+			writer.BeginObject();
+			writer.WriteAttribute("x", x);
+			writer.WriteAttribute("y", y);
+			writer.WriteAttribute("z", z);
+			writer.WriteAttribute("w", w);
+			writer.EndObject();
 		}
 
 		Quaternion Quaternion::Log(const Quaternion& q)

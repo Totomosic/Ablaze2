@@ -89,6 +89,32 @@ namespace Ablaze
 		return "Layer";
 	}
 
+	void Layer::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("Name", m_Name);
+		writer.BeginArray("GameObjects");
+		String filename = writer.Filename();
+		size_t slash = filename.find_last_of('/');
+
+		String cameraFile = "";
+
+		for (int i = 0; i < m_HighestID + 1; i++)
+		{
+			String fullFilename = filename.substr(0, slash) + "/" + GetName() + "/GameObject" + std::to_string(i) + ".gameobject";
+			JSONwriter gameObjectWriter(fullFilename);
+			m_GameObjects[i]->Serialize(gameObjectWriter);
+			writer.WriteElement(fullFilename);
+			if (m_GameObjects[i] == m_Camera)
+			{
+				cameraFile = fullFilename;
+			}
+		}
+		writer.EndArray();
+		writer.WriteAttribute("Camera", cameraFile);
+		writer.EndObject();
+	}
+
 	void Layer::TagGameObject(GameObject* entity, const String& tag)
 	{
 		if (TagExists(tag))

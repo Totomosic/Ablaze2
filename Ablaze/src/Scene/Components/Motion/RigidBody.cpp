@@ -95,6 +95,18 @@ namespace Ablaze
 		return "RigidBody";
 	}
 
+	void RigidBody::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("Mass", m_Mass);
+		writer.WriteObject("Velocity", m_Velocity);
+		writer.WriteObject("Acceleration", m_Acceleration);
+		writer.WriteObject("RotationVelocity", m_RotationVelocity);
+		writer.WriteObject("RotationAcceleration", m_RotationAcceleration);
+		writer.WriteAttribute("GravityEnabled", m_GravityEnabled);
+		writer.EndObject();
+	}
+
 	Component* RigidBody::Clone() const
 	{
 		RigidBody* rb = new RigidBody(m_Mass, m_GravityEnabled);

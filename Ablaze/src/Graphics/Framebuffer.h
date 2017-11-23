@@ -62,8 +62,7 @@ namespace Ablaze
 		void SetWidth(int width);
 		void SetHeight(int height);
 
-		const Resource<Texture2D>& GetTexture(ColorBuffer buffer) const;
-		Resource<Texture2D>& GetTexture(ColorBuffer buffer);
+		Resource<Texture2D> GetTexture(ColorBuffer buffer) const;
 
 		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth);
 		void CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);

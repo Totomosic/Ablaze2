@@ -20,6 +20,8 @@ namespace Ablaze
 		void Apply() const;
 		void operator()() const;
 
+		void Serialize(JSONwriter& writer) const;
+
 	};
 
 }

@@ -74,6 +74,16 @@ namespace Ablaze
 		return "Light";
 	}
 
+	void Light::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("Type", (int)m_Type);
+		writer.WriteObject("Color", m_LightColor);
+		writer.WriteAttribute("Ambient", m_Ambient);
+		writer.WriteObject("Attenuation", m_Attenuation);
+		writer.EndObject();
+	}
+
 	Component* Light::Clone() const
 	{
 		Light* light = new Light(m_Type, m_LightColor, m_Ambient, m_Attenuation);

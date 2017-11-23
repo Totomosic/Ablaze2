@@ -4,6 +4,8 @@
 namespace Ablaze
 {
 
+	class JSONwriter;
+
 	namespace Maths
 	{
 		struct AB_API Vec2
@@ -31,6 +33,7 @@ namespace Ablaze
 			Vec2 Divide(const Vec2& other) const;
 
 			String ToString() const;
+			void Serialize(JSONwriter& writer) const;
 
 			friend Vec2 operator+(const Vec2& left, const Vec2& right);
 			friend Vec2 operator-(const Vec2& left, const Vec2& right);

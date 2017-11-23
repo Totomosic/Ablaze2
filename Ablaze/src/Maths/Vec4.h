@@ -41,6 +41,7 @@ namespace Ablaze
 			Vec4 Divide(const Vec4& other) const;
 
 			String ToString() const;
+			void Serialize(JSONwriter& writer) const;
 
 			friend Vec4 operator+(const Vec4& left, const Vec4& right);
 			friend Vec4 operator-(const Vec4& left, const Vec4& right);

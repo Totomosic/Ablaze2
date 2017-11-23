@@ -30,6 +30,7 @@ namespace Ablaze
 		virtual void Apply() const;
 		String ToString() const override;
 		virtual MaterialBase* Clone() const = 0;
+		virtual void Serialize(JSONwriter& writer) const;
 
 	};
 

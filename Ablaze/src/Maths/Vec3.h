@@ -37,6 +37,7 @@ namespace Ablaze
 			Vec3 Divide(const Vec3& other) const;
 
 			String ToString() const;
+			void Serialize(JSONwriter& writer) const;
 
 			friend Vec3 operator+(const Vec3& left, const Vec3& right);
 			friend Vec3 operator-(const Vec3& left, const Vec3& right);

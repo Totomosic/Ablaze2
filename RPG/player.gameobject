@@ -1,0 +1,17 @@
+{
+    "Tag" : "Player",
+    "Components" : {
+        "Transform" : {},
+        "Mesh" : {
+            "Model" : {
+                "Type" : "Cuboid",
+                "Width" : 1,
+                "Height" : 1,
+                "Depth" : 1
+            },
+            "Material" : {
+                "Shader" : "LightingColorShader"
+            }
+        }
+    }
+}

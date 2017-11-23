@@ -55,6 +55,17 @@ namespace Ablaze
 			return "Material";
 		}
 
+		void Serialize(JSONwriter& writer) const override
+		{
+			writer.BeginObject();
+			writer.WriteAttribute("Type", typeid(T).name());
+			writer.WriteObject("Color", m_BaseColor);
+			writer.WriteObject("RenderSettings", m_RenderState);
+			writer.WriteObject("Shader", m_Shader);
+			writer.WriteObject("Textures", m_Textures);
+			writer.EndObject();
+		}
+
 		MaterialBase* Clone() const override
 		{
 			Material<T>* mat = new Material<T>(BaseColor(), ActiveShader(), RenderSettings());

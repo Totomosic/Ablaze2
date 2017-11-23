@@ -1,5 +1,7 @@
 #pragma once
-#include "Common.h"
+#include "Maths\__Maths__.h"
+#include "Object.h"
+#include "Logging.h"
 
 namespace Ablaze
 {
@@ -21,11 +23,10 @@ namespace Ablaze
 		std::ofstream m_Out;
 		std::ifstream m_In;
 
-	private:
+	public:
 		File();
 		File(const String& filename);
 
-	public:
 		const String& Filename() const;
 		bool IsOpen() const;
 		int FileSize() const;

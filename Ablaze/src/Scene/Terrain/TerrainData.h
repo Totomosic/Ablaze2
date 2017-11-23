@@ -12,6 +12,7 @@ namespace Ablaze
 	{
 	private:
 		Terrain* m_Owner;
+		VertexBuffer* m_VertexBuffer;
 
 		float m_Width;
 		float m_Depth;
@@ -37,11 +38,17 @@ namespace Ablaze
 
 		String ToString() const override;
 
+		friend class Terrain;
+
 	private:
 		int GetVertexIndex(int x, int z) const;
 		void ApplyHeightmap();
+		void RecalculateNormals();
 		void ApplyVertex(int index, float height);
+		void ApplyNormal(int index, const Maths::Vec3& normal);
 		int GetVBOIndex(int vertexIndex, VertexBuffer* vbo) const;
+		int GetNormalIndex(int vertexIndex, VertexBuffer* vbo) const;
+		Maths::Vec3 CalculateNormal(int x, int y) const;
 
 	};
 

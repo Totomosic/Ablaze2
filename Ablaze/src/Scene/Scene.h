@@ -23,8 +23,8 @@ namespace Ablaze
 		const Layer& CurrentLayer() const;
 		Layer& CurrentLayer();
 		const Layer& GetLayer(const String& layer) const;
-		const Layer& GetLayer(int index) const;
 		Layer& GetLayer(const String& layer);
+		const Layer& GetLayer(int index) const;
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
 		std::vector<Layer*> GetLayers(int layerMask) const;
@@ -37,7 +37,11 @@ namespace Ablaze
 
 		void AddGameObject(GameObject* entity);
 
+		const Layer& operator[](const String& layer) const;
+		Layer& operator[](const String& layer);
+
 		String ToString() const override;
+		void Serialize(JSONwriter& writer) const;
 
 		friend class SceneManager;
 

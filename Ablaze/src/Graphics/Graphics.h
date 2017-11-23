@@ -4,7 +4,6 @@
 #include "Framebuffer.h"
 #include "GraphicsPipeline.h"
 #include "Window.h"
-#include "Scene\Components\Motion\Transform.h"
 #include "Resources\Resource.h"
 #include "Resources\Textures\Fonts\Font.h"
 

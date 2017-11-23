@@ -1,6 +1,5 @@
 #include "Debugger.h"
 #include "Graphics\Graphics.h"
-#include "Utils\FileSystem\__FileSystem__.h"
 #include "Application\Time.h"
 
 namespace Ablaze
@@ -110,7 +109,7 @@ namespace Ablaze
 			}
 			else if (command == "GameTime")
 			{
-				AB_INFO("GameTime: " + std::to_string(Time::TotalTime()) + "s");
+				AB_INFO("GameTime: " + std::to_string(Time::CurrentTime()) + "s");
 			}
 			else if (command == "Bytecode")
 			{

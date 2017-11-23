@@ -23,4 +23,15 @@ namespace Ablaze
 		Apply();
 	}
 
+	void RenderState::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("DepthTest", useDepthTest);
+		writer.WriteAttribute("Blend", useBlend);
+		writer.WriteAttribute("DepthFunction", (int)depthFunction);
+		writer.WriteAttribute("BlendSrcFunction", (int)blendSrcFunction);
+		writer.WriteAttribute("BlendDstFunction", (int)blendDstFunction);
+		writer.EndObject();
+	}
+
 }

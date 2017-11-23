@@ -3,6 +3,8 @@
 #include "ComponentSet.h"
 #include "Components\__Components__.h"
 
+#include "Resources\Meshes\Materials\__Materials__.h"
+
 namespace Ablaze
 {
 
@@ -97,6 +99,13 @@ namespace Ablaze
 		return "GameObject";
 	}
 
+	void GameObject::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteObject("Components", *m_Components);
+		writer.EndObject();
+	}
+
 	GameObject* GameObject::Empty()
 	{
 		return new GameObject;
@@ -116,10 +125,13 @@ namespace Ablaze
 
 	GameObject* GameObject::Instantiate(GameObject* prefab)
 	{
-		GameObject* object = new GameObject;
-		for (auto pair : prefab->Components().GetComponentMap())
+		GameObject* object = Instantiate();
+		if (prefab != nullptr)
 		{
-			object->Components().AddComponent(pair.first, pair.second->Clone());
+			for (auto pair : prefab->Components().GetComponentMap())
+			{
+				object->Components().AddComponent(pair.first, pair.second->Clone());
+			}
 		}
 		return object;
 	}
@@ -145,6 +157,34 @@ namespace Ablaze
 		return object;
 	}
 
+	GameObject* GameObject::Load(const String& gameobjectFile)
+	{
+		JSONnode& node = *LoadJSONFile(gameobjectFile);
+		GameObject* object = Empty();
+
+		if (node.HasChild("Tag"))
+		{
+			object->SetTag(node["Tag"].Data());
+		}
+		if (node.HasChild("Components"))
+		{
+			JSONnode& components = node["Components"];
+			if (components.HasChild("Transform"))
+			{
+				LoadTransform(object, components["Transform"]);
+			}
+			if (components.HasChild("Mesh"))
+			{
+				LoadMesh(object, components["Mesh"]);
+			}
+		}
+		if (node.HasChild("Parent"))
+		{
+			object->SetParent(Load(node["Parent"].Data()));
+		}
+		return object;
+	}
+
 	void GameObject::Destroy(GameObject* gameObject)
 	{
 		delete gameObject;
@@ -167,7 +207,7 @@ namespace Ablaze
 		return objects;
 	}
 
-	std::vector<GameObject*> GameObject::GetAllWith(const std::vector<std::type_index>& componentTypes)
+	std::vector<GameObject*> GameObject::GetAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled)
 	{
 		std::vector<GameObject*> objects;
 		if (SceneManager::Instance().HasScene())
@@ -179,7 +219,7 @@ namespace Ablaze
 					bool passed = true;
 					for (const std::type_index& type : componentTypes)
 					{
-						if (!object->Components().HasComponent(type))
+						if (!object->Components().HasComponent(type) || (onlyIfEnabled && !object->Components().GetComponent(type)->Enabled()))
 						{
 							passed = false;
 							break;
@@ -193,6 +233,56 @@ namespace Ablaze
 			}
 		}
 		return objects;
+	}
+
+	void GameObject::LoadTransform(GameObject* object, JSONnode& transformNode)
+	{
+		Transform* transform = new Transform;
+		if (transformNode.HasChild("Position"))
+		{
+			JSONnode& position = transformNode["Position"];
+			transform->LocalPosition().x = stof(position["x"].Data());
+			transform->LocalPosition().y = stof(position["y"].Data());
+			transform->LocalPosition().z = stof(position["z"].Data());
+		}
+		if (transformNode.HasChild("Rotation"))
+		{
+			JSONnode& rotation = transformNode["Rotation"];
+			transform->LocalRotation().x = stof(rotation["x"].Data());
+			transform->LocalRotation().y = stof(rotation["y"].Data());
+			transform->LocalRotation().z = stof(rotation["z"].Data());
+			transform->LocalRotation().w = stof(rotation["w"].Data());
+		}
+		if (transformNode.HasChild("Scale"))
+		{
+			JSONnode& scale = transformNode["Scale"];
+			transform->LocalScale().x = stof(scale["x"].Data());
+			transform->LocalScale().y = stof(scale["y"].Data());
+			transform->LocalScale().z = stof(scale["z"].Data());
+		}
+		object->AddComponent(transform);
+	}
+
+	void GameObject::LoadMesh(GameObject* object, JSONnode& meshNode)
+	{
+		Mesh* mesh = new Mesh;
+		if (meshNode.HasChild("Model"))
+		{
+			if (meshNode.HasChild("Material"))
+			{
+				JSONnode& materialNode = meshNode["Material"];
+				if (!materialNode.HasChild("Type") || materialNode["Type"].Data() == "Texture2D")
+				{
+					LoadMaterial<Texture2D>(mesh, meshNode);
+				}
+			}
+			else
+			{
+				AB_WARN("No Material tag found with model tag");
+			}
+		}
+
+		object->AddComponent(mesh);
 	}
 
 }

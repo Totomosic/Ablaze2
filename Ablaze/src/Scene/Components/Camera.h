@@ -21,6 +21,7 @@ namespace Ablaze
 
 	public:
 		Camera(Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
+		Camera(float x, float xMax, float y, float yMax, float nearPlane = 1.0f, float farPlane = 1000.0f);
 
 		const Maths::Mat4& ProjectionMatrix() const;
 		Maths::Mat4& ProjectionMatrix();
@@ -43,9 +44,10 @@ namespace Ablaze
 
 		String ToString() const override;
 		Component* Clone() const override;
+		void Serialize(JSONwriter& writer) const override;
 
 	private:
-		void CreateProjectionMatrix();
+		void CreateProjectionMatrix(float x, float xMax, float y, float yMax);
 
 	};
 

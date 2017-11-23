@@ -1,5 +1,4 @@
 #pragma once
-#include "Common.h"
 #include "File.h"
 
 namespace Ablaze
@@ -19,6 +18,7 @@ namespace Ablaze
 		static File GetFile(const String& filename);
 		static File OpenFile(const String& filename, OpenFlags flags = OpenFlags::Read);
 		static File CreateNewFile(const String& filename);
+		static void CreateNewDirectory(const String& directoryPath);
 
 		static bool Delete(const String& filename);
 		static bool Delete(const File& file);

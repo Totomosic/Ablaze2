@@ -16,11 +16,6 @@ namespace Ablaze
 		return "Game Time";
 	}
 
-	double Time::TotalTime()
-	{
-		return s_TotalSeconds;
-	}
-
 	double Time::DeltaTime()
 	{
 		return s_ElapsedSeconds;

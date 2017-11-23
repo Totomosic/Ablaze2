@@ -81,15 +81,49 @@ namespace Ablaze
 		m_Models.push_back({ model, material.Clone(), transform });
 	}
 
+	void Mesh::SetMaterial(int index, const MaterialBase& material)
+	{
+		delete m_Models[index].material;
+		m_Models[index].material = material.Clone();
+	}
+
 	String Mesh::ToString() const
 	{
 		return "Mesh";
 	}
 
+	void Mesh::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.BeginArray("Models");
+		for (const ModelSet& model : m_Models)
+		{
+			writer.WriteObject(model.model);
+		}
+		writer.EndArray();
+		writer.BeginArray("Materials");
+		for (const ModelSet& model : m_Models)
+		{
+			writer.WriteObject(*model.material);
+		}
+		writer.EndArray();
+		writer.BeginArray("Transforms");
+		for (const ModelSet& model : m_Models)
+		{
+			writer.WriteObject(model.transform);
+		}
+		writer.EndArray();
+		writer.EndObject();
+	}
+
 	Component* Mesh::Clone() const
 	{
 		Mesh* mesh = new Mesh;
-		mesh->m_Models = m_Models;
+		for (const ModelSet& modelSet : m_Models)
+		{
+			ModelSet model = { modelSet.model, modelSet.material->Clone(), modelSet.transform };
+			mesh->m_Models.push_back(model);
+		}
 		return mesh;
 	}
 

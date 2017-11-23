@@ -38,10 +38,10 @@ namespace Ablaze
 		return radians / (float)Maths::PI * 180.0f;
 	}
 
-	std::vector<String> SplitString(const String& string, const String& delimiters)
+	std::vector<String> SplitString(const String& string, const String& delimiter)
 	{
 		size_t start = 0;
-		size_t end = string.find_first_of(delimiters);
+		size_t end = string.find_first_of(delimiter);
 
 		std::vector<String> result;
 
@@ -55,9 +55,19 @@ namespace Ablaze
 				break;
 
 			start = end + 1;
-			end = string.find_first_of(delimiters, start);
+			end = string.find_first_of(delimiter, start);
 		}
 
+		return result;
+	}
+
+	std::vector<String> SplitStringOnce(const String& string, const String& delimeter)
+	{
+		std::vector<String> result;
+		result.reserve(2);
+		size_t end = string.find_first_of(delimeter);
+		result.push_back(string.substr(0, end));
+		result.push_back(string.substr(end + 1, string.length() - end - 1));
 		return result;
 	}
 
@@ -66,7 +76,7 @@ namespace Ablaze
 		std::stringstream ss;
 		for (auto chr : str)
 		{
-			if (chr != '\n' && chr != ' ' && chr != '\r')
+			if (chr != '\n' && chr != ' ' && chr != '\r' && chr != '\t')
 			{
 				ss << chr;
 			}

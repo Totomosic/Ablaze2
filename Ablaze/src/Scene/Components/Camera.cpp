@@ -7,7 +7,13 @@ namespace Ablaze
 	Camera::Camera(Projection projection, float fov, float nearPlane, float farPlane) : Component(),
 		m_ProjectionType(projection), m_Fov(fov), m_NearPlane(nearPlane), m_FarPlane(farPlane)
 	{
-		CreateProjectionMatrix();
+		CreateProjectionMatrix(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height());
+	}
+
+	Camera::Camera(float x, float xMax, float y, float yMax, float nearPlane, float farPlane) : Component(),
+		m_ProjectionType(Projection::Orthographic), m_Fov(Maths::PI / 3), m_NearPlane(nearPlane), m_FarPlane(farPlane)
+	{
+		CreateProjectionMatrix(x, xMax, y, yMax);
 	}
 
 	const Maths::Mat4& Camera::ProjectionMatrix() const
@@ -76,12 +82,23 @@ namespace Ablaze
 
 	void Camera::UpdateProjectionMatrix()
 	{
-		CreateProjectionMatrix();
+		CreateProjectionMatrix(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height());
 	}
 
 	String Camera::ToString() const
 	{
 		return "Camera";
+	}
+
+	void Camera::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteAttribute("FOV", m_Fov);
+		writer.WriteAttribute("Projection", (int)m_ProjectionType);
+		writer.WriteAttribute("NearPlane", m_NearPlane);
+		writer.WriteAttribute("FarPlane", m_FarPlane);
+		writer.WriteObject("ProjectionMatrix", m_Projection);
+		writer.EndObject();
 	}
 
 	Component* Camera::Clone() const
@@ -90,7 +107,7 @@ namespace Ablaze
 		return camera;
 	}
 
-	void Camera::CreateProjectionMatrix()
+	void Camera::CreateProjectionMatrix(float x, float width, float y, float height)
 	{
 		if (m_ProjectionType == Projection::Perspective)
 		{
@@ -98,7 +115,7 @@ namespace Ablaze
 		}
 		else
 		{
-			m_Projection = Maths::Mat4::Orthographic(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height(), m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Mat4::Orthographic(x, width, y, height, m_NearPlane, m_FarPlane);
 		}
 	}
 

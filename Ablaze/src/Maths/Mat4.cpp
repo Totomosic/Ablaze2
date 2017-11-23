@@ -1,5 +1,6 @@
 #include "Mat4.h"
 #include "Logging.h"
+#include "Utils\JSON\__JSON__.h"
 
 namespace Ablaze
 {
@@ -94,6 +95,16 @@ namespace Ablaze
 				+ "|" + std::to_string(values[2 + 0 * 4]) + s + std::to_string(values[2 + 1 * 4]) + s + std::to_string(values[2 + 2 * 4]) + s + std::to_string(values[2 + 3 * 4]) + "|" + "\n"
 				+ "|" + std::to_string(values[3 + 0 * 4]) + s + std::to_string(values[3 + 1 * 4]) + s + std::to_string(values[3 + 2 * 4]) + s + std::to_string(values[3 + 3 * 4]) + "|";
 			return result;
+		}
+
+		void Mat4::Serialize(JSONwriter& writer) const
+		{
+			writer.BeginObject();
+			writer.WriteObject("C0", GetColumn(0));
+			writer.WriteObject("C1", GetColumn(1));
+			writer.WriteObject("C2", GetColumn(2));
+			writer.WriteObject("C3", GetColumn(3));
+			writer.EndObject();
 		}
 
 		Mat4 Mat4::Identity()

@@ -22,7 +22,6 @@ namespace Ablaze
 		String ToString() const override;
 
 	public:
-		static double TotalTime();
 		static double ElapsedTime();
 		static double DeltaTime();
 		static double CurrentTime();

@@ -29,9 +29,9 @@ namespace Ablaze
 		Transform(const Maths::Vec3& position, const Maths::Vec3& scale);
 		Transform(const Maths::Quaternion& rotation, const Maths::Vec3& scale);
 
-		Maths::Vec3 Position() const;
-		Maths::Quaternion Rotation() const;
-		Maths::Vec3 Scale() const;
+		const Maths::Vec3 Position() const;
+		const Maths::Quaternion Rotation() const;
+		const Maths::Vec3 Scale() const;
 
 		const Maths::Vec3& LocalPosition() const;
 		Maths::Vec3& LocalPosition();
@@ -54,6 +54,7 @@ namespace Ablaze
 		String ToString() const override;
 
 		Component* Clone() const override;
+		void Serialize(JSONwriter& writer) const override;
 
 		Transform operator+(const Transform& other) const;
 

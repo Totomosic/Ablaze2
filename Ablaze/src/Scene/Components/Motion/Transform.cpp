@@ -34,7 +34,7 @@ namespace Ablaze
 
 	}
 
-	Maths::Vec3 Transform::Position() const
+	const Maths::Vec3 Transform::Position() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
@@ -43,7 +43,7 @@ namespace Ablaze
 		return ToMatrix().GetColumn(3).xyz();
 	}
 
-	Maths::Quaternion Transform::Rotation() const
+	const Maths::Quaternion Transform::Rotation() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
@@ -52,7 +52,7 @@ namespace Ablaze
 		return m_GameObject->Parent()->GetComponent<Transform>().Rotation() * m_Rotation;
 	}
 
-	Maths::Vec3 Transform::Scale() const
+	const Maths::Vec3 Transform::Scale() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
@@ -159,6 +159,15 @@ namespace Ablaze
 	{
 		Transform* t = new Transform(m_Position, m_Rotation, m_Scale);
 		return t;
+	}
+
+	void Transform::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		writer.WriteObject("Position", LocalPosition());
+		writer.WriteObject("Rotation", LocalRotation());
+		writer.WriteObject("Scale", LocalScale());
+		writer.EndObject();
 	}
 
 	Transform Transform::operator+(const Transform& other) const

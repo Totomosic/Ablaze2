@@ -12,7 +12,7 @@ namespace Ablaze
 		uint m_HighestID;
 		GameObject** m_GameObjects;
 
-		const String& m_Name;
+		String m_Name;
 		std::unordered_map<String, std::vector<GameObject*>> m_NamedEntities;
 		GameObject* m_Camera;
 
@@ -49,6 +49,7 @@ namespace Ablaze
 		}
 
 		String ToString() const override;
+		void Serialize(JSONwriter& writer) const;
 
 		friend class Scene;
 		friend class GameObject;

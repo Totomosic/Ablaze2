@@ -54,6 +54,16 @@ namespace Ablaze
 		return "ComponentSet";
 	}
 
+	void ComponentSet::Serialize(JSONwriter& writer) const
+	{
+		writer.BeginObject();
+		for (auto pair : m_Components)
+		{
+			writer.WriteObject(pair.first.name(), *pair.second);
+		}
+		writer.EndObject();
+	}
+
 	void ComponentSet::AddComponent(const std::type_index& type, Component* component)
 	{
 		if (HasComponent(type))
