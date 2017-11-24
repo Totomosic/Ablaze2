@@ -7,8 +7,6 @@ using namespace Ablaze::Maths;
 class Game : public Application
 {
 public:
-	Framebuffer* fbo;
-	GameObject* minimapCamera;
 
 public:
 	void Init() override
@@ -17,56 +15,39 @@ public:
 		Graphics::Initialise(window);
 		Graphics::EnableCull();
 
-		fbo = new Framebuffer(1280, 720, true);
-		
-		SceneManager::Instance().CreateScene();
+		SceneManager::Instance().LoadScene("Saves/Scene.scene");
 
+		/*SceneManager::Instance().CreateScene();
 		SceneManager::Instance().CurrentScene().CreateLayer("World");
-		SceneManager::Instance().CurrentScene().SetCurrentLayer("World");
+		SceneManager::Instance().CurrentScene().SetCurrentLayer(0);
 
-		GameObject* playerOrientation = GameObject::Load("playerOrientation.gameobject");
-		GameObject* player = playerOrientation->Parent();		
+		GameObject* player = GameObject::Instantiate("Player", 0, 0, 0);
+		player->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(1, 1, 1), Material<Texture2D>(Color::White(), ResourceManager::Library().LightingTextureShader(), "Tex0", "res/canyonTerrain.png")));
+		GameObject* playerOrientation = GameObject::Instantiate("PlayerOrientation", nullptr, player, 0, 0, 0);
 
-		GameObject* camera = GameObject::Instantiate(nullptr, playerOrientation, 0, 0, 10);
+		GameObject* terrain = GameObject::Instantiate("Terrain", 0, -0.5f, 0);
+		terrain->AddComponent(new Mesh(ResourceManager::Library().CreatePlane(15, 15), Material<Texture2D>(Color::Green(), ResourceManager::Library().LightingColorShader())));
+
+		GameObject* camera = GameObject::Instantiate("Camera", nullptr, playerOrientation, 0, 0, 10);
 		camera->AddComponent<Camera>();
-		SceneManager::Instance().CurrentScene()["World"].SetActiveCamera(camera);
 
-		GameObject* sun = GameObject::Instantiate(0, 15, 0);
+		GameObject* sun = GameObject::Instantiate("Sun", 0, 100, 0);
 		sun->AddComponent<Light>();
 
-		minimapCamera = GameObject::Instantiate(nullptr, player, 0, 100, 0);
-		minimapCamera->transform().Rotate(-Maths::PI / 2, Maths::Vec3(1, 0, 0));
-		minimapCamera->AddComponent(new Camera(-10, 10, -10, 10));
+		SceneManager::Instance().CurrentScene().CurrentLayer().SetActiveCamera(camera);
 
 		SceneManager::Instance().CurrentScene().CreateLayer("UI");
 		SceneManager::Instance().CurrentScene().SetCurrentLayer("UI");
 
-		GameObject* canvas = GameObject::Instantiate(0, 0, 10);
+		GameObject* canvas = GameObject::Instantiate("Canvas", 0, 0, 100);
 		canvas->AddComponent(new Camera(Projection::Orthographic));
-		SceneManager::Instance().CurrentScene()["UI"].SetActiveCamera(canvas);
 
-		GameObject* frame = GameObject::Instantiate(WindowWidth() - 275.0f / 2, WindowHeight() - 275.0f / 2, 0);
-		frame->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(275, 275), Material<Texture2D>(Color(255, 255, 50, 100), ResourceManager::Library().DefaultColorShader())));
-		GameObject* minimap = GameObject::Instantiate(nullptr, frame, 0, 0, 1);
-		minimap->AddComponent(new Mesh(ResourceManager::Library().CreateCircle(275.0f / 2), Material<Texture2D>(Color::White(), ResourceManager::Library().DefaultTextureShader(), "Tex0", fbo->GetTexture(ColorBuffer::Color0))));
-		minimap->transform().LocalScale() = Maths::Vec3(0.95f);
+		GameObject* rect = GameObject::Instantiate("Crosshair", WindowWidth() / 2, WindowHeight() / 2, 0);
+		rect->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(15, 15), Material<Texture2D>(Color::Red(), ResourceManager::Library().DefaultColorShader())));
 
-		GameObject* compass = GameObject::Instantiate(minimap, frame, -100, 100, 2);
-		compass->transform().SetScale(0.2f);
-		compass->mesh().SetMaterial(0, Material<Texture2D>(Color::White(), ResourceManager::Library().DefaultTextureShader(), "Tex0", "res/compass.jpg"));
-		compass->SetTag("Compass");
+		SceneManager::Instance().CurrentScene().CurrentLayer().SetActiveCamera(canvas);
 
-		GameObject* ribbon = GameObject::Instantiate(WindowWidth() - 400, 12.5f, 0);
-		ribbon->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(800, 25), Material<Texture2D>(Color::White(), ResourceManager::Library().DefaultColorShader())));
-
-		GameObject* chatwindow = GameObject::Instantiate(200, 87.5, 0);
-		chatwindow->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(400, 175), Material<Texture2D>(Color(50, 50, 255, 100), ResourceManager::Library().DefaultColorShader())));
-		GameObject* chatbox = GameObject::Instantiate(chatwindow, chatwindow, 0, 0, 1);
-		chatbox->transform().LocalScale() = Maths::Vec3(0.96f, 0.92f, 1);
-		chatbox->mesh().Material(0).BaseColor() = Color(255, 255, 255, 100);
-
-		JSONwriter writer("Saves/Scene.scene");
-		writer.WriteObject(SceneManager::Instance().CurrentScene());
+		SceneManager::Instance().SaveScene(SceneManager::Instance().CurrentScene(), "Saves/Scene.scene");*/
 
 	}
 
@@ -76,7 +57,7 @@ public:
 
 		GameObject& camera = *SceneManager::Instance().CurrentScene()["World"].GetActiveCamera();
 		Transform& transform = SceneManager::Instance().CurrentScene()["World"].GetNamedGameObject("PlayerOrientation").transform();
-		Transform& compass = SceneManager::Instance().CurrentScene()["UI"].GetNamedGameObject("Compass").transform();
+
 		if (Input::KeyDown(Keycode::Down))
 		{
 			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(1, 0, 0), Space::Local);
@@ -88,14 +69,10 @@ public:
 		if (Input::KeyDown(Keycode::Right))
 		{
 			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
-			minimapCamera->transform().Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
-			compass.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 0, 1), Space::World);
 		}
 		if (Input::KeyDown(Keycode::Left))
 		{
 			transform.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
-			minimapCamera->transform().Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
-			compass.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 0, 1), Space::World);
 		}
 
 		Transform& player = SceneManager::Instance().CurrentScene().GetLayer("World").GetNamedGameObject("Player").transform();
@@ -116,15 +93,6 @@ public:
 
 	void Render() override
 	{
-		fbo->Clear();
-		for (GameObject* object : SceneManager::Instance().CurrentScene().GetLayer("World").GameObjects())
-		{
-			if (object->HasComponent<Transform>() && object->HasComponent<Mesh>())
-			{
-				RenderMesh(object->transform(), object->mesh(), minimapCamera);
-			}
-		}
-
 		Application::Render();
 
 		if (SceneManager::Instance().HasScene())

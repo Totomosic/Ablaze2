@@ -19,13 +19,13 @@ namespace Ablaze
 		Layer* m_Layer;
 
 		GameObject* m_Parent;
+		String m_Tag;
 
 	protected:
 		~GameObject();
-
-	public:
 		GameObject();
 
+	public:
 		GameObject* Parent() const;
 		bool HasParent() const;
 		Layer* GetLayer() const;
@@ -69,20 +69,22 @@ namespace Ablaze
 
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
+		void Serialize(JSONwriter& writer, const String& parentFile) const;
 
 		friend class Layer;
 		friend class Engine;
 
 	public:
-		static GameObject* Empty();
-		static GameObject* Instantiate();
-		static GameObject* Instantiate(float x, float y, float z);
-		static GameObject* Instantiate(GameObject* prefab);
-		static GameObject* Instantiate(GameObject* prefab, float x, float y, float z);
-		static GameObject* Instantiate(GameObject* prefab, GameObject* parent);
-		static GameObject* Instantiate(GameObject* prefab, GameObject* parent, float x, float y, float z);
+		static GameObject* Empty(const String& name);
+		static GameObject* Instantiate(const String& name);
+		static GameObject* Instantiate(const String& name, float x, float y, float z);
+		static GameObject* Instantiate(const String& name, GameObject* prefab);
+		static GameObject* Instantiate(const String& name, GameObject* prefab, float x, float y, float z);
+		static GameObject* Instantiate(const String& name, GameObject* prefab, GameObject* parent);
+		static GameObject* Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z);
 
 		static GameObject* Load(const String& gameobjectFile);
+		static GameObject* Deserialize(JSONnode& node);
 
 		static void Destroy(GameObject* gameObject);
 

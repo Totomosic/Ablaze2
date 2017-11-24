@@ -3,7 +3,8 @@
 namespace Ablaze
 {
 
-	AssetLoadInfo::AssetLoadInfo() : Object()
+	AssetLoadInfo::AssetLoadInfo() : Object(),
+		m_IdCount(0)
 	{
 
 	}
@@ -38,9 +39,15 @@ namespace Ablaze
 		return m_Identifiers;
 	}
 
+	int AssetLoadInfo::IdentifierCount() const
+	{
+		return m_IdCount;
+	}
+
 	void AssetLoadInfo::AddIdentifier(const String& name, const String& identifier)
 	{
 		m_Identifiers[name] = identifier;
+		m_IdCount++;
 	}
 
 	const String& AssetLoadInfo::GetIdentifier(const String& name) const
@@ -51,6 +58,16 @@ namespace Ablaze
 	String& AssetLoadInfo::GetIdentifier(const String& name)
 	{
 		return m_Identifiers.at(name);
+	}
+
+	const String& AssetLoadInfo::operator[](const String& name) const
+	{
+		return GetIdentifier(name);
+	}
+
+	String& AssetLoadInfo::operator[](const String& name)
+	{
+		return GetIdentifier(name);
 	}
 
 	bool AssetLoadInfo::operator==(const AssetLoadInfo& other) const
@@ -80,6 +97,19 @@ namespace Ablaze
 		}
 		writer.EndObject();
 		writer.EndObject();
+	}
+
+	AssetLoadInfo AssetLoadInfo::Deserialize(JSONnode& node)
+	{
+		AssetLoadInfo info;
+		info.m_AssetType = (AssetType)stoi(node["AssetType"].Data());
+		info.m_LoadType = (LoadType)stoi(node["LoadType"].Data());
+		JSONnode& identifiers = node["Identifiers"];
+		for (int i = 0; i < identifiers.ChildCount(); i++)
+		{
+			info.AddIdentifier(identifiers[i].Key(), identifiers[i].Data());
+		}
+		return info;
 	}
 
 }

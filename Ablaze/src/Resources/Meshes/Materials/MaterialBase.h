@@ -32,6 +32,9 @@ namespace Ablaze
 		virtual MaterialBase* Clone() const = 0;
 		virtual void Serialize(JSONwriter& writer) const;
 
+	public:
+		static MaterialBase* Deserialize(JSONnode& node);
+
 	};
 
 }

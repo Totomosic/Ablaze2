@@ -393,9 +393,6 @@
     <ClInclude Include="src\Utils\JSON\ISerializable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\JSON\JSONreader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\JSON\JSONwriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

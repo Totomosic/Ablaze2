@@ -9,7 +9,7 @@ namespace Ablaze
 {
 
 	GameObject::GameObject() : Object(),
-		m_Components(new ComponentSet(this)), m_Id(0), m_Layer(nullptr), m_Parent(nullptr)
+		m_Components(new ComponentSet(this)), m_Id(0), m_Layer(nullptr), m_Parent(nullptr), m_Tag("")
 	{
 		if (SceneManager::Instance().HasScene())
 		{
@@ -72,6 +72,7 @@ namespace Ablaze
 	void GameObject::SetTag(const String& tag)
 	{
 		m_Layer->TagGameObject(this, tag);
+		m_Tag = tag;
 	}
 	
 	const ComponentSet& GameObject::Components() const
@@ -102,30 +103,51 @@ namespace Ablaze
 	void GameObject::Serialize(JSONwriter& writer) const
 	{
 		writer.BeginObject();
+		writer.WriteAttribute("Tag", m_Tag);
 		writer.WriteObject("Components", *m_Components);
 		writer.EndObject();
 	}
 
-	GameObject* GameObject::Empty()
+	void GameObject::Serialize(JSONwriter& writer, const String& parentFile) const
 	{
-		return new GameObject;
+		writer.BeginObject();
+		writer.WriteAttribute("Tag", m_Tag);
+		writer.WriteAttribute("Parent", parentFile);
+		writer.WriteObject("Components", *m_Components);
+		writer.EndObject();
 	}
 
-	GameObject* GameObject::Instantiate()
+	GameObject* GameObject::Deserialize(JSONnode& node)
 	{
-		return Instantiate(0, 0, 0);
+		GameObject* obj = Empty(node["Tag"].Data());
+		delete obj->m_Components;		 
+		obj->m_Components = ComponentSet::Deserialize(node["Components"], obj);
+		return obj;
 	}
 
-	GameObject* GameObject::Instantiate(float x, float y, float z)
+	GameObject* GameObject::Empty(const String& name)
+	{
+		GameObject* obj = new GameObject;
+		obj->SetTag(name);
+		return obj;
+	}
+
+	GameObject* GameObject::Instantiate(const String& name)
+	{
+		return Instantiate(name, 0, 0, 0);
+	}
+
+	GameObject* GameObject::Instantiate(const String& name, float x, float y, float z)
 	{
 		GameObject* object = new GameObject;
 		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
+		object->SetTag(name);
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(GameObject* prefab)
+	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab)
 	{
-		GameObject* object = Instantiate();
+		GameObject* object = Instantiate(name);
 		if (prefab != nullptr)
 		{
 			for (auto pair : prefab->Components().GetComponentMap())
@@ -136,23 +158,23 @@ namespace Ablaze
 		return object;
 	}
 	
-	GameObject* GameObject::Instantiate(GameObject* prefab, float x, float y, float z)
+	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, float x, float y, float z)
 	{
-		GameObject* object = Instantiate(prefab);
+		GameObject* object = Instantiate(name, prefab);
 		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(GameObject* prefab, GameObject* parent)
+	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent)
 	{
-		GameObject* object = Instantiate(prefab);
+		GameObject* object = Instantiate(name, prefab);
 		object->SetParent(parent);
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(GameObject* prefab, GameObject* parent, float x, float y, float z)
+	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z)
 	{
-		GameObject* object = Instantiate(prefab, parent);
+		GameObject* object = Instantiate(name, prefab, parent);
 		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
 		return object;
 	}
@@ -160,12 +182,8 @@ namespace Ablaze
 	GameObject* GameObject::Load(const String& gameobjectFile)
 	{
 		JSONnode& node = *LoadJSONFile(gameobjectFile);
-		GameObject* object = Empty();
+		GameObject* object = Empty(node["Tag"].Data());
 
-		if (node.HasChild("Tag"))
-		{
-			object->SetTag(node["Tag"].Data());
-		}
 		if (node.HasChild("Components"))
 		{
 			JSONnode& components = node["Components"];

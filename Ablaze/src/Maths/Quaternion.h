@@ -55,6 +55,7 @@ namespace Ablaze
 			String ToString() const;
 			void Serialize(JSONwriter& writer) const;
 
+		public:
 			static Quaternion Log(const Quaternion& q);
 			static Quaternion Exp(const Quaternion& q);
 			static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t);
@@ -69,7 +70,10 @@ namespace Ablaze
 			static Quaternion FromEuler(float pitch, float yaw, float roll);
 			static Quaternion FromRotationMat(const Mat4& rotation);
 
+			static Quaternion Deserialize(JSONnode& node);
+
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
+
 		};
 
 	}

@@ -374,6 +374,16 @@ namespace Ablaze
 			}
 		}
 
+		Quaternion Quaternion::Deserialize(JSONnode& node)
+		{
+			Quaternion q;
+			q.x = stof(node["x"].Data());
+			q.y = stof(node["y"].Data());
+			q.z = stof(node["z"].Data());
+			q.w = stof(node["w"].Data());
+			return q;
+		}
+
 		std::ostream& operator<<(std::ostream& stream, const Quaternion& q)
 		{
 			stream << q.ToString();

@@ -1,4 +1,5 @@
 #include "Layer.h"
+#include "SceneManager.h"
 
 namespace Ablaze
 {
@@ -97,13 +98,15 @@ namespace Ablaze
 		String filename = writer.Filename();
 		size_t slash = filename.find_last_of('/');
 
+		std::unordered_map<GameObject*, String> mapping;
+		String baseFilepath = filename.substr(0, slash) + "/" + GetName() + "/";
 		String cameraFile = "";
 
+		int count = 0;
 		for (int i = 0; i < m_HighestID + 1; i++)
-		{
-			String fullFilename = filename.substr(0, slash) + "/" + GetName() + "/GameObject" + std::to_string(i) + ".gameobject";
-			JSONwriter gameObjectWriter(fullFilename);
-			m_GameObjects[i]->Serialize(gameObjectWriter);
+		{			
+			String fullFilename = baseFilepath + "GameObject" + std::to_string(i) + ".gameobject";
+			SerializeGameObject(JSONwriter(fullFilename), m_GameObjects[i], mapping, baseFilepath, count);
 			writer.WriteElement(fullFilename);
 			if (m_GameObjects[i] == m_Camera)
 			{
@@ -155,6 +158,71 @@ namespace Ablaze
 		for (uint i = 0; i < m_MaxGameObjects; i++)
 		{
 			m_GameObjects[i] = nullptr;
+		}
+	}
+
+	String Layer::SerializeGameObject(JSONwriter& writer, GameObject* object, std::unordered_map<GameObject*, String>& mapping, const String& basePath, int& count) const
+	{
+		if (mapping.find(object) != mapping.end())
+		{
+			return mapping[object];
+		}
+		if (object->HasParent())
+		{
+			String parent = basePath + "GameObject" + std::to_string(count) + ".gameobject";
+			parent = SerializeGameObject(*new JSONwriter(parent), object->Parent(), mapping, basePath, count);
+			object->Serialize(writer, parent);
+			mapping[object] = writer.Filename();
+			count++;
+			return writer.Filename();
+		}
+		else
+		{
+			object->Serialize(writer);
+			mapping[object] = writer.Filename();
+			count++;
+			return writer.Filename();
+		}
+		
+	}
+
+	Layer* Layer::Deserialize(JSONnode& node)
+	{
+		Layer& layer = SceneManager::Instance().CurrentScene().CreateLayer(node["Name"].Data());
+		SceneManager::Instance().CurrentScene().SetCurrentLayer(&layer);
+		std::unordered_map<String, GameObject*> mapping;
+		JSONnode& gameObjects = node["GameObjects"];
+		for (int i = 0; i < gameObjects.ChildCount(); i++)
+		{
+			JSONnode* object = LoadJSONFile(gameObjects[i].Data());
+			DeserializeGameObject(*object, mapping, gameObjects[i].Data());
+			delete object;
+		}
+		layer.SetActiveCamera(mapping[node["Camera"].Data()]);
+		return &layer;
+	}
+
+	GameObject* Layer::DeserializeGameObject(JSONnode& node, std::unordered_map<String, GameObject*>& mapping, const String& currentFile)
+	{
+		if (mapping.find(currentFile) != mapping.end())
+		{
+			return mapping[currentFile];
+		}
+		if (node.HasChild("Parent"))
+		{
+			JSONnode* parentNode = LoadJSONFile(node["Parent"].Data());
+			GameObject* parent = DeserializeGameObject(*parentNode, mapping, node["Parent"].Data());
+			delete parentNode;
+			GameObject* obj = GameObject::Deserialize(node);
+			obj->SetParent(parent);
+			mapping[currentFile] = obj;
+			return obj;
+		}
+		else
+		{
+			GameObject* obj = GameObject::Deserialize(node);
+			mapping[currentFile] = obj; 
+			return obj;
 		}
 	}
 

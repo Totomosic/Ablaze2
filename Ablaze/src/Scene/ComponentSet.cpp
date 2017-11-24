@@ -59,7 +59,7 @@ namespace Ablaze
 		writer.BeginObject();
 		for (auto pair : m_Components)
 		{
-			writer.WriteObject(pair.first.name(), *pair.second);
+			writer.WriteObject(CleanJSONString(pair.first.name()), *pair.second);
 		}
 		writer.EndObject();
 	}
@@ -78,6 +78,16 @@ namespace Ablaze
 	bool ComponentSet::HasComponentType(const std::type_index& type) const
 	{
 		return m_Components.find(type) != m_Components.end();
+	}
+
+	ComponentSet* ComponentSet::Deserialize(JSONnode& node, GameObject* owner)
+	{
+		ComponentSet* set = new ComponentSet(owner);
+		for (int i = 0; i < node.ChildCount(); i++)
+		{
+			set->AddComponent(Component::m_RegisteredComponents[node[i].Key()]->Deserialize(node[i]));
+		}
+		return set;
 	}
 
 }

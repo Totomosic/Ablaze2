@@ -100,10 +100,10 @@ namespace Ablaze
 		void Mat4::Serialize(JSONwriter& writer) const
 		{
 			writer.BeginObject();
-			writer.WriteObject("C0", GetColumn(0));
-			writer.WriteObject("C1", GetColumn(1));
-			writer.WriteObject("C2", GetColumn(2));
-			writer.WriteObject("C3", GetColumn(3));
+			writer.WriteObject("Col0", GetColumn(0));
+			writer.WriteObject("Col1", GetColumn(1));
+			writer.WriteObject("Col2", GetColumn(2));
+			writer.WriteObject("Col3", GetColumn(3));
 			writer.EndObject();
 		}
 
@@ -407,6 +407,31 @@ namespace Ablaze
 		{
 			Mat4 flipMatrix = Scale(1.f, 1.f, -1.f);
 			return flipMatrix * other * flipMatrix;
+		}
+
+		Mat4 Mat4::Deserialize(JSONnode& node)
+		{
+			Mat4 mat;
+			mat.values[0] = stof(node["Col0"]["x"].Data());
+			mat.values[1] = stof(node["Col0"]["y"].Data());
+			mat.values[2] = stof(node["Col0"]["z"].Data());
+			mat.values[3] = stof(node["Col0"]["w"].Data());
+
+			mat.values[4] = stof(node["Col1"]["x"].Data());
+			mat.values[5] = stof(node["Col1"]["y"].Data());
+			mat.values[6] = stof(node["Col1"]["z"].Data());
+			mat.values[7] = stof(node["Col1"]["w"].Data());
+
+			mat.values[8] = stof(node["Col2"]["x"].Data());
+			mat.values[9] = stof(node["Col2"]["y"].Data());
+			mat.values[10] = stof(node["Col2"]["z"].Data());
+			mat.values[11] = stof(node["Col2"]["w"].Data());
+
+			mat.values[12] = stof(node["Col3"]["x"].Data());
+			mat.values[13] = stof(node["Col3"]["y"].Data());
+			mat.values[14] = stof(node["Col3"]["z"].Data());
+			mat.values[15] = stof(node["Col3"]["w"].Data());
+			return mat;
 		}
 
 		std::ostream& operator<<(std::ostream& stream, const Mat4& matrix)

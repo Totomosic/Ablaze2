@@ -3,6 +3,8 @@
 #include "Graphics\Graphics.h"
 #include "Scene\Systems\Systems.h"
 
+#include "Scene\Components\__Components__.h"
+
 namespace Ablaze
 {
 
@@ -24,11 +26,18 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLFW");
 		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
+
+		Component::Register<Transform>();
+		Component::Register<Mesh>();
+		Component::Register<Light>();
+		Component::Register<Camera>();
+
 		double time = Time::CurrentTime();
 		Init();
 		AB_INFO("Init took: " + std::to_string(Time::CurrentTime() - time) + " seconds");
 		Time::Reset();
 		Time::CreateNewTimer(1.0, METHOD_0(Application::Tick));
+
 		Run();
 	}
 

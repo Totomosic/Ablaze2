@@ -24,6 +24,8 @@ namespace Ablaze
 
 		void LoadScene(int index);
 		void LoadScene(Scene* scene);
+		Scene& LoadScene(const String& sceneFile);
+		void SaveScene(Scene& scene, const String& file);
 
 		void AddScene(Scene* scene);
 		void RemoveScene(Scene* scene);

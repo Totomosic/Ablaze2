@@ -37,6 +37,7 @@ namespace Ablaze
 			String ToString() const;
 			void Serialize(JSONwriter& writer) const;
 			
+		public:
 			static Mat4 FromRows(const Vec4& r1, const Vec4& r2, const Vec4& r3, const Vec4& r4);
 			static Mat4 FromCols(const Vec4& c1, const Vec4& c2, const Vec4& c3, const Vec4& c4);
 
@@ -53,6 +54,8 @@ namespace Ablaze
 			static Mat4 InvertX(const Maths::Mat4& other);
 			static Mat4 InvertY(const Maths::Mat4& other);
 			static Mat4 InvertZ(const Maths::Mat4& other);
+
+			static Mat4 Deserialize(JSONnode& node);
 
 			friend Mat4 operator*(const Mat4& left, const Mat4& right);
 			friend Vec4 operator*(const Mat4& left, const Vec4& right);

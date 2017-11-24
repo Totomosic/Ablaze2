@@ -161,4 +161,17 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
+	Scene* Scene::Deserialize(JSONnode& node)
+	{
+		Scene& scene = SceneManager::Instance().CreateScene();
+		JSONnode& layers = node["Layers"];
+		for (int i = 0; i < layers.ChildCount(); i++)
+		{
+			JSONnode* layer = LoadJSONFile(layers[i].Data());
+			Layer::Deserialize(*layer);
+			delete layer;
+		}
+		return &scene;
+	}
+
 }

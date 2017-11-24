@@ -22,6 +22,9 @@ namespace Ablaze
 
 		void Serialize(JSONwriter& writer) const;
 
+	public:
+		static RenderState Deserialize(JSONnode& node);
+
 	};
 
 }

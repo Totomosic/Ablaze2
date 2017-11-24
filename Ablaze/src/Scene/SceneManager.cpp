@@ -32,12 +32,25 @@ namespace Ablaze
 	void SceneManager::LoadScene(int index)
 	{
 		m_Current = m_Scenes[index];
-		// Loading logic
 	}
 
 	void SceneManager::LoadScene(Scene* scene)
 	{
 		m_Current = scene;
+	}
+
+	Scene& SceneManager::LoadScene(const String& sceneFile)
+	{
+		JSONnode* scene = LoadJSONFile(sceneFile);
+		Scene* s = Scene::Deserialize(*scene);
+		AddScene(s);
+		delete scene;
+		return *s;
+	}
+
+	void SceneManager::SaveScene(Scene& scene, const String& file)
+	{
+		scene.Serialize(JSONwriter(file));
 	}
 
 	void SceneManager::AddScene(Scene* scene)

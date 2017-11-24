@@ -58,9 +58,16 @@ namespace Ablaze
 			}
 			else if (source[index] == '[')
 			{
-				JSONnode* node = new JSONnode;
-				current->AddChild(node);
-				current = node;
+				if (source[index + 1] != ']')
+				{
+					JSONnode* node = new JSONnode;
+					current->AddChild(node);
+					current = node;
+				}
+				else
+				{
+					index++;
+				}
 			}
 			else if (source[index] == ']')
 			{

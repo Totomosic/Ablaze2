@@ -6,6 +6,7 @@ namespace Ablaze
 {
 
 	class JSONwriter;
+	class JSONnode;
 
 	struct AB_API Color
 	{
@@ -41,6 +42,7 @@ namespace Ablaze
 	public:
 		static Color FromFloats(float r, float g, float b, float a = 1.0f);
 		static Color FromHSB(float hue, float saturation, float brightness); // All values range from 0 - 1
+		static Color Deserialize(JSONnode& node);
 
 		static Color White();
 		static Color Black();

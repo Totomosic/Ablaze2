@@ -5,6 +5,7 @@ namespace Ablaze
 {
 
 	class JSONwriter;
+	class JSONnode;
 
 	namespace Maths
 	{
@@ -59,6 +60,8 @@ namespace Ablaze
 			static float Distance(const Vec2& a, const Vec2& b);
 			static Vec2 Right();
 			static Vec2 Up();
+
+			static Vec2 Deserialize(JSONnode& node);
 
 		};
 	}

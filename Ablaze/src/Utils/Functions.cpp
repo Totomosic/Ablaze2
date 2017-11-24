@@ -85,6 +85,20 @@ namespace Ablaze
 		return s;
 	}
 
+	String CleanJSONString(const String& str)
+	{
+		std::stringstream ss;
+		for (auto chr : str)
+		{
+			if (chr != '\n' && chr != ' ' && chr != '\r' && chr != '\t' && chr != ':')
+			{
+				ss << chr;
+			}
+		}
+		String s = ss.str();
+		return s;
+	}
+
 	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, int* outCompCount, int desiredCompCount, bool flipImage)
 	{
 		int width;

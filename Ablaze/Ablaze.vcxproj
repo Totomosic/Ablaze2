@@ -258,7 +258,6 @@
     <ClInclude Include="src\Utils\JSON\ISerializable.h" />
     <ClInclude Include="src\Utils\JSON\JSONloader.h" />
     <ClInclude Include="src\Utils\JSON\JSONnode.h" />
-    <ClInclude Include="src\Utils\JSON\JSONreader.h" />
     <ClInclude Include="src\Utils\JSON\JSONvalue.h" />
     <ClInclude Include="src\Utils\JSON\JSONwriter.h" />
     <ClInclude Include="src\Utils\JSON\__JSON__.h" />

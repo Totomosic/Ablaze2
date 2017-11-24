@@ -33,6 +33,7 @@ namespace Ablaze
 		AssetType m_AssetType;
 		LoadType m_LoadType;
 		std::unordered_map<String, String> m_Identifiers;
+		int m_IdCount;
 
 	public:
 		AssetLoadInfo();
@@ -43,10 +44,13 @@ namespace Ablaze
 		LoadType& LoadMethod();
 		const std::unordered_map<String, String>& Identifiers() const;
 		std::unordered_map<String, String>& Identifiers();
+		int IdentifierCount() const;
 
 		void AddIdentifier(const String& name, const String& identifier);
 		const String& GetIdentifier(const String& name) const;
 		String& GetIdentifier(const String& name);
+		const String& operator[](const String& name) const;
+		String& operator[](const String& name);
 
 		template<typename T>
 		void AddIdentifier(const String& name, T identifier)
@@ -65,6 +69,9 @@ namespace Ablaze
 
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
+
+	public:
+		static AssetLoadInfo Deserialize(JSONnode& node);
 
 	};
 

@@ -45,6 +45,9 @@ namespace Ablaze
 
 		friend class SceneManager;
 
+	public:
+		static Scene* Deserialize(JSONnode& node);
+
 	};
 
 }

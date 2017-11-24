@@ -58,7 +58,7 @@ namespace Ablaze
 		void Serialize(JSONwriter& writer) const override
 		{
 			writer.BeginObject();
-			writer.WriteAttribute("Type", typeid(T).name());
+			writer.WriteAttribute("Type", CleanJSONString(typeid(T).name()));
 			writer.WriteObject("Color", m_BaseColor);
 			writer.WriteObject("RenderSettings", m_RenderState);
 			writer.WriteObject("Shader", m_Shader);

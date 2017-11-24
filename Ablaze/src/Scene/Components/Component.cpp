@@ -3,6 +3,8 @@
 namespace Ablaze
 {
 
+	std::unordered_map<String, Component*> Component::m_RegisteredComponents = std::unordered_map<String, Component*>();
+
 	Component::Component() : Object(),
 		m_GameObject(nullptr), m_Enabled(true)
 	{
@@ -43,6 +45,11 @@ namespace Ablaze
 	{
 		writer.BeginObject();
 		writer.EndObject();
+	}
+
+	Component* Component::Deserialize(JSONnode& node) const
+	{
+		return nullptr;
 	}
 
 	void Component::Start()

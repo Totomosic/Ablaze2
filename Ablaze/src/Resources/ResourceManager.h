@@ -54,14 +54,40 @@ namespace Ablaze
 			{
 				return (Resource<T>)LoadFont(filename, 16);
 			}
-			AB_ERROR("Unable to load type");
+			else if (typeid(T) == typeid(Shader))
+			{
+				return (Resource<T>)LoadShader(filename);
+			}
+			AB_ERROR("Unable to load resource");
+			return Resource<T>(nullptr);
+		}
+
+		template<typename T>
+		Resource<T> Load(const AssetLoadInfo& loadInfo)
+		{
+			if (typeid(T) == typeid(Texture2D))
+			{
+				return (Resource<T>)LoadTexture2DAsset(loadInfo);
+			}
+			else if (typeid(T) == typeid(Model))
+			{
+				return (Resource<T>)LoadModelAsset(loadInfo);
+			}
+			else if (typeid(T) == typeid(Font))
+			{
+				return (Resource<T>)LoadFontAsset(loadInfo);
+			}
+			else if (typeid(T) == typeid(Shader))
+			{
+				return (Resource<T>)LoadShaderAsset(loadInfo);
+			}
+			AB_ERROR("Unable to load resource");
 			return Resource<T>(nullptr);
 		}
 
 		Resource<Texture2D> LoadTexture2D(const String& filename, MipmapMode mipmap = MipmapMode::Enabled);
 		Resource<Font> LoadFont(const String& filename, float size);
 
-		Resource<ShaderProgram> LoadShaderProgram(ShaderType type, const String& filename);
 		Resource<Shader> LoadShader(const String& vFile, const String& fFile);
 		Resource<Shader> LoadShader(const String& shaderFile);
 		Resource<Shader> DefaultColorShader();
@@ -73,7 +99,6 @@ namespace Ablaze
 		Resource<Model> LoadOBJModel(const String& objFile);
 
 		Resource<Texture2D> CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap = MipmapMode::Disabled);
-		Resource<ShaderProgram> CreateShaderProgram(ShaderType type, const String& shaderSource);
 
 		Resource<Model> CreateRectangle(float width, float height, const Color& color = Color::White());
 		Resource<Model> CreateCircle(float radius, const Color& color = Color::White());
@@ -96,13 +121,15 @@ namespace Ablaze
 		AssetPtr& GetAsset(const AssetLoadInfo& info);
 		bool AssetExists(const AssetLoadInfo& info);
 
-		Texture2D* CreateNewTexture2D(const String& filename, MipmapMode mipmap);
-		Font* CreateNewFont(const String& filename, float size);
-		Shader* CreateNewShader(const String& vFile, const String& fFile);
-		Shader* CreateNewShader(const String& shaderFile);
-		ShaderProgram* CreateNewShaderProgram(ShaderType type, const String& fileOrSource, bool isFile);
-		Model* CreateNewOBJModel(const String& filename);
+		Texture2D* CreateNewTexture2D(const AssetLoadInfo& info);
+		Font* CreateNewFont(const AssetLoadInfo& info);
+		Shader* CreateNewShader(const AssetLoadInfo& info);
+		Model* CreateNewOBJModel(const AssetLoadInfo& info);
 
+		Resource<Model> LoadModelAsset(const AssetLoadInfo& info);
+		Resource<Texture2D> LoadTexture2DAsset(const AssetLoadInfo& info);
+		Resource<Shader> LoadShaderAsset(const AssetLoadInfo& info);
+		Resource<Font> LoadFontAsset(const AssetLoadInfo& info);
 
 	};
 

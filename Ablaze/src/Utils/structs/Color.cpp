@@ -69,7 +69,7 @@ namespace Ablaze
 
 	String Color::ToString() const
 	{
-		return "Color(" + std::to_string(r) + ", " + std::to_string(g) + ", " + std::to_string(b) + ", " + std::to_string(a) + ")";
+		return "Color(" + std::to_string(r) + ";" + std::to_string(g) + ";" + std::to_string(b) + ";" + std::to_string(a) + ")";
 	}
 
 	void Color::Serialize(JSONwriter& writer) const
@@ -146,6 +146,16 @@ namespace Ablaze
 			bd = x;
 		}
 		return Color((rd + m) * 255, (gd + m) * 255, (bd + m) * 255, 255);
+	}
+
+	Color Color::Deserialize(JSONnode& node)
+	{
+		Color c;
+		c.r = stof(node["r"].Data());
+		c.g = stof(node["g"].Data());
+		c.b = stof(node["b"].Data());
+		c.a = stof(node["a"].Data());
+		return c;
 	}
 
 	Color Color::White()

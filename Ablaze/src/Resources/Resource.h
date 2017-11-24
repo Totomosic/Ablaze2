@@ -59,7 +59,8 @@ namespace Ablaze
 
 		void Serialize(JSONwriter& writer) const
 		{
-			m_ResourcePtr->Serialize(writer);
+			if (m_ResourcePtr != nullptr)
+				m_ResourcePtr->Serialize(writer);
 		}
 
 	};

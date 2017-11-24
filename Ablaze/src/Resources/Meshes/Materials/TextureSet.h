@@ -87,6 +87,18 @@ namespace Ablaze
 			writer.EndObject();
 		}
 
+	public:
+		static TextureSet<T> Deserialize(JSONnode& node)
+		{
+			TextureSet<T> textures;
+			JSONnode& texturesNode = node["Textures"];
+			for (int i = 0; i < texturesNode.ChildCount(); i++)
+			{
+				textures.AddTexture(texturesNode[i]["Sampler"].Data(), ResourceManager::Library().Load<T>(AssetLoadInfo::Deserialize(texturesNode[i]["Texture"]["Info"])));
+			}
+			return textures;
+		}
+
 	};
 
 }

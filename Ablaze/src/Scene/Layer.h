@@ -61,6 +61,14 @@ namespace Ablaze
 		uint GetNextID();
 		void Init();
 
+		String SerializeGameObject(JSONwriter& writer, GameObject* object, std::unordered_map<GameObject*, String>& mapping, const String& basePath, int& count) const;
+
+	public:
+		static Layer* Deserialize(JSONnode& node);
+		
+	private:
+		static GameObject* DeserializeGameObject(JSONnode& node, std::unordered_map<String, GameObject*>& mapping, const String& currentFile);
+
 	};
 
 }

@@ -1,7 +1,0 @@
-{
-    "Tag" : "PlayerOrientation",
-    "Parent" : "player.gameobject",
-    "Components" : {
-        "Transform" : {}
-    }
-}
