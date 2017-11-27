@@ -208,14 +208,5 @@ namespace Ablaze
 			return Maths::Vec3(0, 1, 0);
 		}
 
-		Vec3 Vec3::Deserialize(JSONnode& node)
-		{
-			Vec3 vec;
-			vec.x = stof(node["x"].Data());
-			vec.y = stof(node["y"].Data());
-			vec.z = stof(node["z"].Data());
-			return vec;
-		}
-
 	}
 }

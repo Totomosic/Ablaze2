@@ -117,8 +117,9 @@ namespace Ablaze
 		{
 			// This was the first one added
 			DetermineRenderCount();
-			DetermineVertexCount();
+			DetermineVertexCount(vertexBuffer);
 		}
+		TestVertexCount(vertexBuffer);
 	}
 
 	void VertexArray::RemoveVertexBuffer(int index)
@@ -166,7 +167,7 @@ namespace Ablaze
 
 	String VertexArray::ToString() const
 	{
-		return "Vertex Array";
+		return "VertexArray";
 	}
 
 	const VertexArray* VertexArray::CurrentlyBound()
@@ -174,16 +175,9 @@ namespace Ablaze
 		return s_CurrentlyBound;
 	}
 
-	void VertexArray::DetermineVertexCount()
+	void VertexArray::DetermineVertexCount(VertexBuffer* buffer)
 	{
-		if (HasVertexBuffer())
-		{
-			m_VertexCount = GetVertexBuffer(0)->GetSize() / sizeof(GLfloat) / GetVertexBuffer(0)->GetLayout().CountOf(Attribute::Position);
-		}
-		else
-		{
-			AB_WARN("Vertex Array has no Vertex Buffers attached, ID: " + std::to_string(m_Id));
-		}
+		m_VertexCount = buffer->GetSize() / buffer->GetLayout().GetStride();
 	}
 
 	void VertexArray::DetermineRenderCount()
@@ -192,9 +186,14 @@ namespace Ablaze
 		{
 			m_RenderCount = m_IndexBuffer->GetSize() / sizeof(GLuint);
 		}
-		else
+	}
+
+	void VertexArray::TestVertexCount(VertexBuffer* buffer)
+	{
+		int vertexCount = buffer->GetSize() / buffer->GetLayout().GetStride();
+		if (vertexCount != m_VertexCount)
 		{
-			//AB_WARN("Vertex Array has no Index buffer bound, ID: " + std::to_string(m_Id));
+			AB_WARN("Buffer added that does not match vertex count: " + std::to_string(m_VertexCount));
 		}
 	}
 

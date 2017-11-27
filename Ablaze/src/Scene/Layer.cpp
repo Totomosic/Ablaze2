@@ -72,7 +72,7 @@ namespace Ablaze
 
 	const GameObject& Layer::GetNamedGameObject(const String& tag, int index) const
 	{
-		return *m_NamedEntities.at(tag)[index];
+		return *m_NamedGameObjects.at(tag)[index];
 	}
 
 	GameObject& Layer::GetNamedGameObject(const String& tag, int index)
@@ -82,7 +82,7 @@ namespace Ablaze
 			AB_ERROR("GameObject with tag: " + tag + " does not exist");
 			return *(GameObject*)nullptr;
 		}
-		return *m_NamedEntities.at(tag)[index];
+		return *m_NamedGameObjects.at(tag)[index];
 	}
 
 	String Layer::ToString() const
@@ -105,12 +105,15 @@ namespace Ablaze
 		int count = 0;
 		for (int i = 0; i < m_HighestID + 1; i++)
 		{			
-			String fullFilename = baseFilepath + "GameObject" + std::to_string(i) + ".gameobject";
-			SerializeGameObject(JSONwriter(fullFilename), m_GameObjects[i], mapping, baseFilepath, count);
-			writer.WriteElement(fullFilename);
-			if (m_GameObjects[i] == m_Camera)
+			if (m_GameObjects[i] != nullptr)
 			{
-				cameraFile = fullFilename;
+				String fullFilename = baseFilepath + "GameObject" + std::to_string(i) + ".gameobject";
+				SerializeGameObject(JSONwriter(fullFilename), m_GameObjects[i], mapping, baseFilepath, count);
+				writer.WriteElement(fullFilename);
+				if (m_GameObjects[i] == m_Camera)
+				{
+					cameraFile = fullFilename;
+				}
 			}
 		}
 		writer.EndArray();
@@ -122,18 +125,18 @@ namespace Ablaze
 	{
 		if (TagExists(tag))
 		{
-			m_NamedEntities[tag].push_back(entity);
+			m_NamedGameObjects[tag].push_back(entity);
 		}
 		else
 		{
-			m_NamedEntities[tag] = std::vector<GameObject*>();
-			m_NamedEntities[tag].push_back(entity);
+			m_NamedGameObjects[tag] = std::vector<GameObject*>();
+			m_NamedGameObjects[tag].push_back(entity);
 		}
 	}
 
 	bool Layer::TagExists(const String& tag)
 	{
-		return m_NamedEntities.find(tag) != m_NamedEntities.end();
+		return m_NamedGameObjects.find(tag) != m_NamedGameObjects.end();
 	}
 
 	uint Layer::GetNextID()
@@ -186,44 +189,15 @@ namespace Ablaze
 		
 	}
 
-	Layer* Layer::Deserialize(JSONnode& node)
+	void Layer::DestroyGameObject(GameObject* object)
 	{
-		Layer& layer = SceneManager::Instance().CurrentScene().CreateLayer(node["Name"].Data());
-		SceneManager::Instance().CurrentScene().SetCurrentLayer(&layer);
-		std::unordered_map<String, GameObject*> mapping;
-		JSONnode& gameObjects = node["GameObjects"];
-		for (int i = 0; i < gameObjects.ChildCount(); i++)
+		if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
 		{
-			JSONnode* object = LoadJSONFile(gameObjects[i].Data());
-			DeserializeGameObject(*object, mapping, gameObjects[i].Data());
-			delete object;
+			auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
+			m_NamedGameObjects[object->m_Tag].erase(it);
 		}
-		layer.SetActiveCamera(mapping[node["Camera"].Data()]);
-		return &layer;
-	}
-
-	GameObject* Layer::DeserializeGameObject(JSONnode& node, std::unordered_map<String, GameObject*>& mapping, const String& currentFile)
-	{
-		if (mapping.find(currentFile) != mapping.end())
-		{
-			return mapping[currentFile];
-		}
-		if (node.HasChild("Parent"))
-		{
-			JSONnode* parentNode = LoadJSONFile(node["Parent"].Data());
-			GameObject* parent = DeserializeGameObject(*parentNode, mapping, node["Parent"].Data());
-			delete parentNode;
-			GameObject* obj = GameObject::Deserialize(node);
-			obj->SetParent(parent);
-			mapping[currentFile] = obj;
-			return obj;
-		}
-		else
-		{
-			GameObject* obj = GameObject::Deserialize(node);
-			mapping[currentFile] = obj; 
-			return obj;
-		}
+		delete object;
+		object = nullptr;
 	}
 
 }

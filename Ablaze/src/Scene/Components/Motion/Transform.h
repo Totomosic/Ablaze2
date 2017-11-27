@@ -55,7 +55,6 @@ namespace Ablaze
 
 		Component* Clone() const override;
 		void Serialize(JSONwriter& writer) const override;
-		Component* Deserialize(JSONnode& node) const override;
 
 		Transform operator+(const Transform& other) const;
 

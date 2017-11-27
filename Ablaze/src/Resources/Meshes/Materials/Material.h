@@ -6,7 +6,7 @@
 namespace Ablaze
 {
 
-	template<typename T>
+	template<typename T = Texture2D>
 	class AB_API Material : public MaterialBase
 	{
 	private:
@@ -31,7 +31,7 @@ namespace Ablaze
 
 		Material(const Color& color, const Resource<Shader>& shader, const String& sampler, const String& textureFilename) : Material(color, shader, RenderState())
 		{
-			m_Textures.AddTexture(sampler, ResourceManager::Library().Load<T>(textureFilename));
+			m_Textures.AddTexture(sampler, ResourceManager::Instance().Load<T>(textureFilename));
 		}
 
 		Material(const Color& color, const Resource<Shader>& shader) : Material(color, shader, RenderState())
@@ -46,6 +46,7 @@ namespace Ablaze
 		{
 			m_Shader->Bind();
 			m_RenderState.Apply();
+			m_Uniforms.UploadAll(m_Shader);
 			m_Textures.BindAll(m_Shader);
 			m_Shader->Unbind();
 		}

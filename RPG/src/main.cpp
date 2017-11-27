@@ -15,18 +15,16 @@ public:
 		Graphics::Initialise(window);
 		Graphics::EnableCull();
 
-		SceneManager::Instance().LoadScene("Saves/Scene.scene");
-
-		/*SceneManager::Instance().CreateScene();
+		SceneManager::Instance().CreateScene();
 		SceneManager::Instance().CurrentScene().CreateLayer("World");
 		SceneManager::Instance().CurrentScene().SetCurrentLayer(0);
 
 		GameObject* player = GameObject::Instantiate("Player", 0, 0, 0);
-		player->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(1, 1, 1), Material<Texture2D>(Color::White(), ResourceManager::Library().LightingTextureShader(), "Tex0", "res/canyonTerrain.png")));
+		player->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(1, 1, 1), Material<>(Color::White(), ResourceManager::Instance().LightingTextureShader(), "Tex0", "res/canyonTerrain.png")));
 		GameObject* playerOrientation = GameObject::Instantiate("PlayerOrientation", nullptr, player, 0, 0, 0);
 
 		GameObject* terrain = GameObject::Instantiate("Terrain", 0, -0.5f, 0);
-		terrain->AddComponent(new Mesh(ResourceManager::Library().CreatePlane(15, 15), Material<Texture2D>(Color::Green(), ResourceManager::Library().LightingColorShader())));
+		terrain->AddComponent(new Mesh(ResourceManager::Instance().CreatePlane(15, 15), Material<>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
 
 		GameObject* camera = GameObject::Instantiate("Camera", nullptr, playerOrientation, 0, 0, 10);
 		camera->AddComponent<Camera>();
@@ -43,11 +41,9 @@ public:
 		canvas->AddComponent(new Camera(Projection::Orthographic));
 
 		GameObject* rect = GameObject::Instantiate("Crosshair", WindowWidth() / 2, WindowHeight() / 2, 0);
-		rect->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(15, 15), Material<Texture2D>(Color::Red(), ResourceManager::Library().DefaultColorShader())));
+		rect->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(15, 15), Material<>(Color::Red(), ResourceManager::Instance().DefaultColorShader())));
 
 		SceneManager::Instance().CurrentScene().CurrentLayer().SetActiveCamera(canvas);
-
-		SceneManager::Instance().SaveScene(SceneManager::Instance().CurrentScene(), "Saves/Scene.scene");*/
 
 	}
 

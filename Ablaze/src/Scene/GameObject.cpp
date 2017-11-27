@@ -15,7 +15,7 @@ namespace Ablaze
 		{
 			if (SceneManager::Instance().CurrentScene().HasLayer())
 			{
-				SceneManager::Instance().CurrentScene().AddGameObject(this);
+				SceneManager::Instance().CurrentScene().CurrentLayer().AddGameObject(this);
 			}
 			else
 			{
@@ -31,7 +31,10 @@ namespace Ablaze
 	GameObject::~GameObject()
 	{
 		delete m_Components;
-		m_Layer->m_GameObjects[m_Id] = nullptr;
+		if (m_Layer != nullptr)
+		{
+			m_Layer->m_GameObjects[m_Id] = nullptr;
+		}
 	}
 
 	GameObject* GameObject::Parent() const
@@ -66,13 +69,23 @@ namespace Ablaze
 
 	void GameObject::Destroy()
 	{
-		Destroy(this);
+		if (m_Layer != nullptr)
+		{
+			m_Layer->DestroyGameObject(this);
+		}
+		else
+		{
+			delete this;
+		}
 	}
 
 	void GameObject::SetTag(const String& tag)
 	{
-		m_Layer->TagGameObject(this, tag);
-		m_Tag = tag;
+		if (m_Layer != nullptr)
+		{
+			m_Layer->TagGameObject(this, tag);
+			m_Tag = tag;
+		}
 	}
 	
 	const ComponentSet& GameObject::Components() const
@@ -117,14 +130,6 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
-	GameObject* GameObject::Deserialize(JSONnode& node)
-	{
-		GameObject* obj = Empty(node["Tag"].Data());
-		delete obj->m_Components;		 
-		obj->m_Components = ComponentSet::Deserialize(node["Components"], obj);
-		return obj;
-	}
-
 	GameObject* GameObject::Empty(const String& name)
 	{
 		GameObject* obj = new GameObject;
@@ -165,48 +170,12 @@ namespace Ablaze
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent)
+	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z)
 	{
 		GameObject* object = Instantiate(name, prefab);
 		object->SetParent(parent);
-		return object;
-	}
-
-	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z)
-	{
-		GameObject* object = Instantiate(name, prefab, parent);
 		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
 		return object;
-	}
-
-	GameObject* GameObject::Load(const String& gameobjectFile)
-	{
-		JSONnode& node = *LoadJSONFile(gameobjectFile);
-		GameObject* object = Empty(node["Tag"].Data());
-
-		if (node.HasChild("Components"))
-		{
-			JSONnode& components = node["Components"];
-			if (components.HasChild("Transform"))
-			{
-				LoadTransform(object, components["Transform"]);
-			}
-			if (components.HasChild("Mesh"))
-			{
-				LoadMesh(object, components["Mesh"]);
-			}
-		}
-		if (node.HasChild("Parent"))
-		{
-			object->SetParent(Load(node["Parent"].Data()));
-		}
-		return object;
-	}
-
-	void GameObject::Destroy(GameObject* gameObject)
-	{
-		delete gameObject;
-		gameObject = nullptr;
 	}
 
 	std::vector<GameObject*> GameObject::GetAll()
@@ -251,56 +220,6 @@ namespace Ablaze
 			}
 		}
 		return objects;
-	}
-
-	void GameObject::LoadTransform(GameObject* object, JSONnode& transformNode)
-	{
-		Transform* transform = new Transform;
-		if (transformNode.HasChild("Position"))
-		{
-			JSONnode& position = transformNode["Position"];
-			transform->LocalPosition().x = stof(position["x"].Data());
-			transform->LocalPosition().y = stof(position["y"].Data());
-			transform->LocalPosition().z = stof(position["z"].Data());
-		}
-		if (transformNode.HasChild("Rotation"))
-		{
-			JSONnode& rotation = transformNode["Rotation"];
-			transform->LocalRotation().x = stof(rotation["x"].Data());
-			transform->LocalRotation().y = stof(rotation["y"].Data());
-			transform->LocalRotation().z = stof(rotation["z"].Data());
-			transform->LocalRotation().w = stof(rotation["w"].Data());
-		}
-		if (transformNode.HasChild("Scale"))
-		{
-			JSONnode& scale = transformNode["Scale"];
-			transform->LocalScale().x = stof(scale["x"].Data());
-			transform->LocalScale().y = stof(scale["y"].Data());
-			transform->LocalScale().z = stof(scale["z"].Data());
-		}
-		object->AddComponent(transform);
-	}
-
-	void GameObject::LoadMesh(GameObject* object, JSONnode& meshNode)
-	{
-		Mesh* mesh = new Mesh;
-		if (meshNode.HasChild("Model"))
-		{
-			if (meshNode.HasChild("Material"))
-			{
-				JSONnode& materialNode = meshNode["Material"];
-				if (!materialNode.HasChild("Type") || materialNode["Type"].Data() == "Texture2D")
-				{
-					LoadMaterial<Texture2D>(mesh, meshNode);
-				}
-			}
-			else
-			{
-				AB_WARN("No Material tag found with model tag");
-			}
-		}
-
-		object->AddComponent(mesh);
 	}
 
 }

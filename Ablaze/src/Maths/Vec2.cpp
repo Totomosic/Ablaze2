@@ -177,13 +177,5 @@ namespace Ablaze
 			return Vec2(0, 1);
 		}
 
-		Vec2 Vec2::Deserialize(JSONnode& node)
-		{
-			Vec2 vec;
-			vec.x = stof(node["x"].Data());
-			vec.y = stof(node["y"].Data());
-			return vec;
-		}
-
 	}
 }

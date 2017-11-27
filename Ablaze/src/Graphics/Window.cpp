@@ -1,6 +1,6 @@
 #include "Window.h"
 #include "Application\Input\Input.h"
-#include "Graphics.h"
+#include "Rendering\Graphics.h"
 
 namespace Ablaze
 {

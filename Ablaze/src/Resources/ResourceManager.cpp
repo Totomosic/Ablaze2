@@ -11,7 +11,7 @@ namespace Ablaze
 		
 	}
 
-	ResourceManager& ResourceManager::Library()
+	ResourceManager& ResourceManager::Instance()
 	{
 		static ResourceManager* instance = new ResourceManager();
 		return *instance;
@@ -243,7 +243,7 @@ namespace Ablaze
 		info.Type() = AssetType::Grid;
 		info.LoadMethod() = LoadType::Generated;
 		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Depth", width);
+		info.AddIdentifier("Depth", depth);
 		info.AddIdentifier("xVertices", xVertices);
 		info.AddIdentifier("zVertices", zVertices);
 		info.AddIdentifier("Color", color.ToString());

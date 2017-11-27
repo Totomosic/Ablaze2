@@ -6,5 +6,7 @@
 
 #include "ComponentSet.h"
 #include "GameObject.h"
+#include "Layer.h"
+#include "LayerMask.h"
 #include "Scene.h"
 #include "SceneManager.h"

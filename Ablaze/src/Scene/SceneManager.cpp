@@ -39,15 +39,6 @@ namespace Ablaze
 		m_Current = scene;
 	}
 
-	Scene& SceneManager::LoadScene(const String& sceneFile)
-	{
-		JSONnode* scene = LoadJSONFile(sceneFile);
-		Scene* s = Scene::Deserialize(*scene);
-		AddScene(s);
-		delete scene;
-		return *s;
-	}
-
 	void SceneManager::SaveScene(Scene& scene, const String& file)
 	{
 		scene.Serialize(JSONwriter(file));

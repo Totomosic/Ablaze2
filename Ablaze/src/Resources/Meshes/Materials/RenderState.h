@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 
 namespace Ablaze
 {
@@ -21,9 +21,6 @@ namespace Ablaze
 		void operator()() const;
 
 		void Serialize(JSONwriter& writer) const;
-
-	public:
-		static RenderState Deserialize(JSONnode& node);
 
 	};
 

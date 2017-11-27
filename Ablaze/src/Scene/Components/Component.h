@@ -31,7 +31,6 @@ namespace Ablaze
 
 		virtual Component* Clone() const = 0;
 		virtual void Serialize(JSONwriter& writer) const;
-		virtual Component* Deserialize(JSONnode& node) const;
 
 		friend class ComponentSet;
 

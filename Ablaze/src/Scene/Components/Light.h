@@ -38,7 +38,6 @@ namespace Ablaze
 		String ToString() const override;
 		Component* Clone() const override;
 		void Serialize(JSONwriter& writer) const override;
-		Component* Deserialize(JSONnode& node) const override;
 
 	};
 

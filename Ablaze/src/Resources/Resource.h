@@ -18,13 +18,18 @@ namespace Ablaze
 			m_ResourcePtr = resource;
 		}
 
-		Resource() = default;
+		Resource() : Resource(nullptr)
+		{
+		
+		}
 
 		Resource(const Resource<T>& other)
 		{
 			m_ResourcePtr = other.m_ResourcePtr;
 			if (other.m_ResourcePtr != nullptr)
-				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
+			{
+				ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
+			}
 		}
 
 		template<typename Other>
@@ -32,13 +37,17 @@ namespace Ablaze
 		{
 			m_ResourcePtr = (T*)other.m_ResourcePtr;
 			if (other.m_ResourcePtr != nullptr)
-				ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
+			{
+				ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
+			}
 		}
 
 		~Resource()
 		{
 			if (m_ResourcePtr != nullptr)
-				ResourceManager::Library().DecrementRefCount(m_ResourcePtr->Info());
+			{
+				ResourceManager::Instance().DecrementRefCount(m_ResourcePtr->Info());
+			}
 		}
 
 		T* Get() const { return m_ResourcePtr; }
@@ -47,7 +56,7 @@ namespace Ablaze
 
 		void Increment() const
 		{
-			ResourceManager::Library().IncrementRefCount(m_ResourcePtr->Info());
+			ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
 		}
 
 		template<typename> friend class Resource;
@@ -60,7 +69,9 @@ namespace Ablaze
 		void Serialize(JSONwriter& writer) const
 		{
 			if (m_ResourcePtr != nullptr)
+			{
 				m_ResourcePtr->Serialize(writer);
+			}
 		}
 
 	};

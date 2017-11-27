@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 
 namespace Ablaze
 {

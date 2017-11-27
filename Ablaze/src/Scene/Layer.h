@@ -13,7 +13,7 @@ namespace Ablaze
 		GameObject** m_GameObjects;
 
 		String m_Name;
-		std::unordered_map<String, std::vector<GameObject*>> m_NamedEntities;
+		std::unordered_map<String, std::vector<GameObject*>> m_NamedGameObjects;
 		GameObject* m_Camera;
 
 	private:
@@ -60,14 +60,9 @@ namespace Ablaze
 
 		uint GetNextID();
 		void Init();
+		void DestroyGameObject(GameObject* object);
 
 		String SerializeGameObject(JSONwriter& writer, GameObject* object, std::unordered_map<GameObject*, String>& mapping, const String& basePath, int& count) const;
-
-	public:
-		static Layer* Deserialize(JSONnode& node);
-		
-	private:
-		static GameObject* DeserializeGameObject(JSONnode& node, std::unordered_map<String, GameObject*>& mapping, const String& currentFile);
 
 	};
 

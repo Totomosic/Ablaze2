@@ -409,31 +409,6 @@ namespace Ablaze
 			return flipMatrix * other * flipMatrix;
 		}
 
-		Mat4 Mat4::Deserialize(JSONnode& node)
-		{
-			Mat4 mat;
-			mat.values[0] = stof(node["Col0"]["x"].Data());
-			mat.values[1] = stof(node["Col0"]["y"].Data());
-			mat.values[2] = stof(node["Col0"]["z"].Data());
-			mat.values[3] = stof(node["Col0"]["w"].Data());
-
-			mat.values[4] = stof(node["Col1"]["x"].Data());
-			mat.values[5] = stof(node["Col1"]["y"].Data());
-			mat.values[6] = stof(node["Col1"]["z"].Data());
-			mat.values[7] = stof(node["Col1"]["w"].Data());
-
-			mat.values[8] = stof(node["Col2"]["x"].Data());
-			mat.values[9] = stof(node["Col2"]["y"].Data());
-			mat.values[10] = stof(node["Col2"]["z"].Data());
-			mat.values[11] = stof(node["Col2"]["w"].Data());
-
-			mat.values[12] = stof(node["Col3"]["x"].Data());
-			mat.values[13] = stof(node["Col3"]["y"].Data());
-			mat.values[14] = stof(node["Col3"]["z"].Data());
-			mat.values[15] = stof(node["Col3"]["w"].Data());
-			return mat;
-		}
-
 		std::ostream& operator<<(std::ostream& stream, const Mat4& matrix)
 		{
 			const char* s = " ";

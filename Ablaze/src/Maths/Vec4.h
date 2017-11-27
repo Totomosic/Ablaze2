@@ -68,8 +68,6 @@ namespace Ablaze
 			static Vec4 Forward();
 			static Vec4 Right();
 			static Vec4 Up();
-
-			static Vec4 Deserialize(JSONnode& node);
 			
 		};
 	}

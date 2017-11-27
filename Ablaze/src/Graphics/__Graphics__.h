@@ -4,5 +4,4 @@
 #include "structs\__structs__.h"
 
 #include "Framebuffer.h"
-#include "Graphics.h"
 #include "Window.h"

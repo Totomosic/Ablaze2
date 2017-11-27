@@ -9,7 +9,7 @@ namespace Ablaze
 		m_TerrainData(this, width, height, xVerts, zVerts)
 	{
 		AddComponent<Transform>();
-		AddComponent(new Mesh(ResourceManager::Library().CreateGrid(width, height, xVerts, zVerts, color), material));
+		AddComponent(new Mesh(ResourceManager::Instance().CreateGrid(width, height, xVerts, zVerts, color), material));
 		m_TerrainData.m_VertexBuffer = mesh().GetModel(0).Get()->GetVertexArray()->GetVertexBuffer(0);
 	}
 

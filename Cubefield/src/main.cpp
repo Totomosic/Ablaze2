@@ -21,57 +21,59 @@ public:
 		Graphics::EnableCull();
 		Graphics::EnableDepthTest();
 
+		//scene = &SceneManager::Instance().LoadScene("Saves/Scene.scene");
+
 		scene = &SceneManager::Instance().CreateScene();
 		Layer& world = scene->CreateLayer("World");
 		Layer& ui = scene->CreateLayer("UI");
 		Layer& backgroundLayer = scene->CreateLayer("Background");
 
-		Systems::Lighting().AddShader(ResourceManager::Library().LoadShader("res/base.shader"));
-		shader = *ResourceManager::Library().LoadShader("res/cube.shader");
+		Systems::Lighting().AddShader(ResourceManager::Instance().LoadShader("res/base.shader"));
+		shader = *ResourceManager::Instance().LoadShader("res/cube.shader");
 
 		scene->SetCurrentLayer("Background");
 
-		GameObject* backgroundCamera = GameObject::Instantiate(0, 0, 0);
+		GameObject* backgroundCamera = GameObject::Instantiate("BackgroundCamera", 0, 0, 0);
 		backgroundCamera->AddComponent(new Camera(Projection::Orthographic));
 
-		GameObject* background = GameObject::Instantiate(WindowWidth() / 2, WindowHeight() / 2, -999);
-		background->AddComponent(new Mesh(ResourceManager::Library().CreateRectangle(WindowWidth(), WindowHeight(), Color::White()), Material<Texture2D>(Color::White(), ResourceManager::Library().DefaultTextureShader(), "Tex0", "res/background.png")));
+		GameObject* background = GameObject::Instantiate("Background", WindowWidth() / 2, WindowHeight() / 2, -999);
+		background->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(WindowWidth(), WindowHeight(), Color::White()), Material<Texture2D>(Color::White(), ResourceManager::Instance().DefaultTextureShader(), "Tex0", "res/background.png")));
 
 		scene->SetCurrentLayer("World");
 
-		GameObject* worldCamera = GameObject::Instantiate(0, 0, 5);
+		GameObject* worldCamera = GameObject::Instantiate("WorldCamera", 0, 0, 5);
 		worldCamera->AddComponent<Camera>();
 
-		GameObject* floor = GameObject::Instantiate(0, -7, -30);
-		floor->AddComponent(new Mesh(ResourceManager::Library().CreatePlane(300, 1500), Material<Texture2D>(Color::White(), ResourceManager::Library().LightingColorShader())));
+		GameObject* floor = GameObject::Instantiate("Floor", 0, -7, -10);
+		floor->AddComponent(new Mesh(ResourceManager::Instance().CreatePlane(300, 1500), Material<Texture2D>(Color::White(), ResourceManager::Instance().LightingColorShader())));
 
-		GameObject* player = GameObject::Instantiate(0, -5, -10);
-		player->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(1, 1, 1), Material<Texture2D>(Color::Green(), ResourceManager::Library().LightingColorShader())));
+		GameObject* player = GameObject::Instantiate("Player", 0, -5, -10);
+		player->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(1, 1, 1), Material<Texture2D>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
 		player->AddComponent(new RigidBody(false));
-		player->SetTag("Player");
 
-		GameObject* sun = GameObject::Instantiate();
-		sun->AddComponent(new Transform(Maths::Vec3(0, 100, -10)));
+		GameObject* sun = GameObject::Instantiate("Sun", 0, 100, -10);
 		sun->AddComponent<Light>();
-
-		scene->SetCurrentLayer(nullptr);
-		cubePrefab = GameObject::Instantiate();
-		cubePrefab->AddComponent(new RigidBody(false));
-		cubePrefab->AddComponent(new Mesh(ResourceManager::Library().CreateCuboid(3, 3, 3), Material<Texture2D>(Color::Red(), ResourceManager::Library().DefaultColorShader())));
 
 		world.SetActiveCamera(worldCamera);
 		backgroundLayer.SetActiveCamera(backgroundCamera);
 
+		scene->SetCurrentLayer(nullptr);
+		cubePrefab = GameObject::Instantiate("CubePrefab");
+		cubePrefab->AddComponent(new RigidBody(false));
+		cubePrefab->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(3, 3, 3), Material<Texture2D>(Color::Red(), ResourceManager::Instance().DefaultColorShader())));
+
 		scene->SetCurrentLayer("World");
 
 		Time::CreateNewTimer(0.1, METHOD_0(Game::CreateBlock));
+
+		//SceneManager::Instance().SaveScene(SceneManager::Instance().CurrentScene(), "Saves/Scene.scene");
 
 	}
 
 	void CreateBlock()
 	{
 		static float speed = 1;
-		GameObject* block = GameObject::Instantiate(cubePrefab, Random::NextFloat(-150, 150), -4, -1000);
+		GameObject* block = GameObject::Instantiate("Block", cubePrefab, Random::NextFloat(-150, 150), -4, -1000);
 		block->GetComponent<RigidBody>().Velocity().z = 200 + speed;
 		speed *= 1.001f;
 	}
@@ -118,7 +120,6 @@ public:
 				object->Destroy();
 			}
 		}
-
 	}
 
 	void Render() override

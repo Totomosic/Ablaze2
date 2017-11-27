@@ -36,7 +36,7 @@ namespace Ablaze
 		ResourceManager();
 
 	public:
-		static ResourceManager& Library();
+		static ResourceManager& Instance();
 
 	public:
 		template<typename T>

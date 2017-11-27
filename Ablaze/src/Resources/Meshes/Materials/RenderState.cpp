@@ -34,29 +34,4 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
-	RenderState RenderState::Deserialize(JSONnode& node)
-	{
-		RenderState r;
-		if (node["DepthTest"].Data() == "true")
-		{
-			r.useDepthTest = true;
-		}
-		else
-		{
-			r.useDepthTest = false;
-		}
-		if (node["Blend"].Data() == "true")
-		{
-			r.useBlend = true;
-		}
-		else
-		{
-			r.useBlend = false;
-		}
-		r.depthFunction = (DepthFunction)stoi(node["DepthFunction"].Data());
-		r.blendSrcFunction = (BlendSrc)stoi(node["BlendSrcFunction"].Data());
-		r.blendDstFunction = (BlendDst)stoi(node["BlendDstFunction"].Data());
-		return r;
-	}
-
 }

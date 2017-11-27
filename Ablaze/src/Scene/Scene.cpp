@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "SceneManager.h"
+#include "LayerMask.h"
 
 namespace Ablaze
 {
@@ -77,6 +78,33 @@ namespace Ablaze
 		return layers;
 	}
 
+	std::vector<Layer*> Scene::GetLayers(LayerMask& layerMask) const
+	{		
+		if (!layerMask.all)
+		{
+			layerMask.Evaluate(*this);
+			return GetLayers(layerMask);
+		}
+		return GetLayers();
+	}
+
+	int Scene::GetMask(Layer* layer) const
+	{
+		for (int i = 0; i < m_LayerOrder.size(); i++)
+		{
+			if (m_LayerOrder[i] == layer)
+			{
+				return BIT(i);
+			}
+		}
+		return -1;
+	}
+
+	int Scene::GetMask(const String& layerName) const
+	{
+		return GetMask(m_Layers.at(layerName));
+	}
+
 	Layer& Scene::CreateLayer(const String& name, GameObject* camera)
 	{
 		Layer* layer = nullptr;
@@ -88,8 +116,7 @@ namespace Ablaze
 		{
 			layer = new Layer(name);
 		}
-		m_Layers[name] = layer;
-		m_LayerOrder.push_back(layer);
+		AddLayer(layer);
 		if (m_CurrentLayer == nullptr)
 		{   
 			SetCurrentLayer(layer);
@@ -121,12 +148,10 @@ namespace Ablaze
 		return *m_CurrentLayer;
 	}
 
-	void Scene::AddGameObject(GameObject* entity)
+	void Scene::AddLayer(Layer* layer)
 	{
-		if (HasLayer())
-		{
-			CurrentLayer().AddGameObject(entity);
-		}
+		m_LayerOrder.push_back(layer);
+		m_Layers[layer->GetName()] = layer;
 	}
 
 	const Layer& Scene::operator[](const String& layer) const
@@ -159,19 +184,6 @@ namespace Ablaze
 		}
 		writer.EndArray();
 		writer.EndObject();
-	}
-
-	Scene* Scene::Deserialize(JSONnode& node)
-	{
-		Scene& scene = SceneManager::Instance().CreateScene();
-		JSONnode& layers = node["Layers"];
-		for (int i = 0; i < layers.ChildCount(); i++)
-		{
-			JSONnode* layer = LoadJSONFile(layers[i].Data());
-			Layer::Deserialize(*layer);
-			delete layer;
-		}
-		return &scene;
 	}
 
 }

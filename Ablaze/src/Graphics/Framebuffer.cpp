@@ -1,6 +1,6 @@
 #include "Framebuffer.h"
 #include "Resources\ResourceManager.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 #include "Resources\Resource.h"
 
 namespace Ablaze
@@ -127,7 +127,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
 	{
-		CreateColorTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled), buffer);
+		CreateColorTextureAttachment(ResourceManager::Instance().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled), buffer);
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment(const Resource<Texture2D>& texture)
@@ -145,7 +145,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateDepthTextureAttachment()
 	{
-		CreateDepthTextureAttachment(ResourceManager::Library().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled));
+		CreateDepthTextureAttachment(ResourceManager::Instance().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled));
 	}
 
 	String Framebuffer::ToString() const

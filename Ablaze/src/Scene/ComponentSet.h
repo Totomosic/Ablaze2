@@ -51,9 +51,6 @@ namespace Ablaze
 		void AddComponent(const std::type_index& type, Component* component);
 		bool HasComponentType(const std::type_index& type) const;
 
-	public:
-		static ComponentSet* Deserialize(JSONnode& node, GameObject* owner);
-
 	};
 
 }

@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 
 namespace Ablaze
 {
@@ -102,17 +102,6 @@ namespace Ablaze
 		writer.WriteAttribute("FarPlane", m_FarPlane);
 		writer.WriteObject("ProjectionMatrix", m_Projection);
 		writer.EndObject();
-	}
-
-	Component* Camera::Deserialize(JSONnode& node) const
-	{
-		Camera* camera = new Camera;
-		camera->m_Fov = stof(node["FOV"].Data());
-		camera->m_ProjectionType = (Projection)stoi(node["Projection"].Data());
-		camera->m_NearPlane = stof(node["NearPlane"].Data());
-		camera->m_FarPlane = stof(node["FarPlane"].Data());
-		camera->m_Projection = Maths::Mat4::Deserialize(node["ProjectionMatrix"]);
-		return camera;
 	}
 
 	Component* Camera::Clone() const

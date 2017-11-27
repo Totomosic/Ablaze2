@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "Application\Input\Input.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 #include "BytecodeVM\__BytecodeVM__.h"
 #include "Scene\Systems\Systems.h"
 

@@ -55,8 +55,6 @@ namespace Ablaze
 			static Mat4 InvertY(const Maths::Mat4& other);
 			static Mat4 InvertZ(const Maths::Mat4& other);
 
-			static Mat4 Deserialize(JSONnode& node);
-
 			friend Mat4 operator*(const Mat4& left, const Mat4& right);
 			friend Vec4 operator*(const Mat4& left, const Vec4& right);
 			friend Vec3 operator*(const Mat4& left, const Vec3& right);

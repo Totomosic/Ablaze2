@@ -70,8 +70,6 @@ namespace Ablaze
 			static Quaternion FromEuler(float pitch, float yaw, float roll);
 			static Quaternion FromRotationMat(const Mat4& rotation);
 
-			static Quaternion Deserialize(JSONnode& node);
-
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
 
 		};

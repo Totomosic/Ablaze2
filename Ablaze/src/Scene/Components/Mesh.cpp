@@ -116,19 +116,6 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
-	Component* Mesh::Deserialize(JSONnode& node) const
-	{
-		Mesh* m = new Mesh;
-		JSONnode& models = node["Models"];
-		JSONnode& materials = node["Materials"];
-		JSONnode& transforms = node["Transforms"];
-		for (int i = 0; i < models.ChildCount(); i++)
-		{
-			m->AddModel(ResourceManager::Library().Load<Model>(AssetLoadInfo::Deserialize(models[i]["Info"])), *MaterialBase::Deserialize(materials[i]), Maths::Mat4::Deserialize(transforms[i]));
-		}
-		return m;
-	}
-
 	Component* Mesh::Clone() const
 	{
 		Mesh* mesh = new Mesh;

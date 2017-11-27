@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "Time.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 #include "Scene\Systems\Systems.h"
 
 #include "Scene\Components\__Components__.h"
@@ -31,6 +31,7 @@ namespace Ablaze
 		Component::Register<Mesh>();
 		Component::Register<Light>();
 		Component::Register<Camera>();
+		Component::Register<RigidBody>();
 
 		double time = Time::CurrentTime();
 		Init();

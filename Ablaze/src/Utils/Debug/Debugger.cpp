@@ -1,5 +1,5 @@
 #include "Debugger.h"
-#include "Graphics\Graphics.h"
+#include "Graphics\Rendering\Graphics.h"
 #include "Application\Time.h"
 
 namespace Ablaze

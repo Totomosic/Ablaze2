@@ -1,9 +1,8 @@
 #pragma once
 #include "Common.h"
 
-#include "Framebuffer.h"
-#include "GraphicsPipeline.h"
-#include "Window.h"
+#include "Graphics\Framebuffer.h"
+#include "Graphics\Window.h"
 #include "Resources\Resource.h"
 #include "Resources\Textures\Fonts\Font.h"
 
@@ -43,7 +42,6 @@ namespace Ablaze
 	{
 	private:
 		static Window* s_Context;
-		static GraphicsPipeline* s_Pipeline; // May want multiple pipelines
 		static GraphicsAPI s_API;
 
 		static bool s_DepthEnabled;

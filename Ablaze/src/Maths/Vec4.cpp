@@ -223,15 +223,5 @@ namespace Ablaze
 			return Vec4(0, 1, 0, 0);
 		}
 
-		Vec4 Vec4::Deserialize(JSONnode& node)
-		{
-			Vec4 vec;
-			vec.x = stof(node["x"].Data());
-			vec.y = stof(node["y"].Data());
-			vec.z = stof(node["z"].Data());
-			vec.w = stof(node["w"].Data());
-			return vec;
-		}
-
 	}
 }

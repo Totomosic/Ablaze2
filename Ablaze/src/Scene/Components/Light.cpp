@@ -90,14 +90,4 @@ namespace Ablaze
 		return light;
 	}
 
-	Component* Light::Deserialize(JSONnode& node) const
-	{
-		Light* l = new Light;
-		l->Type() = (LightType)stoi(node["Type"].Data());
-		l->LightColor() = Color::Deserialize(node["Color"]);
-		l->Ambient() = stof(node["Ambient"].Data());
-		l->Attenuation() = Maths::Vec3::Deserialize(node["Attenuation"]);
-		return l;
-	}
-
 }

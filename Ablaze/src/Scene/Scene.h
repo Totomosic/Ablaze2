@@ -5,6 +5,8 @@
 namespace Ablaze
 {
 
+	struct LayerMask;
+
 	// Object that stores and manages all relavent Entities and Cameras
 	class AB_API Scene : public Object
 	{
@@ -28,6 +30,9 @@ namespace Ablaze
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
 		std::vector<Layer*> GetLayers(int layerMask) const;
+		std::vector<Layer*> GetLayers(LayerMask& layerMask) const;
+		int GetMask(Layer* layer) const;
+		int GetMask(const String& layerName) const;
 
 		Layer& CreateLayer(const String& name, GameObject* camera = nullptr);
 		Layer& CreateLayer(GameObject* camera = nullptr); // Assigned random name
@@ -35,7 +40,7 @@ namespace Ablaze
 		Layer& SetCurrentLayer(Layer* layer);
 		Layer& SetCurrentLayer(int index);
 
-		void AddGameObject(GameObject* entity);
+		void AddLayer(Layer* layer);
 
 		const Layer& operator[](const String& layer) const;
 		Layer& operator[](const String& layer);
@@ -44,9 +49,6 @@ namespace Ablaze
 		void Serialize(JSONwriter& writer) const;
 
 		friend class SceneManager;
-
-	public:
-		static Scene* Deserialize(JSONnode& node);
 
 	};
 

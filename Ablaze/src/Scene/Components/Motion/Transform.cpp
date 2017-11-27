@@ -170,15 +170,6 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
-	Component* Transform::Deserialize(JSONnode& node) const
-	{
-		Transform* t = new Transform;
-		t->LocalPosition() = Maths::Vec3::Deserialize(node["Position"]);
-		t->LocalRotation() = Maths::Quaternion::Deserialize(node["Rotation"]);
-		t->LocalScale() = Maths::Vec3::Deserialize(node["Scale"]);
-		return t;
-	}
-
 	Transform Transform::operator+(const Transform& other) const
 	{
 		Transform t = *this;

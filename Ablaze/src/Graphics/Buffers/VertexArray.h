@@ -61,8 +61,9 @@ namespace Ablaze
 		static const VertexArray* CurrentlyBound();
 
 	private:
-		void DetermineVertexCount();
+		void DetermineVertexCount(VertexBuffer* buffer);
 		void DetermineRenderCount();
+		void TestVertexCount(VertexBuffer* buffer);
 
 	};
 

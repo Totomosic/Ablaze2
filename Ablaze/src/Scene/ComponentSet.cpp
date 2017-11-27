@@ -80,14 +80,4 @@ namespace Ablaze
 		return m_Components.find(type) != m_Components.end();
 	}
 
-	ComponentSet* ComponentSet::Deserialize(JSONnode& node, GameObject* owner)
-	{
-		ComponentSet* set = new ComponentSet(owner);
-		for (int i = 0; i < node.ChildCount(); i++)
-		{
-			set->AddComponent(Component::m_RegisteredComponents[node[i].Key()]->Deserialize(node[i]));
-		}
-		return set;
-	}
-
 }

@@ -47,11 +47,6 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
-	Component* Component::Deserialize(JSONnode& node) const
-	{
-		return nullptr;
-	}
-
 	void Component::Start()
 	{
 	

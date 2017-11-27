@@ -141,6 +141,9 @@
     <ClInclude Include="src\Ablaze.h" />
     <ClInclude Include="src\AblazeGL.h" />
     <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Application\Events\Event.h" />
+    <ClInclude Include="src\Application\Events\EventArgs.h" />
+    <ClInclude Include="src\Application\Events\__Events__.h" />
     <ClInclude Include="src\Application\Input\Input.h" />
     <ClInclude Include="src\Application\Input\__Input__.h" />
     <ClInclude Include="src\Application\Stopwatch.h" />
@@ -148,13 +151,17 @@
     <ClInclude Include="src\Application\Timer.h" />
     <ClInclude Include="src\Application\__Application__.h" />
     <ClInclude Include="src\Common.h" />
-    <ClInclude Include="src\Graphics\Graphics.h" />
-    <ClInclude Include="src\Graphics\GraphicsPipeline.h" />
+    <ClInclude Include="src\Graphics\Rendering\Graphics.h" />
+    <ClInclude Include="src\Graphics\Rendering\GraphicsPipeline.h" />
+    <ClInclude Include="src\Graphics\Rendering\Structs\Renderer.h" />
     <ClInclude Include="src\Resources\AssetLoadInfo.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h" />
     <ClInclude Include="src\Resources\Shaders\ShaderProgram.h" />
+    <ClInclude Include="src\Resources\Shaders\Uniforms\Uniform.h" />
+    <ClInclude Include="src\Resources\Shaders\Uniforms\UniformManager.h" />
+    <ClInclude Include="src\Resources\Shaders\Uniforms\__Uniforms__.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\Font.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
@@ -194,7 +201,6 @@
     <ClInclude Include="src\Maths\Vec4.h" />
     <ClInclude Include="src\Maths\__Maths__.h" />
     <ClInclude Include="src\Object.h" />
-    <ClInclude Include="src\Graphics\Rendering\Interfaces\__Interfaces__.h" />
     <ClInclude Include="src\Graphics\Rendering\Renderers\__Renderers__.h" />
     <ClInclude Include="src\Graphics\Rendering\Structs\__Structs__.h" />
     <ClInclude Include="src\Graphics\Rendering\__Rendering__.h" />
@@ -269,17 +275,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Application\Events\Event.cpp" />
     <ClCompile Include="src\Application\Input\Input.cpp" />
     <ClCompile Include="src\Application\Stopwatch.cpp" />
     <ClCompile Include="src\Application\Time.cpp" />
     <ClCompile Include="src\Application\Timer.cpp" />
-    <ClCompile Include="src\Graphics\Graphics.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsPipeline.cpp" />
+    <ClCompile Include="src\Graphics\Rendering\Graphics.cpp" />
+    <ClCompile Include="src\Graphics\Rendering\Structs\Renderer.cpp" />
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Resources\AssetLoadInfo.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
     <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp" />
+    <ClCompile Include="src\Resources\Shaders\Uniforms\Uniform.cpp" />
+    <ClCompile Include="src\Resources\Shaders\Uniforms\UniformManager.cpp" />
     <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp" />
     <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="src\Scene\Components\Mesh.cpp" />

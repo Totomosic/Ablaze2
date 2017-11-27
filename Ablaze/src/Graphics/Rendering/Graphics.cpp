@@ -6,7 +6,6 @@ namespace Ablaze
 {
 
 	Window* Graphics::s_Context = nullptr;
-	GraphicsPipeline* Graphics::s_Pipeline = nullptr;
 	GraphicsAPI Graphics::s_API = GraphicsAPI::OpenGL;
 
 	bool Graphics::s_DepthEnabled = false;
