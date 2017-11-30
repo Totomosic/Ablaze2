@@ -17,9 +17,6 @@ namespace Ablaze
 	class AB_API VertexArray : public GLObject
 	{
 	private:
-		static const VertexArray* s_CurrentlyBound;
-
-	private:
 		std::vector<VertexBuffer*> m_VertexBuffers;
 		IndexBuffer* m_IndexBuffer;
 		RenderMode m_RenderMode;
@@ -56,9 +53,6 @@ namespace Ablaze
 		IndexBuffer* CreateIndexBuffer(void* buffer, int64 numBytes, BufferUsage = BufferUsage::StaticDraw);
 
 		String ToString() const override;
-
-	public:
-		static const VertexArray* CurrentlyBound();
 
 	private:
 		void DetermineVertexCount(VertexBuffer* buffer);

@@ -58,8 +58,10 @@ namespace Ablaze
 		static void RenderScene();
 
 		// Drawing commands
-		static void DrawString(const String& text, const Resource<Font>& font);
+		static void DrawString(const String& text, const std::shared_ptr<Font>& font);
+		static void DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material);
 		static void DrawRectangle(float x, float y, float w, float h, const Color& color);
+		static void DrawImage(float x, float y, float w, float h, const std::shared_ptr<Texture2D>& image);
 
 		// OpenGL state management
 		static void ResetGLStates();

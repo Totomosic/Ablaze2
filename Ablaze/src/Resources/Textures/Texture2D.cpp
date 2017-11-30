@@ -5,8 +5,6 @@
 namespace Ablaze
 {
 
-	const Texture2D* Texture2D::s_CurrentlyBound = nullptr;
-
 	Texture2D::Texture2D(const String& filepath, MipmapMode mm) : Texture(filepath, TextureTarget::Texture2D)
 	{
 		m_Format = ImageFormat::Rgba;
@@ -25,11 +23,6 @@ namespace Ablaze
 	Texture2D::Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm) : Texture(width, height, TextureTarget::Texture2D, format)
 	{
 	
-	}
-
-	Texture2D::~Texture2D()
-	{
-		Texture::~Texture();
 	}
 
 	byte* Texture2D::GetImage(int mipmap) const
@@ -94,11 +87,7 @@ namespace Ablaze
 
 	void Texture2D::Bind() const
 	{
-		if (s_CurrentlyBound != this)
-		{
-			TextureManager::Instance().Bind(this);
-			s_CurrentlyBound = this;
-		}
+		TextureManager::Instance().Bind(this);
 	}
 	
 	void Texture2D::Unbind() const
@@ -208,7 +197,7 @@ namespace Ablaze
 		Unbind();
 	}
 
-	void Texture2D::SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, const Resource<Texture2D>& src, int srcXOffset, int srcYOffset, bool applyToMipmaps) const
+	void Texture2D::SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, const std::shared_ptr<Texture2D>& src, int srcXOffset, int srcYOffset, bool applyToMipmaps) const
 	{
 		if (applyToMipmaps)
 		{

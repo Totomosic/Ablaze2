@@ -3,8 +3,6 @@
 namespace Ablaze
 {
 
-	const VertexArray* VertexArray::s_CurrentlyBound = nullptr;
-
 	VertexArray::VertexArray(RenderMode renderMode) : GLObject(),
 		m_VertexBuffers(), m_IndexBuffer(nullptr), m_RenderMode(renderMode), m_VertexCount(0), m_RenderCount(0)
 	{
@@ -76,14 +74,10 @@ namespace Ablaze
 
 	void VertexArray::Bind() const
 	{
-		if (s_CurrentlyBound != this)
+		GL_CALL(glBindVertexArray(m_Id));
+		if (HasIndexBuffer())
 		{
-			GL_CALL(glBindVertexArray(m_Id));
-			if (HasIndexBuffer())
-			{
-				m_IndexBuffer->Bind();
-			}
-			s_CurrentlyBound = this;
+			m_IndexBuffer->Bind();
 		}
 	}
 
@@ -168,11 +162,6 @@ namespace Ablaze
 	String VertexArray::ToString() const
 	{
 		return "VertexArray";
-	}
-
-	const VertexArray* VertexArray::CurrentlyBound()
-	{
-		return s_CurrentlyBound;
 	}
 
 	void VertexArray::DetermineVertexCount(VertexBuffer* buffer)

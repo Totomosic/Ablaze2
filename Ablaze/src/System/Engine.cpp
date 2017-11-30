@@ -3,6 +3,7 @@
 #include "Graphics\Rendering\Graphics.h"
 #include "BytecodeVM\__BytecodeVM__.h"
 #include "Scene\Systems\Systems.h"
+#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
@@ -24,6 +25,7 @@ namespace Ablaze
 
 	bool Engine::Shutdown()
 	{
+		ResourceManager::Terminate();
 		Graphics::Terminate();
 		glfwTerminate();
 		return true;

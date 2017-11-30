@@ -95,13 +95,13 @@ namespace Ablaze
 		void WriteObject(const String& attributeName, const T& object)
 		{
 			WriteAttribute(attributeName);
-			object.Serialize(*this);
+			//object.Serialize(*this);
 		}
 
 		template<typename T>
 		void WriteObject(const T& object)
 		{
-			object.Serialize(*this);
+			//object.Serialize(*this);
 		}
 
 		void BeginObject(const String& attributeTag);

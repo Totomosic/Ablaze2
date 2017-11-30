@@ -10,12 +10,6 @@ namespace Ablaze
 		Initialise();
 	}
 
-	TextureManager& TextureManager::Instance()
-	{
-		static TextureManager* manager = new TextureManager();
-		return *manager;
-	}
-
 	void TextureManager::Bind(const Texture* const texture)
 	{
 		if (texture->m_BindPort == -1)
@@ -31,11 +25,6 @@ namespace Ablaze
 	void TextureManager::Unbind(const Texture* const texture)
 	{
 	
-	}
-
-	String TextureManager::ToString() const
-	{
-		return "TextureManager";
 	}
 
 	void TextureManager::BindNewTexture(const Texture* const texture)
@@ -65,6 +54,11 @@ namespace Ablaze
 			}
 		}
 		return -1;
+	}
+
+	void TextureManager::Delete(int bindport)
+	{
+		m_TextureArray[bindport] = nullptr;
 	}
 
 }

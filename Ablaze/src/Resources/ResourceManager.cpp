@@ -1,432 +1,166 @@
 #include "ResourceManager.h"
 #include "Resource.h"
-#include "Scene\Systems\__Systems__.h"
 #include "Shaders\__Shaders__.h"
+#include "Scene\Systems\__Systems__.h"
 
 namespace Ablaze
 {
 
 	ResourceManager::ResourceManager()
 	{
-		
+		LoadDefaultColor();
+		LoadDefaultTexture();
+		LoadLightColor();
+		LoadLightTexture();
+
+		Systems::Lighting().AddShader(m_LightColor);
+		Systems::Lighting().AddShader(m_LightTexture);
 	}
 
-	Resource<Texture2D> ResourceManager::LoadTexture2D(const String& filename, MipmapMode mipmap)
+	void ResourceManager::Terminate()
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Texture2D;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", filename);
-		info.AddIdentifier("MipmapMode", (int)mipmap);
-		return LoadTexture2DAsset(info);
+		delete &Instance();
 	}
 
-	Resource<Font> ResourceManager::LoadFont(const String& filename, float size)
+	std::shared_ptr<Shader> ResourceManager::LoadShader(const String& shaderFile)
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Font;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", filename);
-		info.AddIdentifier("Size", size);
-		return LoadFontAsset(info);
+		Shader* shader = Shader::FromFile(shaderFile);
+		return std::shared_ptr<Shader>(shader);
 	}
 
-	Resource<Shader> ResourceManager::LoadShader(const String& vFile, const String& fFile)
+	std::shared_ptr<Shader> ResourceManager::LoadShader(const String& vFile, const String& fFile)
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("VertexFile", vFile);
-		info.AddIdentifier("FragmentFile", fFile);
-		return LoadShaderAsset(info);
+		Shader* shader = Shader::FromFile(vFile, fFile);
+		return std::shared_ptr<Shader>(shader);
 	}
 
-	Resource<Shader> ResourceManager::LoadShader(const String& shaderFile)
+	std::shared_ptr<Shader> ResourceManager::CreateShader(const String& vSource, const String& fSource)
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", shaderFile);
-		return LoadShaderAsset(info);
+		Shader* shader = Shader::FromSource(vSource, fSource);
+		return std::shared_ptr<Shader>(shader);
 	}
 
-	Resource<Shader> ResourceManager::DefaultColorShader()
+	std::shared_ptr<Shader> ResourceManager::CreateShader(const String& vSource, const String& gSource, const String& fSource)
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", "DefaultColorShader");
-		if (!AssetExists(info))
-		{
-			String vSource =
+		Shader* shader = Shader::FromSource(vSource, gSource, fSource);
+		return std::shared_ptr<Shader>(shader);
+	}
+
+	std::shared_ptr<Shader> ResourceManager::DefaultColorShader()
+	{
+		return m_DefaultColor;
+	}
+
+	std::shared_ptr<Shader> ResourceManager::DefaultTextureShader()
+	{
+		return m_DefaultTexture;
+	}
+
+	std::shared_ptr<Shader> ResourceManager::LightingColorShader()
+	{
+		return m_LightColor;
+	}
+
+	std::shared_ptr<Shader> ResourceManager::LightingTextureShader()
+	{
+		return m_LightTexture;
+	}
+
+
+	std::shared_ptr<Texture2D> ResourceManager::LoadTexture2D(const String& textureFile, MipmapMode mipmap)
+	{
+		return std::make_shared<Texture2D>(textureFile, mipmap);
+	}
+
+	std::shared_ptr<Texture2D> ResourceManager::CreateBlankTexture2D(int width, int height, MipmapMode mipmap)
+	{
+		return std::make_shared<Texture2D>(width, height, ImageFormat::Rgba, mipmap);
+	}
+
+
+	std::shared_ptr<Model> ResourceManager::LoadModel(const String& objModelFile)
+	{
+		Model* model = new Model(objModelFile);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateRectangle(const Color& color)
+	{
+		Model* model = Internal::Shapes::Rectangle(1, 1, color);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateCircle(const Color& color)
+	{
+		Model* model = Internal::Shapes::Ellipse(2, 2, 100, color);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateCuboid(const Color& color)
+	{
+		Model* model = Internal::Shapes::Cuboid(1, 1, 1, color);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateSphere(const Color& color)
+	{
+		Model* model = Internal::Shapes::Sphere(1, 10, color);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateGrid(int xVerts, int zVerts, const Color& color)
+	{
+		Model* model = Internal::Shapes::Grid(1, 1, xVerts, zVerts, color);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreatePlane(const Color& color)
+	{
+		return CreateGrid(2, 2, color);
+	}
+
+	void ResourceManager::LoadDefaultColor()
+	{
+		String vSource =
 #include "Shaders\Source\DefaultColor_v.glsl"
-				;
-			String fSource =
+			;
+		String fSource =
 #include "Shaders\Source\DefaultColor_f.glsl"
-				;
-			Shader* shader = Shader::FromSource(vSource, fSource);
-			AddNewAsset(info, shader);
-			Resource<Shader> res = Resource<Shader>(shader);
-			return res;
-		}
-		return Resource<Shader>((Shader*)GetAsset(info).ptr);
+			;
+		m_DefaultColor = CreateShader(vSource, fSource);
 	}
 
-	Resource<Shader> ResourceManager::DefaultTextureShader()
+	void ResourceManager::LoadDefaultTexture()
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", "DefaultTextureShader");
-		if (!AssetExists(info))
-		{
-			String vSource =
+		String vSource =
 #include "Shaders\Source\DefaultTexture_v.glsl"
-				;
-			String fSource =
+			;
+		String fSource =
 #include "Shaders\Source\DefaultTexture_f.glsl"
-				;
-			Shader* shader = Shader::FromSource(vSource, fSource);
-			AddNewAsset(info, shader);
-			Resource<Shader> res = Resource<Shader>(shader);
-			return res;
-		}
-		return Resource<Shader>((Shader*)GetAsset(info).ptr);
+			;
+		m_DefaultTexture = CreateShader(vSource, fSource);
 	}
 
-	Resource<Shader> ResourceManager::LightingColorShader()
+	void ResourceManager::LoadLightColor()
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", "LightingColorShader");
-		if (!AssetExists(info))
-		{
-			String vSource =
+		String vSource =
 #include "Shaders\Source\LightColor_v.glsl"
-				;
-			String fSource =
+			;
+		String fSource =
 #include "Shaders\Source\LightColor_f.glsl"
-				;
-			Shader* shader = Shader::FromSource(vSource, fSource);
-			AddNewAsset(info, shader);
-			Resource<Shader> res = Resource<Shader>(shader);
-			Systems::Lighting().AddShader(res);
-			return res;
-		}
-		return Resource<Shader>((Shader*)GetAsset(info).ptr);
+			;
+		m_LightColor = CreateShader(vSource, fSource);
 	}
 
-	Resource<Shader> ResourceManager::LightingTextureShader()
+	void ResourceManager::LoadLightTexture()
 	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", "LightingTextureShader");
-		if (!AssetExists(info))
-		{
-			String vSource =
+		String vSource =
 #include "Shaders\Source\LightTexture_v.glsl"
-				;
-			String fSource =
+			;
+		String fSource =
 #include "Shaders\Source\LightTexture_f.glsl"
-				;
-			Shader* shader = Shader::FromSource(vSource, fSource);
-			AddNewAsset(info, shader);
-			Resource<Shader> res = Resource<Shader>(shader);
-			Systems::Lighting().AddShader(res);
-			return res;
-		}
-		return Resource<Shader>((Shader*)GetAsset(info).ptr);
-	}
-
-	Resource<Shader> ResourceManager::DefaultWireframeShader()
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Shader;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", "DefaultWireframeShader");
-		if (!AssetExists(info))
-		{
-			String vSource =
-#include "Shaders\Source\DefaultWireframe_v.glsl"
-				;
-			String gSource =
-#include "Shaders\Source\DefaultWireframe_g.glsl"
-				;
-			String fSource =
-#include "Shaders\Source\DefaultWireframe_f.glsl"
-				;
-			Shader* shader = Shader::FromSource(vSource, gSource, fSource);
-			AddNewAsset(info, shader);
-			Resource<Shader> res = Resource<Shader>(shader);
-			return res;
-		}
-		return Resource<Shader>((Shader*)GetAsset(info).ptr);
-	}
-
-	Resource<Model> ResourceManager::LoadOBJModel(const String& objFile)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::OBJModel;
-		info.LoadMethod() = LoadType::Loaded;
-		info.AddIdentifier("Filename", objFile);
-		return LoadModelAsset(info);
-	}
-
-	Resource<Texture2D> ResourceManager::CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Texture2D;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Height", height);
-		info.AddIdentifier("MipmapMode", (int)mipmap);
-		return LoadTexture2DAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreateRectangle(float width, float height, const Color& color)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Rectangle;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Height", height);
-		return LoadModelAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreateEllipse(float width, float height, const Color& color)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Ellipse;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Height", height);
-		return LoadModelAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreateCircle(float radius, const Color& color)
-	{
-		return CreateEllipse(radius * 2.0f, radius * 2.0f, color);
-	}
-
-	Resource<Model> ResourceManager::CreateCuboid(float width, float height, float depth, const Color& color)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Cuboid;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Height", height);
-		info.AddIdentifier("Depth", depth);
-		return LoadModelAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreateSphere(float radius, const Color& color)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Sphere;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Radius", radius);
-		info.AddIdentifier("Color", color.ToString());
-		return LoadModelAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreateGrid(float width, float depth, int xVertices, int zVertices, const Color& color)
-	{
-		AssetLoadInfo info;
-		info.Type() = AssetType::Grid;
-		info.LoadMethod() = LoadType::Generated;
-		info.AddIdentifier("Width", width);
-		info.AddIdentifier("Depth", depth);
-		info.AddIdentifier("xVertices", xVertices);
-		info.AddIdentifier("zVertices", zVertices);
-		info.AddIdentifier("Color", color.ToString());
-		return LoadModelAsset(info);
-	}
-
-	Resource<Model> ResourceManager::CreatePlane(float width, float depth, const Color& color)
-	{
-		return CreateGrid(width, depth, 2, 2, color);
-	}
-
-	void ResourceManager::AddNewAsset(const AssetLoadInfo& info, Asset* asset, int initialRefCount)
-	{
-		m_Assets[info] = { asset, initialRefCount };
-		asset->Info() = info;
-	}
-
-	void ResourceManager::IncrementRefCount(const AssetLoadInfo& info, int count)
-	{
-		AssetPtr& asset = GetAsset(info);
-		asset.ref += count;
-	}
-
-	void ResourceManager::DecrementRefCount(const AssetLoadInfo& info, int count)
-	{
-		AssetPtr& asset = GetAsset(info);
-		asset.ref -= count;
-		if (asset.ref <= 0)
-		{
-			DeleteAsset(info);
-		}
-	}
-
-	void ResourceManager::DeleteAsset(const AssetLoadInfo& info)
-	{
-		AssetPtr& asset = GetAsset(info);
-		delete asset.ptr;
-		m_Assets.erase(info);
-	}
-
-	AssetPtr& ResourceManager::GetAsset(const AssetLoadInfo& info)
-	{
-		return m_Assets[info];
-	}
-
-	bool ResourceManager::AssetExists(const AssetLoadInfo& info)
-	{
-		return (m_Assets.find(info) != m_Assets.end());
-	}
-
-	Texture2D* ResourceManager::CreateNewTexture2D(const AssetLoadInfo& info)
-	{
-		Texture2D* tex = new Texture2D(info["Filename"], (MipmapMode)stoi(info["MipmapMode"]));
-		AddNewAsset(info, tex);
-		return tex;
-	}
-
-	Font* ResourceManager::CreateNewFont(const AssetLoadInfo& info)
-	{
-		Font* font = new Font(info["Filename"], stof(info["Size"]));
-		AddNewAsset(info, font);
-		return font;
-	}
-
-	Shader* ResourceManager::CreateNewShader(const AssetLoadInfo& info)
-	{
-		Shader* shader = nullptr;
-		if (info.IdentifierCount() == 1)
-		{
-			shader = Shader::FromFile(info["Filename"]);
-		}
-		else
-		{
-			shader = Shader::FromFile(info["VertexFile"], info["FragmentFile"]);
-		}
-		AddNewAsset(info, shader);
-		return shader;
-	}
-
-	Model* ResourceManager::CreateNewOBJModel(const AssetLoadInfo& info)
-	{
-		Model* model = new Model(info["Filename"]);
-		AddNewAsset(info, model);
-		return model;
-	}
-
-	Resource<Model> ResourceManager::LoadModelAsset(const AssetLoadInfo& info)
-	{
-		if (AssetExists(info))
-		{
-			IncrementRefCount(info);
-			return Resource<Model>((Model*)GetAsset(info).ptr);
-		}
-		if (info.Type() == AssetType::OBJModel)
-		{
-			return Resource<Model>(CreateNewOBJModel(info));
-		}
-		else if (info.Type() == AssetType::Cuboid)
-		{
-			Model* cuboid = Internal::Shapes::Cuboid(stof(info["Width"]), stof(info["Height"]), stof(info["Depth"]));
-			AddNewAsset(info, cuboid);
-			return Resource<Model>(cuboid);
-		}
-		else if (info.Type() == AssetType::Grid)
-		{
-			Model* grid = Internal::Shapes::Grid(stof(info["Width"]), stof(info["Depth"]), stoi(info["xVertices"]), stoi(info["zVertices"]));
-			AddNewAsset(info, grid);
-			return Resource<Model>(grid);
-		}
-		else if (info.Type() == AssetType::Sphere)
-		{
-			Model* sphere = Internal::Shapes::Sphere(stof(info["Radius"]), 100);
-			AddNewAsset(info, sphere);
-			return Resource<Model>(sphere);
-		}
-		else if (info.Type() == AssetType::Ellipse)
-		{
-			Model* ellipse = Internal::Shapes::Ellipse(stof(info["Width"]), stof(info["Height"]), 100);
-			AddNewAsset(info, ellipse);
-			return Resource<Model>(ellipse);
-		}
-		else if (info.Type() == AssetType::Rectangle)
-		{
-			Model* rectangle = Internal::Shapes::Rectangle(stof(info["Width"]), stof(info["Height"]));
-			AddNewAsset(info, rectangle);
-			return Resource<Model>(rectangle);
-		}
-	}
-
-	Resource<Shader> ResourceManager::LoadShaderAsset(const AssetLoadInfo& info)
-	{
-		if (AssetExists(info))
-		{
-			IncrementRefCount(info);
-			return Resource<Shader>((Shader*)GetAsset(info).ptr);
-		}
-		if (info.LoadMethod() == LoadType::Loaded)
-		{
-			if (info["Filename"] == "DefaultColorShader")
-			{
-				return DefaultColorShader();
-			}
-			else if (info["Filename"] == "DefaultTextureShader")
-			{
-				return DefaultTextureShader();
-			}
-			else if (info["Filename"] == "LightingColorShader")
-			{
-				return LightingColorShader();
-			}
-			else if (info["Filename"] == "LightingTextureShader")
-			{
-				return LightingTextureShader();
-			}
-			else if (info["Filename"] == "DefaultWireframeShader")
-			{
-				return DefaultWireframeShader();
-			}
-			return Resource<Shader>(CreateNewShader(info));
-		}
-	}
-
-	Resource<Texture2D> ResourceManager::LoadTexture2DAsset(const AssetLoadInfo& info)
-	{
-		if (info.LoadMethod() == LoadType::Generated)
-		{
-			int width = stoi(info["Width"]);
-			int height = stoi(info["Height"]);
-			MipmapMode mip = (MipmapMode)stoi(info["MipmapMode"]);
-			Texture2D* texture = new Texture2D((uint)width, (uint)height, ImageFormat::Rgba, mip);
-			AddNewAsset(info, texture);
-			return Resource<Texture2D>(texture);
-		}
-		if (AssetExists(info))
-		{
-			IncrementRefCount(info);
-			return Resource<Texture2D>((Texture2D*)GetAsset(info).ptr);
-		}		
-		return Resource<Texture2D>(CreateNewTexture2D(info));
-	}
-
-	Resource<Font> ResourceManager::LoadFontAsset(const AssetLoadInfo& info)
-	{
-		if (AssetExists(info))
-		{
-			IncrementRefCount(info);
-			return Resource<Font>((Font*)GetAsset(info).ptr);
-		}
-		return Resource<Font>(CreateNewFont(info));
+			;
+		m_LightTexture = CreateShader(vSource, fSource);
 	}
 
 }

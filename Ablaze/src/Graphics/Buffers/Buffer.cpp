@@ -22,6 +22,7 @@ namespace Ablaze
 	Buffer::~Buffer()
 	{
 		GL_CALL(glDeleteBuffers(1, &m_Id));
+		m_Id = 0;
 	}
 
 	int64 Buffer::GetSize() const
@@ -41,11 +42,7 @@ namespace Ablaze
 
 	void Buffer::Bind() const
 	{
-		if (s_CurrentlyBound != this)
-		{
-			GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
-			s_CurrentlyBound = this;
-		}
+		GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
 	}
 
 	void Buffer::Unbind() const

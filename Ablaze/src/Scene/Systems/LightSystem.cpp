@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	void LightSystem::AddShader(const Resource<Shader>& shader)
+	void LightSystem::AddShader(const std::shared_ptr<Shader>& shader)
 	{
 		m_Shaders.push_back(shader);
 	}
@@ -12,7 +12,7 @@ namespace Ablaze
 	{
 		std::vector<GameObject*> lights = GameObject::GetAllWith<Transform, Light>();
 		int lightCount = lights.size();
-		for (Resource<Shader>& shader : m_Shaders)
+		for (std::shared_ptr<Shader>& shader : m_Shaders)
 		{
 			shader->Bind();
 			shader->SetUniform("UsedLights", lightCount);

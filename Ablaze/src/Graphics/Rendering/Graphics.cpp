@@ -118,22 +118,36 @@ namespace Ablaze
 		}
 	}
 
-	void Graphics::DrawString(const String& text, const Resource<Font>& font)
+	void Graphics::DrawString(const String& text, const std::shared_ptr<Font>& font)
 	{
 		
 	}
 
+	void Graphics::DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material)
+	{
+		GameObject* obj = GameObject::Instantiate("Object", x, y, 0);
+		obj->transform().LocalScale() = Maths::Vec3(w, h, 1);
+		obj->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(), material));
+		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
+		camera->AddComponent(new Camera(Projection::Orthographic));
+
+		ForwardRenderMethod method;
+		method.Begin();
+		method.Render(obj, camera);
+		method.End();
+
+		obj->Destroy();
+		camera->Destroy();
+	}
+
 	void Graphics::DrawRectangle(float x, float y, float w, float h, const Color& color)
 	{
-		Resource<Model> model = ResourceManager::Instance().CreateRectangle(w, h);
-		Material<Texture2D> material(color, ResourceManager::Instance().DefaultColorShader());
+		DrawRectangle(x, y, w, h, std::make_shared<Material<Texture2D>>(color, ResourceManager::Instance().DefaultColorShader()));
+	}
 
-		material.ActiveShader()->Bind();
-		material.Apply();
-		VertexArray* vao = model->GetVertexArray();
-		vao->Bind();
-
-		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
+	void Graphics::DrawImage(float x, float y, float w, float h, const std::shared_ptr<Texture2D>& image)
+	{
+		DrawRectangle(x, y, w, h, std::make_shared<Material<Texture2D>>(Color::White(), ResourceManager::Instance().DefaultTextureShader(), "Tex0", image));
 	}
 
 	void Graphics::ResetGLStates()

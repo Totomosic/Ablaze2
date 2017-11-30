@@ -6,49 +6,37 @@ namespace Ablaze
 	Mesh::Mesh() : Component(),
 		m_Models()
 	{
-	
+		
 	}
 
-	Mesh::Mesh(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform) : Mesh()
+	Mesh::Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Mat4& transform) : Mesh()
 	{
 		AddModel(model, material, transform);
 	}
 
-	Mesh::Mesh(const Mesh& other)
-		: m_Models(other.m_Models)
-	{
-		for (ModelSet& set : m_Models)
-		{
-			set.material = set.material->Clone();
-		}
-	}
-
 	Mesh::~Mesh()
 	{
-		for (ModelSet& set : m_Models)
-		{
-			delete set.material;
-		}
+		
 	}
 
-	const Resource<Model>& Mesh::GetModel(int index) const
+	const std::shared_ptr<Model>& Mesh::GetModel(int index) const
 	{
 		return m_Models[index].model;
 	}
 
-	Resource<Model>& Mesh::GetModel(int index)
+	std::shared_ptr<Model>& Mesh::GetModel(int index)
 	{
 		return m_Models[index].model;
 	}
 
-	const MaterialBase& Mesh::Material(int index) const
+	const std::shared_ptr<MaterialBase>& Mesh::Material(int index) const
 	{
-		return *m_Models[index].material;
+		return m_Models[index].material;
 	}
 
-	MaterialBase& Mesh::Material(int index)
+	std::shared_ptr<MaterialBase>& Mesh::Material(int index)
 	{
-		return *m_Models[index].material;
+		return m_Models[index].material;
 	}
 
 	const Maths::Mat4& Mesh::GetTransform(int index) const
@@ -66,9 +54,9 @@ namespace Ablaze
 		return m_Models[index];
 	}
 
-	const std::vector<ModelSet>& Mesh::GetModelSets() const
+	ModelSet& Mesh::GetModelSet(int index)
 	{
-		return m_Models;
+		return m_Models[index];
 	}
 
 	int Mesh::ModelCount() const
@@ -76,15 +64,14 @@ namespace Ablaze
 		return m_Models.size();
 	}
 
-	void Mesh::AddModel(const Resource<Model>& model, const MaterialBase& material, const Maths::Mat4& transform)
+	void Mesh::AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Mat4& transform)
 	{
-		m_Models.push_back({ model, material.Clone(), transform });
+		m_Models.push_back({ model, material, transform });
 	}
 
-	void Mesh::SetMaterial(int index, const MaterialBase& material)
+	void Mesh::SetMaterial(int index, const std::shared_ptr<MaterialBase>& material)
 	{
-		delete m_Models[index].material;
-		m_Models[index].material = material.Clone();
+		m_Models[index].material = material;
 	}
 
 	String Mesh::ToString() const
@@ -121,7 +108,7 @@ namespace Ablaze
 		Mesh* mesh = new Mesh;
 		for (const ModelSet& modelSet : m_Models)
 		{
-			ModelSet model = { modelSet.model, modelSet.material->Clone(), modelSet.transform };
+			ModelSet model = { modelSet.model, modelSet.material, modelSet.transform };
 			mesh->m_Models.push_back(model);
 		}
 		return mesh;

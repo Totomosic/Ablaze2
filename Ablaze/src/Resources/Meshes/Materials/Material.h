@@ -13,28 +13,23 @@ namespace Ablaze
 		TextureSet<T> m_Textures;
 
 	public:
-		Material(const Color& color, const Resource<Shader>& shader, const TextureSet<T>& textures, const RenderState& renderState) : MaterialBase(color, shader, renderState),
-			m_Textures(textures)
+		Material(const Color& color, const std::shared_ptr<Shader>& shader, const RenderState& renderState) : MaterialBase(color, shader, renderState),
+			m_Textures()
 		{
 			
 		}
 
-		Material(const Color& color, const Resource<Shader>& shader, const RenderState& renderState) : Material(color, shader, TextureSet<T>(), renderState)
-		{
-		
-		}
-
-		Material(const Color& color, const Resource<Shader>& shader, const String& sampler, const Resource<T>& texture) : Material(color, shader, RenderState())
+		Material(const Color& color, const std::shared_ptr<Shader>& shader, const String& sampler, const std::shared_ptr<T>& texture) : Material(color, shader, RenderState())
 		{
 			m_Textures.AddTexture(sampler, texture);
 		}
 
-		Material(const Color& color, const Resource<Shader>& shader, const String& sampler, const String& textureFilename) : Material(color, shader, RenderState())
+		Material(const Color& color, const std::shared_ptr<Shader>& shader, const String& sampler, const String& textureFilename) : Material(color, shader, RenderState())
 		{
-			m_Textures.AddTexture(sampler, ResourceManager::Instance().Load<T>(textureFilename));
+			//m_Textures.AddTexture(sampler, ResourceManager::Instance().Load<T>(textureFilename));
 		}
 
-		Material(const Color& color, const Resource<Shader>& shader) : Material(color, shader, RenderState())
+		Material(const Color& color, const std::shared_ptr<Shader>& shader) : Material(color, shader, RenderState())
 		{
 		
 		}

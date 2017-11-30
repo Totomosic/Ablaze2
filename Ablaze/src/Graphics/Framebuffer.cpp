@@ -95,7 +95,7 @@ namespace Ablaze
 		m_Viewport.SetHeight(height);
 	}
 
-	Resource<Texture2D> Framebuffer::GetTexture(ColorBuffer buffer) const
+	std::shared_ptr<Texture2D> Framebuffer::GetTexture(ColorBuffer buffer) const
 	{
 		return m_Textures.at(buffer);
 	}
@@ -111,7 +111,7 @@ namespace Ablaze
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	}
 
-	void Framebuffer::CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer)
+	void Framebuffer::CreateColorTextureAttachment(const std::shared_ptr<Texture2D>& texture, ColorBuffer buffer)
 	{
 		Bind();
 		texture->Bind();
@@ -122,7 +122,6 @@ namespace Ablaze
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->GetID(), 0));
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 		m_Textures[buffer] = texture;
-		texture.Increment(); // ????????????????
 	}
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
@@ -130,7 +129,7 @@ namespace Ablaze
 		CreateColorTextureAttachment(ResourceManager::Instance().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled), buffer);
 	}
 
-	void Framebuffer::CreateDepthTextureAttachment(const Resource<Texture2D>& texture)
+	void Framebuffer::CreateDepthTextureAttachment(const std::shared_ptr<Texture2D>& texture)
 	{
 		Bind();
 		texture->Bind();
@@ -140,7 +139,6 @@ namespace Ablaze
 		texture->SetWrapMode(WrapMode::Clamp);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->GetID(), 0));
 		m_Textures[ColorBuffer::Depth] = texture;
-		texture.Increment(); // ????????????????? Crashes without this... Does the above line not call copy constructor?????????????????
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment()

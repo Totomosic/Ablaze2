@@ -3,7 +3,6 @@
 #include "Asset.h"
 #include "Meshes\Model.h"
 #include "Meshes\Shapes.h"
-#include "Shaders\ShaderProgram.h"
 #include "Textures\__Textures__.h"
 #include "Resource.h"
 
@@ -30,102 +29,45 @@ namespace Ablaze
 	class AB_API ResourceManager : public Singleton<ResourceManager>
 	{
 	private:
-		std::unordered_map<AssetLoadInfo, AssetPtr> m_Assets;
+		std::shared_ptr<Shader> m_DefaultColor;
+		std::shared_ptr<Shader> m_DefaultTexture;
+		std::shared_ptr<Shader> m_LightColor;
+		std::shared_ptr<Shader> m_LightTexture;
 
 	private:
 		ResourceManager();
 
 	public:
-		template<typename T>
-		Resource<T> Load(const String& filename)
-		{
-			if (typeid(T) == typeid(Texture2D))
-			{
-				return (Resource<T>)LoadTexture2D(filename);
-			}
-			else if (typeid(T) == typeid(Model))
-			{
-				return (Resource<T>)LoadOBJModel(filename);
-			}
-			else if (typeid(T) == typeid(Font))
-			{
-				return (Resource<T>)LoadFont(filename, 16);
-			}
-			else if (typeid(T) == typeid(Shader))
-			{
-				return (Resource<T>)LoadShader(filename);
-			}
-			AB_ERROR("Unable to load resource");
-			return Resource<T>(nullptr);
-		}
+		static void Terminate();
 
-		template<typename T>
-		Resource<T> Load(const AssetLoadInfo& loadInfo)
-		{
-			if (typeid(T) == typeid(Texture2D))
-			{
-				return (Resource<T>)LoadTexture2DAsset(loadInfo);
-			}
-			else if (typeid(T) == typeid(Model))
-			{
-				return (Resource<T>)LoadModelAsset(loadInfo);
-			}
-			else if (typeid(T) == typeid(Font))
-			{
-				return (Resource<T>)LoadFontAsset(loadInfo);
-			}
-			else if (typeid(T) == typeid(Shader))
-			{
-				return (Resource<T>)LoadShaderAsset(loadInfo);
-			}
-			AB_ERROR("Unable to load resource");
-			return Resource<T>(nullptr);
-		}
+	public:
+		std::shared_ptr<Shader> LoadShader(const String& shaderFile);
+		std::shared_ptr<Shader> LoadShader(const String& vFile, const String& fFile);
+		std::shared_ptr<Shader> CreateShader(const String& vSource, const String& fSource);
+		std::shared_ptr<Shader> CreateShader(const String& vSource, const String& gSource, const String& fSource);
+		std::shared_ptr<Shader> DefaultColorShader();
+		std::shared_ptr<Shader> DefaultTextureShader();
+		std::shared_ptr<Shader> LightingColorShader();
+		std::shared_ptr<Shader> LightingTextureShader();
 
-		Resource<Texture2D> LoadTexture2D(const String& filename, MipmapMode mipmap = MipmapMode::Enabled);
-		Resource<Font> LoadFont(const String& filename, float size);
+		std::shared_ptr<Texture2D> LoadTexture2D(const String& textureFile, MipmapMode mipmap = MipmapMode::Enabled);
+		std::shared_ptr<Texture2D> CreateBlankTexture2D(int width, int height, MipmapMode mipmap = MipmapMode::Enabled);
 
-		Resource<Shader> LoadShader(const String& vFile, const String& fFile);
-		Resource<Shader> LoadShader(const String& shaderFile);
-		Resource<Shader> DefaultColorShader();
-		Resource<Shader> DefaultTextureShader();
-		Resource<Shader> LightingColorShader();
-		Resource<Shader> LightingTextureShader();
-		Resource<Shader> DefaultWireframeShader();
+		std::shared_ptr<Model> LoadModel(const String& objModelFile);
+		std::shared_ptr<Model> CreateRectangle(const Color& color = Color::White());
+		std::shared_ptr<Model> CreateCircle(const Color& color = Color::White());
+		std::shared_ptr<Model> CreateCuboid(const Color& color = Color::White());
+		std::shared_ptr<Model> CreateSphere(const Color& color = Color::White());
+		std::shared_ptr<Model> CreateGrid(int xVerts, int zVerts, const Color& color = Color::White());
+		std::shared_ptr<Model> CreatePlane(const Color& color = Color::White());
 
-		Resource<Model> LoadOBJModel(const String& objFile);
-
-		Resource<Texture2D> CreateBlankTexture2D(uint width, uint height, MipmapMode mipmap = MipmapMode::Disabled);
-
-		Resource<Model> CreateRectangle(float width, float height, const Color& color = Color::White());
-		Resource<Model> CreateCircle(float radius, const Color& color = Color::White());
-		Resource<Model> CreateEllipse(float width, float height, const Color& color = Color::White());
-		
-		Resource<Model> CreateCuboid(float width, float height, float depth, const Color& color = Color::White());
-		Resource<Model> CreateSphere(float radius, const Color& color = Color::White());
-		Resource<Model> CreatePlane(float width, float depth, const Color& color = Color::White());
-		Resource<Model> CreateGrid(float width, float height, int xVertices, int zVertices, const Color& color = Color::White()); // x and yVertices must be >= 2
-
-		template<typename> friend class Resource;
 		friend class Singleton<ResourceManager>;
 
 	private:
-		void AddNewAsset(const AssetLoadInfo& info, Asset* asset, int initalRefCount = 1);
-		void DecrementRefCount(const AssetLoadInfo& info, int count = 1);
-		void IncrementRefCount(const AssetLoadInfo& info, int count = 1);
-		void DeleteAsset(const AssetLoadInfo& info);
-		AssetPtr& GetAsset(const AssetLoadInfo& info);
-		bool AssetExists(const AssetLoadInfo& info);
-
-		Texture2D* CreateNewTexture2D(const AssetLoadInfo& info);
-		Font* CreateNewFont(const AssetLoadInfo& info);
-		Shader* CreateNewShader(const AssetLoadInfo& info);
-		Model* CreateNewOBJModel(const AssetLoadInfo& info);
-
-		Resource<Model> LoadModelAsset(const AssetLoadInfo& info);
-		Resource<Texture2D> LoadTexture2DAsset(const AssetLoadInfo& info);
-		Resource<Shader> LoadShaderAsset(const AssetLoadInfo& info);
-		Resource<Font> LoadFontAsset(const AssetLoadInfo& info);
+		void LoadDefaultColor();
+		void LoadDefaultTexture();
+		void LoadLightColor();
+		void LoadLightTexture();
 
 	};
 

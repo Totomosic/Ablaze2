@@ -11,11 +11,13 @@ namespace Ablaze
 	{
 	private:
 		T* m_ResourcePtr;
+		mutable bool m_Delete;
 
 	public:
 		Resource(T* resource)
 		{
 			m_ResourcePtr = resource;
+			m_Delete = true;
 		}
 
 		Resource() : Resource(nullptr)
@@ -23,41 +25,17 @@ namespace Ablaze
 		
 		}
 
-		Resource(const Resource<T>& other)
-		{
-			m_ResourcePtr = other.m_ResourcePtr;
-			if (other.m_ResourcePtr != nullptr)
-			{
-				ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
-			}
-		}
-
-		template<typename Other>
-		Resource(const Resource<Other>& other)
-		{
-			m_ResourcePtr = (T*)other.m_ResourcePtr;
-			if (other.m_ResourcePtr != nullptr)
-			{
-				ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
-			}
-		}
-
 		~Resource()
 		{
-			if (m_ResourcePtr != nullptr)
+			if (m_ResourcePtr != nullptr && m_Delete)
 			{
-				ResourceManager::Instance().DecrementRefCount(m_ResourcePtr->Info());
+				delete m_ResourcePtr;
 			}
 		}
 
 		T* Get() const { return m_ResourcePtr; }
 		T* operator*() const { return Get(); }
 		T* operator->() const { return Get(); }
-
-		void Increment() const
-		{
-			ResourceManager::Instance().IncrementRefCount(m_ResourcePtr->Info());
-		}
 
 		template<typename> friend class Resource;
 

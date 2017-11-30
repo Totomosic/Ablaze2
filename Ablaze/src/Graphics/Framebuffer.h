@@ -45,7 +45,7 @@ namespace Ablaze
 	private:
 		Viewport m_Viewport;
 		Color m_ClearColor;
-		std::unordered_map<ColorBuffer, Resource<Texture2D>> m_Textures;
+		std::unordered_map<ColorBuffer, std::shared_ptr<Texture2D>> m_Textures;
 
 	private:
 		Framebuffer(int width, int height); // Window Framebuffer constructor
@@ -68,12 +68,12 @@ namespace Ablaze
 		void SetWidth(int width);
 		void SetHeight(int height);
 
-		Resource<Texture2D> GetTexture(ColorBuffer buffer) const;
+		std::shared_ptr<Texture2D> GetTexture(ColorBuffer buffer) const;
 
 		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest);
-		void CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		void CreateColorTextureAttachment(const std::shared_ptr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateColorTextureAttachment(ColorBuffer buffer = ColorBuffer::Color0);
-		void CreateDepthTextureAttachment(const Resource<Texture2D>& texture);
+		void CreateDepthTextureAttachment(const std::shared_ptr<Texture2D>& texture);
 		void CreateDepthTextureAttachment();
 
 		String ToString() const override;

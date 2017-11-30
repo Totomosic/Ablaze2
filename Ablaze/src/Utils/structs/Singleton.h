@@ -21,8 +21,8 @@ namespace Ablaze
 	public:
 		static T& Instance()
 		{
-			static T instance;
-			return instance;
+			static T* instance = new T;
+			return *instance;
 		}
 
 	};

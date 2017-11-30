@@ -18,6 +18,7 @@ namespace Ablaze
 
 	Window::~Window()
 	{
+		AB_INFO("Window Deleted");
 		glfwDestroyWindow(m_WindowPtr);
 	}
 

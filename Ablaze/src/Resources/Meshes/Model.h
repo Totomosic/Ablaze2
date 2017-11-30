@@ -37,7 +37,7 @@ namespace Ablaze
 	private:
 		VertexArray* m_VertexArray;
 
-	private:
+	public:
 		Model();
 		Model(VertexArray* vertexArray);
 		Model(const String& filename);
@@ -55,6 +55,7 @@ namespace Ablaze
 
 		friend class ResourceManager;
 		friend class Internal::Shapes;
+		template<typename> friend class std::shared_ptr;
 
 	private:
 		void LoadOBJModel(const String& filename);

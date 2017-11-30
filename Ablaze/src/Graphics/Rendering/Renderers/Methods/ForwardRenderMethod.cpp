@@ -15,22 +15,21 @@ namespace Ablaze
 		Transform& cameraTransform = camera->transform();
 		Camera& cameraComp = camera->GetComponent<Camera>();
 
-		AB_INFO(object->m_Id);
-
-		for (const ModelSet& set : mesh.GetModelSets())
+		for (int i = 0; i < mesh.ModelCount(); i++)
 		{
-			const MaterialBase& mat = *set.material;
-			const Resource<Model>& model = set.model;
-			const Resource<Shader>& shader = mat.ActiveShader();
+			ModelSet& set = mesh.GetModelSet(i);
+			MaterialBase* mat = set.material.get();
+			std::shared_ptr<Model>& model = set.model;
+			std::shared_ptr<Shader>& shader = mat->ActiveShader();
 			shader->Bind();
 			shader->SetUniform("modelMatrix", set.transform * transform.ToMatrix());
 			shader->SetUniform("viewMatrix", cameraTransform.ToMatrix().Inverse());
 			shader->SetUniform("projectionMatrix", cameraComp.ProjectionMatrix());
-			shader->SetUniform("color", mat.BaseColor());
-			mat.Apply();
+			shader->SetUniform("color", mat->BaseColor());
+			mat->Apply();
 			VertexArray* vao = model->GetVertexArray();
 			vao->Bind();
-			glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
+			GL_CALL(glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr));
 		}
 	}
 

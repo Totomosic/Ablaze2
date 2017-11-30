@@ -74,7 +74,7 @@ namespace Ablaze
 		return Get(uniformLocation);
 	}
 
-	void UniformManager::UploadAll(const Resource<Shader>& shader) const
+	void UniformManager::UploadAll(const std::shared_ptr<Shader>& shader) const
 	{
 		std::vector<int> remove;
 		int count = 0;

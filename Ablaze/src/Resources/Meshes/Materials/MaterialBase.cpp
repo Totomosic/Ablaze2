@@ -4,13 +4,13 @@
 namespace Ablaze
 {
 
-	MaterialBase::MaterialBase(const Color& color, const RenderState& renderSettings, const Resource<Shader>& shader) : Object(),
+	MaterialBase::MaterialBase(const Color& color, const RenderState& renderSettings, const std::shared_ptr<Shader>& shader) : Object(),
 		m_BaseColor(color), m_RenderState(renderSettings), m_Shader(shader), m_Uniforms()
 	{
-	
+		
 	}
 
-	MaterialBase::MaterialBase(const Color& color, const Resource<Shader>& shader, const RenderState& renderSettings) : MaterialBase(color, renderSettings, shader)
+	MaterialBase::MaterialBase(const Color& color, const std::shared_ptr<Shader>& shader, const RenderState& renderSettings) : MaterialBase(color, renderSettings, shader)
 	{
 	
 	}
@@ -35,12 +35,12 @@ namespace Ablaze
 		return m_RenderState;
 	}
 
-	const Resource<Shader>& MaterialBase::ActiveShader() const
+	const std::shared_ptr<Shader>& MaterialBase::ActiveShader() const
 	{
 		return m_Shader;
 	}
 
-	Resource<Shader>& MaterialBase::ActiveShader()
+	std::shared_ptr<Shader>& MaterialBase::ActiveShader()
 	{
 		return m_Shader;
 	}

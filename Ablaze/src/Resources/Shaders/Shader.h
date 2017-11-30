@@ -18,10 +18,10 @@ namespace Ablaze
 		static const int FragmentShader = 2;
 
 	private:
-		Resource<ShaderProgram> m_ShaderPrograms[3];
+		std::shared_ptr<ShaderProgram> m_ShaderPrograms[3];
 		mutable std::unordered_map<String, int> m_UniformLocations;
 
-	private:
+	public:
 		Shader(const String& vertexSrc, const String& fragmentSrc);
 		Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		~Shader(); // Prevent stack objects and can only be deleted by ResourceManager
@@ -31,7 +31,7 @@ namespace Ablaze
 		void Unbind() const override;
 
 		void Reload() override;
-		void AttachShader(const Resource<ShaderProgram>& shader);
+		void AttachShader(const std::shared_ptr<ShaderProgram>& shader);
 
 		void SetUniform(const String& uniformName, bool value) const;
 		void SetUniform(const String& uniformName, int value) const;
@@ -52,7 +52,7 @@ namespace Ablaze
 		}
 
 		template<typename T>
-		void SetTexture(const String& samplerName, const Resource<T>& texture)
+		void SetTexture(const String& samplerName, const std::shared_ptr<T>& texture)
 		{
 			texture->Bind();
 			SetUniform<int>(samplerName, texture->GetBindPort());
@@ -61,6 +61,7 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class ResourceManager;
+		template<typename> friend class std::shared_ptr;
 
 	private:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);

@@ -10,16 +10,17 @@ namespace Ablaze
 	class AB_API TextureSet : public Object
 	{
 	private:
-		std::vector<Resource<T>> m_Textures;
+		std::vector<std::shared_ptr<T>> m_Textures;
 		std::unordered_map<int, String> m_Lookup;
 
 	public:
-		TextureSet() : Object()
+		TextureSet() : Object(),
+			m_Textures(), m_Lookup()
 		{
-		
+			
 		}
 
-		TextureSet(const String& sampler, const Resource<T>& texture)
+		TextureSet(const String& sampler, const std::shared_ptr<T>& texture) : TextureSet()
 		{
 			AddTexture(sampler, texture);
 		}
@@ -30,12 +31,12 @@ namespace Ablaze
 			return m_Lookup[index];
 		}
 
-		const Resource<T>& GetTexture(int index) const
+		const std::shared_ptr<T>& GetTexture(int index) const
 		{
 			return m_Textures[index];
 		}
 
-		Resource<T>& GetTexture(int index)
+		std::shared_ptr<T>& GetTexture(int index)
 		{
 			return m_Textures[index];
 		}
@@ -45,7 +46,7 @@ namespace Ablaze
 			return m_Textures.size();
 		}
 
-		void AddTexture(const String& sampler, const Resource<T>& texture)
+		void AddTexture(const String& sampler, const std::shared_ptr<T>& texture)
 		{
 			int index = m_Textures.size();
 			m_Textures.push_back(texture);
@@ -57,7 +58,7 @@ namespace Ablaze
 			m_Textures.erase(m_Textures.begin() + index);
 		}
 
-		void BindAll(const Resource<Shader>& shader) const
+		void BindAll(const std::shared_ptr<Shader>& shader) const
 		{
 			for (int i = 0; i < TextureCount(); i++)
 			{
@@ -75,7 +76,7 @@ namespace Ablaze
 			writer.BeginObject();
 			writer.BeginArray("Textures");
 			int index = 0;
-			for (const Resource<T>& resource : m_Textures)
+			for (const std::shared_ptr<T>& resource : m_Textures)
 			{
 				writer.BeginObject();
 				writer.WriteAttribute("Sampler", m_Lookup.at(index));

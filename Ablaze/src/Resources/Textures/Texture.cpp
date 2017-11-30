@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "TextureManager.h"
 
 namespace Ablaze
 {
@@ -17,6 +18,7 @@ namespace Ablaze
 
 	Texture::~Texture()
 	{
+		TextureManager::Instance().Delete(m_BindPort);
 		glDeleteTextures(1, &m_Id);
 	}
 
