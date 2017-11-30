@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Graphics\Rendering\Graphics.h"
+#include "Graphics\Rendering\GraphicsEnums.h"
 
 namespace Ablaze
 {

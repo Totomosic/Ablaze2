@@ -10,6 +10,14 @@ namespace Ablaze
 	
 	}
 
+	ComponentSet::~ComponentSet()
+	{
+		for (auto pair : m_Components)
+		{
+			delete pair.second;
+		}
+	}
+
 	int ComponentSet::ComponentCount() const
 	{
 		return m_Components.size();

@@ -5,7 +5,7 @@
 namespace Ablaze
 {
 
-	class AB_API SceneManager : public Object
+	class AB_API SceneManager : public Singleton<SceneManager>
 	{
 	private:
 		std::vector<Scene*> m_Scenes;
@@ -13,9 +13,6 @@ namespace Ablaze
 
 	private:
 		SceneManager();
-
-	public:
-		static SceneManager& Instance();
 
 	public:
 		Scene& CurrentScene();
@@ -32,7 +29,7 @@ namespace Ablaze
 
 		Scene& CreateScene();
 
-		String ToString() const override;
+		friend class Singleton<SceneManager>;
 
 	};
 

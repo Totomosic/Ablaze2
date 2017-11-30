@@ -27,15 +27,9 @@ namespace Ablaze
 		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
 
-		Component::Register<Transform>();
-		Component::Register<Mesh>();
-		Component::Register<Light>();
-		Component::Register<Camera>();
-		Component::Register<RigidBody>();
-
 		double time = Time::CurrentTime();
 		Init();
-		AB_INFO("Init took: " + std::to_string(Time::CurrentTime() - time) + " seconds");
+		AB_WARN("Init took: " + std::to_string(Time::CurrentTime() - time) + " seconds");
 		Time::Reset();
 		Time::CreateNewTimer(1.0, METHOD_0(Application::Tick));
 
@@ -85,7 +79,6 @@ namespace Ablaze
 	void Application::Render()
 	{
 		Graphics::CurrentContext()->Update();
-		Graphics::CurrentContext()->Clear();
 	}
 
 	void Application::Run()

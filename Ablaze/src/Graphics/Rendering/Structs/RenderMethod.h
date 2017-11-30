@@ -10,7 +10,7 @@ namespace Ablaze
 	{
 	public:
 		virtual void Begin() = 0; // Called at beginning of each render pass
-		virtual void Render(GameObject* object) = 0; // May need to accept parameters such as the current renderer?
+		virtual void Render(GameObject* object, GameObject* camera) = 0; // May need to accept parameters such as the current renderer?
 		virtual void End() = 0; // Called at end of each render pass
 
 	};

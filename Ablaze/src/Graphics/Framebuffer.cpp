@@ -100,13 +100,13 @@ namespace Ablaze
 		return m_Textures.at(buffer);
 	}
 
-	void Framebuffer::CopyToScreen(ClearBuffer buffer)
+	void Framebuffer::CopyToScreen(ClearBuffer buffer, Filter filter)
 	{
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id));
 		GL_CALL(glReadBuffer(GL_COLOR_ATTACHMENT0));
-		//GL_CALL(glDrawBuffer(GL_COLOR_ATTACHMENT0));
-		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext()->Width(), Graphics::CurrentContext()->Height(), (GLbitfield)buffer, GL_NEAREST));
+		GL_CALL(glDrawBuffer(GL_FRONT_AND_BACK));
+		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext()->Width(), Graphics::CurrentContext()->Height(), (GLbitfield)buffer, (GLenum)filter));
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	}

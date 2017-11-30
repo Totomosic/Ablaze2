@@ -13,7 +13,7 @@ namespace Ablaze
 	// Base class for all Objects in the game
 	class AB_API GameObject : public Object
 	{
-	protected:
+	public:
 		ComponentSet* m_Components;
 		uint m_Id;
 		Layer* m_Layer;

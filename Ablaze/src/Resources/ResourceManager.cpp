@@ -6,15 +6,9 @@
 namespace Ablaze
 {
 
-	ResourceManager::ResourceManager() : Object()
+	ResourceManager::ResourceManager()
 	{
 		
-	}
-
-	ResourceManager& ResourceManager::Instance()
-	{
-		static ResourceManager* instance = new ResourceManager();
-		return *instance;
 	}
 
 	Resource<Texture2D> ResourceManager::LoadTexture2D(const String& filename, MipmapMode mipmap)
@@ -253,11 +247,6 @@ namespace Ablaze
 	Resource<Model> ResourceManager::CreatePlane(float width, float depth, const Color& color)
 	{
 		return CreateGrid(width, depth, 2, 2, color);
-	}
-
-	String ResourceManager::ToString() const
-	{
-		return "ResourceManager";
 	}
 
 	void ResourceManager::AddNewAsset(const AssetLoadInfo& info, Asset* asset, int initialRefCount)

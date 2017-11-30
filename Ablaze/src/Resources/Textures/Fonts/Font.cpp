@@ -19,7 +19,7 @@ namespace Ablaze
 		Texture2D::~Texture2D();
 	}
 
-	float Font::Size() const
+	float Font::FontSize() const
 	{
 		return m_Size;
 	}

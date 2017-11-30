@@ -1,4 +1,5 @@
 #include "RenderState.h"
+#include "Graphics\Rendering\Graphics.h"
 
 namespace Ablaze
 {

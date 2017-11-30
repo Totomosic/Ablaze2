@@ -6,7 +6,7 @@
 namespace Ablaze
 {
 
-	class AB_API Time : public Object
+	class AB_API Time
 	{
 	private:
 		static double s_TotalSeconds;
@@ -19,7 +19,6 @@ namespace Ablaze
 
 	public:
 		Time() = delete;
-		String ToString() const override;
 
 	public:
 		static double ElapsedTime();

@@ -5,8 +5,11 @@
 namespace Ablaze
 {
 
-	class AB_API GraphicsPipeline : public Object
+	struct AB_API GraphicsPipeline
 	{
+	public:
+		RenderSchedule* Schedule;
+		Renderer* Renderer;
 
 	};
 

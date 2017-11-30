@@ -27,16 +27,13 @@ namespace Ablaze
 	class Shader;
 
 	// Manages all resources within Engine
-	class AB_API ResourceManager : public Object
+	class AB_API ResourceManager : public Singleton<ResourceManager>
 	{
 	private:
 		std::unordered_map<AssetLoadInfo, AssetPtr> m_Assets;
 
 	private:
 		ResourceManager();
-
-	public:
-		static ResourceManager& Instance();
 
 	public:
 		template<typename T>
@@ -109,9 +106,8 @@ namespace Ablaze
 		Resource<Model> CreatePlane(float width, float depth, const Color& color = Color::White());
 		Resource<Model> CreateGrid(float width, float height, int xVertices, int zVertices, const Color& color = Color::White()); // x and yVertices must be >= 2
 
-		String ToString() const override;
-
 		template<typename> friend class Resource;
+		friend class Singleton<ResourceManager>;
 
 	private:
 		void AddNewAsset(const AssetLoadInfo& info, Asset* asset, int initalRefCount = 1);

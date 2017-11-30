@@ -41,6 +41,7 @@ namespace Ablaze
 		Model();
 		Model(VertexArray* vertexArray);
 		Model(const String& filename);
+		Model(const Model& other) = delete;
 		~Model(); // Prevent stack objects and can only be deleted by ResourceManager
 
 	public:

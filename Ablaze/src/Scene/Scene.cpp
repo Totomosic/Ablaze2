@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "LayerMask.h"
+#include "Scene\Components\__Components__.h"
 
 namespace Ablaze
 {

@@ -1,6 +1,10 @@
 #pragma once
 #include "Common.h"
+#include "Graphics\Framebuffer.h"
 #include "Scene\LayerMask.h"
+#include "Scene\Layer.h"
+#include "Scene\Scene.h"
+#include "Scene\SceneManager.h"
 #include "Resources\Shaders\Uniforms\__Uniforms__.h"
 
 namespace Ablaze
@@ -28,6 +32,11 @@ namespace Ablaze
 		Framebuffer* RenderTarget();
 		const UniformManager& Uniforms() const;
 		UniformManager& Uniforms();
+
+		std::vector<GameObject*> GetGameObjects();
+
+		void Begin();
+		void End();
 
 		String ToString() const override;
 

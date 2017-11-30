@@ -1,5 +1,6 @@
 #include "RenderPass.h"
 #include "Graphics\Rendering\Graphics.h"
+#include "Scene\ComponentSet.h"
 
 namespace Ablaze
 {
@@ -63,6 +64,36 @@ namespace Ablaze
 	UniformManager& RenderPass::Uniforms()
 	{
 		return m_Uniforms;
+	}
+
+	std::vector<GameObject*> RenderPass::GetGameObjects()
+	{
+		std::vector<GameObject*> objects;
+		if (SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer())
+		{
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers(m_Layers))
+			{
+				for (GameObject* object : layer->GameObjects())
+				{
+					if (object->HasComponent<Transform>() && object->HasComponent<Mesh>())
+					{
+						objects.push_back(object);
+					}
+				}
+			}
+		}
+		return objects;
+	}
+
+	void RenderPass::Begin()
+	{
+		m_RenderTarget->Bind();
+		m_RenderTarget->Clear();
+	}
+
+	void RenderPass::End()
+	{
+		
 	}
 
 	String RenderPass::ToString() const

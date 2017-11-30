@@ -1,42 +1,19 @@
 #pragma once
 #include "Common.h"
+#include "GraphicsEnums.h"
 
 #include "Graphics\Framebuffer.h"
 #include "Graphics\Window.h"
 #include "Resources\Resource.h"
 #include "Resources\Textures\Fonts\Font.h"
 
+#include "GraphicsPipeline.h"
+
 namespace Ablaze
 {
 
 	class MaterialBase;
 	class Mesh;
-
-	enum class GraphicsAPI
-	{
-		OpenGL, DirectX, Vulkan
-	};
-
-	enum class DepthFunction : GLenum
-	{
-		Less = GL_LESS,
-		Lequal = GL_LEQUAL,
-		Equal = GL_EQUAL,
-		Gequal = GL_GEQUAL,
-		Greater = GL_GREATER
-	};
-
-	enum class BlendSrc : GLenum
-	{
-		SrcAlpha = GL_SRC_ALPHA,
-		One = GL_ONE
-	};
-
-	enum class BlendDst : GLenum
-	{
-		OneMinusSrcAlpha = GL_ONE_MINUS_SRC_ALPHA,
-		One = GL_ONE
-	};
 
 	class AB_API Graphics
 	{
@@ -50,6 +27,10 @@ namespace Ablaze
 		static DepthFunction s_DepthFunction;
 		static BlendSrc s_BlendSrcFunction;
 		static BlendDst s_BlendDstFunction;
+
+	private:
+		static std::vector<GraphicsPipeline> s_Pipelines;
+		static GraphicsPipeline* s_CurrentPipeline;
 
 	public:
 		Graphics() = delete;
@@ -70,11 +51,15 @@ namespace Ablaze
 
 		// Graphical window commands
 		static void Clear();
-		static void SetRenderTarget(const Framebuffer* const renderTarget);
 		static void Present();
+
+		static void AddGraphicsPipeline(const GraphicsPipeline& pipeline);
+		static void EnableGraphicsPipeline(int index);
+		static void RenderScene();
 
 		// Drawing commands
 		static void DrawString(const String& text, const Resource<Font>& font);
+		static void DrawRectangle(float x, float y, float w, float h, const Color& color);
 
 		// OpenGL state management
 		static void ResetGLStates();

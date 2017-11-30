@@ -11,11 +11,6 @@ namespace Ablaze
 	double Time::s_AvgFps = 60;
 	double Time::s_AvgTimer = 0;
 
-	String Time::ToString() const
-	{
-		return "Game Time";
-	}
-
 	double Time::DeltaTime()
 	{
 		return s_ElapsedSeconds;

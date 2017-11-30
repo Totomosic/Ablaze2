@@ -15,6 +15,7 @@ namespace Ablaze
 
 	public:
 		ComponentSet(GameObject* owner);
+		~ComponentSet();
 
 		int ComponentCount() const;
 		GameObject* Owner() const;

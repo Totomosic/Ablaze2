@@ -84,8 +84,8 @@ namespace Ablaze
 		if (m_Layer != nullptr)
 		{
 			m_Layer->TagGameObject(this, tag);
-			m_Tag = tag;
 		}
+		m_Tag = tag;
 	}
 	
 	const ComponentSet& GameObject::Components() const

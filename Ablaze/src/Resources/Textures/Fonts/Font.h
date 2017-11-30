@@ -17,7 +17,7 @@ namespace Ablaze
 		~Font();
 
 	public:
-		float Size() const;
+		float FontSize() const;
 
 		float GetWidth(const String& text) const;
 		float GetHeight(const String& text) const;

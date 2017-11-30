@@ -31,6 +31,12 @@ namespace Ablaze
 		Depth = GL_DEPTH_ATTACHMENT
 	};
 
+	enum class Filter : GLenum
+	{
+		Linear = GL_LINEAR,
+		Nearest = GL_NEAREST
+	};
+
 	class AB_API Framebuffer : public GLObject
 	{
 	private:
@@ -64,7 +70,7 @@ namespace Ablaze
 
 		Resource<Texture2D> GetTexture(ColorBuffer buffer) const;
 
-		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth);
+		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest);
 		void CreateColorTextureAttachment(const Resource<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateColorTextureAttachment(ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateDepthTextureAttachment(const Resource<Texture2D>& texture);

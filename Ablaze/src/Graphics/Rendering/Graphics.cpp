@@ -2,6 +2,8 @@
 #include "Resources\ResourceManager.h"
 #include "Resources\Meshes\__Meshes__.h"
 
+#include "Renderers\Methods\__Methods__.h"
+
 namespace Ablaze
 {
 
@@ -14,6 +16,9 @@ namespace Ablaze
 	DepthFunction Graphics::s_DepthFunction = DepthFunction::Less;
 	BlendSrc Graphics::s_BlendSrcFunction = BlendSrc::SrcAlpha;
 	BlendDst Graphics::s_BlendDstFunction = BlendDst::OneMinusSrcAlpha;
+
+	std::vector<GraphicsPipeline> Graphics::s_Pipelines = std::vector<GraphicsPipeline>();
+	GraphicsPipeline* Graphics::s_CurrentPipeline = nullptr;
 
 	bool Graphics::IsInitialised()
 	{
@@ -81,19 +86,54 @@ namespace Ablaze
 		s_Context->Clear();
 	}
 
-	void Graphics::SetRenderTarget(const Framebuffer* const renderTarget)
-	{
-		
-	}
-
 	void Graphics::Present()
 	{
 		s_Context->SwapBuffers();
 	}
 
+	void Graphics::AddGraphicsPipeline(const GraphicsPipeline& pipeline)
+	{
+		int index = s_Pipelines.size();
+		s_Pipelines.push_back(pipeline);
+		if (s_CurrentPipeline == nullptr)
+		{
+			s_CurrentPipeline = &s_Pipelines[index];
+		}
+	}
+
+	void Graphics::EnableGraphicsPipeline(int index)
+	{
+		s_CurrentPipeline = &s_Pipelines[index];
+	}
+
+	void Graphics::RenderScene()
+	{
+		if (s_CurrentPipeline != nullptr)
+		{
+			s_CurrentPipeline->Schedule->Execute(*s_CurrentPipeline->Renderer);
+		}
+		else
+		{
+			AB_WARN("Attempted to render scene without active GraphicsPipeline");
+		}
+	}
+
 	void Graphics::DrawString(const String& text, const Resource<Font>& font)
 	{
 		
+	}
+
+	void Graphics::DrawRectangle(float x, float y, float w, float h, const Color& color)
+	{
+		Resource<Model> model = ResourceManager::Instance().CreateRectangle(w, h);
+		Material<Texture2D> material(color, ResourceManager::Instance().DefaultColorShader());
+
+		material.ActiveShader()->Bind();
+		material.Apply();
+		VertexArray* vao = model->GetVertexArray();
+		vao->Bind();
+
+		glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void Graphics::ResetGLStates()

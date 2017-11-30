@@ -3,15 +3,9 @@
 namespace Ablaze
 {
 
-	SceneManager::SceneManager() : Object()
+	SceneManager::SceneManager()
 	{
 		m_Current = nullptr;
-	}
-
-	SceneManager& SceneManager::Instance()
-	{
-		static SceneManager* instance = new SceneManager();
-		return *instance;
 	}
 
 	Scene& SceneManager::CurrentScene()
@@ -68,11 +62,6 @@ namespace Ablaze
 	{
 		Scene* s = new Scene();
 		return *s;
-	}
-
-	String SceneManager::ToString() const
-	{
-		return "SceneManager";
 	}
 
 }

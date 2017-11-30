@@ -7,15 +7,19 @@ using namespace Ablaze::Maths;
 class Game : public Application
 {
 public:
+	Framebuffer* renderTarget;
 
 public:
 	void Init() override
 	{
-		Window* window = new Window(1280, 720, "AblazeScape: ", Color::CornflowerBlue());
+		Window* window = new Window(1280, 720, "AblazeScape: ", Color::CornflowerBlue(), false);
 		Graphics::Initialise(window);
 		Graphics::EnableCull();
 
-		SceneManager::Instance().CreateScene();
+		renderTarget = new Framebuffer(WindowWidth(), WindowHeight(), true);
+		renderTarget->SetClearColor(Color::CornflowerBlue());
+
+		/*SceneManager::Instance().CreateScene();
 		SceneManager::Instance().CurrentScene().CreateLayer("World");
 		SceneManager::Instance().CurrentScene().SetCurrentLayer(0);
 
@@ -43,13 +47,20 @@ public:
 		GameObject* rect = GameObject::Instantiate("Crosshair", WindowWidth() / 2, WindowHeight() / 2, 0);
 		rect->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(15, 15), Material<>(Color::Red(), ResourceManager::Instance().DefaultColorShader())));
 
-		SceneManager::Instance().CurrentScene().CurrentLayer().SetActiveCamera(canvas);
+		SceneManager::Instance().CurrentScene().CurrentLayer().SetActiveCamera(canvas);*/
+
+		// Render Setup
+		GraphicsPipeline g;
+		g.Renderer = new ForwardRenderer;
+		g.Schedule = new RenderSchedule;
+		g.Schedule->AddRenderPass(new RenderPass("Default", renderTarget));
+		Graphics::AddGraphicsPipeline(g);
 
 	}
 
 	void Update() override
 	{
-		Graphics::CurrentContext()->SetTitle("AblazeScape: " + std::to_string((int)Time::AvgFPS()));
+		/*Graphics::CurrentContext()->SetTitle("AblazeScape: " + std::to_string((int)Time::AvgFPS()));
 
 		GameObject& camera = *SceneManager::Instance().CurrentScene()["World"].GetActiveCamera();
 		Transform& transform = SceneManager::Instance().CurrentScene()["World"].GetNamedGameObject("PlayerOrientation").transform();
@@ -82,7 +93,7 @@ public:
 			player.LocalPosition() -= player.Forward() * speed * Time::DeltaTime();
 		}
 
-		camera.transform().LocalPosition() += Maths::Vec3::Forward() * Input::RelMouseScroll().y;
+		camera.transform().LocalPosition() += Maths::Vec3::Forward() * Input::RelMouseScroll().y;*/
 
 		Application::Update();
 	}
@@ -91,15 +102,19 @@ public:
 	{
 		Application::Render();
 
-		if (SceneManager::Instance().HasScene())
+		Graphics::Clear();
+		Graphics::RenderScene();
+		Graphics::DrawRectangle(300, 300, 100, 50, Color::Blue());
+		renderTarget->CopyToScreen(ClearBuffer::Color, Filter::Nearest);
+		Graphics::Present();
+
+		/*if (SceneManager::Instance().HasScene())
 		{
 			for (GameObject* object : GameObject::GetAllWith<Transform, Mesh>())
 			{
 				RenderMesh(object->transform(), object->mesh(), object->GetLayer()->GetActiveCamera());
 			}
-		}
-
-		UpdateDisplay();
+		}*/
 	}
 
 	void RenderMesh(const Transform& transform, const Mesh& mesh, GameObject* camera)
