@@ -3,13 +3,13 @@
 namespace Ablaze
 {
 
-	Light::Light(LightType type, const Color& color, float ambient, const Maths::Vec3& attenuation) : Component(),
+	Light::Light(LightType type, const Color& color, float ambient, const Maths::Vector3f& attenuation) : Component(),
 		m_Type(type), m_LightColor(color), m_Ambient(ambient), m_Attenuation(attenuation)
 	{ 
 	
 	}
 
-	Light::Light(LightType type, const Color& color, float ambient) : Light(type, color, ambient, Maths::Vec3(1.0f, 0.0f, 0.0f))
+	Light::Light(LightType type, const Color& color, float ambient) : Light(type, color, ambient, Maths::Vector3f(1.0f, 0.0f, 0.0f))
 	{
 	
 	}
@@ -59,12 +59,12 @@ namespace Ablaze
 		return m_Ambient;
 	}
 
-	const Maths::Vec3& Light::Attenuation() const
+	const Maths::Vector3f& Light::Attenuation() const
 	{
 		return m_Attenuation;
 	}
 
-	Maths::Vec3& Light::Attenuation()
+	Maths::Vector3f& Light::Attenuation()
 	{
 		return m_Attenuation;
 	}

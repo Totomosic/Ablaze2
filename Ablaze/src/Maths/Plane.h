@@ -1,5 +1,5 @@
 #pragma once
-#include "Vec3.h"
+#include "Vectors\__Vectors__.h"
 
 namespace Ablaze
 {
@@ -9,12 +9,12 @@ namespace Ablaze
 		struct AB_API Plane
 		{
 		public:
-			Maths::Vec3 normal;
+			Maths::Vector3f normal;
 			float height;
 
 		public:
 			Plane();
-			Plane(const Maths::Vec3& normal, float height);
+			Plane(const Maths::Vector3f& normal, float height);
 			Plane(float x, float y, float z, float height);
 
 		};

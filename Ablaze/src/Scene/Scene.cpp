@@ -84,7 +84,7 @@ namespace Ablaze
 		if (!layerMask.all)
 		{
 			layerMask.Evaluate(*this);
-			return GetLayers(layerMask);
+			return GetLayers(layerMask.mask);
 		}
 		return GetLayers();
 	}

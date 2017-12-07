@@ -11,7 +11,7 @@ namespace Ablaze
 	
 	}
 
-	RenderPass::RenderPass(const String& name, const LayerMask& layers) : RenderPass(name, layers, &Graphics::CurrentContext()->GetFramebuffer())
+	RenderPass::RenderPass(const String& name, const LayerMask& layers) : RenderPass(name, layers, &Graphics::CurrentContext().GetFramebuffer())
 	{
 	
 	}

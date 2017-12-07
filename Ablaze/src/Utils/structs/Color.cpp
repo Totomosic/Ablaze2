@@ -27,44 +27,44 @@ namespace Ablaze
 		return (r + b + g) / 3.0f;
 	}
 
-	Maths::Vec4 Color::rgba() const
+	Maths::Vector4f Color::rgba() const
 	{
-		return Maths::Vec4(r, g, b, a);
+		return Maths::Vector4f(r, g, b, a);
 	}
 
-	Maths::Vec4 Color::abgr() const
+	Maths::Vector4f Color::abgr() const
 	{
-		return Maths::Vec4(a, b, g, r);
+		return Maths::Vector4f(a, b, g, r);
 	}
 
-	Maths::Vec4 Color::bgra() const
+	Maths::Vector4f Color::bgra() const
 	{
-		return Maths::Vec4(b, g, r, a);
+		return Maths::Vector4f(b, g, r, a);
 	}
 
-	Maths::Vec3 Color::rgb() const
+	Maths::Vector3f Color::rgb() const
 	{
-		return Maths::Vec3(r, g, b);
+		return Maths::Vector3f(r, g, b);
 	}
 
-	Maths::Vec3 Color::bgr() const
+	Maths::Vector3f Color::bgr() const
 	{
-		return Maths::Vec3(b, g, r);
+		return Maths::Vector3f(b, g, r);
 	}
 
-	Maths::Vec2 Color::rg() const
+	Maths::Vector2f Color::rg() const
 	{
-		return Maths::Vec2(r, g);
+		return Maths::Vector2f(r, g);
 	}
 
-	Maths::Vec2 Color::gb() const
+	Maths::Vector2f Color::gb() const
 	{
-		return Maths::Vec2(g, b);
+		return Maths::Vector2f(g, b);
 	}
 
-	Maths::Vec2 Color::rb() const
+	Maths::Vector2f Color::rb() const
 	{
-		return Maths::Vec2(r, b);
+		return Maths::Vector2f(r, b);
 	}
 
 	String Color::ToString() const
@@ -155,6 +155,12 @@ namespace Ablaze
 		c.g = stof(node["g"].Data());
 		c.b = stof(node["b"].Data());
 		c.a = stof(node["a"].Data());
+		return c;
+	}
+
+	Color Color::Random()
+	{
+		Color c = Color::FromFloats(Random::NextFloat(0.0f, 1.0f), Random::NextFloat(0.0f, 1.0f), Random::NextFloat(0.0f, 1.0f), 1.0f);
 		return c;
 	}
 

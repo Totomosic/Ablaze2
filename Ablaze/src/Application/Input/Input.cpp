@@ -20,70 +20,74 @@ namespace Ablaze
 	std::vector<std::pair<int, Keystate>> Input::s_KeysPressed = std::vector<std::pair<int, Keystate>>();
 	std::vector<char> Input::s_CharsPressed = std::vector<char>();
 
-	Maths::Vec3 Input::s_MousePosition = Maths::Vec3(0.0f);
-	Maths::Vec3 Input::s_RelMousePosition = Maths::Vec3(0.0f);
-	Maths::Vec2 Input::s_MouseScroll = Maths::Vec2(0.0f);
-	Maths::Vec2 Input::s_RelMouseScroll = Maths::Vec2(0.0f);
+	Maths::Vector3f Input::s_MousePosition = Maths::Vector3f(0.0f);
+	Maths::Vector3f Input::s_RelMousePosition = Maths::Vector3f(0.0f);
+	Maths::Vector2f Input::s_MouseScroll = Maths::Vector2f(0.0f);
+	Maths::Vector2f Input::s_RelMouseScroll = Maths::Vector2f(0.0f);
 
 	String Input::ToString() const
 	{
 		return "Input Manager";
 	}
 
-	Maths::Vec2 Input::ScreenSize()
+	Maths::Vector2f Input::ScreenSize()
 	{
-		return Maths::Vec2(Graphics::CurrentContext()->Width(), Graphics::CurrentContext()->Height());
+		return Maths::Vector2f(Graphics::CurrentContext().Width(), Graphics::CurrentContext().Height());
 	}
 
-	Maths::Vec3 Input::MousePosition(Origin origin)
+	Maths::Vector3f Input::MousePosition(Origin origin)
 	{
 		switch (origin)
 		{
 		case Origin::BottomLeft:
-			return Maths::Vec3(s_MousePosition.x, ScreenSize().y - s_MousePosition.y, 0);
+			return Maths::Vector3f(s_MousePosition.x, ScreenSize().y - s_MousePosition.y, 0);
 		case Origin::TopLeft:
 			return s_MousePosition;
 		case Origin::Centre:
-			return Maths::Vec3(s_MousePosition.x * 2 - ScreenSize().x / 2.0f, -(s_MousePosition.y * 2 - ScreenSize().y / 2.0f), 0);
+			return Maths::Vector3f(s_MousePosition.x * 2 - ScreenSize().x / 2.0f, -(s_MousePosition.y * 2 - ScreenSize().y / 2.0f), 0);
 		case Origin::TopRight:
-			return Maths::Vec3(ScreenSize().x - s_MousePosition.x, s_MousePosition.y, 0);
+			return Maths::Vector3f(ScreenSize().x - s_MousePosition.x, s_MousePosition.y, 0);
 		case Origin::BottomRight:
-			return Maths::Vec3(ScreenSize().x - s_MousePosition.x, ScreenSize().y - s_MousePosition.y, 0);
+			return Maths::Vector3f(ScreenSize().x - s_MousePosition.x, ScreenSize().y - s_MousePosition.y, 0);
+		default:
+			return MousePosition(Origin::BottomLeft);
 		}
 	}
 
-	Maths::Vec3 Input::NormalizedMousePosition(Origin origin)
+	Maths::Vector3f Input::NormalizedMousePosition(Origin origin)
 	{
 		if (origin != Origin::Centre)
 		{
-			return MousePosition(origin) / Maths::Vec3(ScreenSize(), 1);
+			return MousePosition(origin) / Maths::Vector3f(ScreenSize(), 1);
 		}
-		return MousePosition(origin) / Maths::Vec3(ScreenSize() / 2, 1);
+		return MousePosition(origin) / Maths::Vector3f(ScreenSize() / 2, 1);
 	}
 
-	Maths::Vec3 Input::RelMousePosition(Origin origin)
+	Maths::Vector3f Input::RelMousePosition(Origin origin)
 	{
 		switch (origin)
 		{
 		case Origin::BottomLeft:
-			return Maths::Vec3(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
+			return Maths::Vector3f(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopLeft:
 			return s_RelMousePosition;
 		case Origin::Centre:
-			return Maths::Vec3(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
+			return Maths::Vector3f(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopRight:
-			return Maths::Vec3(-s_RelMousePosition.x, s_RelMousePosition.y, 0);
+			return Maths::Vector3f(-s_RelMousePosition.x, s_RelMousePosition.y, 0);
 		case Origin::BottomRight:
-			return Maths::Vec3(-s_RelMousePosition.x, -s_RelMousePosition.y, 0);
+			return Maths::Vector3f(-s_RelMousePosition.x, -s_RelMousePosition.y, 0);
+		default:
+			return RelMousePosition(Origin::BottomLeft);
 		}
 	}
 
-	const Maths::Vec2& Input::MouseScroll()
+	const Maths::Vector2f& Input::MouseScroll()
 	{
 		return s_MouseScroll;
 	}
 
-	const Maths::Vec2& Input::RelMouseScroll()
+	const Maths::Vector2f& Input::RelMouseScroll()
 	{
 		return s_RelMouseScroll;
 	}
@@ -190,12 +194,12 @@ namespace Ablaze
 
 	void Input::CaptureCursor()
 	{
-		glfwSetInputMode(Graphics::CurrentContext()->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(Graphics::CurrentContext().WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	void Input::ReleaseCursor()
 	{
-		glfwSetInputMode(Graphics::CurrentContext()->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(Graphics::CurrentContext().WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	const std::vector<char>& Input::CharsPressed()
@@ -223,8 +227,8 @@ namespace Ablaze
 
 	void Input::End()
 	{
-		s_RelMousePosition = Maths::Vec3(0);
-		s_RelMouseScroll = Maths::Vec2(0);
+		s_RelMousePosition = Maths::Vector3f(0);
+		s_RelMouseScroll = Maths::Vector2f(0);
 		s_KeysPressed.clear();
 		s_ButtonsPressed.clear();
 		s_CharsPressed.clear();
@@ -306,7 +310,7 @@ namespace Ablaze
 
 	void Input::MousePositionCallback(GLFWwindow* window, double x, double y)
 	{
-		s_RelMousePosition = s_MousePosition - Maths::Vec3((float)x, (float)y, 0);
+		s_RelMousePosition = s_MousePosition - Maths::Vector3f((float)x, (float)y, 0);
 		s_MousePosition.x = (float)x;
 		s_MousePosition.y = (float)y;
 	}
@@ -341,7 +345,7 @@ namespace Ablaze
 
 	void Input::MouseScrollCallback(GLFWwindow* window, double xScroll, double yScroll)
 	{
-		s_RelMouseScroll = Maths::Vec2((float)xScroll, (float)yScroll);
+		s_RelMouseScroll = Maths::Vector2f((float)xScroll, (float)yScroll);
 		s_MouseScroll += s_RelMouseScroll;
 	}
 

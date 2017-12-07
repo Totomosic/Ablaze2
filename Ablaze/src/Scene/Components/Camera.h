@@ -17,14 +17,14 @@ namespace Ablaze
 		Projection m_ProjectionType;
 		float m_NearPlane;
 		float m_FarPlane;
-		Maths::Mat4 m_Projection;
+		Maths::Matrix4f m_Projection;
 
 	public:
 		Camera(Projection projection = Projection::Perspective, float fov = Maths::PI / 3.0f, float nearPlane = 1.0f, float farPlane = 1000.0f);
 		Camera(float x, float xMax, float y, float yMax, float nearPlane = 1.0f, float farPlane = 1000.0f);
 
-		const Maths::Mat4& ProjectionMatrix() const;
-		Maths::Mat4& ProjectionMatrix();
+		const Maths::Matrix4f& ProjectionMatrix() const;
+		Maths::Matrix4f& ProjectionMatrix();
 		float NearPlane() const;
 		float& NearPlane();
 		float FarPlane() const;
@@ -37,8 +37,8 @@ namespace Ablaze
 		void SetFOV(float fov, Angle angleType = Angle::Radians);
 		void SetProjectionType(Projection projection);
 
-		Maths::Vec3 ScreenToWorldPoint(const Maths::Vec3& screenpoint) const;
-		Maths::Vec3 WorldToScreenPoint(const Maths::Vec3& worldpoint) const;
+		Maths::Vector3f ScreenToWorldPoint(const Maths::Vector3f& screenpoint) const;
+		Maths::Vector3f WorldToScreenPoint(const Maths::Vector3f& worldpoint) const;
 
 		void UpdateProjectionMatrix();
 

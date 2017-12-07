@@ -5,13 +5,13 @@ namespace Ablaze
 	namespace Maths
 	{
 
-		Plane::Plane(const Maths::Vec3& normal, float height)
+		Plane::Plane(const Maths::Vector3f& normal, float height)
 			: normal(normal), height(height)
 		{
 		
 		}
 
-		Plane::Plane(float x, float y, float z, float height) : Plane(Maths::Vec3(x, y, z), height)
+		Plane::Plane(float x, float y, float z, float height) : Plane(Maths::Vector3f(x, y, z), height)
 		{
 			
 		}

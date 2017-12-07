@@ -22,14 +22,14 @@ namespace Ablaze
 		Color();
 
 		float GetBrightness() const;
-		Maths::Vec4 rgba() const;
-		Maths::Vec4 abgr() const;
-		Maths::Vec4 bgra() const;
-		Maths::Vec3 rgb() const;
-		Maths::Vec3 bgr() const;
-		Maths::Vec2 rg() const;
-		Maths::Vec2 gb() const;
-		Maths::Vec2 rb() const;
+		Maths::Vector4f rgba() const;
+		Maths::Vector4f abgr() const;
+		Maths::Vector4f bgra() const;
+		Maths::Vector3f rgb() const;
+		Maths::Vector3f bgr() const;
+		Maths::Vector2f rg() const;
+		Maths::Vector2f gb() const;
+		Maths::Vector2f rb() const;
 
 		float* ToFloat() const;
 		byte* ToByte() const;
@@ -44,6 +44,7 @@ namespace Ablaze
 		static Color FromHSB(float hue, float saturation, float brightness); // All values range from 0 - 1
 		static Color Deserialize(JSONnode& node);
 
+		static Color Random();
 		static Color White();
 		static Color Black();
 

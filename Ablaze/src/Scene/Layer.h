@@ -32,6 +32,7 @@ namespace Ablaze
 
 		const GameObject& GetNamedGameObject(const String& tag, int index = 0) const;
 		GameObject& GetNamedGameObject(const String& tag, int index = 0);
+		const std::vector<GameObject*> GetNamedGameObjects(const String& tag) const;
 
 		void AddGameObject(GameObject* gameObject);
 		void AddGameObject(GameObject* gameObject, const String& tag);
@@ -56,7 +57,7 @@ namespace Ablaze
 
 	private:
 		void TagGameObject(GameObject* entity, const String& tag);
-		bool TagExists(const String& tag);
+		bool TagExists(const String& tag) const;
 
 		uint GetNextID();
 		void Init();

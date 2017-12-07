@@ -43,9 +43,7 @@ namespace Ablaze
 
 		void Upload(const std::shared_ptr<Shader>& shader) const override
 		{
-			shader->Bind();
 			shader->SetUniform<T>(m_UniformLocation, m_Value);
-			shader->Unbind();
 		}
 
 		String ToString() const override

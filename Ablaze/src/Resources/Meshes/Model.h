@@ -16,8 +16,8 @@ namespace Ablaze
 	public:
 		struct VertexSet
 		{
-			std::vector<Maths::Vec3> positions, normals;
-			std::vector<Maths::Vec2> uvs;
+			std::vector<Maths::Vector3f> positions, normals;
+			std::vector<Maths::Vector2f> uvs;
 		};
 
 		struct IndexSet

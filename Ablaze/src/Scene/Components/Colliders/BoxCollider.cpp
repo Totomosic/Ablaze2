@@ -3,28 +3,28 @@
 namespace Ablaze
 {
 
-	BoxCollider::BoxCollider(const Maths::Vec3& size, const Transform& transform) : Component(),
+	BoxCollider::BoxCollider(const Maths::Vector3f& size, const Transform& transform) : Component(),
 		m_Size(size), m_Transform(transform)
 	{
 	
 	}
 
-	BoxCollider::BoxCollider(const Maths::Vec3& size) : BoxCollider(size, Transform())
+	BoxCollider::BoxCollider(const Maths::Vector3f& size) : BoxCollider(size, Transform())
 	{
 	
 	}
 
-	BoxCollider::BoxCollider() : BoxCollider(Maths::Vec3(1.0f))
+	BoxCollider::BoxCollider() : BoxCollider(Maths::Vector3f(1.0f))
 	{
 		
 	}
 
-	const Maths::Vec3& BoxCollider::Size() const
+	const Maths::Vector3f& BoxCollider::Size() const
 	{
 		return m_Size;
 	}
 
-	Maths::Vec3& BoxCollider::Size()
+	Maths::Vector3f& BoxCollider::Size()
 	{
 		return m_Size;
 	}
@@ -39,20 +39,20 @@ namespace Ablaze
 		return m_Transform;
 	}
 
-	Maths::Vec3 BoxCollider::Max() const
+	Maths::Vector3f BoxCollider::Max() const
 	{
 		return Size() / 2;
 	}
 
-	Maths::Vec3 BoxCollider::Min() const
+	Maths::Vector3f BoxCollider::Min() const
 	{
 		return -Size() / 2;
 	}
 
 	Endpoint* BoxCollider::Endpoints()
 	{
-		Maths::Vec3 min = Min();
-		Maths::Vec3 max = Max();
+		Maths::Vector3f min = Min();
+		Maths::Vector3f max = Max();
 		Endpoint* endpoints = new Endpoint[6];
 		endpoints[0] = { this, min.x, true };
 		endpoints[1] = { this, min.y, true };

@@ -38,12 +38,12 @@ namespace Ablaze
 
 	int Application::WindowWidth()
 	{
-		return Graphics::CurrentContext()->Width();
+		return Graphics::CurrentContext().Width();
 	}
 
 	int Application::WindowHeight()
 	{
-		return Graphics::CurrentContext()->Height();
+		return Graphics::CurrentContext().Height();
 	}
 
 	String Application::ToString() const
@@ -58,7 +58,7 @@ namespace Ablaze
 
 	void Application::Quit()
 	{
-		Graphics::CurrentContext()->Close();
+		Graphics::CurrentContext().Close();
 	}
 
 	void Application::Init()
@@ -78,12 +78,12 @@ namespace Ablaze
 
 	void Application::Render()
 	{
-		Graphics::CurrentContext()->Update();
+		Graphics::CurrentContext().Update();
 	}
 
 	void Application::Run()
 	{
-		while (!Graphics::CurrentContext()->ShouldClose())
+		while (!Graphics::CurrentContext().ShouldClose())
 		{
 			Time::Update();
 			Input::Start();

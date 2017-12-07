@@ -1,5 +1,5 @@
 #pragma once
-#include "Mat4.h"
+#include "Matrix4f.h"
 
 namespace Ablaze
 {
@@ -16,12 +16,12 @@ namespace Ablaze
 
 		public:
 			Quaternion();
-			Quaternion(const Vec4& values);
+			Quaternion(const Vector4f& values);
 			Quaternion(float x, float y, float z, float w);
 			Quaternion(const Quaternion& other);
 
-			Mat4 ToMat4() const;
-			Vec4 ToAngleAxis() const;
+			Matrix4f ToMatrix4f() const;
+			Vector4f ToAngleAxis() const;
 			float GetLength() const;
 			float GetLengthSqrd() const;
 			float Dot(const Quaternion& q) const;
@@ -38,7 +38,7 @@ namespace Ablaze
 			friend Quaternion operator*(const Quaternion& q1, const Quaternion& q2);
 			friend Quaternion operator*(const Quaternion& q1, float s);
 			friend Quaternion operator*(float s, const Quaternion& q1);
-			friend Vec3 operator*(const Quaternion& q1, const Maths::Vec3& v);
+			friend Vector3f operator*(const Quaternion& q1, const Maths::Vector3f& v);
 			friend Quaternion operator/(const Quaternion& q1, const Quaternion& q2);
 			friend Quaternion operator/(const Quaternion& q1, float s);
 
@@ -66,9 +66,9 @@ namespace Ablaze
 
 			static Quaternion Zero();
 			static Quaternion Identity();
-			static Quaternion FromAngleAxis(float angle, const Vec3& axis);
+			static Quaternion FromAngleAxis(float angle, const Vector3f& axis);
 			static Quaternion FromEuler(float pitch, float yaw, float roll);
-			static Quaternion FromRotationMat(const Mat4& rotation);
+			static Quaternion FromRotationMat(const Matrix4f& rotation);
 
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
 

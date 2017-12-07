@@ -38,9 +38,9 @@ namespace Ablaze
 		Internal::Uniform* operator[](const String& uniformLocation) const;
 
 		template<typename T>
-		void AddUniform(const String& uniformLocation, const T& value)
+		void AddUniform(const String& uniformLocation, const T& value, UniformUploadMode mode = UniformUploadMode::Repeat)
 		{
-			AddUniform(new Uniform<T>(uniformLocation, value));
+			AddUniform(new Uniform<T>(uniformLocation, value), mode);
 		}
 
 		void UploadAll(const std::shared_ptr<Shader>& shader) const;

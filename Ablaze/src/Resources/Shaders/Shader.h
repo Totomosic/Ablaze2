@@ -10,52 +10,44 @@ namespace Ablaze
 	class AB_API Shader : public Asset, public GLObject
 	{
 	private:
-		static const Shader* s_CurrentlyBound;
-
-	public:
 		static const int VertexShader = 0;
 		static const int GeometryShader = 1;
 		static const int FragmentShader = 2;
 
 	private:
-		std::shared_ptr<ShaderProgram> m_ShaderPrograms[3];
 		mutable std::unordered_map<String, int> m_UniformLocations;
 
 	public:
 		Shader(const String& vertexSrc, const String& fragmentSrc);
 		Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
-		~Shader(); // Prevent stack objects and can only be deleted by ResourceManager
+		~Shader();
 
 	public:
 		void Bind() const override;
 		void Unbind() const override;
 
 		void Reload() override;
-		void AttachShader(const std::shared_ptr<ShaderProgram>& shader);
 
 		void SetUniform(const String& uniformName, bool value) const;
 		void SetUniform(const String& uniformName, int value) const;
+		void SetUniform(const String& uniformName, uint value) const;
 		void SetUniform(const String& uniformName, float value) const;
-		void SetUniform(const String& uniformName, const Maths::Vec2& value) const;
-		void SetUniform(const String& uniformName, const Maths::Vec3& value) const;
-		void SetUniform(const String& uniformName, const Maths::Vec4& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector2f& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector3f& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector4f& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector2i& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector3i& value) const;
+		void SetUniform(const String& uniformName, const Maths::Vector4i& value) const;
 		void SetUniform(const String& uniformName, const Maths::Plane& value) const;
 		void SetUniform(const String& uniformName, const Maths::Ray& value) const;
-		void SetUniform(const String& uniformName, const Maths::Mat4& value) const;
+		void SetUniform(const String& uniformName, const Maths::Matrix4f& value) const;
 		void SetUniform(const String& uniformName, const Color& value) const;
-
-		template<typename T>
-		void SetUniform(const String& uniformName, const T& value) const
-		{
-			Bind();
-			SetUniform(uniformName, value);
-		}
 
 		template<typename T>
 		void SetTexture(const String& samplerName, const std::shared_ptr<T>& texture)
 		{
 			texture->Bind();
-			SetUniform<int>(samplerName, texture->GetBindPort());
+			SetUniform(samplerName, (int)texture->GetBindPort());
 		}
 
 		String ToString() const override;

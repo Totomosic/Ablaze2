@@ -145,7 +145,7 @@ namespace Ablaze
 	GameObject* GameObject::Instantiate(const String& name, float x, float y, float z)
 	{
 		GameObject* object = new GameObject;
-		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
+		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
 		object->SetTag(name);
 		return object;
 	}
@@ -166,7 +166,7 @@ namespace Ablaze
 	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, float x, float y, float z)
 	{
 		GameObject* object = Instantiate(name, prefab);
-		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
+		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
 		return object;
 	}
 
@@ -174,7 +174,7 @@ namespace Ablaze
 	{
 		GameObject* object = Instantiate(name, prefab);
 		object->SetParent(parent);
-		object->AddComponent(new Transform(Maths::Vec3(x, y, z)));
+		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
 		return object;
 	}
 

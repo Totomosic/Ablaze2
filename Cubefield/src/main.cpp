@@ -21,15 +21,13 @@ public:
 		Graphics::EnableCull();
 		Graphics::EnableDepthTest();
 
-		//scene = &SceneManager::Instance().LoadScene("Saves/Scene.scene");
-
 		scene = &SceneManager::Instance().CreateScene();
 		Layer& world = scene->CreateLayer("World");
 		Layer& ui = scene->CreateLayer("UI");
 		Layer& backgroundLayer = scene->CreateLayer("Background");
 
 		Systems::Lighting().AddShader(ResourceManager::Instance().LoadShader("res/base.shader"));
-		shader = *ResourceManager::Instance().LoadShader("res/cube.shader");
+		shader = ResourceManager::Instance().LoadShader("res/cube.shader").get();
 
 		scene->SetCurrentLayer("Background");
 
@@ -37,7 +35,8 @@ public:
 		backgroundCamera->AddComponent(new Camera(Projection::Orthographic));
 
 		GameObject* background = GameObject::Instantiate("Background", WindowWidth() / 2, WindowHeight() / 2, -999);
-		background->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(WindowWidth(), WindowHeight(), Color::White()), Material<Texture2D>(Color::White(), ResourceManager::Instance().DefaultTextureShader(), "Tex0", "res/background.png")));
+		background->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(Color::White()), std::make_shared<Material<Texture2D>>(Color::White(), ResourceManager::Instance().DefaultTextureShader(), "Tex0", "res/background.png")));
+		background->transform().LocalScale() = Maths::Vec3(WindowWidth(), WindowHeight(), 1);
 
 		scene->SetCurrentLayer("World");
 
@@ -45,10 +44,11 @@ public:
 		worldCamera->AddComponent<Camera>();
 
 		GameObject* floor = GameObject::Instantiate("Floor", 0, -7, -10);
-		floor->AddComponent(new Mesh(ResourceManager::Instance().CreatePlane(300, 1500), Material<Texture2D>(Color::White(), ResourceManager::Instance().LightingColorShader())));
+		floor->AddComponent(new Mesh(ResourceManager::Instance().CreatePlane(), std::make_shared<Material<Texture2D>>(Color::White(), ResourceManager::Instance().LightingColorShader())));
+		floor->transform().LocalScale() = Maths::Vec3(300, 1, 1500);
 
 		GameObject* player = GameObject::Instantiate("Player", 0, -5, -10);
-		player->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(1, 1, 1), Material<Texture2D>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
+		player->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(), std::make_shared<Material<Texture2D>>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
 		player->AddComponent(new RigidBody(false));
 
 		GameObject* sun = GameObject::Instantiate("Sun", 0, 100, -10);
@@ -60,13 +60,18 @@ public:
 		scene->SetCurrentLayer(nullptr);
 		cubePrefab = GameObject::Instantiate("CubePrefab");
 		cubePrefab->AddComponent(new RigidBody(false));
-		cubePrefab->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(3, 3, 3), Material<Texture2D>(Color::Red(), ResourceManager::Instance().DefaultColorShader())));
+		cubePrefab->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(), std::make_shared<Material<Texture2D>>(Color::Red(), ResourceManager::Instance().DefaultColorShader())));
+		cubePrefab->transform().LocalScale() = Maths::Vec3(3);
 
 		scene->SetCurrentLayer("World");
 
 		Time::CreateNewTimer(0.1, METHOD_0(Game::CreateBlock));
 
-		//SceneManager::Instance().SaveScene(SceneManager::Instance().CurrentScene(), "Saves/Scene.scene");
+		GraphicsPipeline g;
+		g.Renderer = new ForwardRenderer;
+		g.Schedule = new RenderSchedule;
+		g.Schedule->AddRenderPass(new RenderPass("Default"));
+		Graphics::AddGraphicsPipeline(g);
 
 	}
 
@@ -74,6 +79,7 @@ public:
 	{
 		static float speed = 1;
 		GameObject* block = GameObject::Instantiate("Block", cubePrefab, Random::NextFloat(-150, 150), -4, -1000);
+		block->transform().LocalScale() = Maths::Vec3(3);
 		block->GetComponent<RigidBody>().Velocity().z = 200 + speed;
 		speed *= 1.001f;
 	}
@@ -126,33 +132,9 @@ public:
 	{
 		Application::Render();
 
-		for (GameObject* object : GameObject::GetAllWith<Transform, Mesh>())
-		{
-			RenderMesh(object->transform(), object->mesh(), object->GetLayer()->GetActiveCamera());
-		}
-
-		UpdateDisplay();
-	}
-
-	void RenderMesh(const Transform& transform, const Mesh& mesh, GameObject* camera)
-	{
-		Camera& camComp = camera->GetComponent<Camera>();
-		Transform& camT = camera->GetComponent<Transform>();
-		for (const ModelSet& set : mesh.GetModelSets())
-		{
-			const MaterialBase& mat = *set.material;
-			const Resource<Model>& model = set.model;
-			const Resource<Shader>& shader = mat.ActiveShader();
-			shader->Bind();
-			shader->SetUniform("modelMatrix", set.transform * transform.ToMatrix());
-			shader->SetUniform("viewMatrix", camT.ToMatrix().Inverse());
-			shader->SetUniform("projectionMatrix", camComp.ProjectionMatrix());
-			shader->SetUniform("color", mat.BaseColor());
-			mat.Apply();
-			VertexArray* vao = model->GetVertexArray();
-			vao->Bind();
-			glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr);
-		}
+		Graphics::Clear();
+		Graphics::RenderScene();
+		Graphics::Present();
 	}
 
 };

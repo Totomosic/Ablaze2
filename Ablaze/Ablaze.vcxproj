@@ -166,6 +166,10 @@
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderPass.h" />
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderQueue.h" />
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderSchedule.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector2Template.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector3Template.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector4Template.h" />
+    <ClInclude Include="src\Maths\Vectors\__Vectors__.h" />
     <ClInclude Include="src\Resources\AssetLoadInfo.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
@@ -175,6 +179,7 @@
     <ClInclude Include="src\Resources\Shaders\Uniforms\UniformManager.h" />
     <ClInclude Include="src\Resources\Shaders\Uniforms\__Uniforms__.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\Font.h" />
+    <ClInclude Include="src\Resources\Textures\Fonts\FontFace.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="src\Scene\Components\Colliders\Endpoint.h" />
@@ -202,15 +207,15 @@
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Graphics\__Graphics__.h" />
     <ClInclude Include="src\Logging.h" />
-    <ClInclude Include="src\Maths\Mat4.h" />
+    <ClInclude Include="src\Maths\Matrix4f.h" />
     <ClInclude Include="src\Maths\Maths.h" />
     <ClInclude Include="src\Maths\Plane.h" />
     <ClInclude Include="src\Maths\Quaternion.h" />
     <ClInclude Include="src\Maths\Random.h" />
     <ClInclude Include="src\Maths\Ray.h" />
-    <ClInclude Include="src\Maths\Vec2.h" />
-    <ClInclude Include="src\Maths\Vec3.h" />
-    <ClInclude Include="src\Maths\Vec4.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector2.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector3.h" />
+    <ClInclude Include="src\Maths\Vectors\Vector4.h" />
     <ClInclude Include="src\Maths\__Maths__.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Graphics\Rendering\Renderers\__Renderers__.h" />
@@ -329,15 +334,15 @@
     <ClCompile Include="src\Graphics\Framebuffer.cpp" />
     <ClCompile Include="src\Graphics\structs\Viewport.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
-    <ClCompile Include="src\Maths\Mat4.cpp" />
+    <ClCompile Include="src\Maths\Matrix4f.cpp" />
     <ClCompile Include="src\Maths\Maths.cpp" />
     <ClCompile Include="src\Maths\Plane.cpp" />
     <ClCompile Include="src\Maths\Quaternion.cpp" />
     <ClCompile Include="src\Maths\Random.cpp" />
     <ClCompile Include="src\Maths\Ray.cpp" />
-    <ClCompile Include="src\Maths\Vec2.cpp" />
-    <ClCompile Include="src\Maths\Vec3.cpp" />
-    <ClCompile Include="src\Maths\Vec4.cpp" />
+    <ClCompile Include="src\Maths\Vectors\Vector2.cpp" />
+    <ClCompile Include="src\Maths\Vectors\Vector3.cpp" />
+    <ClCompile Include="src\Maths\Vectors\Vector4.cpp" />
     <ClCompile Include="src\Resources\Asset.cpp" />
     <ClCompile Include="src\Resources\Meshes\Model.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
@@ -401,6 +406,8 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="src\Resources\Shaders\Source\DefaultFont_f.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultFont_v.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultTexture_f.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

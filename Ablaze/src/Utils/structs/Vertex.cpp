@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	Vertex::Vertex(const Maths::Vec3& position, const Maths::Vec3& normal, const Maths::Vec2& texCoord, const Color& color, const Maths::Vec3& tangent)
+	Vertex::Vertex(const Maths::Vector3f& position, const Maths::Vector3f& normal, const Maths::Vector2f& texCoord, const Color& color, const Maths::Vector3f& tangent)
 	{
 		this->position = position;
 		this->normal = normal;

@@ -19,6 +19,7 @@ namespace Ablaze
 		else
 		{
 			GL_CALL(glActiveTexture(GL_TEXTURE0 + texture->m_BindPort));
+			GL_CALL(glBindTexture((GLenum)texture->GetTarget(), texture->GetID()));
 		}
 	}
 

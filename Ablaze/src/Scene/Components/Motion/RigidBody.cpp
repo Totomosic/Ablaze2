@@ -29,42 +29,42 @@ namespace Ablaze
 		return m_Mass;
 	}
 
-	const Maths::Vec3& RigidBody::Velocity() const
+	const Maths::Vector3f& RigidBody::Velocity() const
 	{
 		return m_Velocity;
 	}
 
-	Maths::Vec3& RigidBody::Velocity()
+	Maths::Vector3f& RigidBody::Velocity()
 	{
 		return m_Velocity;
 	}
 
-	const Maths::Vec3& RigidBody::Acceleration() const
+	const Maths::Vector3f& RigidBody::Acceleration() const
 	{
 		return m_Acceleration;
 	}
 
-	Maths::Vec3& RigidBody::Acceleration()
+	Maths::Vector3f& RigidBody::Acceleration()
 	{
 		return m_Acceleration;
 	}
 
-	const Maths::Vec3& RigidBody::RotationVelocity() const
+	const Maths::Vector3f& RigidBody::RotationVelocity() const
 	{
 		return m_RotationVelocity;
 	}
 
-	Maths::Vec3& RigidBody::RotationVelocity()
+	Maths::Vector3f& RigidBody::RotationVelocity()
 	{
 		return m_RotationVelocity;
 	}
 
-	const Maths::Vec3& RigidBody::RotationAcceleration() const
+	const Maths::Vector3f& RigidBody::RotationAcceleration() const
 	{
 		return m_RotationAcceleration;
 	}
 
-	Maths::Vec3& RigidBody::RotationAcceleration()
+	Maths::Vector3f& RigidBody::RotationAcceleration()
 	{
 		return m_RotationAcceleration;
 	}
@@ -79,13 +79,13 @@ namespace Ablaze
 		return m_GravityEnabled;
 	}
 
-	void RigidBody::ApplyForce(const Maths::Vec3& force)
+	void RigidBody::ApplyForce(const Maths::Vector3f& force)
 	{
 		// F = ma
 		m_Acceleration += force / Mass();
 	}
 
-	void RigidBody::ApplyForce(float magnitude, const Maths::Vec3& direction)
+	void RigidBody::ApplyForce(float magnitude, const Maths::Vector3f& direction)
 	{
 		ApplyForce(direction * magnitude);
 	}

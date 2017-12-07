@@ -55,6 +55,7 @@ namespace Ablaze
 
 	enum class Keycode : int
 	{
+		None = -2,
 		UNKNOWN = GLFW_KEY_UNKNOWN,
 
 		N_0 = GLFW_KEY_0,
@@ -153,10 +154,10 @@ namespace Ablaze
 		static std::vector<std::pair<int, Keystate>> s_ButtonsPressed;
 		static std::vector<char> s_CharsPressed;
 
-		static Maths::Vec3 s_MousePosition; // Represented as TopLeft Origin
-		static Maths::Vec3 s_RelMousePosition; // Represented as TopLeft Origin
-		static Maths::Vec2 s_MouseScroll;
-		static Maths::Vec2 s_RelMouseScroll;
+		static Maths::Vector3f s_MousePosition; // Represented as TopLeft Origin
+		static Maths::Vector3f s_RelMousePosition; // Represented as TopLeft Origin
+		static Maths::Vector2f s_MouseScroll;
+		static Maths::Vector2f s_RelMouseScroll;
 
 	public:
 		Input() = delete;
@@ -164,13 +165,13 @@ namespace Ablaze
 		String ToString() const override;
 
 	public:
-		static Maths::Vec2 ScreenSize();
+		static Maths::Vector2f ScreenSize();
 
-		static Maths::Vec3 MousePosition(Origin origin = Origin::BottomLeft);
-		static Maths::Vec3 NormalizedMousePosition(Origin origin = Origin::BottomLeft);
-		static Maths::Vec3 RelMousePosition(Origin origin = Origin::BottomLeft);
-		static const Maths::Vec2& MouseScroll();
-		static const Maths::Vec2& RelMouseScroll();
+		static Maths::Vector3f MousePosition(Origin origin = Origin::BottomLeft);
+		static Maths::Vector3f NormalizedMousePosition(Origin origin = Origin::BottomLeft);
+		static Maths::Vector3f RelMousePosition(Origin origin = Origin::BottomLeft);
+		static const Maths::Vector2f& MouseScroll();
+		static const Maths::Vector2f& RelMouseScroll();
 		static bool MouseButtonDown(MouseButton button, KeyMod mods = KeyMod::None);
 		static bool MouseButtonDown(int button, KeyMod mods = KeyMod::None);
 		static bool MouseButtonUp(MouseButton button, KeyMod mods = KeyMod::None);

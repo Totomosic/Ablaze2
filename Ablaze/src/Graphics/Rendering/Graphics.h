@@ -36,7 +36,7 @@ namespace Ablaze
 		Graphics() = delete;
 
 		static bool IsInitialised();
-		static Window* CurrentContext();
+		static Window& CurrentContext();
 		static GraphicsAPI GetAPI();
 
 		static bool IsDepthEnabled();
@@ -49,15 +49,15 @@ namespace Ablaze
 		static void Initialise(Window* window, GraphicsAPI api = GraphicsAPI::OpenGL);
 		static void Terminate();
 
-		// Graphical window commands
+		// Clear window
 		static void Clear();
+		// Update window display
 		static void Present();
 
 		static void AddGraphicsPipeline(const GraphicsPipeline& pipeline);
 		static void EnableGraphicsPipeline(int index);
 		static void RenderScene();
 
-		// Drawing commands
 		static void DrawString(const String& text, const std::shared_ptr<Font>& font);
 		static void DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material);
 		static void DrawRectangle(float x, float y, float w, float h, const Color& color);

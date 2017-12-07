@@ -5,8 +5,6 @@
 namespace Ablaze
 {
 
-	const Shader* Shader::s_CurrentlyBound = nullptr;
-
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),
 		m_UniformLocations()
 	{
@@ -28,11 +26,7 @@ namespace Ablaze
 
 	void Shader::Bind() const
 	{
-		if (s_CurrentlyBound != this)
-		{
-			GL_CALL(glUseProgram(m_Id));
-			s_CurrentlyBound = this;
-		}
+		GL_CALL(glUseProgram(m_Id));
 	}
 
 	void Shader::Unbind() const
@@ -52,6 +46,11 @@ namespace Ablaze
 		GL_CALL(glUniform1i(GetUniformLocation(uniformName), value));
 	}
 
+	void Shader::SetUniform(const String& uniformName, uint value) const
+	{
+		SetUniform(uniformName, (int)value);
+	}
+
 	void Shader::SetUniform(const String& uniformName, float value) const
 	{
 		Bind();
@@ -63,22 +62,40 @@ namespace Ablaze
 		SetUniform(uniformName, (int)value);
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Vec2& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector2f& value) const
 	{
 		Bind();
 		GL_CALL(glUniform2f(GetUniformLocation(uniformName), value.x, value.y));
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Vec3& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector3f& value) const
 	{
 		Bind();
 		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.x, value.y, value.z));
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Vec4& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector4f& value) const
 	{
 		Bind();
 		GL_CALL(glUniform4f(GetUniformLocation(uniformName), value.x, value.y, value.z, value.w));
+	}
+
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector2i& value) const
+	{
+		Bind();
+		GL_CALL(glUniform2i(GetUniformLocation(uniformName), value.x, value.y));
+	}
+
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector3i& value) const
+	{
+		Bind();
+		GL_CALL(glUniform3i(GetUniformLocation(uniformName), value.x, value.y, value.z));
+	}
+
+	void Shader::SetUniform(const String& uniformName, const Maths::Vector4i& value) const
+	{
+		Bind();
+		GL_CALL(glUniform4i(GetUniformLocation(uniformName), value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Maths::Plane& value) const
@@ -93,7 +110,7 @@ namespace Ablaze
 		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.direction.x, value.direction.y, value.direction.z));
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Mat4& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Matrix4f& value) const
 	{
 		Bind();
 		GL_CALL(glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, value.values));
@@ -245,7 +262,7 @@ namespace Ablaze
 
 	int Shader::GetUniformLocation(const String& uniformName) const
 	{
-		int location = 0;
+		int location = -1;
 		if (m_UniformLocations.find(uniformName) != m_UniformLocations.end())
 		{
 			location = m_UniformLocations[uniformName];

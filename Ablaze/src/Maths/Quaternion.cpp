@@ -17,7 +17,7 @@ namespace Ablaze
 		
 		}
 
-		Quaternion::Quaternion(const Vec4& values) : Quaternion(values.x, values.y, values.z, values.w)
+		Quaternion::Quaternion(const Vector4f& values) : Quaternion(values.x, values.y, values.z, values.w)
 		{
 			
 		}
@@ -27,16 +27,16 @@ namespace Ablaze
 		
 		}
 
-		Mat4 Quaternion::ToMat4() const
+		Matrix4f Quaternion::ToMatrix4f() const
 		{
-			return Mat4::FromRows(
-				Vec4(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y), 0.0f),
-				Vec4(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x), 0.0f),
-				Vec4(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y), 0.0f),
-				Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+			return Matrix4f::FromRows(
+				Vector4f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y), 0.0f),
+				Vector4f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x), 0.0f),
+				Vector4f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y), 0.0f),
+				Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		Vec4 Quaternion::ToAngleAxis() const
+		Vector4f Quaternion::ToAngleAxis() const
 		{
 			Quaternion q(*this);
 			if (q.w > 1.0f)
@@ -46,11 +46,11 @@ namespace Ablaze
 			float den = (float)sqrt(1.0 - q.w * q.w);
 			if (den > 0.0001f)
 			{
-				return Vec4(Vec3(q.x, q.y, q.z) / den, w);
+				return Vector4f(Vector3f(q.x, q.y, q.z) / den, w);
 			}
 			else
 			{
-				return Vec4(1, 0, 0, w);
+				return Vector4f(1, 0, 0, w);
 			}
 		}
 
@@ -129,12 +129,12 @@ namespace Ablaze
 			return q * s;
 		}
 
-		Vec3 operator*(const Quaternion& q, const Vec3& v)
+		Vector3f operator*(const Quaternion& q, const Vector3f& v)
 		{
-			Vec3 t_uv, t_uuv;
-			Vec3 t_qvec = Vec3(q.x, q.y, q.z);
-			t_uv = Vec3::Cross(t_qvec, v);
-			t_uuv = Vec3::Cross(t_qvec, t_uv);
+			Vector3f t_uv, t_uuv;
+			Vector3f t_qvec = Vector3f(q.x, q.y, q.z);
+			t_uv = Vector3f::Cross(t_qvec, v);
+			t_uuv = Vector3f::Cross(t_qvec, t_uv);
 			t_uv *= 2.0f * q.w;
 			t_uuv *= 2.0f;
 			return v + t_uv + t_uuv;
@@ -313,12 +313,12 @@ namespace Ablaze
 			return Quaternion(0, 0, 0, 1);
 		}
 
-		Quaternion Quaternion::FromAngleAxis(float angle, const Vec3& axis)
+		Quaternion Quaternion::FromAngleAxis(float angle, const Vector3f& axis)
 		{
-			if (axis.GetLengthSqrd() == 0.0f)
+			if (axis.LengthSqrd() == 0.0f)
 				return Identity();
 
-			return Quaternion(Vec4(axis.Normalize() * (float)sin(angle * 0.5f), (float)cos(angle * 0.5f)));
+			return Quaternion(Vector4f(axis.Normalize() * (float)sin(angle * 0.5f), (float)cos(angle * 0.5f)));
 		}
 
 		Quaternion Quaternion::FromEuler(float roll, float pitch, float yaw)
@@ -337,7 +337,7 @@ namespace Ablaze
 			return Quaternion((float)x, (float)y, (float)z, (float)w);
 		}
 
-		Quaternion Quaternion::FromRotationMat(const Mat4& rotation)
+		Quaternion Quaternion::FromRotationMat(const Matrix4f& rotation)
 		{
 			int rotationLookup[] = { 1, 2, 0 };
 			float t_trace = rotation.GetRow(0).x + rotation.GetRow(1).y + rotation.GetRow(2).z;

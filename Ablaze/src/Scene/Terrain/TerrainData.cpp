@@ -124,7 +124,7 @@ namespace Ablaze
 		}
 	}
 
-	void TerrainData::ApplyNormal(int index, const Maths::Vec3& height)
+	void TerrainData::ApplyNormal(int index, const Maths::Vector3f& height)
 	{
 		m_VertexBuffer->Upload(&height.x, sizeof(float) * 3, (int64)GetNormalIndex(index, m_VertexBuffer));
 	}
@@ -151,13 +151,13 @@ namespace Ablaze
 		return offset;
 	}
 
-	Maths::Vec3 TerrainData::CalculateNormal(int x, int y) const
+	Maths::Vector3f TerrainData::CalculateNormal(int x, int y) const
 	{
 		float heightL = GetHeight(x - 1, y);
 		float heightR = GetHeight(x + 1, y);
 		float heightD = GetHeight(x, y - 1);
 		float heightU = GetHeight(x, y + 1);
-		return Maths::Vec3(heightL - heightR, 2.0, heightD - heightU).Normalize();
+		return Maths::Vector3f(heightL - heightR, 2.0, heightD - heightU).Normalize();
 	}
 
 }

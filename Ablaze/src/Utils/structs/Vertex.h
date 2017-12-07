@@ -9,14 +9,14 @@ namespace Ablaze
 	struct Vertex
 	{
 	public:
-		Maths::Vec3 position;
-		Maths::Vec3 normal;
-		Maths::Vec2 texCoord;
+		Maths::Vector3f position;
+		Maths::Vector3f normal;
+		Maths::Vector2f texCoord;
 		Color color;
-		Maths::Vec3 tangent;
+		Maths::Vector3f tangent;
 
 	public:
-		Vertex(const Maths::Vec3& position, const Maths::Vec3& normal, const Maths::Vec2& texCoord, const Color& color, const Maths::Vec3& tangent);
+		Vertex(const Maths::Vector3f& position, const Maths::Vector3f& normal, const Maths::Vector2f& texCoord, const Color& color, const Maths::Vector3f& tangent);
 
 	};
 

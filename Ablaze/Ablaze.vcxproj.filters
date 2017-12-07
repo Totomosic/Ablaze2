@@ -57,9 +57,6 @@
     <ClInclude Include="src\Maths\__Maths__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Maths\Mat4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Maths\Plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,15 +67,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Maths\Ray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Maths\Vec2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Maths\Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Maths\Vec4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\structs\__structs__.h">
@@ -459,15 +447,39 @@
     <ClInclude Include="src\Utils\structs\Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\__Vectors__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector2Template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector3Template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector4Template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Vectors\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Matrix4f.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Textures\Fonts\FontFace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Application\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Maths\Mat4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Maths\Plane.cpp">
@@ -480,15 +492,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Maths\Ray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Maths\Vec2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Maths\Vec3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Maths\Vec4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\structs\Viewport.cpp">
@@ -731,6 +734,18 @@
     <ClCompile Include="src\Graphics\Rendering\Renderers\Methods\ForwardRenderMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Maths\Vectors\Vector4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Vectors\Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Vectors\Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Maths\Matrix4f.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Convention.md" />
@@ -745,5 +760,7 @@
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_v.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_g.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_f.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultFont_v.glsl" />
+    <None Include="src\Resources\Shaders\Source\DefaultFont_f.glsl" />
   </ItemGroup>
 </Project>

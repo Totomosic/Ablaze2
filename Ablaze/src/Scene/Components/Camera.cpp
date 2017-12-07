@@ -9,7 +9,7 @@ namespace Ablaze
 	{
 		if (Graphics::IsInitialised())
 		{
-			CreateProjectionMatrix(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height());
+			CreateProjectionMatrix(0, Graphics::CurrentContext().Width(), 0, Graphics::CurrentContext().Height());
 		}
 	}
 
@@ -19,12 +19,12 @@ namespace Ablaze
 		CreateProjectionMatrix(x, xMax, y, yMax);
 	}
 
-	const Maths::Mat4& Camera::ProjectionMatrix() const
+	const Maths::Matrix4f& Camera::ProjectionMatrix() const
 	{
 		return m_Projection;
 	}
 
-	Maths::Mat4& Camera::ProjectionMatrix()
+	Maths::Matrix4f& Camera::ProjectionMatrix()
 	{
 		return m_Projection;
 	}
@@ -85,7 +85,7 @@ namespace Ablaze
 
 	void Camera::UpdateProjectionMatrix()
 	{
-		CreateProjectionMatrix(0, Graphics::CurrentContext()->Width(), 0, Graphics::CurrentContext()->Height());
+		CreateProjectionMatrix(0, Graphics::CurrentContext().Width(), 0, Graphics::CurrentContext().Height());
 	}
 
 	String Camera::ToString() const
@@ -114,11 +114,11 @@ namespace Ablaze
 	{
 		if (m_ProjectionType == Projection::Perspective)
 		{
-			m_Projection = Maths::Mat4::Perspective(m_Fov, Graphics::CurrentContext()->Aspect(), m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Matrix4f::Perspective(m_Fov, Graphics::CurrentContext().Aspect(), m_NearPlane, m_FarPlane);
 		}
 		else
 		{
-			m_Projection = Maths::Mat4::Orthographic(x, width, y, height, m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Matrix4f::Orthographic(x, width, y, height, m_NearPlane, m_FarPlane);
 		}
 	}
 

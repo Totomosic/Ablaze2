@@ -1,5 +1,5 @@
 #pragma once
-#include "Vec3.h"
+#include "Vectors\__Vectors__.h"
 
 namespace Ablaze
 {
@@ -8,10 +8,10 @@ namespace Ablaze
 
 		struct AB_API Ray
 		{
-			Vec3 origin;
-			Vec3 direction;
+			Vector3f origin;
+			Vector3f direction;
 
-			Ray(const Vec3& origin, const Vec3& direction);
+			Ray(const Vector3f& origin, const Vector3f& direction);
 
 			String ToString() const;
 

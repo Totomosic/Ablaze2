@@ -25,13 +25,13 @@ namespace Ablaze
 		return s_Context != nullptr;
 	}
 
-	Window* Graphics::CurrentContext()
+	Window& Graphics::CurrentContext()
 	{
 		if (!IsInitialised())
 		{
 			AB_FATAL("Window was never initialised, Call Graphics::Initialise(windowPtr)");
 		}
-		return s_Context;
+		return *s_Context;
 	}
 
 	GraphicsAPI Graphics::GetAPI()
@@ -126,8 +126,8 @@ namespace Ablaze
 	void Graphics::DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material)
 	{
 		GameObject* obj = GameObject::Instantiate("Object", x, y, 0);
-		obj->transform().LocalScale() = Maths::Vec3(w, h, 1);
-		obj->AddComponent(new Mesh(ResourceManager::Instance().CreateRectangle(), material));
+		obj->transform().LocalScale() = Maths::Vector3f(w, h, 1);
+		obj->AddComponent(new Mesh(ResourceManager::Instance().Square(), material));
 		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
@@ -300,8 +300,8 @@ namespace Ablaze
 
 	void Graphics::FramebufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
-		CurrentContext()->SetWidth(width);
-		CurrentContext()->SetHeight(height);
+		CurrentContext().SetWidth(width);
+		CurrentContext().SetHeight(height);
 	}
 
 }

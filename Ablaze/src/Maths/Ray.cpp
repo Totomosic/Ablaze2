@@ -5,7 +5,7 @@ namespace Ablaze
 	namespace Maths
 	{
 
-		Ray::Ray(const Vec3& origin, const Vec3& direction)
+		Ray::Ray(const Vector3f& origin, const Vector3f& direction)
 			: origin(origin), direction(direction)
 		{
 

@@ -12,6 +12,13 @@ namespace Ablaze
 		LoadDefaultTexture();
 		LoadLightColor();
 		LoadLightTexture();
+		LoadDefaultFont();
+
+		m_Square = CreateSquare();
+		m_Circle = CreateCircle();
+		m_Cube = CreateCube();
+		m_Sphere = CreateSphere();
+		m_Plane = CreatePlane();
 
 		Systems::Lighting().AddShader(m_LightColor);
 		Systems::Lighting().AddShader(m_LightTexture);
@@ -66,6 +73,11 @@ namespace Ablaze
 		return m_LightTexture;
 	}
 
+	std::shared_ptr<Shader> ResourceManager::DefaultFontShader()
+	{
+		return m_DefaultFont;
+	}
+
 
 	std::shared_ptr<Texture2D> ResourceManager::LoadTexture2D(const String& textureFile, MipmapMode mipmap)
 	{
@@ -77,6 +89,11 @@ namespace Ablaze
 		return std::make_shared<Texture2D>(width, height, ImageFormat::Rgba, mipmap);
 	}
 
+	std::shared_ptr<Font> ResourceManager::LoadFont(const String& fontFile, float size)
+	{
+		return std::make_shared<Font>(fontFile, size);
+	}
+
 
 	std::shared_ptr<Model> ResourceManager::LoadModel(const String& objModelFile)
 	{
@@ -84,7 +101,13 @@ namespace Ablaze
 		return std::shared_ptr<Model>(model);
 	}
 
-	std::shared_ptr<Model> ResourceManager::CreateRectangle(const Color& color)
+	std::shared_ptr<Model> ResourceManager::LoadTextModel(const String& text, const std::shared_ptr<Font>& font)
+	{
+		Model* model = font->CreateModel(text);
+		return std::shared_ptr<Model>(model);
+	}
+
+	std::shared_ptr<Model> ResourceManager::CreateSquare(const Color& color)
 	{
 		Model* model = Internal::Shapes::Rectangle(1, 1, color);
 		return std::shared_ptr<Model>(model);
@@ -96,7 +119,7 @@ namespace Ablaze
 		return std::shared_ptr<Model>(model);
 	}
 
-	std::shared_ptr<Model> ResourceManager::CreateCuboid(const Color& color)
+	std::shared_ptr<Model> ResourceManager::CreateCube(const Color& color)
 	{
 		Model* model = Internal::Shapes::Cuboid(1, 1, 1, color);
 		return std::shared_ptr<Model>(model);
@@ -118,6 +141,33 @@ namespace Ablaze
 	{
 		return CreateGrid(2, 2, color);
 	}
+
+
+	std::shared_ptr<Model> ResourceManager::Square()
+	{
+		return m_Square;
+	}
+
+	std::shared_ptr<Model> ResourceManager::Circle()
+	{
+		return m_Circle;
+	}
+
+	std::shared_ptr<Model> ResourceManager::Cube()
+	{
+		return m_Cube;
+	}
+
+	std::shared_ptr<Model> ResourceManager::Sphere()
+	{
+		return m_Sphere;
+	}
+
+	std::shared_ptr<Model> ResourceManager::Plane()
+	{
+		return m_Plane;
+	}
+
 
 	void ResourceManager::LoadDefaultColor()
 	{
@@ -161,6 +211,17 @@ namespace Ablaze
 #include "Shaders\Source\LightTexture_f.glsl"
 			;
 		m_LightTexture = CreateShader(vSource, fSource);
+	}
+
+	void ResourceManager::LoadDefaultFont()
+	{
+		String vSource =
+#include "Shaders\Source\DefaultFont_v.glsl"
+			;
+		String fSource =
+#include "Shaders\Source\DefaultFont_f.glsl"
+			;
+		m_DefaultFont = CreateShader(vSource, fSource);
 	}
 
 }

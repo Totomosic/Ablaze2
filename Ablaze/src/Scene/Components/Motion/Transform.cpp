@@ -3,38 +3,38 @@
 namespace Ablaze
 {
 
-	Transform::Transform::Transform(const Maths::Vec3& position, const Maths::Quaternion& rotation, const Maths::Vec3& scale) : Component(),
+	Transform::Transform::Transform(const Maths::Vector3f& position, const Maths::Quaternion& rotation, const Maths::Vector3f& scale) : Component(),
 		m_Position(position), m_Rotation(rotation), m_Scale(scale)
 	{
-	
+
 	}
 
-	Transform::Transform() : Transform(Maths::Vec3(0, 0, 0))
-	{ 
-	
-	}
-
-	Transform::Transform(const Maths::Vec3& position) : Transform(position, Maths::Quaternion::Identity())
-	{ 
-	
-	}
-
-	Transform::Transform(const Maths::Vec3& position, const Maths::Quaternion& rotation) : Transform(position, rotation, Maths::Vec3(1, 1, 1))
-	{ 
-	
-	}
-
-	Transform::Transform(const Maths::Vec3& position, const Maths::Vec3& scale) : Transform(position, Maths::Quaternion::Identity(), scale)
-	{
-	
-	}
-
-	Transform::Transform(const Maths::Quaternion& rotation, const Maths::Vec3& scale) : Transform(Maths::Vec3(0, 0, 0), rotation, scale)
+	Transform::Transform() : Transform(Maths::Vector3f(0, 0, 0))
 	{
 
 	}
 
-	const Maths::Vec3 Transform::Position() const
+	Transform::Transform(const Maths::Vector3f& position) : Transform(position, Maths::Quaternion::Identity())
+	{
+
+	}
+
+	Transform::Transform(const Maths::Vector3f& position, const Maths::Quaternion& rotation) : Transform(position, rotation, Maths::Vector3f(1, 1, 1))
+	{
+
+	}
+
+	Transform::Transform(const Maths::Vector3f& position, const Maths::Vector3f& scale) : Transform(position, Maths::Quaternion::Identity(), scale)
+	{
+
+	}
+
+	Transform::Transform(const Maths::Quaternion& rotation, const Maths::Vector3f& scale) : Transform(Maths::Vector3f(0, 0, 0), rotation, scale)
+	{
+
+	}
+
+	const Maths::Vector3f Transform::Position() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
@@ -52,7 +52,7 @@ namespace Ablaze
 		return m_GameObject->Parent()->GetComponent<Transform>().Rotation() * m_Rotation;
 	}
 
-	const Maths::Vec3 Transform::Scale() const
+	const Maths::Vector3f Transform::Scale() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
@@ -61,12 +61,12 @@ namespace Ablaze
 		return m_GameObject->Parent()->GetComponent<Transform>().Scale() * m_Scale;
 	}
 
-	const Maths::Vec3& Transform::LocalPosition() const
+	const Maths::Vector3f& Transform::LocalPosition() const
 	{
 		return m_Position;
 	}
 
-	Maths::Vec3& Transform::LocalPosition()
+	Maths::Vector3f& Transform::LocalPosition()
 	{
 		return m_Position;
 	}
@@ -81,49 +81,59 @@ namespace Ablaze
 		return m_Rotation;
 	}
 
-	const Maths::Vec3& Transform::LocalScale() const
+	const Maths::Vector3f& Transform::LocalScale() const
 	{
 		return m_Scale;
 	}
 
-	Maths::Vec3& Transform::LocalScale()
+	Maths::Vector3f& Transform::LocalScale()
 	{
 		return m_Scale;
 	}
 
-	Maths::Vec3 Transform::Forward() const
+	Maths::Vector3f Transform::Forward() const
 	{
-		return Rotation() * Maths::Vec3(0, 0, -1);
+		return Rotation() * Maths::Vector3f(0, 0, -1);
 	}
 
-	Maths::Vec3 Transform::Right() const
+	Maths::Vector3f Transform::Right() const
 	{
-		return Rotation() * Maths::Vec3(1, 0, 0);
+		return Rotation() * Maths::Vector3f(1, 0, 0);
 	}
 
-	Maths::Vec3 Transform::Up() const
+	Maths::Vector3f Transform::Up() const
 	{
-		return Rotation() * Maths::Vec3(0, 1, 0);
+		return Rotation() * Maths::Vector3f(0, 1, 0);
 	}
 
-	void Transform::Translate(const Maths::Vec3& translation)
+	void Transform::Translate(const Maths::Vector3f& translation)
 	{
 		m_Position += translation;
 	}
 
-	void Transform::SetScale(const Maths::Vec3& scale)
+	void Transform::Translate(float x, float y, float z)
+	{
+		Translate(Maths::Vector3f(x, y, z));
+	}
+
+	void Transform::SetScale(const Maths::Vector3f& scale)
 	{
 		m_Scale = scale;
 	}
 
 	void Transform::SetScale(float scale)
 	{
-		SetScale(Maths::Vec3(scale));
+		SetScale(Maths::Vector3f(scale));
 	}
 
-	void Transform::Rotate(float angle, const Maths::Vec3& axis, Space space, Angle angleType)
+	void Transform::SetScale(float x, float y, float z)
 	{
-		Maths::Vec3 a = axis;
+		SetScale(Maths::Vector3f(x, y, z));
+	}
+
+	void Transform::Rotate(float angle, const Maths::Vector3f& axis, Space space, Angle angleType)
+	{
+		Maths::Vector3f a = axis;
 		if (space == Space::World)
 		{
 			a = m_Rotation.Inverse() * a;
@@ -141,13 +151,13 @@ namespace Ablaze
 		m_Rotation *= quaternion;
 	}
 
-	Maths::Mat4 Transform::ToMatrix() const
+	Maths::Matrix4f Transform::ToMatrix() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
-			return Maths::Mat4::Translation(m_Position) * m_Rotation.ToMat4() * Maths::Mat4::Scale(m_Scale);
+			return Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
 		}
-		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Mat4::Translation(m_Position) * m_Rotation.ToMat4() * Maths::Mat4::Scale(m_Scale);
+		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
 	}
 
 	String Transform::ToString() const

@@ -13,7 +13,7 @@ namespace Ablaze
 	public:
 		std::shared_ptr<Model> model;
 		std::shared_ptr<MaterialBase> material;
-		Maths::Mat4 transform;
+		Maths::Matrix4f transform;
 
 	};
 
@@ -24,7 +24,7 @@ namespace Ablaze
 
 	public:
 		Mesh();
-		Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
 		Mesh(const Mesh& other) = delete;
 		~Mesh();
 
@@ -32,13 +32,13 @@ namespace Ablaze
 		std::shared_ptr<Model>& GetModel(int index);
 		const std::shared_ptr<MaterialBase>& Material(int index) const;
 		std::shared_ptr<MaterialBase>& Material(int index);
-		const Maths::Mat4& GetTransform(int index) const;
-		Maths::Mat4& GetTransform(int index);
+		const Maths::Matrix4f& GetTransform(int index) const;
+		Maths::Matrix4f& GetTransform(int index);
 		const ModelSet& GetModelSet(int index) const;
 		ModelSet& GetModelSet(int index);
 		int ModelCount() const;
 
-		void AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Mat4& transform = Maths::Mat4::Identity());
+		void AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
 		void SetMaterial(int index, const std::shared_ptr<MaterialBase>& material);
 
 		String ToString() const override;

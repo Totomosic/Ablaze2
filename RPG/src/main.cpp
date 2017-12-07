@@ -1,5 +1,7 @@
 #include "Ablaze.h"
 
+#include "Components\PlayerController.h"
+
 using namespace Ablaze;
 using namespace Ablaze::VM;
 using namespace Ablaze::Maths;
@@ -11,7 +13,7 @@ public:
 public:
 	void Init() override
 	{
-		Window* window = new Window(1280, 720, "AblazeScape: ", Color::CornflowerBlue(), false);
+		Window* window = new Window(1280, 720, "AblazeScape: ", Color::CornflowerBlue());
 		Graphics::Initialise(window);
 		Graphics::EnableCull();
 
@@ -20,12 +22,13 @@ public:
 		SceneManager::Instance().CurrentScene().SetCurrentLayer(0);
 
 		GameObject* player = GameObject::Instantiate("Player", 0, 0, 0);
-		player->AddComponent(new Mesh(ResourceManager::Instance().CreateCuboid(), std::make_shared<Material<>>(Color::White(), ResourceManager::Instance().LightingTextureShader(), "Tex0", ResourceManager::Instance().LoadTexture2D("res/canyonTerrain.png"))));
+		player->AddComponent(new Mesh(ResourceManager::Instance().Cube(), std::make_shared<Material<>>(Color::White(), ResourceManager::Instance().LightingTextureShader(), "Tex0", ResourceManager::Instance().LoadTexture2D("res/canyonTerrain.png"))));
+		player->AddComponent(new PlayerController(3));
 		GameObject* playerOrientation = GameObject::Instantiate("PlayerOrientation", nullptr, player, 0, 0, 0);
 
 		GameObject* terrain = GameObject::Instantiate("Terrain", 0, -0.5f, 0);
-		terrain->AddComponent(new Mesh(ResourceManager::Instance().CreatePlane(), std::make_shared<Material<>>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
-		terrain->transform().LocalScale() = Maths::Vec3(15, 1, 15);
+		terrain->AddComponent(new Mesh(ResourceManager::Instance().Plane(), std::make_shared<Material<>>(Color::Green(), ResourceManager::Instance().LightingColorShader())));
+		terrain->transform().LocalScale() = Maths::Vector3f(15, 1, 15);
 
 		GameObject* camera = GameObject::Instantiate("Camera", nullptr, playerOrientation, 0, 0, 10);
 		camera->AddComponent<Camera>();
@@ -49,45 +52,32 @@ public:
 		g.Schedule = new RenderSchedule;
 		g.Schedule->AddRenderPass(new RenderPass("Default"));
 		Graphics::AddGraphicsPipeline(g);
-
 	}
 
 	void Update() override
 	{
-		Graphics::CurrentContext()->SetTitle("AblazeScape: " + std::to_string((int)Time::AvgFPS()));
+		Graphics::CurrentContext().SetTitle("AblazeScape: " + std::to_string((int)Time::AvgFPS()));
 
 		GameObject& camera = *SceneManager::Instance().CurrentScene()["World"].GetActiveCamera();
 		Transform& transform = SceneManager::Instance().CurrentScene()["World"].GetNamedGameObject("PlayerOrientation").transform();
 
 		if (Input::KeyDown(Keycode::Down))
 		{
-			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(1, 0, 0), Space::Local);
+			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vector3f(1, 0, 0), Space::Local);
 		}
 		if (Input::KeyDown(Keycode::Up))
 		{
-			transform.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(1, 0, 0), Space::Local);
+			transform.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vector3f(1, 0, 0), Space::Local);
 		}
 		if (Input::KeyDown(Keycode::Right))
 		{
-			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
+			transform.Rotate(Maths::PI / 2 * Time::DeltaTime(), Maths::Vector3f(0, 1, 0), Space::World);
 		}
 		if (Input::KeyDown(Keycode::Left))
 		{
-			transform.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vec3(0, 1, 0), Space::World);
+			transform.Rotate(-Maths::PI / 2 * Time::DeltaTime(), Maths::Vector3f(0, 1, 0), Space::World);
 		}
-
-		Transform& player = SceneManager::Instance().CurrentScene().GetLayer("World").GetNamedGameObject("Player").transform();
-		float speed = 3;
-		if (Input::KeyDown(Keycode::W))
-		{
-			player.LocalPosition() += player.Forward() * speed * Time::DeltaTime();
-		}
-		if (Input::KeyDown(Keycode::S))
-		{
-			player.LocalPosition() -= player.Forward() * speed * Time::DeltaTime();
-		}
-
-		camera.transform().LocalPosition() += Maths::Vec3::Forward() * Input::RelMouseScroll().y;
+		camera.transform().LocalPosition() += Maths::Vector3f::Forward() * Input::RelMouseScroll().y;
 
 		Application::Update();
 	}

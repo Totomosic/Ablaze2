@@ -1,12 +1,15 @@
 #include "Debugger.h"
 #include "Graphics\Rendering\Graphics.h"
 #include "Application\Time.h"
+#include "Scene\SceneManager.h"
+#include "Scene\Components\__Components__.h"
 
 namespace Ablaze
 {
 
 	bool Debugger::m_IsTyping = false;
 	std::vector<char> Debugger::m_Command = std::vector<char>();
+	GameObject* Debugger::m_CurrentGameObject = nullptr;
 
 	void Debugger::Update()
 	{
@@ -76,7 +79,7 @@ namespace Ablaze
 			}
 			else if (command == "Quit")
 			{
-				Graphics::CurrentContext()->Close();
+				Graphics::CurrentContext().Close();
 			}
 			else if (command == "WriteFile")
 			{
@@ -93,7 +96,7 @@ namespace Ablaze
 			}
 			else if (command == "DeleteFile")
 			{
-				//FileSystem::Delete(args);
+				Filesystem::Delete(args);
 			}
 			else if (command == "Clear")
 			{
@@ -101,11 +104,11 @@ namespace Ablaze
 			}
 			else if (command == "ClearColor")
 			{
-				Graphics::CurrentContext()->SetClearColor(Color(std::stoi(argList[0]), std::stoi(argList[1]), std::stoi(argList[2]), std::stoi(argList[3])));
+				Graphics::CurrentContext().SetClearColor(Color(std::stoi(argList[0]), std::stoi(argList[1]), std::stoi(argList[2]), std::stoi(argList[3])));
 			}
 			else if (command == "ClearColorHSB")
 			{
-				Graphics::CurrentContext()->SetClearColor(Color::FromHSB(std::stof(argList[0]), std::stof(argList[1]), std::stof(argList[2])));
+				Graphics::CurrentContext().SetClearColor(Color::FromHSB(std::stof(argList[0]), std::stof(argList[1]), std::stof(argList[2])));
 			}
 			else if (command == "GameTime")
 			{
@@ -147,9 +150,25 @@ namespace Ablaze
 				VM::VirtualMachine vm(CleanString(outFile), debug);
 				vm.Execute();
 			}
+			else if (command == "SetCurrentLayer")
+			{
+				SceneManager::Instance().CurrentScene().SetCurrentLayer(args);
+			}
+			else if (command == "SelectGameObject")
+			{
+				m_CurrentGameObject = &SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObject(args);
+			}
+			else if (command == "ObjectPosition")
+			{
+				AB_INFO(m_CurrentGameObject->transform().Position());
+			}
+			else if (command == "SetPosition")
+			{
+				m_CurrentGameObject->transform().LocalPosition() = Maths::Vector3f(stof(argList[0]), stof(argList[1]), stof(argList[2]));
+			}
 			else if (command == "Help")
 			{
-				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), ClearColorHSB(h, s, b), GameTime(), Bytecode(filename, debug = 0), Assemble(filename, outfile), aexec(filename, outfile = null, debug = 0), Help()");
+				AB_INFO("Available Commands: Log(msg), Warn(msg), Error(msg), Fatal(msg), Quit(), WriteFile(filename, text), ReadFile(filename), DeleteFile(filename), Clear(), ClearColor(r, g, b, a), ClearColorHSB(h, s, b), GameTime(), Bytecode(filename, debug = 0), Assemble(filename, outfile), aexec(filename, outfile = null, debug = 0), SetCurrentLayer(layerName), SelectGameObject(objName), ObjectPosition(), SetPosition(x, y, z), Help()");
 			}
 			else
 			{

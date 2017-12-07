@@ -134,7 +134,7 @@ namespace Ablaze
 			{
 				if (strstr(cstr, "vt"))
 				{
-					Maths::Vec2 uv;
+					Maths::Vector2f uv;
 					int result = sscanf(cstr, "%*s %f %f", &uv.x, &uv.y);
 					if (result != 2)
 						continue;
@@ -142,7 +142,7 @@ namespace Ablaze
 				}
 				else if (strstr(cstr, "vn"))
 				{
-					Maths::Vec3 normal;
+					Maths::Vector3f normal;
 					int result = sscanf(cstr, "%*s %f %f %f", &normal.x, &normal.y, &normal.z);
 					if (result != 3)
 						continue;
@@ -150,7 +150,7 @@ namespace Ablaze
 				}
 				else
 				{
-					Maths::Vec3 position;
+					Maths::Vector3f position;
 					int result = sscanf(cstr, "%*s %f %f %f", &position.x, &position.y, &position.z);
 					UpdateMinMax(position.x, position.y, position.z, &minX, &maxX, &minY, &maxY, &minZ, &maxZ);
 					if (result != 3)
@@ -268,9 +268,9 @@ namespace Ablaze
 			mapping[indexSet] = (int)vertices.size();
 			indices.push_back(vertices.size());
 
-			Maths::Vec3 position;
-			Maths::Vec3 normal;
-			Maths::Vec2 tex;
+			Maths::Vector3f position;
+			Maths::Vector3f normal;
+			Maths::Vector2f tex;
 
 			if (indexSet.position == 0 || indexSet.position - 1 >= inputVertices.positions.size())
 			{
@@ -283,7 +283,7 @@ namespace Ablaze
 
 			if (indexSet.normal == 0 || indexSet.normal - 1 >= inputVertices.normals.size())
 			{
-				normal = Maths::Vec3(0, 1, 0);
+				normal = Maths::Vector3f(0, 1, 0);
 			}
 			else
 			{
@@ -292,14 +292,14 @@ namespace Ablaze
 
 			if (indexSet.uv == 0 || indexSet.uv - 1 >= inputVertices.uvs.size())
 			{
-				tex = Maths::Vec2(0, 0);
+				tex = Maths::Vector2f(0, 0);
 			}
 			else
 			{
 				tex = inputVertices.uvs[indexSet.uv - 1];
 			}
 
-			Vertex vertex = { position, normal, tex, Color::White(), Maths::Vec3(0, 0, 1) };
+			Vertex vertex = { position, normal, tex, Color::White(), Maths::Vector3f(0, 0, 1) };
 			vertices.push_back(vertex);
 		}
 	}

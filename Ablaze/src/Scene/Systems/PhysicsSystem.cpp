@@ -4,7 +4,7 @@ namespace Ablaze
 {
 
 	PhysicsSystem::PhysicsSystem() : System(),
-		m_Gravity(9.8f), m_GravityDir(-Maths::Vec3::Up())
+		m_Gravity(9.8f), m_GravityDir(-Maths::Vector3f::Up())
 	{
 	
 	}
@@ -19,12 +19,12 @@ namespace Ablaze
 		return m_Gravity;
 	}
 
-	const Maths::Vec3& PhysicsSystem::GravityDirection() const
+	const Maths::Vector3f& PhysicsSystem::GravityDirection() const
 	{
 		return m_GravityDir;
 	}
 
-	Maths::Vec3& PhysicsSystem::GravityDirection()
+	Maths::Vector3f& PhysicsSystem::GravityDirection()
 	{
 		return m_GravityDir;
 	}
@@ -44,13 +44,13 @@ namespace Ablaze
 			
 			rb.Velocity() += rb.Acceleration() * Time::DeltaTime();
 			transform.Translate(rb.Velocity() * Time::DeltaTime());
-			rb.Acceleration() = Maths::Vec3(0.0f);
+			rb.Acceleration() = Maths::Vector3f(0.0f);
 
 			rb.RotationAcceleration() += rb.RotationVelocity() * Time::DeltaTime();
-			transform.Rotate(rb.RotationVelocity().x * Time::DeltaTime(), Maths::Vec3(1, 0, 0));
-			transform.Rotate(rb.RotationVelocity().y * Time::DeltaTime(), Maths::Vec3(0, 1, 0));
-			transform.Rotate(rb.RotationVelocity().z * Time::DeltaTime(), Maths::Vec3(0, 0, 1));
-			rb.RotationAcceleration() = Maths::Vec3(0.0f);
+			transform.Rotate(rb.RotationVelocity().x * Time::DeltaTime(), Maths::Vector3f(1, 0, 0));
+			transform.Rotate(rb.RotationVelocity().y * Time::DeltaTime(), Maths::Vector3f(0, 1, 0));
+			transform.Rotate(rb.RotationVelocity().z * Time::DeltaTime(), Maths::Vector3f(0, 0, 1));
+			rb.RotationAcceleration() = Maths::Vector3f(0.0f);
 		}
 	}
 

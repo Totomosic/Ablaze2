@@ -20,7 +20,7 @@ namespace Ablaze
 
 	Layer::~Layer()
 	{
-		
+		AB_INFO("LAYER DESTROYED");
 	}
 
 	const String& Layer::GetName() const
@@ -85,6 +85,15 @@ namespace Ablaze
 		return *m_NamedGameObjects.at(tag)[index];
 	}
 
+	const std::vector<GameObject*> Layer::GetNamedGameObjects(const String& tag) const
+	{
+		if (TagExists(tag))
+		{
+			return m_NamedGameObjects.at(tag);
+		}
+		return std::vector<GameObject*>();
+	}
+
 	String Layer::ToString() const
 	{
 		return "Layer";
@@ -134,7 +143,7 @@ namespace Ablaze
 		}
 	}
 
-	bool Layer::TagExists(const String& tag)
+	bool Layer::TagExists(const String& tag) const
 	{
 		return m_NamedGameObjects.find(tag) != m_NamedGameObjects.end();
 	}

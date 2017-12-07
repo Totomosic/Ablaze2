@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Application\Input\__Input__.h"
 #include "System\BytecodeVM\__BytecodeVM__.h"
+#include "Scene\GameObject.h"
 
 namespace Ablaze
 {
@@ -11,6 +12,7 @@ namespace Ablaze
 	private:
 		static bool m_IsTyping;
 		static std::vector<char> m_Command;
+		static GameObject* m_CurrentGameObject;
 
 	public:
 		Debugger() = delete;

@@ -9,21 +9,21 @@ namespace Ablaze
 	class AB_API BoxCollider : public Component
 	{
 	private:
-		Maths::Vec3 m_Size;
+		Maths::Vector3f m_Size;
 		Transform m_Transform;
 
 	public:
-		BoxCollider(const Maths::Vec3& size, const Transform& transform);
-		BoxCollider(const Maths::Vec3& size);
+		BoxCollider(const Maths::Vector3f& size, const Transform& transform);
+		BoxCollider(const Maths::Vector3f& size);
 		BoxCollider();
 
-		const Maths::Vec3& Size() const;
-		Maths::Vec3& Size();
+		const Maths::Vector3f& Size() const;
+		Maths::Vector3f& Size();
 		const Transform& transform() const;
 		Transform& transform();
 
-		Maths::Vec3 Max() const;
-		Maths::Vec3 Min() const;
+		Maths::Vector3f Max() const;
+		Maths::Vector3f Min() const;
 		Endpoint* Endpoints();
 
 		String ToString() const override;
