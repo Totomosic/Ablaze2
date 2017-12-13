@@ -20,6 +20,11 @@ namespace Ablaze
 		return obj;
 	}
 
+	void RenderQueue::Clear()
+	{
+		m_Queue.clear();
+	}
+
 	String RenderQueue::ToString() const
 	{
 		return "RenderQueue";

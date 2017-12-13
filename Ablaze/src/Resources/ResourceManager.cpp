@@ -1,5 +1,4 @@
 #include "ResourceManager.h"
-#include "Resource.h"
 #include "Shaders\__Shaders__.h"
 #include "Scene\Systems\__Systems__.h"
 
@@ -81,7 +80,11 @@ namespace Ablaze
 
 	std::shared_ptr<Texture2D> ResourceManager::LoadTexture2D(const String& textureFile, MipmapMode mipmap)
 	{
-		return std::make_shared<Texture2D>(textureFile, mipmap);
+		if (Texture2DExists(textureFile))
+		{
+			return m_Texture2Ds[textureFile];
+		}
+		return AddTexture2D(textureFile, new Texture2D(textureFile, mipmap));
 	}
 
 	std::shared_ptr<Texture2D> ResourceManager::CreateBlankTexture2D(int width, int height, MipmapMode mipmap)
@@ -91,7 +94,11 @@ namespace Ablaze
 
 	std::shared_ptr<Font> ResourceManager::LoadFont(const String& fontFile, float size)
 	{
-		return std::make_shared<Font>(fontFile, size);
+		if (FontExists(fontFile + std::to_string(size)))
+		{
+			return m_Fonts[fontFile + std::to_string(size)];
+		}
+		return AddFont(fontFile + std::to_string(size), new Font(fontFile, size));
 	}
 
 
@@ -101,9 +108,9 @@ namespace Ablaze
 		return std::shared_ptr<Model>(model);
 	}
 
-	std::shared_ptr<Model> ResourceManager::LoadTextModel(const String& text, const std::shared_ptr<Font>& font)
+	std::shared_ptr<Model> ResourceManager::LoadTextModel(const String& text, const std::shared_ptr<Font>& font, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical)
 	{
-		Model* model = font->CreateModel(text);
+		Model* model = font->CreateModel(text, color, horizontal, vertical);
 		return std::shared_ptr<Model>(model);
 	}
 
@@ -168,6 +175,42 @@ namespace Ablaze
 		return m_Plane;
 	}
 
+
+	bool ResourceManager::ModelExists(const String& filename)
+	{
+		return (m_Models.find(filename) != m_Models.end());
+	}
+
+	bool ResourceManager::Texture2DExists(const String& filename)
+	{
+		return (m_Texture2Ds.find(filename) != m_Texture2Ds.end());
+	}
+
+	bool ResourceManager::FontExists(const String& filename)
+	{
+		return (m_Fonts.find(filename) != m_Fonts.end());
+	}
+
+	std::shared_ptr<Model> ResourceManager::AddModel(const String& filename, Model* model)
+	{
+		std::shared_ptr<Model> m = std::shared_ptr<Model>(model);
+		m_Models[filename] = m;
+		return m;
+	}
+
+	std::shared_ptr<Texture2D> ResourceManager::AddTexture2D(const String& filename, Texture2D* texture)
+	{
+		std::shared_ptr<Texture2D> tex = std::shared_ptr<Texture2D>(texture);
+		m_Texture2Ds[filename] = tex;
+		return tex;
+	}
+
+	std::shared_ptr<Font> ResourceManager::AddFont(const String& filename, Font* font)
+	{
+		std::shared_ptr<Font> f = std::shared_ptr<Font>(font);
+		m_Fonts[filename] = f;
+		return f;
+	}
 
 	void ResourceManager::LoadDefaultColor()
 	{

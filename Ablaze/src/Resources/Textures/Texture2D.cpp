@@ -1,5 +1,4 @@
 #include "Texture2D.h"
-#include "Resources\Resource.h"
 #include "TextureManager.h"
 
 namespace Ablaze

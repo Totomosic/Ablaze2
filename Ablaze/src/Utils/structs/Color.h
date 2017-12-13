@@ -37,6 +37,10 @@ namespace Ablaze
 		String ToString() const;
 		void Serialize(JSONwriter& writer) const;
 
+		friend Color operator*(const Color& left, const Color& right);
+		friend Color operator*(const Color& left, float right);
+		friend Color operator*(float left, const Color& right);
+
 		friend std::ostream& operator<<(std::ostream& stream, const Color& color);
 
 	public:

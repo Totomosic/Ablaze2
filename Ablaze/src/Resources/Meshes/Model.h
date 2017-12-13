@@ -55,7 +55,7 @@ namespace Ablaze
 
 		friend class ResourceManager;
 		friend class Internal::Shapes;
-		template<typename> friend class std::shared_ptr;
+		template<typename> friend class Resource;
 
 	private:
 		void LoadOBJModel(const String& filename);

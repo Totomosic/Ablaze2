@@ -5,18 +5,18 @@ namespace Ablaze
 {
 
 	RenderState::RenderState(bool useDepthFunction, bool useBlend, DepthFunction depthFunction, BlendSrc blendSrcFunction, BlendDst blendDstFunction)
-		: useDepthTest(useDepthFunction), useBlend(useBlend), depthFunction(depthFunction), blendSrcFunction(blendSrcFunction), blendDstFunction(blendDstFunction)
+		: UseDepthTest(useDepthFunction), UseBlend(useBlend), DepthFunc(depthFunction), BlendSrcFunc(blendSrcFunction), BlendDstFunc(blendDstFunction)
 	{
 	
 	}
 
 	void RenderState::Apply() const
 	{
-		Graphics::SetDepth(useDepthTest);
-		Graphics::SetBlend(useBlend);
-		Graphics::SetDepthFunction(depthFunction);
-		Graphics::SetBlendSrcFunction(blendSrcFunction);
-		Graphics::SetBlendDstFunction(blendDstFunction);
+		Graphics::SetDepth(UseDepthTest);
+		Graphics::SetBlend(UseBlend);
+		Graphics::SetDepthFunction(DepthFunc);
+		Graphics::SetBlendSrcFunction(BlendSrcFunc);
+		Graphics::SetBlendDstFunction(BlendDstFunc);
 	}
 
 	void RenderState::operator()() const
@@ -27,11 +27,11 @@ namespace Ablaze
 	void RenderState::Serialize(JSONwriter& writer) const
 	{
 		writer.BeginObject();
-		writer.WriteAttribute("DepthTest", useDepthTest);
-		writer.WriteAttribute("Blend", useBlend);
-		writer.WriteAttribute("DepthFunction", (int)depthFunction);
-		writer.WriteAttribute("BlendSrcFunction", (int)blendSrcFunction);
-		writer.WriteAttribute("BlendDstFunction", (int)blendDstFunction);
+		writer.WriteAttribute("DepthTest", UseDepthTest);
+		writer.WriteAttribute("Blend", UseBlend);
+		writer.WriteAttribute("DepthFunction", (int)DepthFunc);
+		writer.WriteAttribute("BlendSrcFunction", (int)BlendSrcFunc);
+		writer.WriteAttribute("BlendDstFunction", (int)BlendDstFunc);
 		writer.EndObject();
 	}
 

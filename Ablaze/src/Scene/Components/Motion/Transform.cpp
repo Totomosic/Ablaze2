@@ -40,7 +40,7 @@ namespace Ablaze
 		{
 			return m_Position;
 		}
-		return ToMatrix().GetColumn(3).xyz();
+		return ToMatrix().Column(3).xyz();
 	}
 
 	const Maths::Quaternion Transform::Rotation() const
@@ -106,6 +106,16 @@ namespace Ablaze
 		return Rotation() * Maths::Vector3f(0, 1, 0);
 	}
 
+	void Transform::SetLocalPosition(const Maths::Vector3f& position)
+	{
+		m_Position = position;
+	}
+
+	void Transform::SetLocalPosition(float x, float y, float z)
+	{
+		SetLocalPosition(Maths::Vector3f(x, y, z));
+	}
+
 	void Transform::Translate(const Maths::Vector3f& translation)
 	{
 		m_Position += translation;
@@ -116,19 +126,19 @@ namespace Ablaze
 		Translate(Maths::Vector3f(x, y, z));
 	}
 
-	void Transform::SetScale(const Maths::Vector3f& scale)
+	void Transform::SetLocalScale(const Maths::Vector3f& scale)
 	{
 		m_Scale = scale;
 	}
 
-	void Transform::SetScale(float scale)
+	void Transform::SetLocalScale(float scale)
 	{
-		SetScale(Maths::Vector3f(scale));
+		SetLocalScale(Maths::Vector3f(scale));
 	}
 
-	void Transform::SetScale(float x, float y, float z)
+	void Transform::SetLocalScale(float x, float y, float z)
 	{
-		SetScale(Maths::Vector3f(x, y, z));
+		SetLocalScale(Maths::Vector3f(x, y, z));
 	}
 
 	void Transform::Rotate(float angle, const Maths::Vector3f& axis, Space space, Angle angleType)
@@ -151,13 +161,13 @@ namespace Ablaze
 		m_Rotation *= quaternion;
 	}
 
-	Maths::Matrix4f Transform::ToMatrix() const
+	Maths::Matrix4d Transform::ToMatrix() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
-			return Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
+			return Maths::Matrix4d::Translation(m_Position) * m_Rotation.ToMatrix4d() * Maths::Matrix4d::Scale(m_Scale);
 		}
-		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
+		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Matrix4d::Translation(m_Position) * m_Rotation.ToMatrix4d() * Maths::Matrix4d::Scale(m_Scale);
 	}
 
 	String Transform::ToString() const

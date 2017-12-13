@@ -11,30 +11,12 @@ namespace Ablaze
 	GameObject::GameObject() : Object(),
 		m_Components(new ComponentSet(this)), m_Id(0), m_Layer(nullptr), m_Parent(nullptr), m_Tag("")
 	{
-		if (SceneManager::Instance().HasScene())
-		{
-			if (SceneManager::Instance().CurrentScene().HasLayer())
-			{
-				SceneManager::Instance().CurrentScene().CurrentLayer().AddGameObject(this);
-			}
-			else
-			{
-				AB_WARN("GameObject created with no active layer in current scene");
-			}
-		}
-		else
-		{
-			AB_WARN("GameObject created with no active scene");
-		}
+
 	}
 
 	GameObject::~GameObject()
 	{
 		delete m_Components;
-		if (m_Layer != nullptr)
-		{
-			m_Layer->m_GameObjects[m_Id] = nullptr;
-		}
 	}
 
 	GameObject* GameObject::Parent() const
@@ -50,6 +32,27 @@ namespace Ablaze
 	Layer* GameObject::GetLayer() const
 	{
 		return m_Layer;
+	}
+
+	const String& GameObject::Tag() const
+	{
+		return m_Tag;
+	}
+
+	void GameObject::Enable() const
+	{
+		for (Component* c : m_Components->GetAll())
+		{
+			c->Enable();
+		}
+	}
+
+	void GameObject::Disable() const
+	{
+		for (Component* c : m_Components->GetAll())
+		{
+			c->Disable();
+		}
 	}
 
 	void GameObject::SetParent(GameObject* parent)
@@ -69,14 +72,8 @@ namespace Ablaze
 
 	void GameObject::Destroy()
 	{
-		if (m_Layer != nullptr)
-		{
-			m_Layer->DestroyGameObject(this);
-		}
-		else
-		{
-			delete this;
-		}
+		AB_ASSERT(m_Layer);
+		m_Layer->DestroyGameObject(this);
 	}
 
 	void GameObject::SetTag(const String& tag)
@@ -132,9 +129,8 @@ namespace Ablaze
 
 	GameObject* GameObject::Empty(const String& name)
 	{
-		GameObject* obj = new GameObject;
-		obj->SetTag(name);
-		return obj;
+		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer());
+		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name);
 	}
 
 	GameObject* GameObject::Instantiate(const String& name)
@@ -144,10 +140,8 @@ namespace Ablaze
 
 	GameObject* GameObject::Instantiate(const String& name, float x, float y, float z)
 	{
-		GameObject* object = new GameObject;
-		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
-		object->SetTag(name);
-		return object;
+		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer());
+		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name, x, y, z);
 	}
 
 	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab)

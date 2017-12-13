@@ -21,6 +21,7 @@ namespace Ablaze
 		int GetWidth() const;
 		int GetHeight() const;
 		float GetAspect() const;
+		Maths::Vector2i Size() const;
 
 		void SetX(int x);
 		void SetY(int y);

@@ -8,13 +8,15 @@ namespace Ablaze
 
 		struct AB_API Ray
 		{
-			Vector3f origin;
-			Vector3f direction;
+		public:
+			Vector3f Origin;
+			Vector3f Direction;
 
+		public:
 			Ray(const Vector3f& origin, const Vector3f& direction);
+			Ray();
 
 			String ToString() const;
-
 			friend std::ostream& operator<<(std::ostream& stream, const Ray& ray);
 		};
 

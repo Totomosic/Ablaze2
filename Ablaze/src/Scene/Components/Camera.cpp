@@ -19,12 +19,12 @@ namespace Ablaze
 		CreateProjectionMatrix(x, xMax, y, yMax);
 	}
 
-	const Maths::Matrix4f& Camera::ProjectionMatrix() const
+	const Maths::Matrix4d& Camera::ProjectionMatrix() const
 	{
 		return m_Projection;
 	}
 
-	Maths::Matrix4f& Camera::ProjectionMatrix()
+	Maths::Matrix4d& Camera::ProjectionMatrix()
 	{
 		return m_Projection;
 	}
@@ -83,6 +83,19 @@ namespace Ablaze
 		UpdateProjectionMatrix();
 	}
 
+	Maths::Ray Camera::ScreenToWorldRay(const Maths::Vector3f& screenPoint) const
+	{
+		Maths::Vector3f origin = m_GameObject->transform().Position();
+		Maths::Vector4f ndc;
+		ndc.x = (2.0f * screenPoint.x) / Graphics::CurrentContext().Width() - 1.0f;
+		ndc.y = (2.0f * screenPoint.y) / Graphics::CurrentContext().Height() - 1.0f;
+		ndc.z = 1.0f;
+		ndc.w = 1.0f;
+		Maths::Vector4f viewPoint = ProjectionMatrix().Inverse() * ndc;
+		Maths::Vector4f direction = m_GameObject->transform().ToMatrix() * viewPoint; // Transform.ToMatrix().Inverse() is view matrix -> so the inverse of the view matrix is just Transform.ToMatrix()
+		return Maths::Ray(origin, direction.xyz());
+	}
+
 	void Camera::UpdateProjectionMatrix()
 	{
 		CreateProjectionMatrix(0, Graphics::CurrentContext().Width(), 0, Graphics::CurrentContext().Height());
@@ -114,11 +127,11 @@ namespace Ablaze
 	{
 		if (m_ProjectionType == Projection::Perspective)
 		{
-			m_Projection = Maths::Matrix4f::Perspective(m_Fov, Graphics::CurrentContext().Aspect(), m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Matrix4d::Perspective(m_Fov, Graphics::CurrentContext().Aspect(), m_NearPlane, m_FarPlane);
 		}
 		else
 		{
-			m_Projection = Maths::Matrix4f::Orthographic(x, width, y, height, m_NearPlane, m_FarPlane);
+			m_Projection = Maths::Matrix4d::Orthographic(x, width, y, height, m_NearPlane, m_FarPlane);
 		}
 	}
 

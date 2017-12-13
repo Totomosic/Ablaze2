@@ -9,7 +9,7 @@ namespace Ablaze
 		
 	}
 
-	Mesh::Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform) : Mesh()
+	Mesh::Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform) : Mesh()
 	{
 		AddModel(model, material, transform);
 	}
@@ -29,22 +29,22 @@ namespace Ablaze
 		return m_Models[index].model;
 	}
 
-	const std::shared_ptr<MaterialBase>& Mesh::Material(int index) const
+	const std::shared_ptr<MaterialBase>& Mesh::GetMaterial(int index) const
 	{
 		return m_Models[index].material;
 	}
 
-	std::shared_ptr<MaterialBase>& Mesh::Material(int index)
+	std::shared_ptr<MaterialBase>& Mesh::GetMaterial(int index)
 	{
 		return m_Models[index].material;
 	}
 
-	const Maths::Matrix4f& Mesh::GetTransform(int index) const
+	const Maths::Matrix4d& Mesh::GetTransform(int index) const
 	{
 		return m_Models[index].transform;
 	}
 
-	Maths::Matrix4f& Mesh::GetTransform(int index)
+	Maths::Matrix4d& Mesh::GetTransform(int index)
 	{
 		return m_Models[index].transform;
 	}
@@ -64,7 +64,7 @@ namespace Ablaze
 		return m_Models.size();
 	}
 
-	void Mesh::AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform)
+	void Mesh::AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform)
 	{
 		m_Models.push_back({ model, material, transform });
 	}

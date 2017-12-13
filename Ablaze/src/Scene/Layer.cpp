@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include "SceneManager.h"
+#include "Components\__Components__.h"
 
 namespace Ablaze
 {
@@ -20,7 +21,7 @@ namespace Ablaze
 
 	Layer::~Layer()
 	{
-		AB_INFO("LAYER DESTROYED");
+		
 	}
 
 	const String& Layer::GetName() const
@@ -43,10 +44,11 @@ namespace Ablaze
 		std::vector<GameObject*> objects;
 		for (uint i = 0; i < m_HighestID + 1; i++)
 		{
-			if (m_GameObjects[i] != nullptr)
+			if (m_GameObjects[i] == nullptr)
 			{
-				objects.push_back(m_GameObjects[i]);
+				continue;
 			}
+			objects.push_back(m_GameObjects[i]);
 		}
 		return objects;
 	}
@@ -67,7 +69,21 @@ namespace Ablaze
 	void Layer::AddGameObject(GameObject* gameObject, const String& tag)
 	{
 		AddGameObject(gameObject);
-		TagGameObject(gameObject, tag);
+		gameObject->SetTag(tag);
+	}
+
+	GameObject* Layer::CreateGameObject(const String& name)
+	{
+		GameObject* object = new GameObject;
+		AddGameObject(object, name);
+		return object;
+	}
+
+	GameObject* Layer::CreateGameObject(const String& name, float x, float y, float z)
+	{
+		GameObject* object = CreateGameObject(name);
+		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
+		return object;
 	}
 
 	const GameObject& Layer::GetNamedGameObject(const String& tag, int index) const
@@ -80,18 +96,35 @@ namespace Ablaze
 		if (!TagExists(tag))
 		{
 			AB_ERROR("GameObject with tag: " + tag + " does not exist");
+			AB_ASSERT(false);
 			return *(GameObject*)nullptr;
 		}
 		return *m_NamedGameObjects.at(tag)[index];
 	}
 
-	const std::vector<GameObject*> Layer::GetNamedGameObjects(const String& tag) const
+	std::vector<GameObject*> Layer::GetNamedGameObjects(const String& tag) const
 	{
 		if (TagExists(tag))
 		{
 			return m_NamedGameObjects.at(tag);
 		}
 		return std::vector<GameObject*>();
+	}
+
+	void Layer::Clean()
+	{
+		for (GameObject* object : m_NeedDelete)
+		{
+			if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
+			{
+				auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
+				m_NamedGameObjects[object->m_Tag].erase(it);
+			}
+			uint id = object->m_Id;
+			delete object;
+			m_GameObjects[id] = nullptr;
+		}
+		m_NeedDelete.clear();
 	}
 
 	String Layer::ToString() const
@@ -162,6 +195,7 @@ namespace Ablaze
 			}
 		}
 		AB_ERROR("Unable to find available ID for GameObject");
+		AB_ASSERT(false);
 		return 0;
 	}
 
@@ -200,13 +234,10 @@ namespace Ablaze
 
 	void Layer::DestroyGameObject(GameObject* object)
 	{
-		if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
+		if (std::find(m_NeedDelete.begin(), m_NeedDelete.end(), object) == m_NeedDelete.end())
 		{
-			auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
-			m_NamedGameObjects[object->m_Tag].erase(it);
+			m_NeedDelete.push_back(object);
 		}
-		delete object;
-		object = nullptr;
 	}
 
 }

@@ -11,7 +11,7 @@ namespace Ablaze
 		TopRight,
 		BottomLeft,
 		BottomRight,
-		Centre
+		Center
 	};
 
 	enum class MouseButton

@@ -10,7 +10,10 @@ namespace Ablaze
 		{
 			for (Component* component : object->Components().GetAll())
 			{
-				component->Update(Time::DeltaTime());
+				if (component->Enabled())
+				{
+					component->Update(Time::DeltaTime());
+				}
 			}
 		}
 	}

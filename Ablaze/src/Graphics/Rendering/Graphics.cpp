@@ -118,9 +118,25 @@ namespace Ablaze
 		}
 	}
 
-	void Graphics::DrawString(const String& text, const std::shared_ptr<Font>& font)
+	void Graphics::DrawString(float x, float y, const String& text, const std::shared_ptr<Font>& font, const Color& color)
 	{
-		
+		GameObject* obj = GameObject::Instantiate("Object", x, y, 0);
+		obj->AddComponent(new Mesh(ResourceManager::Instance().LoadTextModel(text, font), std::make_shared<Material<Font>>(color, ResourceManager::Instance().DefaultFontShader(), "Tex0", font)));
+		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
+		camera->AddComponent(new Camera(Projection::Orthographic));
+
+		ForwardRenderMethod method;
+		method.Begin();
+		method.Render(obj, camera);
+		method.End();
+
+		obj->Destroy();
+		camera->Destroy();
+	}
+
+	void Graphics::DrawString(float x, float y, const String& text, const String& fontFile, float size, const Color& color)
+	{
+		DrawString(x, y, text, ResourceManager::Instance().LoadFont(fontFile, size), color);
 	}
 
 	void Graphics::DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material)

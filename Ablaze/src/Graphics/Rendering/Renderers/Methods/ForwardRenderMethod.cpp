@@ -22,7 +22,7 @@ namespace Ablaze
 			std::shared_ptr<Model>& model = set.model;
 			std::shared_ptr<Shader>& shader = mat->ActiveShader();
 			shader->Bind();
-			shader->SetUniform("modelMatrix", set.transform * transform.ToMatrix());
+			shader->SetUniform("modelMatrix", transform.ToMatrix() * set.transform);
 			shader->SetUniform("viewMatrix", cameraTransform.ToMatrix().Inverse());
 			shader->SetUniform("projectionMatrix", cameraComp.ProjectionMatrix());
 			shader->SetUniform("color", mat->BaseColor());

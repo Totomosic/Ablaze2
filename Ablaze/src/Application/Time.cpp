@@ -11,6 +11,8 @@ namespace Ablaze
 	double Time::s_AvgFps = 60;
 	double Time::s_AvgTimer = 0;
 
+	std::vector<Timer*> Time::s_ActiveTimers = std::vector<Timer*>();
+
 	double Time::DeltaTime()
 	{
 		return s_ElapsedSeconds;
@@ -54,12 +56,16 @@ namespace Ablaze
 
 	Timer& Time::CreateNewTimer(double seconds, TimerMode mode)
 	{
-		return *(new Timer(seconds, mode));
+		Timer* t = new Timer(seconds, mode);
+		s_ActiveTimers.push_back(t);
+		return *t;
 	}
 
 	Timer& Time::CreateNewTimer(double seconds, const std::function<void()>& callback, TimerMode mode)
 	{
-		return *(new Timer(seconds, callback, mode));
+		Timer* t = new Timer(seconds, callback, mode);
+		s_ActiveTimers.push_back(t);
+		return *t;
 	}
 
 	void Time::Update()
@@ -75,9 +81,9 @@ namespace Ablaze
 			CalcAvgFPS();
 		}
 
-		for (Timer* timer : Timer::s_ActiveTimers)
+		for (int i = 0; i < s_ActiveTimers.size(); i++)
 		{
-			timer->Update(s_ElapsedSeconds);
+			s_ActiveTimers[i]->Update(s_ElapsedSeconds);
 		}
 	}
 

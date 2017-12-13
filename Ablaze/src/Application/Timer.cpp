@@ -3,24 +3,16 @@
 namespace Ablaze
 {
 
-	std::vector<Timer*> Timer::s_ActiveTimers = std::vector<Timer*>();
-
 	Timer::Timer(double seconds, TimerMode mode) : Object(),
 		m_CurrentTime(0), m_TotalTime(seconds), m_Paused(false), m_IsTriggered(false), m_Mode(mode), m_UseCallback(false)
 	{
-		s_ActiveTimers.push_back(this);
+		
 	}
 
 	Timer::Timer(double seconds, const std::function<void()>& callback, TimerMode mode) : Object(),
 		m_CurrentTime(0), m_TotalTime(seconds), m_Paused(false), m_IsTriggered(false), m_Mode(mode), m_Callback(callback), m_UseCallback(true)
 	{
-		s_ActiveTimers.push_back(this);
-	}
-
-	Timer::~Timer()
-	{
-		auto it = std::find(s_ActiveTimers.begin(), s_ActiveTimers.end(), this);
-		s_ActiveTimers.erase(it);
+		
 	}
 
 	double Timer::CurrentTime() const
@@ -110,17 +102,18 @@ namespace Ablaze
 
 	void Timer::Update(double elapsedSeconds)
 	{
-		m_IsTriggered = false;
-		m_CurrentTime += elapsedSeconds;
-		if (m_CurrentTime >= m_TotalTime)
+		if (!m_Paused)
 		{
-			Trigger();
-			m_CurrentTime -= m_TotalTime;
-			m_IsTriggered = true;
-			if (m_Mode == TimerMode::Single)
+			m_CurrentTime += elapsedSeconds;
+			if (m_CurrentTime >= m_TotalTime)
 			{
-				Stop();
-				Reset();
+				Trigger();
+				m_CurrentTime -= m_TotalTime;
+				if (m_Mode == TimerMode::Single)
+				{
+					Stop();
+					Reset();
+				}
 			}
 		}
 	}

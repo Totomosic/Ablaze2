@@ -19,6 +19,7 @@ namespace Ablaze
 
 		int Width() const;
 		int Height() const;
+		Maths::Vector2i Size() const;
 		const String& Title() const;
 		float Aspect() const;
 		GLFWwindow* WindowHandle() const;

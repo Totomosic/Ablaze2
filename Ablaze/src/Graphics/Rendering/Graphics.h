@@ -4,7 +4,6 @@
 
 #include "Graphics\Framebuffer.h"
 #include "Graphics\Window.h"
-#include "Resources\Resource.h"
 #include "Resources\Textures\Fonts\Font.h"
 
 #include "GraphicsPipeline.h"
@@ -58,7 +57,8 @@ namespace Ablaze
 		static void EnableGraphicsPipeline(int index);
 		static void RenderScene();
 
-		static void DrawString(const String& text, const std::shared_ptr<Font>& font);
+		static void DrawString(float x, float y, const String& text, const std::shared_ptr<Font>& font, const Color& color = Color::White());
+		static void DrawString(float x, float y, const String& text, const String& fontName, float size, const Color& color = Color::White());
 		static void DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material);
 		static void DrawRectangle(float x, float y, float w, float h, const Color& color);
 		static void DrawImage(float x, float y, float w, float h, const std::shared_ptr<Texture2D>& image);

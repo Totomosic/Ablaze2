@@ -20,8 +20,8 @@ namespace Ablaze
 
 	Font::~Font()
 	{
-		delete m_Atlas;
-		delete m_Font;
+		texture_atlas_delete(m_Atlas);
+		texture_font_delete(m_Font);
 		Texture2D::~Texture2D();
 	}
 
@@ -72,8 +72,15 @@ namespace Ablaze
 		return Maths::Vector2f(totalLength, maxHeight);
 	}
 
-	Model* Font::CreateModel(const String& text, const Color& color) const
+	Model* Font::CreateModel(const String& text, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical) const
 	{
+		if (text.length() == 0)
+		{
+			VertexArray* vao = new VertexArray;
+			vao->CreateAttribute(0);
+			vao->CreateIndexBuffer(0);
+			return new Model(vao);
+		}
 		VertexArray* vao = new VertexArray;
 		VertexBuffer* vbo = vao->CreateAttribute(text.length() * 4 * sizeof(Vertex), BufferLayout::Default());
 		IndexBuffer* ibo = vao->CreateIndexBuffer(text.length() * 6 * sizeof(uint));
@@ -81,8 +88,25 @@ namespace Ablaze
 		uint* indices = new uint[text.length() * 6];
 		float width = GetWidth(text);
 		float height = GetHeight(text);
-		float x = width / -2.0f;
-		float y = height / -2.0f;
+		float x = 0;
+		float y = 0;
+		if (horizontal == TextAlignmentH::Center)
+		{
+			x = -width / 2.0f;
+		}
+		else if (horizontal == TextAlignmentH::Right)
+		{
+			x = -width;
+		}
+		if (vertical == TextAlignmentV::Center)
+		{
+			y = -height / 2.0f;
+		}
+		else if (vertical == TextAlignmentV::Top)
+		{
+			y = -height;
+		}
+
 		int indexCount = 0;
 		int indicesCount = 0;
 		for (int i = 0; i < text.length(); i++)
@@ -156,6 +180,7 @@ namespace Ablaze
 		ibo->Bind();
 		ibo->Upload(indices, text.length() * 6 * sizeof(uint));
 		vbo->Unmap();
+		delete[] indices;
 
 		return new Model(vao);
 	}

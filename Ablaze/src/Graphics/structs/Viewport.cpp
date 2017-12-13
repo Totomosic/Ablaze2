@@ -39,6 +39,11 @@ namespace Ablaze
 		return (float)GetWidth() / GetHeight();
 	}
 
+	Maths::Vector2i Viewport::Size() const
+	{
+		return Maths::Vector2i(GetWidth(), GetHeight());
+	}
+
 	void Viewport::SetX(int x)
 	{
 		m_XOff = x;

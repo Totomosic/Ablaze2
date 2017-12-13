@@ -17,6 +17,8 @@ namespace Ablaze
 		static double s_AvgFps;
 		static double s_AvgTimer;
 
+		static std::vector<Timer*> s_ActiveTimers;
+
 	public:
 		Time() = delete;
 

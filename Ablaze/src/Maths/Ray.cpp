@@ -6,14 +6,19 @@ namespace Ablaze
 	{
 
 		Ray::Ray(const Vector3f& origin, const Vector3f& direction)
-			: origin(origin), direction(direction)
+			: Origin(origin), Direction(direction.Normalize())
 		{
 
 		}
 
+		Ray::Ray() : Ray(Maths::Vector3f(0.0f), Maths::Vector3f::Forward())
+		{
+		
+		}
+
 		String Ray::ToString() const
 		{
-			return "Ray(" + origin.ToString() + ", " + direction.ToString() + ")";
+			return "Ray(" + Origin.ToString() + ", " + Direction.ToString() + ")";
 		}
 
 		std::ostream& operator<<(std::ostream& stream, const Ray& ray)

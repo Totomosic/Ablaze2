@@ -44,15 +44,17 @@ namespace Ablaze
 		Maths::Vector3f Right() const;
 		Maths::Vector3f Up() const;
 
+		void SetLocalPosition(const Maths::Vector3f& position);
+		void SetLocalPosition(float x, float y, float z);
 		void Translate(const Maths::Vector3f& translation);
 		void Translate(float x, float y, float z);
-		void SetScale(const Maths::Vector3f& scale);
-		void SetScale(float scale);
-		void SetScale(float x, float y, float z);
+		void SetLocalScale(const Maths::Vector3f& scale);
+		void SetLocalScale(float scale);
+		void SetLocalScale(float x, float y, float z);
 		void Rotate(float angle, const Maths::Vector3f& axis, Space space = Space::World, Angle angleType = Angle::Radians);
 		void Rotate(const Maths::Quaternion& quaternion);
 
-		Maths::Matrix4f ToMatrix() const;
+		Maths::Matrix4d ToMatrix() const;
 		String ToString() const override;
 
 		Component* Clone() const override;

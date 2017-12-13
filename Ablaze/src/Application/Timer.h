@@ -13,9 +13,6 @@ namespace Ablaze
 	class AB_API Timer : public Object
 	{
 	private:
-		static std::vector<Timer*> s_ActiveTimers;
-
-	private:
 		double m_CurrentTime;
 		double m_TotalTime;
 		bool m_Paused;
@@ -29,7 +26,6 @@ namespace Ablaze
 		Timer(double totalTimeSeconds, TimerMode mode = TimerMode::Repeat);
 		Timer(double totalTimeSeconds, const std::function<void()>& callback, TimerMode mode = TimerMode::Repeat);
 		Timer(const Timer& other) = delete;
-		~Timer();
 
 		double CurrentTime() const;
 		double TotalTime() const;

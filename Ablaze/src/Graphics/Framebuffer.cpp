@@ -1,7 +1,6 @@
 #include "Framebuffer.h"
 #include "Resources\ResourceManager.h"
 #include "Graphics\Rendering\Graphics.h"
-#include "Resources\Resource.h"
 
 namespace Ablaze
 {
@@ -27,7 +26,7 @@ namespace Ablaze
 
 	Framebuffer::~Framebuffer()
 	{
-		if (m_Id != 0)
+		if (m_Id != 0) // Check for window framebuffer
 		{
 			GL_CALL(glDeleteFramebuffers(1, &m_Id));
 		}

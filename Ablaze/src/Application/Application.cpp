@@ -73,6 +73,13 @@ namespace Ablaze
 
 	void Application::Update()
 	{
+		if (SceneManager::Instance().HasScene())
+		{
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+			{
+				layer->Clean();
+			}
+		}
 		Systems::Run();
 	}
 
@@ -88,6 +95,15 @@ namespace Ablaze
 			Time::Update();
 			Input::Start();
 			Update();
+
+			if (SceneManager::Instance().HasScene())
+			{
+				for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+				{
+					layer->Clean();
+				}
+			}
+
 			if (Graphics::IsInitialised())
 			{
 				Render();

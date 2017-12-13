@@ -8,8 +8,6 @@
 namespace Ablaze
 {
 
-	template<typename> class Resource;
-
 	class AB_API MaterialBase : public Object
 	{
 	protected:

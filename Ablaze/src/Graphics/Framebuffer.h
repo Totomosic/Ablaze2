@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "structs\__structs__.h"
 #include "Resources\Textures\__Textures__.h"
-#include "Resources\Resource.h"
 
 namespace Ablaze
 {

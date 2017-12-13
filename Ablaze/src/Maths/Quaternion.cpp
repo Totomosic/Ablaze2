@@ -27,9 +27,9 @@ namespace Ablaze
 		
 		}
 
-		Matrix4f Quaternion::ToMatrix4f() const
+		Matrix4d Quaternion::ToMatrix4d() const
 		{
-			return Matrix4f::FromRows(
+			return Matrix4d::FromRows(
 				Vector4f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y), 0.0f),
 				Vector4f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x), 0.0f),
 				Vector4f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y), 0.0f),
@@ -213,12 +213,7 @@ namespace Ablaze
 
 		void Quaternion::Serialize(JSONwriter& writer) const
 		{
-			writer.BeginObject();
-			writer.WriteAttribute("x", x);
-			writer.WriteAttribute("y", y);
-			writer.WriteAttribute("z", z);
-			writer.WriteAttribute("w", w);
-			writer.EndObject();
+			
 		}
 
 		Quaternion Quaternion::Log(const Quaternion& q)
@@ -337,10 +332,10 @@ namespace Ablaze
 			return Quaternion((float)x, (float)y, (float)z, (float)w);
 		}
 
-		Quaternion Quaternion::FromRotationMat(const Matrix4f& rotation)
+		Quaternion Quaternion::FromRotationMat(const Matrix4d& rotation)
 		{
 			int rotationLookup[] = { 1, 2, 0 };
-			float t_trace = rotation.GetRow(0).x + rotation.GetRow(1).y + rotation.GetRow(2).z;
+			float t_trace = rotation.Row(0).x + rotation.Row(1).y + rotation.Row(2).z;
 			float t_root = 0.0f;
 
 			if (t_trace > 0.0)
@@ -349,9 +344,9 @@ namespace Ablaze
 				t_root = (float)sqrt(t_trace + 1.0);
 				t_return.w = 0.5f * t_root;
 				t_root = 0.5f / t_root;
-				t_return.x = (rotation.GetRow(2).y - rotation.GetRow(1).z) * t_root;
-				t_return.y = (rotation.GetRow(0).z - rotation.GetRow(2).x) * t_root;
-				t_return.z = (rotation.GetRow(1).x - rotation.GetRow(0).y) * t_root;
+				t_return.x = (rotation.Row(2).y - rotation.Row(1).z) * t_root;
+				t_return.y = (rotation.Row(0).z - rotation.Row(2).x) * t_root;
+				t_return.z = (rotation.Row(1).x - rotation.Row(0).y) * t_root;
 				return t_return;
 			}
 			else
@@ -359,17 +354,17 @@ namespace Ablaze
 				Quaternion t_return = Zero();
 
 				int i = 0;
-				if (rotation.GetRow(1).y > rotation.GetRow(0).x) i = 1;
-				if (rotation.GetRow(2).z > rotation.GetRow(i).Get(i)) i = 2;
+				if (rotation.Row(1).y > rotation.Row(0).x) i = 1;
+				if (rotation.Row(2).z > rotation.Row(i).Get(i)) i = 2;
 				int j = rotationLookup[i];
 				int k = rotationLookup[j];
 
-				t_root = (float)sqrt(rotation.GetRow(i).Get(i) - rotation.GetRow(j).Get(j) - rotation.GetRow(k).Get(k) + 1.0f);
+				t_root = (float)sqrt(rotation.Row(i).Get(i) - rotation.Row(j).Get(j) - rotation.Row(k).Get(k) + 1.0f);
 				t_return[i] = 0.5f * t_root;
 				t_root = 0.5f / t_root;
-				t_return.w = (rotation.GetRow(k).Get(j) - rotation.GetRow(j).Get(k)) * t_root;
-				t_return[j] = (rotation.GetRow(j).Get(i) + rotation.GetRow(i).Get(j)) * t_root;
-				t_return[k] = (rotation.GetRow(k).Get(i) + rotation.GetRow(i).Get(k)) * t_root;
+				t_return.w = (rotation.Row(k).Get(j) - rotation.Row(j).Get(k)) * t_root;
+				t_return[j] = (rotation.Row(j).Get(i) + rotation.Row(i).Get(j)) * t_root;
+				t_return[k] = (rotation.Row(k).Get(i) + rotation.Row(i).Get(k)) * t_root;
 				return t_return;
 			}
 		}

@@ -31,6 +31,11 @@ namespace Ablaze
 		return m_Framebuffer.GetHeight();
 	}
 
+	Maths::Vector2i Window::Size() const
+	{
+		return m_Framebuffer.GetViewport().Size();
+	}
+
 	float Window::Aspect() const
 	{
 		return m_Framebuffer.GetAspect();

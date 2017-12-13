@@ -107,13 +107,18 @@ namespace Ablaze
 	void Shader::SetUniform(const String& uniformName, const Maths::Ray& value) const
 	{
 		Bind();
-		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.direction.x, value.direction.y, value.direction.z));
+		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.Direction.x, value.Direction.y, value.Direction.z));
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Matrix4f& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Matrix4d& value) const
 	{
 		Bind();
-		GL_CALL(glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, value.values));
+		float values[16];
+		for (int i = 0; i < 16; i++)
+		{
+			values[i] = (float)value.values[i];
+		}
+		GL_CALL(glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, values));
 	}
 
 	void Shader::SetUniform(const String& uniformName, const Color& value) const

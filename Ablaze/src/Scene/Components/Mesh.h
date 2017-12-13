@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "Resources\Meshes\Materials\__Materials__.h"
 #include "Resources\Meshes\Model.h"
-#include "Resources\Resource.h"
 #include "Component.h"
 
 namespace Ablaze
@@ -13,7 +12,7 @@ namespace Ablaze
 	public:
 		std::shared_ptr<Model> model;
 		std::shared_ptr<MaterialBase> material;
-		Maths::Matrix4f transform;
+		Maths::Matrix4d transform;
 
 	};
 
@@ -24,21 +23,21 @@ namespace Ablaze
 
 	public:
 		Mesh();
-		Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
+		Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
 		Mesh(const Mesh& other) = delete;
 		~Mesh();
 
 		const std::shared_ptr<Model>& GetModel(int index) const;
 		std::shared_ptr<Model>& GetModel(int index);
-		const std::shared_ptr<MaterialBase>& Material(int index) const;
-		std::shared_ptr<MaterialBase>& Material(int index);
-		const Maths::Matrix4f& GetTransform(int index) const;
-		Maths::Matrix4f& GetTransform(int index);
+		const std::shared_ptr<MaterialBase>& GetMaterial(int index) const;
+		std::shared_ptr<MaterialBase>& GetMaterial(int index);
+		const Maths::Matrix4d& GetTransform(int index) const;
+		Maths::Matrix4d& GetTransform(int index);
 		const ModelSet& GetModelSet(int index) const;
 		ModelSet& GetModelSet(int index);
 		int ModelCount() const;
 
-		void AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
+		void AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
 		void SetMaterial(int index, const std::shared_ptr<MaterialBase>& material);
 
 		String ToString() const override;

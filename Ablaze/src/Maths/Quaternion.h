@@ -1,10 +1,13 @@
 #pragma once
-#include "Matrix4f.h"
+#include "Matrices\__Matrices__.h"
 
 namespace Ablaze
 {
 	namespace Maths
 	{
+
+		class JSONwriter;
+		class JSONnode;
 
 		struct AB_API Quaternion
 		{
@@ -20,7 +23,7 @@ namespace Ablaze
 			Quaternion(float x, float y, float z, float w);
 			Quaternion(const Quaternion& other);
 
-			Matrix4f ToMatrix4f() const;
+			Matrix4d ToMatrix4d() const;
 			Vector4f ToAngleAxis() const;
 			float GetLength() const;
 			float GetLengthSqrd() const;
@@ -68,7 +71,7 @@ namespace Ablaze
 			static Quaternion Identity();
 			static Quaternion FromAngleAxis(float angle, const Vector3f& axis);
 			static Quaternion FromEuler(float pitch, float yaw, float roll);
-			static Quaternion FromRotationMat(const Matrix4f& rotation);
+			static Quaternion FromRotationMat(const Matrix4d& rotation);
 
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
 

@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\Chatbox.cpp" />
+    <ClCompile Include="src\Components\Pathing.cpp" />
     <ClCompile Include="src\Components\PlayerController.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -151,6 +153,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\Chatbox.h" />
+    <ClInclude Include="src\Components\Pathing.h" />
     <ClInclude Include="src\Components\PlayerController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

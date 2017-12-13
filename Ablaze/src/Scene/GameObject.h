@@ -22,13 +22,17 @@ namespace Ablaze
 		String m_Tag;
 
 	protected:
-		~GameObject();
 		GameObject();
+		~GameObject();
 
 	public:
 		GameObject* Parent() const;
 		bool HasParent() const;
 		Layer* GetLayer() const;
+		const String& Tag() const;
+
+		void Enable() const;
+		void Disable() const;
 
 		void SetParent(GameObject* parent);
 		void MakeChildOf(GameObject* parent);

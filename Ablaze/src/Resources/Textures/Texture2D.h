@@ -5,8 +5,6 @@
 namespace Ablaze
 {
 
-	template<typename> class Resource;
-
 	class AB_API Texture2D : public Texture
 	{
 	protected:
@@ -41,7 +39,7 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class ResourceManager;
-		template<typename> friend class std::shared_ptr;
+		template<typename> friend class Resource;
 
 	private:
 		void Populate(byte* pixelData) override;

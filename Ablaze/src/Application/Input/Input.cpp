@@ -43,7 +43,7 @@ namespace Ablaze
 			return Maths::Vector3f(s_MousePosition.x, ScreenSize().y - s_MousePosition.y, 0);
 		case Origin::TopLeft:
 			return s_MousePosition;
-		case Origin::Centre:
+		case Origin::Center:
 			return Maths::Vector3f(s_MousePosition.x * 2 - ScreenSize().x / 2.0f, -(s_MousePosition.y * 2 - ScreenSize().y / 2.0f), 0);
 		case Origin::TopRight:
 			return Maths::Vector3f(ScreenSize().x - s_MousePosition.x, s_MousePosition.y, 0);
@@ -56,7 +56,7 @@ namespace Ablaze
 
 	Maths::Vector3f Input::NormalizedMousePosition(Origin origin)
 	{
-		if (origin != Origin::Centre)
+		if (origin != Origin::Center)
 		{
 			return MousePosition(origin) / Maths::Vector3f(ScreenSize(), 1);
 		}
@@ -71,7 +71,7 @@ namespace Ablaze
 			return Maths::Vector3f(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopLeft:
 			return s_RelMousePosition;
-		case Origin::Centre:
+		case Origin::Center:
 			return Maths::Vector3f(s_RelMousePosition.x, -s_RelMousePosition.y, 0);
 		case Origin::TopRight:
 			return Maths::Vector3f(-s_RelMousePosition.x, s_RelMousePosition.y, 0);

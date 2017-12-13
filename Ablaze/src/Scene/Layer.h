@@ -16,6 +16,8 @@ namespace Ablaze
 		std::unordered_map<String, std::vector<GameObject*>> m_NamedGameObjects;
 		GameObject* m_Camera;
 
+		std::vector<GameObject*> m_NeedDelete;
+
 	private:
 		Layer(const String& name, GameObject* camera);
 		Layer(const String& name);
@@ -32,10 +34,12 @@ namespace Ablaze
 
 		const GameObject& GetNamedGameObject(const String& tag, int index = 0) const;
 		GameObject& GetNamedGameObject(const String& tag, int index = 0);
-		const std::vector<GameObject*> GetNamedGameObjects(const String& tag) const;
+		std::vector<GameObject*> GetNamedGameObjects(const String& tag) const;
 
 		void AddGameObject(GameObject* gameObject);
 		void AddGameObject(GameObject* gameObject, const String& tag);
+		GameObject* CreateGameObject(const String& name);
+		GameObject* CreateGameObject(const String& name, float x, float y, float z);
 
 		template<typename T>
 		const T& GetNamedGameObject(const String& tag, int index = 0) const
@@ -49,11 +53,14 @@ namespace Ablaze
 			return *((T*)&GetNamedGameObject(tag, index));
 		}
 
+		void Clean();
+
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
 
 		friend class Scene;
 		friend class GameObject;
+		friend class Application;
 
 	private:
 		void TagGameObject(GameObject* entity, const String& tag);

@@ -151,6 +151,7 @@
     <ClInclude Include="src\Application\Timer.h" />
     <ClInclude Include="src\Application\__Application__.h" />
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Console.h" />
     <ClInclude Include="src\Graphics\Rendering\Graphics.h" />
     <ClInclude Include="src\Graphics\Rendering\GraphicsEnums.h" />
     <ClInclude Include="src\Graphics\Rendering\GraphicsPipeline.h" />
@@ -166,11 +167,12 @@
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderPass.h" />
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderQueue.h" />
     <ClInclude Include="src\Graphics\Rendering\Structs\RenderSchedule.h" />
+    <ClInclude Include="src\Maths\Matrices\Matrix4Template.h" />
+    <ClInclude Include="src\Maths\Matrices\__Matrices__.h" />
     <ClInclude Include="src\Maths\Vectors\Vector2Template.h" />
     <ClInclude Include="src\Maths\Vectors\Vector3Template.h" />
     <ClInclude Include="src\Maths\Vectors\Vector4Template.h" />
     <ClInclude Include="src\Maths\Vectors\__Vectors__.h" />
-    <ClInclude Include="src\Resources\AssetLoadInfo.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h" />
@@ -182,7 +184,6 @@
     <ClInclude Include="src\Resources\Textures\Fonts\FontFace.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
-    <ClInclude Include="src\Scene\Components\Colliders\Endpoint.h" />
     <ClInclude Include="src\Scene\Components\Colliders\__Colliders__.h" />
     <ClInclude Include="src\Scene\Components\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
@@ -190,6 +191,8 @@
     <ClInclude Include="src\Scene\Components\Camera.h" />
     <ClInclude Include="src\Scene\Components\Component.h" />
     <ClInclude Include="src\Scene\ComponentSet.h" />
+    <ClInclude Include="src\Scene\Components\Misc\Text.h" />
+    <ClInclude Include="src\Scene\Components\Misc\__Misc__.h" />
     <ClInclude Include="src\Scene\Components\Motion\RigidBody.h" />
     <ClInclude Include="src\Scene\Components\Motion\__Motion__.h" />
     <ClInclude Include="src\Scene\Components\__Components__.h" />
@@ -207,7 +210,7 @@
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Graphics\__Graphics__.h" />
     <ClInclude Include="src\Logging.h" />
-    <ClInclude Include="src\Maths\Matrix4f.h" />
+    <ClInclude Include="src\Maths\Matrices\Matrix4.h" />
     <ClInclude Include="src\Maths\Maths.h" />
     <ClInclude Include="src\Maths\Plane.h" />
     <ClInclude Include="src\Maths\Quaternion.h" />
@@ -226,7 +229,6 @@
     <ClInclude Include="src\Resources\Meshes\Materials\__Materials__.h" />
     <ClInclude Include="src\Resources\Meshes\Model.h" />
     <ClInclude Include="src\Resources\Meshes\__Meshes__.h" />
-    <ClInclude Include="src\Resources\Resource.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
     <ClInclude Include="src\Resources\Shaders\Shader.h" />
     <ClInclude Include="src\Resources\Shaders\__Shaders__.h" />
@@ -238,7 +240,12 @@
     <ClInclude Include="src\Scene\Layer.h" />
     <ClInclude Include="src\Scene\Components\Light.h" />
     <ClInclude Include="src\Scene\LayerMask.h" />
+    <ClInclude Include="src\Scene\Physics\Physics.h" />
     <ClInclude Include="src\Scene\Physics\PhysicsMaterial.h" />
+    <ClInclude Include="src\Scene\Physics\structs\AABB.h" />
+    <ClInclude Include="src\Scene\Physics\structs\OBB.h" />
+    <ClInclude Include="src\Scene\Physics\structs\RaycastHit.h" />
+    <ClInclude Include="src\Scene\Physics\structs\__structs__.h" />
     <ClInclude Include="src\Scene\Physics\__Physics__.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\SceneManager.h" />
@@ -299,6 +306,7 @@
     <ClCompile Include="src\Application\Stopwatch.cpp" />
     <ClCompile Include="src\Application\Time.cpp" />
     <ClCompile Include="src\Application\Timer.cpp" />
+    <ClCompile Include="src\Console.cpp" />
     <ClCompile Include="src\Graphics\Rendering\Graphics.cpp" />
     <ClCompile Include="src\Graphics\Rendering\Renderers\ForwardRenderer.cpp" />
     <ClCompile Include="src\Graphics\Rendering\Renderers\Methods\ForwardRenderMethod.cpp" />
@@ -309,7 +317,6 @@
     <ClCompile Include="src\Graphics\Rendering\Structs\RenderQueue.cpp" />
     <ClCompile Include="src\Graphics\Rendering\Structs\RenderSchedule.cpp" />
     <ClCompile Include="src\Logging.cpp" />
-    <ClCompile Include="src\Resources\AssetLoadInfo.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
     <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp" />
@@ -323,6 +330,7 @@
     <ClCompile Include="src\Scene\Components\Camera.cpp" />
     <ClCompile Include="src\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Scene\ComponentSet.cpp" />
+    <ClCompile Include="src\Scene\Components\Misc\Text.cpp" />
     <ClCompile Include="src\Scene\Components\Motion\RigidBody.cpp" />
     <ClCompile Include="src\Scene\GameObject.cpp" />
     <ClCompile Include="src\Graphics\Buffers\Buffer.cpp" />
@@ -334,7 +342,7 @@
     <ClCompile Include="src\Graphics\Framebuffer.cpp" />
     <ClCompile Include="src\Graphics\structs\Viewport.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
-    <ClCompile Include="src\Maths\Matrix4f.cpp" />
+    <ClCompile Include="src\Maths\Matrices\Matrix4.cpp" />
     <ClCompile Include="src\Maths\Maths.cpp" />
     <ClCompile Include="src\Maths\Plane.cpp" />
     <ClCompile Include="src\Maths\Quaternion.cpp" />
@@ -353,7 +361,10 @@
     <ClCompile Include="src\Scene\Layer.cpp" />
     <ClCompile Include="src\Scene\Components\Light.cpp" />
     <ClCompile Include="src\Scene\LayerMask.cpp" />
+    <ClCompile Include="src\Scene\Physics\Physics.cpp" />
     <ClCompile Include="src\Scene\Physics\PhysicsMaterial.cpp" />
+    <ClCompile Include="src\Scene\Physics\structs\AABB.cpp" />
+    <ClCompile Include="src\Scene\Physics\structs\OBB.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Scene\Components\Motion\Transform.cpp" />

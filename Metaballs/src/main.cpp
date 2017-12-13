@@ -70,7 +70,7 @@ public:
 		}
 
 		GameObject& canvas = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObject("Canvas");
-		Material<Texture2D>* material = (Material<Texture2D>*)canvas.mesh().Material(0).get();
+		Material<Texture2D>* material = (Material<Texture2D>*)canvas.mesh().GetMaterial(0).get();
 
 		std::vector<GameObject*> metaballs = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObjects("Metaball");
 		int index = 0;
@@ -102,6 +102,7 @@ public:
 				r.Velocity().x += Random::NextFloat(-20, 20);
 				t.LocalPosition().y = WindowHeight() - 1;
 			}
+
 			material->Uniforms().AddUniform("Metaballs[" + std::to_string(index) + "].Position", ball->transform().Position().xy(), UniformUploadMode::Once);
 			material->Uniforms().AddUniform<float>("Metaballs[" + std::to_string(index) + "].Radius", ball->GetComponent<Radius>().radius, UniformUploadMode::Once);
 			material->Uniforms().AddUniform("Metaballs[" + std::to_string(index) + "].Color", ball->GetComponent<Radius>().color, UniformUploadMode::Once);

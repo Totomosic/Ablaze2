@@ -1,6 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "Resources\Resource.h"
 #include "Resources\Shaders\Shader.h"
 
 namespace Ablaze
@@ -43,7 +42,7 @@ namespace Ablaze
 
 		void Upload(const std::shared_ptr<Shader>& shader) const override
 		{
-			shader->SetUniform<T>(m_UniformLocation, m_Value);
+			shader->SetUniform(m_UniformLocation, m_Value);
 		}
 
 		String ToString() const override

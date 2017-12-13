@@ -23,6 +23,7 @@ namespace Ablaze
 
 		void Enqueue(GameObject* object);
 		GameObject* Next();
+		void Clear();
 
 		String ToString() const override;
 

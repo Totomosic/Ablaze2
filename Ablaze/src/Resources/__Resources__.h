@@ -4,5 +4,4 @@
 #include "Textures\__Textures__.h"
 
 #include "Asset.h"
-#include "Resource.h"
 #include "ResourceManager.h"

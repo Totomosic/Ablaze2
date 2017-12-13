@@ -4,25 +4,10 @@
 #include "Meshes\Model.h"
 #include "Meshes\Shapes.h"
 #include "Textures\__Textures__.h"
-#include "Resource.h"
 
 namespace Ablaze
 {
 
-	struct AB_API AssetPtr
-	{
-		Asset* ptr;
-		int ref;
-	};
-
-	struct AB_API ResourceInfo
-	{
-	public:
-		AssetLoadInfo info;
-
-	};
-
-	template<typename> class Resource;
 	class Shader;
 
 	// Manages all resources within Engine
@@ -41,6 +26,11 @@ namespace Ablaze
 		std::shared_ptr<Model> m_Cube;
 		std::shared_ptr<Model> m_Sphere;
 		std::shared_ptr<Model> m_Plane;
+
+	private:
+		std::unordered_map<String, std::shared_ptr<Model>> m_Models;
+		std::unordered_map<String, std::shared_ptr<Texture2D>> m_Texture2Ds;
+		std::unordered_map<String, std::shared_ptr<Font>> m_Fonts;
 
 	private:
 		ResourceManager();
@@ -64,7 +54,7 @@ namespace Ablaze
 		std::shared_ptr<Font> LoadFont(const String& fontFile, float size);
 
 		std::shared_ptr<Model> LoadModel(const String& objModelFile);
-		std::shared_ptr<Model> LoadTextModel(const String& text, const std::shared_ptr<Font>& font);
+		std::shared_ptr<Model> LoadTextModel(const String& text, const std::shared_ptr<Font>& font, const Color& color = Color::White(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
 		std::shared_ptr<Model> CreateSquare(const Color& color = Color::White());
 		std::shared_ptr<Model> CreateCircle(const Color& color = Color::White());
 		std::shared_ptr<Model> CreateCube(const Color& color = Color::White());
@@ -81,6 +71,13 @@ namespace Ablaze
 		friend class Singleton<ResourceManager>;
 
 	private:
+		bool ModelExists(const String& filename);
+		bool Texture2DExists(const String& filename);
+		bool FontExists(const String& filename);
+		std::shared_ptr<Model> AddModel(const String& filename, Model* model);
+		std::shared_ptr<Texture2D> AddTexture2D(const String& filename, Texture2D* texture);
+		std::shared_ptr<Font> AddFont(const String& filename, Font* font);
+
 		void LoadDefaultColor();
 		void LoadDefaultTexture();
 		void LoadLightColor();

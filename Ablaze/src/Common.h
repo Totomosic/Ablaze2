@@ -1,8 +1,10 @@
 #pragma once
-#include "Types.h"
-#include "Object.h"
 #include "AblazeGL.h"
+#include "Console.h"
 #include "Logging.h"
+#include "Object.h"
+#include "Types.h"
+
 #include "Maths\__Maths__.h"
 #include "Utils\FileSystem\__FileSystem__.h"
 #include "Utils\structs\__structs__.h"

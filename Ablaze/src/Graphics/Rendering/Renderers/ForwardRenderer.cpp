@@ -18,6 +18,7 @@ namespace Ablaze
 		}
 		m_Commands.ExecuteAll(*this);
 		m_Method->End();
+		m_RenderQueue.Clear();
 	}
 
 }

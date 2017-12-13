@@ -1,6 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "Resources\Resource.h"
 #include "ShaderProgram.h"
 #include "Utils\FileSystem\FileSystem.h"
 
@@ -40,7 +39,7 @@ namespace Ablaze
 		void SetUniform(const String& uniformName, const Maths::Vector4i& value) const;
 		void SetUniform(const String& uniformName, const Maths::Plane& value) const;
 		void SetUniform(const String& uniformName, const Maths::Ray& value) const;
-		void SetUniform(const String& uniformName, const Maths::Matrix4f& value) const;
+		void SetUniform(const String& uniformName, const Maths::Matrix4d& value) const;
 		void SetUniform(const String& uniformName, const Color& value) const;
 
 		template<typename T>
@@ -53,7 +52,7 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class ResourceManager;
-		template<typename> friend class std::shared_ptr;
+		template<typename> friend class Resource;
 
 	private:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);

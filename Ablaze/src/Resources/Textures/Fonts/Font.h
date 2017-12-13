@@ -7,6 +7,20 @@
 namespace Ablaze
 {
 
+	enum class TextAlignmentH
+	{
+		Left,
+		Center,
+		Right
+	};
+
+	enum class TextAlignmentV
+	{
+		Top,
+		Center,
+		Bottom
+	};
+
 	class AB_API Font : public Texture2D
 	{
 	private:
@@ -29,7 +43,7 @@ namespace Ablaze
 		float GetHeight(const String& text) const;
 		Maths::Vector2f GetSize(const String& text) const;
 
-		Model* CreateModel(const String& text, const Color& color = Color::White()) const;
+		Model* CreateModel(const String& text, const Color& color = Color::White(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center) const;
 
 		void Reload() override;
 
