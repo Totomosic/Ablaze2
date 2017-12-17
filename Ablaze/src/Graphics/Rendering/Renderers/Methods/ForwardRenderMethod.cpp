@@ -18,9 +18,9 @@ namespace Ablaze
 		for (int i = 0; i < mesh.ModelCount(); i++)
 		{
 			ModelSet& set = mesh.GetModelSet(i);
-			MaterialBase* mat = set.material.get();
-			std::shared_ptr<Model>& model = set.model;
-			std::shared_ptr<Shader>& shader = mat->ActiveShader();
+			MaterialBase* mat = set.material;
+			Model* model = set.model;
+			Shader* shader = mat->ActiveShader();
 			shader->Bind();
 			shader->SetUniform("modelMatrix", transform.ToMatrix() * set.transform);
 			shader->SetUniform("viewMatrix", cameraTransform.ToMatrix().Inverse());
@@ -29,7 +29,7 @@ namespace Ablaze
 			mat->Apply();
 			VertexArray* vao = model->GetVertexArray();
 			vao->Bind();
-			GL_CALL(glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), GL_UNSIGNED_INT, nullptr));
+			GL_CALL(glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), (GLenum)vao->GetIndexBuffer()->DataType(), nullptr));
 		}
 	}
 

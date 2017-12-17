@@ -11,7 +11,9 @@ namespace Ablaze
 		Triangles = GL_TRIANGLES,
 		TriangleStrip = GL_TRIANGLE_STRIP,
 		Quads = GL_QUADS,
-		TriangleFan = GL_TRIANGLE_FAN
+		TriangleFan = GL_TRIANGLE_FAN,
+		Lines = GL_LINES,
+		LineStrip = GL_LINE_STRIP
 	};
 
 	class AB_API VertexArray : public GLObject
@@ -49,8 +51,8 @@ namespace Ablaze
 
 		VertexBuffer* CreateAttribute(int64 byteSize, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
 		VertexBuffer* CreateAttribute(void* buffer, int64 numBytes, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
-		IndexBuffer* CreateIndexBuffer(int64 byteSize, BufferUsage usage = BufferUsage::StaticDraw);
-		IndexBuffer* CreateIndexBuffer(void* buffer, int64 numBytes, BufferUsage = BufferUsage::StaticDraw);
+		IndexBuffer* CreateIndexBuffer(int64 byteSize, IndexType type = IndexType::UnsignedInt, BufferUsage usage = BufferUsage::StaticDraw);
+		IndexBuffer* CreateIndexBuffer(void* buffer, int64 numBytes, IndexType type = IndexType::UnsignedInt, BufferUsage = BufferUsage::StaticDraw);
 
 		String ToString() const override;
 

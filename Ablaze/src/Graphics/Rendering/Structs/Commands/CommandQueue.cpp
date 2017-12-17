@@ -33,10 +33,16 @@ namespace Ablaze
 
 	void CommandQueue::ExecuteAll(Renderer& renderer)
 	{
-		for (int i = 0; i < m_Commands.size(); i++)
+		int length = m_Commands.size();
+		for (int i = 0; i < length; i++)
 		{
 			ExecuteNext(renderer);
 		}
+	}
+
+	void CommandQueue::Clear()
+	{
+		m_Commands.clear();
 	}
 
 	String CommandQueue::ToString() const

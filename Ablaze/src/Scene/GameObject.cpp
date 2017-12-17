@@ -39,6 +39,11 @@ namespace Ablaze
 		return m_Tag;
 	}
 
+	bool GameObject::IsStatic() const
+	{
+		return m_IsStatic;
+	}
+
 	void GameObject::Enable() const
 	{
 		for (Component* c : m_Components->GetAll())
@@ -53,6 +58,21 @@ namespace Ablaze
 		{
 			c->Disable();
 		}
+	}
+
+	void GameObject::SetStatic(bool staticMode)
+	{
+		m_IsStatic = staticMode;
+	}
+
+	void GameObject::MakeStatic()
+	{
+		SetStatic(true);
+	}
+
+	void GameObject::MakeDynamic()
+	{
+		SetStatic(false);
 	}
 
 	void GameObject::SetParent(GameObject* parent)
@@ -70,10 +90,10 @@ namespace Ablaze
 		MakeChildOf(nullptr);
 	}
 
-	void GameObject::Destroy()
+	void GameObject::Destroy(float delay)
 	{
-		AB_ASSERT(m_Layer);
-		m_Layer->DestroyGameObject(this);
+		AB_ASSERT(m_Layer, "GameObject had no layer");
+		m_Layer->DestroyGameObject(this, delay);
 	}
 
 	void GameObject::SetTag(const String& tag)
@@ -129,7 +149,7 @@ namespace Ablaze
 
 	GameObject* GameObject::Empty(const String& name)
 	{
-		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer());
+		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer(), "GameObject created with no active Scene/Layer");
 		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name);
 	}
 
@@ -140,7 +160,7 @@ namespace Ablaze
 
 	GameObject* GameObject::Instantiate(const String& name, float x, float y, float z)
 	{
-		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer());
+		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer(), "GameObject created with no active Scene/Layer");
 		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name, x, y, z);
 	}
 

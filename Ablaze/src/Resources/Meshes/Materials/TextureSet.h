@@ -1,6 +1,6 @@
 #pragma once
 #include "Common.h"
-#include "Resources\Textures\__Textures__.h"
+#include "Resources\Textures\Texture2D.h"
 #include "Resources\Shaders\__Shaders__.h"
 
 namespace Ablaze
@@ -10,7 +10,7 @@ namespace Ablaze
 	class AB_API TextureSet : public Object
 	{
 	private:
-		std::vector<std::shared_ptr<T>> m_Textures;
+		std::vector<T*> m_Textures;
 		std::unordered_map<int, String> m_Lookup;
 
 	public:
@@ -20,7 +20,7 @@ namespace Ablaze
 			
 		}
 
-		TextureSet(const String& sampler, const std::shared_ptr<T>& texture) : TextureSet()
+		TextureSet(const String& sampler, T* texture) : TextureSet()
 		{
 			AddTexture(sampler, texture);
 		}
@@ -31,12 +31,7 @@ namespace Ablaze
 			return m_Lookup[index];
 		}
 
-		const std::shared_ptr<T>& GetTexture(int index) const
-		{
-			return m_Textures[index];
-		}
-
-		std::shared_ptr<T>& GetTexture(int index)
+		T* GetTexture(int index) const
 		{
 			return m_Textures[index];
 		}
@@ -46,7 +41,7 @@ namespace Ablaze
 			return m_Textures.size();
 		}
 
-		void AddTexture(const String& sampler, const std::shared_ptr<T>& texture)
+		void AddTexture(const String& sampler, T* texture)
 		{
 			int index = m_Textures.size();
 			m_Textures.push_back(texture);
@@ -58,7 +53,7 @@ namespace Ablaze
 			m_Textures.erase(m_Textures.begin() + index);
 		}
 
-		void BindAll(const std::shared_ptr<Shader>& shader) const
+		void BindAll(Shader* shader) const
 		{
 			for (int i = 0; i < TextureCount(); i++)
 			{

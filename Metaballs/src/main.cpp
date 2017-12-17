@@ -22,7 +22,7 @@ public:
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
 		GameObject* canvas = GameObject::Instantiate("Canvas", WindowWidth() / 2, WindowHeight() / 2, 0);
-		canvas->AddComponent(new Mesh(ResourceManager::Instance().Square(), std::make_shared<Material<>>(Color::White(), ResourceManager::Instance().LoadShader("res/Metaballs.shader"))));
+		canvas->AddComponent(new Mesh(ResourceManager::Square(), std::make_shared<Material<>>(Color::White(), ResourceManager::LoadShader("res/Metaballs.shader"))));
 		canvas->transform().LocalScale() = Maths::Vector3f(WindowWidth(), WindowHeight(), 1);
 
 		scene.CurrentLayer().SetActiveCamera(camera);
@@ -42,7 +42,7 @@ public:
 		Color c = Color::Random();
 		//Color c = Color::White();
 		ball->AddComponent(new Radius(Random::NextFloat(75, 200), c));
-		//ball->AddComponent(new Mesh(ResourceManager::Instance().Circle(), std::make_shared<Material<>>(Color::Magenta(), ResourceManager::Instance().DefaultColorShader())));
+		//ball->AddComponent(new Mesh(ResourceManager::Circle(), std::make_shared<Material<>>(Color::Magenta(), ResourceManager::DefaultColorShader())));
 		//ball->transform().LocalScale() = Maths::Vector3f(ball->GetComponent<Radius>().radius);
 		RigidBody& rb = ball->GetComponent<RigidBody>();
 		rb.Velocity() = Maths::Vector3f(Random::NextFloat(-250, 250), Random::NextFloat(-250, 250), 0);

@@ -10,6 +10,8 @@
 namespace Ablaze
 {
 
+	class RenderTexture;
+
 	class AB_API RenderPass : public Object
 	{
 	private:
@@ -18,11 +20,14 @@ namespace Ablaze
 		Framebuffer* m_RenderTarget;
 		UniformManager m_Uniforms;
 
+		GameObject* m_CameraOverride;
+
 	public:
-		RenderPass(const String& name, const LayerMask& layers, Framebuffer* renderTarget);
-		RenderPass(const String& name, const LayerMask& layers); // Use default renderTarget - Window
-		RenderPass(const String& name, Framebuffer* renderTarget); // Use all layers of scene
-		RenderPass(const String& name);
+		RenderPass(const String& name, const LayerMask& layers, Framebuffer* renderTarget, GameObject* cameraOverride = nullptr);
+		RenderPass(const String& name, const LayerMask& layers, GameObject* cameraOverride = nullptr); // Use default renderTarget - Window
+		RenderPass(const String& name, Framebuffer* renderTarget, GameObject* cameraOverride = nullptr); // Use all layers of scene
+		RenderPass(const String& name, GameObject* cameraOverride = nullptr);
+		RenderPass(const String& name, RenderTexture* renderTexture);
 
 		const String& Name() const;
 		String& Name();
@@ -32,6 +37,7 @@ namespace Ablaze
 		Framebuffer* RenderTarget();
 		const UniformManager& Uniforms() const;
 		UniformManager& Uniforms();
+		GameObject* CameraOverride() const;
 
 		std::vector<GameObject*> GetGameObjects();
 

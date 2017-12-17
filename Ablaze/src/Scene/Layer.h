@@ -8,6 +8,13 @@ namespace Ablaze
 	class AB_API Layer : public Object
 	{
 	private:
+		struct AB_API GameObjectContainer
+		{
+			GameObject* Obj;
+			float DeleteTime;
+		};
+
+	private:
 		uint m_MaxGameObjects;
 		uint m_HighestID;
 		GameObject** m_GameObjects;
@@ -16,7 +23,7 @@ namespace Ablaze
 		std::unordered_map<String, std::vector<GameObject*>> m_NamedGameObjects;
 		GameObject* m_Camera;
 
-		std::vector<GameObject*> m_NeedDelete;
+		std::vector<GameObjectContainer> m_NeedDelete;
 
 	private:
 		Layer(const String& name, GameObject* camera);
@@ -68,7 +75,7 @@ namespace Ablaze
 
 		uint GetNextID();
 		void Init();
-		void DestroyGameObject(GameObject* object);
+		void DestroyGameObject(GameObject* object, float delay = 0.0f);
 
 		String SerializeGameObject(JSONwriter& writer, GameObject* object, std::unordered_map<GameObject*, String>& mapping, const String& basePath, int& count) const;
 

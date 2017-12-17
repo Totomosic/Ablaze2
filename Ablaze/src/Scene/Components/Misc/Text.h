@@ -8,7 +8,7 @@ namespace Ablaze
 	class AB_API Text : public Component
 	{
 	private:
-		std::shared_ptr<Font> m_Font;
+		Font* m_Font;
 		Color m_Color;
 		String m_Text;
 		int m_ModelIndex;
@@ -18,9 +18,9 @@ namespace Ablaze
 		TextAlignmentV m_vAlign;
 
 	public:
-		Text(const String& text, const std::shared_ptr<Font>& font, const Color& color = Color::Black(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
+		Text(const String& text, Font* font, const Color& color = Color::Black(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
 
-		const std::shared_ptr<Font>& GetFont() const;
+		Font* GetFont() const;
 		const Color& FontColor() const;
 		const String& RawString() const;
 		const Maths::Vector2f& Size() const;
@@ -32,7 +32,7 @@ namespace Ablaze
 		void Start() override;
 
 		void SetText(const String& text);
-		void SetFont(const std::shared_ptr<Font>& font);
+		void SetFont(Font* font);
 		void SetColor(const Color& color);
 		void SetAlignment(TextAlignmentH horizontal, TextAlignmentV vertical);
 

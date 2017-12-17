@@ -8,10 +8,10 @@ namespace Ablaze
 	class AB_API LightSystem : public System
 	{
 	private:
-		std::vector<std::shared_ptr<Shader>> m_Shaders;
+		std::vector<Shader*> m_Shaders;
 
 	public:
-		void AddShader(const std::shared_ptr<Shader>& shader);
+		void AddShader(Shader* shader);
 		void Execute() override;
 
 	};

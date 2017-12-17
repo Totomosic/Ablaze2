@@ -35,7 +35,7 @@ namespace Ablaze
 	}
 
 #ifdef AB_DEBUG
-	#define GL_CALL(func) func; AB_ASSERT(CheckErrors(__LINE__, __FILE__))
+	#define GL_CALL(func) func; AB_ASSERT(CheckErrors(__LINE__, __FILE__), "OPENGL ERROR")
 #else
 	#define GL_CALL(func) func
 #endif

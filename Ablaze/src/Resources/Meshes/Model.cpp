@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "Utils\FileSystem\__FileSystem__.h"
+#include "Shapes.h"
 
 template<>
 struct std::hash<Ablaze::Model::IndexSet>
@@ -55,9 +56,48 @@ namespace Ablaze
 		m_VertexArray->Unbind();
 	}
 
+	ModelInfo Model::Info() const
+	{
+		ModelInfo info;
+		info.Array = m_VertexArray;
+		info.Buffer = m_VertexArray->GetVertexBuffer(0);
+		info.Indices = m_VertexArray->GetIndexBuffer();
+		info.RenderCount = m_VertexArray->RenderCount();
+		info.VertexCount = m_VertexArray->VertexCount();
+		byte* buffer = new byte[info.Buffer->GetLayout().GetStride() * info.VertexCount];
+		info.Vertices = (const void*)buffer;
+		info.Buffer->Download((void*)buffer);
+		return info;
+	}
+
 	String Model::ToString() const
 	{
 		return "Model";
+	}
+
+	Model* Model::Rectangle(float width, float height, const Color& color)
+	{
+		return Internal::Shapes::Rectangle(width, height, color);
+	}
+
+	Model* Model::Ellipse(float width, float height, const Color& color)
+	{
+		return Internal::Shapes::Ellipse(width, height, 100, color);
+	}
+
+	Model* Model::Cuboid(float width, float height, float depth, const Color& color)
+	{
+		return Internal::Shapes::Cuboid(width, height, depth, color);
+	}
+
+	Model* Model::Sphere(float radius, int spacing, const Color& color)
+	{
+		return Internal::Shapes::Sphere(radius, spacing, color);
+	}
+
+	Model* Model::Grid(float width, float depth, int xVerts, int zVerts, const Color& color)
+	{
+		return Internal::Shapes::Grid(width, depth, xVerts, zVerts, color);
 	}
 
 	void UpdateMinMax(float x, float y, float z, float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ)

@@ -6,6 +6,8 @@ namespace Ablaze
 	Font::Font(const String& filepath, float size) : Texture2D(512, 512, ImageFormat::Red, MipmapMode::Disabled),
 		m_Size(size), m_FontFace({ filepath })
 	{
+		AB_ASSERT(Filesystem::FileExists(filepath), "File: " + filepath + " was not found");
+
 		GL_CALL(glDeleteTextures(1, &m_Id));
 		m_Atlas = texture_atlas_new(512, 512, 1);
 		m_Font = texture_font_new_from_file(m_Atlas, size, filepath.c_str());

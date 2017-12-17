@@ -10,6 +10,7 @@ namespace Ablaze
 
 	void ForwardRenderer::PerformRenderPass(RenderPass& pass)
 	{
+		m_CurrentRenderPass = &pass;
 		m_Method->Begin();
 		for (GameObject* object : pass.GetGameObjects())
 		{
@@ -18,6 +19,7 @@ namespace Ablaze
 		}
 		m_Commands.ExecuteAll(*this);
 		m_Method->End();
+		m_Commands.Clear();
 		m_RenderQueue.Clear();
 	}
 

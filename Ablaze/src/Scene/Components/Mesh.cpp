@@ -9,32 +9,42 @@ namespace Ablaze
 		
 	}
 
-	Mesh::Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform) : Mesh()
+	Mesh::Mesh(Model* model, MaterialBase* material, const Maths::Matrix4d& transform, bool canDeleteModel, bool canDeleteMaterial) : Mesh()
 	{
-		AddModel(model, material, transform);
+		AddModel(model, material, transform, canDeleteModel, canDeleteMaterial);
 	}
 
 	Mesh::~Mesh()
 	{
-		
+		for (ModelSet& model : m_Models)
+		{
+			if (model.deleteModel)
+			{
+				delete model.model;
+			}
+			if (model.deleteMaterial)
+			{
+				delete model.material;
+			}
+		}
 	}
 
-	const std::shared_ptr<Model>& Mesh::GetModel(int index) const
+	Model* const Mesh::GetModel(int index) const
 	{
 		return m_Models[index].model;
 	}
 
-	std::shared_ptr<Model>& Mesh::GetModel(int index)
+	Model* Mesh::GetModel(int index)
 	{
 		return m_Models[index].model;
 	}
 
-	const std::shared_ptr<MaterialBase>& Mesh::GetMaterial(int index) const
+	MaterialBase* const Mesh::GetMaterial(int index) const
 	{
 		return m_Models[index].material;
 	}
 
-	std::shared_ptr<MaterialBase>& Mesh::GetMaterial(int index)
+	MaterialBase* Mesh::GetMaterial(int index)
 	{
 		return m_Models[index].material;
 	}
@@ -64,14 +74,34 @@ namespace Ablaze
 		return m_Models.size();
 	}
 
-	void Mesh::AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform)
+	void Mesh::AddModel(Model* model, MaterialBase* material, const Maths::Matrix4d& transform, bool canDeleteModel, bool canDeleteMaterial)
 	{
-		m_Models.push_back({ model, material, transform });
+		m_Models.push_back({ model, material, transform, canDeleteModel, canDeleteMaterial });
 	}
 
-	void Mesh::SetMaterial(int index, const std::shared_ptr<MaterialBase>& material)
+	void Mesh::SetModel(int index, Model* model)
 	{
+		Model* prev = m_Models[index].model;
+		m_Models[index].model = model;
+		if (m_Models[index].deleteModel)
+		{
+			delete prev;
+		}
+	}
+
+	void Mesh::SetMaterial(int index, MaterialBase* material)
+	{
+		MaterialBase* prev = m_Models[index].material;
 		m_Models[index].material = material;
+		if (m_Models[index].deleteMaterial)
+		{
+			delete prev;
+		}
+	}
+
+	void Mesh::RemoveModel(int index)
+	{
+		m_Models.erase(m_Models.begin() + index);
 	}
 
 	String Mesh::ToString() const
@@ -106,11 +136,7 @@ namespace Ablaze
 	Component* Mesh::Clone() const
 	{
 		Mesh* mesh = new Mesh;
-		for (const ModelSet& modelSet : m_Models)
-		{
-			ModelSet model = { modelSet.model, modelSet.material, modelSet.transform };
-			mesh->m_Models.push_back(model);
-		}
+		mesh->m_Models = m_Models;
 		return mesh;
 	}
 

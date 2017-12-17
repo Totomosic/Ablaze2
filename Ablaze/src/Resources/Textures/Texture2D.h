@@ -33,7 +33,7 @@ namespace Ablaze
 		void SetPixel(int x, int y, const Color& color, bool applyToMipmaps = true) const;
 		void SetRegion(int xOffset, int yOffset, int width, int height, const Color& color, bool applyToMipmaps = true) const; // Specified from lower left corner
 		void SetRegion(int xOffset, int yOffset, int width, int height, int mipmap, const byte* image) const;
-		void SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, const std::shared_ptr<Texture2D>& src, int srcXOffset, int srcYOffset, bool applyToMipmaps = true) const;
+		void SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, Texture2D* src, int srcXOffset, int srcYOffset, bool applyToMipmaps = true) const;
 		void Reload() override;
 
 		String ToString() const override;

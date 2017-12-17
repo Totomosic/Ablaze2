@@ -3,7 +3,8 @@
 #include "Asset.h"
 #include "Meshes\Model.h"
 #include "Meshes\Shapes.h"
-#include "Textures\__Textures__.h"
+#include "Textures\Texture2D.h"
+#include "Textures\Fonts\__Fonts__.h"
 
 namespace Ablaze
 {
@@ -11,78 +12,68 @@ namespace Ablaze
 	class Shader;
 
 	// Manages all resources within Engine
-	class AB_API ResourceManager : public Singleton<ResourceManager>
+	class AB_API ResourceManager
 	{
 	private:
-		std::shared_ptr<Shader> m_DefaultColor;
-		std::shared_ptr<Shader> m_DefaultTexture;
-		std::shared_ptr<Shader> m_LightColor;
-		std::shared_ptr<Shader> m_LightTexture;
-		std::shared_ptr<Shader> m_DefaultFont;
+		static Shader* s_DefaultColor;
+		static Shader* s_DefaultTexture;
+		static Shader* s_LightColor;
+		static Shader* s_LightTexture;
+		static Shader* s_DefaultFont;
 
 		// Immutable shapes that are generated once at the start and can be used indefinitely and resized/reshaped with scale on transform
-		std::shared_ptr<Model> m_Square;
-		std::shared_ptr<Model> m_Circle;
-		std::shared_ptr<Model> m_Cube;
-		std::shared_ptr<Model> m_Sphere;
-		std::shared_ptr<Model> m_Plane;
+		static Model* s_Square;
+		static Model* s_Circle;
+		static Model* s_Cube;
+		static Model* s_Sphere;
+		static Model* s_Plane;
 
 	private:
-		std::unordered_map<String, std::shared_ptr<Model>> m_Models;
-		std::unordered_map<String, std::shared_ptr<Texture2D>> m_Texture2Ds;
-		std::unordered_map<String, std::shared_ptr<Font>> m_Fonts;
+		static std::unordered_map<String, Model*> s_Models;
+		static std::unordered_map<String, Texture2D*> s_Texture2Ds;
+		static std::unordered_map<String, Font*> s_Fonts;
+		static std::unordered_map<String, Shader*> s_Shaders;
 
 	private:
-		ResourceManager();
+		ResourceManager() = delete;
 
 	public:
+		static void Initialise();
 		static void Terminate();
 
 	public:
-		std::shared_ptr<Shader> LoadShader(const String& shaderFile);
-		std::shared_ptr<Shader> LoadShader(const String& vFile, const String& fFile);
-		std::shared_ptr<Shader> CreateShader(const String& vSource, const String& fSource);
-		std::shared_ptr<Shader> CreateShader(const String& vSource, const String& gSource, const String& fSource);
-		std::shared_ptr<Shader> DefaultColorShader();
-		std::shared_ptr<Shader> DefaultTextureShader();
-		std::shared_ptr<Shader> LightingColorShader();
-		std::shared_ptr<Shader> LightingTextureShader();
-		std::shared_ptr<Shader> DefaultFontShader();
+		static Shader* DefaultColorShader();
+		static Shader* DefaultTextureShader();
+		static Shader* LightingColorShader();
+		static Shader* LightingTextureShader();
+		static Shader* DefaultFontShader();
 
-		std::shared_ptr<Texture2D> LoadTexture2D(const String& textureFile, MipmapMode mipmap = MipmapMode::Enabled);
-		std::shared_ptr<Texture2D> CreateBlankTexture2D(int width, int height, MipmapMode mipmap = MipmapMode::Enabled);
-		std::shared_ptr<Font> LoadFont(const String& fontFile, float size);
+		static Model* Square();
+		static Model* Circle();
+		static Model* Cube();
+		static Model* Sphere();
+		static Model* Plane();
 
-		std::shared_ptr<Model> LoadModel(const String& objModelFile);
-		std::shared_ptr<Model> LoadTextModel(const String& text, const std::shared_ptr<Font>& font, const Color& color = Color::White(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
-		std::shared_ptr<Model> CreateSquare(const Color& color = Color::White());
-		std::shared_ptr<Model> CreateCircle(const Color& color = Color::White());
-		std::shared_ptr<Model> CreateCube(const Color& color = Color::White());
-		std::shared_ptr<Model> CreateSphere(const Color& color = Color::White());
-		std::shared_ptr<Model> CreateGrid(int xVerts, int zVerts, const Color& color = Color::White());
-		std::shared_ptr<Model> CreatePlane(const Color& color = Color::White());
-
-		std::shared_ptr<Model> Square();
-		std::shared_ptr<Model> Circle();
-		std::shared_ptr<Model> Cube();
-		std::shared_ptr<Model> Sphere();
-		std::shared_ptr<Model> Plane();
-
-		friend class Singleton<ResourceManager>;
+		static Texture2D* SetTexture2D(const String& name, Texture2D* texture);
+		static Model* SetModel(const String& name, Model* model);
+		static Font* SetFont(const String& name, Font* font);
+		static Shader* SetShader(const String& name, Shader* shader);
+		static Texture2D* GetTexture2D(const String& name);
+		static Model* GetModel(const String& name);
+		static Font* GetFont(const String& name);
+		static Shader* GetShader(const String& name);
 
 	private:
-		bool ModelExists(const String& filename);
-		bool Texture2DExists(const String& filename);
-		bool FontExists(const String& filename);
-		std::shared_ptr<Model> AddModel(const String& filename, Model* model);
-		std::shared_ptr<Texture2D> AddTexture2D(const String& filename, Texture2D* texture);
-		std::shared_ptr<Font> AddFont(const String& filename, Font* font);
+		static bool ModelExists(const String& filename);
+		static bool Texture2DExists(const String& filename);
+		static bool FontExists(const String& filename);
+		static bool ShaderExists(const String& filename);
 
-		void LoadDefaultColor();
-		void LoadDefaultTexture();
-		void LoadLightColor();
-		void LoadLightTexture();
-		void LoadDefaultFont();
+		static Shader* LoadDefaultColor();
+		static Shader* LoadDefaultTexture();
+		static Shader* LoadLightColor();
+		static Shader* LoadLightTexture();
+		static Shader* LoadDefaultFont();
 
 	};
 

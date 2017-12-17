@@ -6,6 +6,8 @@ namespace Ablaze
 
 	Texture2D::Texture2D(const String& filepath, MipmapMode mm) : Texture(filepath, TextureTarget::Texture2D)
 	{
+		AB_ASSERT(Filesystem::FileExists(filepath), "File: " + filepath + " was not found");
+
 		m_Format = ImageFormat::Rgba;
 
 		byte* imageData = LoadImageFile(filepath, &m_Width, &m_Height);
@@ -196,7 +198,7 @@ namespace Ablaze
 		Unbind();
 	}
 
-	void Texture2D::SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, const std::shared_ptr<Texture2D>& src, int srcXOffset, int srcYOffset, bool applyToMipmaps) const
+	void Texture2D::SetRegion(int dstXOffset, int dstYOffset, int dstWidth, int dstHeight, Texture2D* src, int srcXOffset, int srcYOffset, bool applyToMipmaps) const
 	{
 		if (applyToMipmaps)
 		{

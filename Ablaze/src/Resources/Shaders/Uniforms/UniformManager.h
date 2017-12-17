@@ -43,7 +43,7 @@ namespace Ablaze
 			AddUniform(new Uniform<T>(uniformLocation, value), mode);
 		}
 
-		void UploadAll(const std::shared_ptr<Shader>& shader) const;
+		void UploadAll(Shader* shader) const;
 
 		String ToString() const override;
 

@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include "SceneManager.h"
+#include "Application\Time.h"
 #include "Components\__Components__.h"
 
 namespace Ablaze
@@ -21,7 +22,14 @@ namespace Ablaze
 
 	Layer::~Layer()
 	{
-		
+		for (int i = 0; i < m_HighestID + 1; i++)
+		{
+			if (m_GameObjects[i] != nullptr)
+			{
+				delete m_GameObjects[i];
+			}
+		}
+		delete[] m_GameObjects;
 	}
 
 	const String& Layer::GetName() const
@@ -95,8 +103,7 @@ namespace Ablaze
 	{
 		if (!TagExists(tag))
 		{
-			AB_ERROR("GameObject with tag: " + tag + " does not exist");
-			AB_ASSERT(false);
+			AB_ASSERT(false, "GameObject with tag: " + tag + " does not exist");
 			return *(GameObject*)nullptr;
 		}
 		return *m_NamedGameObjects.at(tag)[index];
@@ -113,8 +120,10 @@ namespace Ablaze
 
 	void Layer::Clean()
 	{
-		for (GameObject* object : m_NeedDelete)
+		std::vector<GameObjectContainer> continues;
+		for (GameObjectContainer& container : m_NeedDelete)
 		{
+			GameObject* object = container.Obj;
 			if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
 			{
 				auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
@@ -165,6 +174,12 @@ namespace Ablaze
 
 	void Layer::TagGameObject(GameObject* entity, const String& tag)
 	{
+		auto it = std::find(m_NamedGameObjects[entity->Tag()].begin(), m_NamedGameObjects[entity->Tag()].end(), entity);
+		if (it != m_NamedGameObjects[entity->Tag()].end())
+		{
+			m_NamedGameObjects[entity->Tag()].erase(it);
+		}
+
 		if (TagExists(tag))
 		{
 			m_NamedGameObjects[tag].push_back(entity);
@@ -194,8 +209,7 @@ namespace Ablaze
 				return i;
 			}
 		}
-		AB_ERROR("Unable to find available ID for GameObject");
-		AB_ASSERT(false);
+		AB_ASSERT(false, "Unable to find available ID for GameObject");
 		return 0;
 	}
 
@@ -232,12 +246,16 @@ namespace Ablaze
 		
 	}
 
-	void Layer::DestroyGameObject(GameObject* object)
+	void Layer::DestroyGameObject(GameObject* object, float delay)
 	{
-		if (std::find(m_NeedDelete.begin(), m_NeedDelete.end(), object) == m_NeedDelete.end())
+		for (GameObjectContainer& c : m_NeedDelete)
 		{
-			m_NeedDelete.push_back(object);
+			if (c.Obj == object)
+			{
+				return;
+			}
 		}
+		m_NeedDelete.push_back({ object, delay });
 	}
 
 }

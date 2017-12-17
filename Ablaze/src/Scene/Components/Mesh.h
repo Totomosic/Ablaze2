@@ -10,9 +10,12 @@ namespace Ablaze
 	struct AB_API ModelSet
 	{
 	public:
-		std::shared_ptr<Model> model;
-		std::shared_ptr<MaterialBase> material;
+		Model* model;
+		MaterialBase* material;
 		Maths::Matrix4d transform;
+
+		bool deleteModel;
+		bool deleteMaterial;
 
 	};
 
@@ -23,22 +26,24 @@ namespace Ablaze
 
 	public:
 		Mesh();
-		Mesh(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
+		Mesh(Model* model, MaterialBase* material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity(), bool canDeleteModel = false, bool canDeleteMaterial = false);
 		Mesh(const Mesh& other) = delete;
 		~Mesh();
 
-		const std::shared_ptr<Model>& GetModel(int index) const;
-		std::shared_ptr<Model>& GetModel(int index);
-		const std::shared_ptr<MaterialBase>& GetMaterial(int index) const;
-		std::shared_ptr<MaterialBase>& GetMaterial(int index);
+		Model* const GetModel(int index) const;
+		Model* GetModel(int index);
+		MaterialBase* const GetMaterial(int index) const;
+		MaterialBase* GetMaterial(int index);
 		const Maths::Matrix4d& GetTransform(int index) const;
 		Maths::Matrix4d& GetTransform(int index);
 		const ModelSet& GetModelSet(int index) const;
 		ModelSet& GetModelSet(int index);
 		int ModelCount() const;
 
-		void AddModel(const std::shared_ptr<Model>& model, const std::shared_ptr<MaterialBase>& material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
-		void SetMaterial(int index, const std::shared_ptr<MaterialBase>& material);
+		void AddModel(Model* model, MaterialBase* material, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity(), bool canDeleteModel = false, bool canDeleteMaterial = false);
+		void SetModel(int index, Model* model);
+		void SetMaterial(int index, MaterialBase* material);
+		void RemoveModel(int index);
 
 		String ToString() const override;
 		Component* Clone() const override;

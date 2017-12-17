@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.h"
+#include "ModelInfo.h"
 #include "Resources\Asset.h"
 #include "Graphics\Buffers\__Buffers__.h"
 
@@ -51,11 +52,20 @@ namespace Ablaze
 		void Bind() const;
 		void Unbind() const;
 
+		ModelInfo Info() const;
+
 		String ToString() const override;
 
 		friend class ResourceManager;
 		friend class Internal::Shapes;
 		template<typename> friend class Resource;
+
+	public:
+		static Model* Rectangle(float width, float height, const Color& color = Color::White());
+		static Model* Ellipse(float width, float height, const Color& color = Color::White());
+		static Model* Cuboid(float width, float height, float depth, const Color& color = Color::White());
+		static Model* Sphere(float radius, int spacing = 10, const Color& color = Color::White());
+		static Model* Grid(float width, float depth, int xVerts, int zVerts, const Color& color = Color::White());
 
 	private:
 		void LoadOBJModel(const String& filename);

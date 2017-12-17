@@ -1,6 +1,8 @@
 #include "Functions.h"
 #include "stb_image.h"
 
+#include "Utils\Filesystem\Filesystem.h"
+
 namespace Ablaze
 {
 
@@ -101,6 +103,8 @@ namespace Ablaze
 
 	byte* LoadImageFile(const String& filename, uint* outWidth, uint* outHeight, int* outCompCount, int desiredCompCount, bool flipImage)
 	{
+		AB_ASSERT(Filesystem::FileExists(filename), "File: " + filename + " could not be found");
+
 		int width;
 		int height;
 		int comp;

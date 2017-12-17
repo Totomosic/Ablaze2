@@ -145,16 +145,16 @@ namespace Ablaze
 		return vbo;
 	}
 
-	IndexBuffer* VertexArray::CreateIndexBuffer(int64 byteSize, BufferUsage usage)
+	IndexBuffer* VertexArray::CreateIndexBuffer(int64 byteSize, IndexType type, BufferUsage usage)
 	{
-		IndexBuffer* ibo = new IndexBuffer(byteSize, usage);
+		IndexBuffer* ibo = new IndexBuffer(byteSize, type, usage);
 		SetIndexBuffer(ibo);
 		return ibo;
 	}
 
-	IndexBuffer* VertexArray::CreateIndexBuffer(void* buffer, int64 byteSize, BufferUsage usage)
+	IndexBuffer* VertexArray::CreateIndexBuffer(void* buffer, int64 byteSize, IndexType type, BufferUsage usage)
 	{
-		IndexBuffer* ibo = new IndexBuffer(buffer, byteSize, usage);
+		IndexBuffer* ibo = new IndexBuffer(buffer, byteSize, type, usage);
 		SetIndexBuffer(ibo);
 		return ibo;
 	}

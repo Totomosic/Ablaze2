@@ -114,7 +114,7 @@ const type name::Get(int index) const	\
 	case 2:	\
 		return z;	\
 	default:	\
-		AB_ASSERT(false);	\
+		AB_ASSERT(false, "Index out of range");	\
 	}	\
 }	\
 	\
@@ -129,7 +129,7 @@ type& name::Get(int index)	\
 	case 2:	\
 		return z;	\
 	default:	\
-		AB_ASSERT(false);	\
+		AB_ASSERT(false, "Index out of range");	\
 	}	\
 }	\
 	\

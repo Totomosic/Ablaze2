@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "structs\__structs__.h"
-#include "Resources\Textures\__Textures__.h"
+#include "Resources\Textures\Texture2D.h"
 
 namespace Ablaze
 {
@@ -44,7 +44,7 @@ namespace Ablaze
 	private:
 		Viewport m_Viewport;
 		Color m_ClearColor;
-		std::unordered_map<ColorBuffer, std::shared_ptr<Texture2D>> m_Textures;
+		std::unordered_map<ColorBuffer, Texture2D*> m_Textures;
 
 	private:
 		Framebuffer(int width, int height); // Window Framebuffer constructor
@@ -67,12 +67,12 @@ namespace Ablaze
 		void SetWidth(int width);
 		void SetHeight(int height);
 
-		std::shared_ptr<Texture2D> GetTexture(ColorBuffer buffer) const;
+		Texture2D* GetTexture(ColorBuffer buffer) const;
 
 		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest);
-		void CreateColorTextureAttachment(const std::shared_ptr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		void CreateColorTextureAttachment(Texture2D* texture, ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateColorTextureAttachment(ColorBuffer buffer = ColorBuffer::Color0);
-		void CreateDepthTextureAttachment(const std::shared_ptr<Texture2D>& texture);
+		void CreateDepthTextureAttachment(Texture2D* texture);
 		void CreateDepthTextureAttachment();
 
 		String ToString() const override;

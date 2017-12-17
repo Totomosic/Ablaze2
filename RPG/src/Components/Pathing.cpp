@@ -24,7 +24,8 @@ void Pathing::Update(double elapsedSeconds)
 		return;
 	}
 	Vector3f direction = (m_Target - m_GameObject->transform().Position()).Normalize();
-	m_GameObject->transform().LocalPosition() += direction * m_Speed * elapsedSeconds;
+	float mag = min((direction * m_Speed * elapsedSeconds).Length(), Vector3f::Distance(m_GameObject->transform().Position(), m_Target));
+	m_GameObject->transform().LocalPosition() += direction * mag;
 }
 
 void Pathing::SetTarget(const Maths::Vector3f& target)

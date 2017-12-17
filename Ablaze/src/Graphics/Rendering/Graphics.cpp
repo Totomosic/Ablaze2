@@ -74,6 +74,8 @@ namespace Ablaze
 		s_Context = window;
 		s_API = api;
 		ResetGLStates();
+
+		ResourceManager::Initialise();
 	}
 
 	void Graphics::Terminate()
@@ -118,10 +120,10 @@ namespace Ablaze
 		}
 	}
 
-	void Graphics::DrawString(float x, float y, const String& text, const std::shared_ptr<Font>& font, const Color& color)
+	void Graphics::DrawString(float x, float y, const String& text, Font* font, const Color& color)
 	{
 		GameObject* obj = GameObject::Instantiate("Object", x, y, 0);
-		obj->AddComponent(new Mesh(ResourceManager::Instance().LoadTextModel(text, font), std::make_shared<Material<Font>>(color, ResourceManager::Instance().DefaultFontShader(), "Tex0", font)));
+		obj->AddComponent(new Mesh(font->CreateModel(text), new Material<Font>(color, ResourceManager::DefaultFontShader(), "Tex0", font)));
 		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
@@ -134,16 +136,11 @@ namespace Ablaze
 		camera->Destroy();
 	}
 
-	void Graphics::DrawString(float x, float y, const String& text, const String& fontFile, float size, const Color& color)
-	{
-		DrawString(x, y, text, ResourceManager::Instance().LoadFont(fontFile, size), color);
-	}
-
-	void Graphics::DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material)
+	void Graphics::DrawRectangle(float x, float y, float w, float h, Material<Texture2D>* material)
 	{
 		GameObject* obj = GameObject::Instantiate("Object", x, y, 0);
 		obj->transform().LocalScale() = Maths::Vector3f(w, h, 1);
-		obj->AddComponent(new Mesh(ResourceManager::Instance().Square(), material));
+		obj->AddComponent(new Mesh(ResourceManager::Square(), material));
 		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
@@ -158,12 +155,12 @@ namespace Ablaze
 
 	void Graphics::DrawRectangle(float x, float y, float w, float h, const Color& color)
 	{
-		DrawRectangle(x, y, w, h, std::make_shared<Material<Texture2D>>(color, ResourceManager::Instance().DefaultColorShader()));
+		DrawRectangle(x, y, w, h, new Material<Texture2D>(color, ResourceManager::DefaultColorShader()));
 	}
 
-	void Graphics::DrawImage(float x, float y, float w, float h, const std::shared_ptr<Texture2D>& image)
+	void Graphics::DrawImage(float x, float y, float w, float h, Texture2D* image)
 	{
-		DrawRectangle(x, y, w, h, std::make_shared<Material<Texture2D>>(Color::White(), ResourceManager::Instance().DefaultTextureShader(), "Tex0", image));
+		DrawRectangle(x, y, w, h, new Material<Texture2D>(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", image));
 	}
 
 	void Graphics::ResetGLStates()

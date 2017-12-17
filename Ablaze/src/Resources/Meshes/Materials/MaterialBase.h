@@ -13,19 +13,18 @@ namespace Ablaze
 	protected:
 		Color m_BaseColor;
 		RenderState m_RenderState;
-		std::shared_ptr<Shader> m_Shader;
+		Shader* m_Shader;
 		UniformManager m_Uniforms;
 
 	public:
-		MaterialBase(const Color& color, const RenderState& renderSettings, const std::shared_ptr<Shader>& shader);
-		MaterialBase(const Color& color, const std::shared_ptr<Shader>& shader, const RenderState& renderSettings = RenderState());
+		MaterialBase(const Color& color, const RenderState& renderSettings, Shader* shader);
+		MaterialBase(const Color& color, Shader* shader, const RenderState& renderSettings = RenderState());
 
 		const Color& BaseColor() const;
 		Color& BaseColor();
 		const RenderState& RenderSettings() const;
 		RenderState& RenderSettings();
-		const std::shared_ptr<Shader>& ActiveShader() const;
-		std::shared_ptr<Shader>& ActiveShader();
+		Shader* ActiveShader() const;
 		const UniformManager& Uniforms() const;
 		UniformManager& Uniforms();
 

@@ -24,11 +24,20 @@ namespace Ablaze
 		return s.str();
 	}
 
+#ifdef AB_DEBUG
 #define AB_INFO(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_INFO)
 #define AB_WARN(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_WARN)
 #define AB_ERROR(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_ERROR)
 #define AB_FATAL(msg) LogMessage(MessageToString(msg), AB_LOG_LEVEL_FATAL)
 
-#define AB_ASSERT(x) if (!(x)) __debugbreak()
+#define AB_ASSERT(x, msg) if (!(x)) { AB_FATAL(msg); __debugbreak(); }
+#else
+#define AB_INFO(msg)
+#define AB_WARN(msg)
+#define AB_ERROR(msg)
+#define AB_FATAL(msg)
+
+#define AB_ASSERT(x, msg)
+#endif
 
 }

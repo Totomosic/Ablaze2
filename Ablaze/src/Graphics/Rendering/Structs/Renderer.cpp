@@ -57,7 +57,8 @@ namespace Ablaze
 	void Renderer::RenderNextGameObject()
 	{
 		GameObject* obj = Queue().Next();
-		m_Method->Render(obj, obj->GetLayer()->GetActiveCamera());
+		GameObject* camera = (m_CurrentRenderPass->CameraOverride() == nullptr) ? obj->GetLayer()->GetActiveCamera() : m_CurrentRenderPass->CameraOverride();
+		m_Method->Render(obj, camera);
 	}
 
 	String Renderer::ToString() const

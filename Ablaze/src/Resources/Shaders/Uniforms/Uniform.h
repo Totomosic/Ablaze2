@@ -15,7 +15,7 @@ namespace Ablaze
 
 		public:
 			Uniform(const String& uniform);
-			virtual void Upload(const std::shared_ptr<Shader>& shader) const = 0;
+			virtual void Upload(Shader* shader) const = 0;
 
 			const String& UniformLocation() const;
 			String& UniformLocation();
@@ -40,7 +40,7 @@ namespace Ablaze
 		const T& Value() const { return m_Value; }
 		T& Value() { return m_Value; }
 
-		void Upload(const std::shared_ptr<Shader>& shader) const override
+		void Upload(Shader* shader) const override
 		{
 			shader->SetUniform(m_UniformLocation, m_Value);
 		}

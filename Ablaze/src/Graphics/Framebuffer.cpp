@@ -94,7 +94,7 @@ namespace Ablaze
 		m_Viewport.SetHeight(height);
 	}
 
-	std::shared_ptr<Texture2D> Framebuffer::GetTexture(ColorBuffer buffer) const
+	Texture2D* Framebuffer::GetTexture(ColorBuffer buffer) const
 	{
 		return m_Textures.at(buffer);
 	}
@@ -110,7 +110,7 @@ namespace Ablaze
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	}
 
-	void Framebuffer::CreateColorTextureAttachment(const std::shared_ptr<Texture2D>& texture, ColorBuffer buffer)
+	void Framebuffer::CreateColorTextureAttachment(Texture2D* texture, ColorBuffer buffer)
 	{
 		Bind();
 		texture->Bind();
@@ -125,10 +125,10 @@ namespace Ablaze
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
 	{
-		CreateColorTextureAttachment(ResourceManager::Instance().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled), buffer);
+		CreateColorTextureAttachment(new Texture2D(GetWidth(), GetHeight(), ImageFormat::Rgba, MipmapMode::Disabled), buffer);
 	}
 
-	void Framebuffer::CreateDepthTextureAttachment(const std::shared_ptr<Texture2D>& texture)
+	void Framebuffer::CreateDepthTextureAttachment(Texture2D* texture)
 	{
 		Bind();
 		texture->Bind();
@@ -142,7 +142,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateDepthTextureAttachment()
 	{
-		CreateDepthTextureAttachment(ResourceManager::Instance().CreateBlankTexture2D(GetWidth(), GetHeight(), MipmapMode::Disabled));
+		CreateDepthTextureAttachment(new Texture2D(GetWidth(), GetHeight(), ImageFormat::Rgba, MipmapMode::Disabled));
 	}
 
 	String Framebuffer::ToString() const

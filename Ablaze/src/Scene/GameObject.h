@@ -20,6 +20,7 @@ namespace Ablaze
 
 		GameObject* m_Parent;
 		String m_Tag;
+		bool m_IsStatic;
 
 	protected:
 		GameObject();
@@ -30,14 +31,18 @@ namespace Ablaze
 		bool HasParent() const;
 		Layer* GetLayer() const;
 		const String& Tag() const;
+		bool IsStatic() const;
 
 		void Enable() const;
 		void Disable() const;
+		void SetStatic(bool staticMode);
+		void MakeStatic();
+		void MakeDynamic();
 
 		void SetParent(GameObject* parent);
 		void MakeChildOf(GameObject* parent);
 		void MakeStandalone();
-		void Destroy();
+		void Destroy(float delay = 0.0f);
 
 		void SetTag(const String& tag);
 

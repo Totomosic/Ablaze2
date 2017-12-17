@@ -6,6 +6,8 @@
 namespace Ablaze
 {
 
+	class Texture2D;
+
 	class AB_API Shader : public Asset, public GLObject
 	{
 	private:
@@ -43,7 +45,7 @@ namespace Ablaze
 		void SetUniform(const String& uniformName, const Color& value) const;
 
 		template<typename T>
-		void SetTexture(const String& samplerName, const std::shared_ptr<T>& texture)
+		void SetTexture(const String& samplerName, T* texture)
 		{
 			texture->Bind();
 			SetUniform(samplerName, (int)texture->GetBindPort());

@@ -12,7 +12,7 @@ private:
 	std::vector<GameObject*> m_History;
 	GameObject* m_CurrentText;
 	String m_CurrentString;
-	std::shared_ptr<Font> m_Font;
+	Font* m_Font;
 	
 	Timer* m_BspaceTimer;
 	Timer* m_Other;
@@ -20,7 +20,7 @@ private:
 	bool m_IsTyping;
 
 public:
-	Chatbox(float width, float height, const std::shared_ptr<Font>& font);
+	Chatbox(float width, float height, Font* font);
 	~Chatbox() override;
 
 	void Start() override;

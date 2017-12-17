@@ -57,11 +57,10 @@ namespace Ablaze
 		static void EnableGraphicsPipeline(int index);
 		static void RenderScene();
 
-		static void DrawString(float x, float y, const String& text, const std::shared_ptr<Font>& font, const Color& color = Color::White());
-		static void DrawString(float x, float y, const String& text, const String& fontName, float size, const Color& color = Color::White());
-		static void DrawRectangle(float x, float y, float w, float h, const std::shared_ptr<Material<Texture2D>>& material);
+		static void DrawString(float x, float y, const String& text, Font* font, const Color& color = Color::White());
+		static void DrawRectangle(float x, float y, float w, float h, Material<Texture2D>* material);
 		static void DrawRectangle(float x, float y, float w, float h, const Color& color);
-		static void DrawImage(float x, float y, float w, float h, const std::shared_ptr<Texture2D>& image);
+		static void DrawImage(float x, float y, float w, float h, Texture2D* image);
 
 		// OpenGL state management
 		static void ResetGLStates();

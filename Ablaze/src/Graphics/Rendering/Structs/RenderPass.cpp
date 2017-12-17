@@ -1,27 +1,33 @@
 #include "RenderPass.h"
 #include "Graphics\Rendering\Graphics.h"
 #include "Scene\ComponentSet.h"
+#include "Resources\Textures\RenderTexture.h"
 
 namespace Ablaze
 {
 	
-	RenderPass::RenderPass(const String& name, const LayerMask& layers, Framebuffer* renderTarget) : Object(),
-		m_Name(name), m_Layers(layers), m_RenderTarget(renderTarget), m_Uniforms()
+	RenderPass::RenderPass(const String& name, const LayerMask& layers, Framebuffer* renderTarget, GameObject* cameraOverride) : Object(),
+		m_Name(name), m_Layers(layers), m_RenderTarget(renderTarget), m_Uniforms(), m_CameraOverride(cameraOverride)
 	{
 	
 	}
 
-	RenderPass::RenderPass(const String& name, const LayerMask& layers) : RenderPass(name, layers, &Graphics::CurrentContext().GetFramebuffer())
+	RenderPass::RenderPass(const String& name, const LayerMask& layers, GameObject* cameraOverride) : RenderPass(name, layers, &Graphics::CurrentContext().GetFramebuffer(), cameraOverride)
 	{
 	
 	}
 
-	RenderPass::RenderPass(const String& name, Framebuffer* renderTarget) : RenderPass(name, LayerMask(true), renderTarget)
+	RenderPass::RenderPass(const String& name, Framebuffer* renderTarget, GameObject* cameraOverride) : RenderPass(name, LayerMask(true), renderTarget, cameraOverride)
 	{
 	
 	}
 
-	RenderPass::RenderPass(const String& name) : RenderPass(name, LayerMask(true))
+	RenderPass::RenderPass(const String& name, GameObject* cameraOverride) : RenderPass(name, LayerMask(true), cameraOverride)
+	{
+	
+	}
+
+	RenderPass::RenderPass(const String& name, RenderTexture* renderTexture) : RenderPass(name, renderTexture->Layers(), &renderTexture->RenderTarget(), renderTexture->Camera())
 	{
 	
 	}
@@ -64,6 +70,11 @@ namespace Ablaze
 	UniformManager& RenderPass::Uniforms()
 	{
 		return m_Uniforms;
+	}
+
+	GameObject* RenderPass::CameraOverride() const
+	{
+		return m_CameraOverride;
 	}
 
 	std::vector<GameObject*> RenderPass::GetGameObjects()

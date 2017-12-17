@@ -5,214 +5,181 @@
 namespace Ablaze
 {
 
-	ResourceManager::ResourceManager()
+	Shader* ResourceManager::s_DefaultColor = nullptr;
+	Shader* ResourceManager::s_DefaultTexture = nullptr;
+	Shader* ResourceManager::s_LightColor = nullptr;
+	Shader* ResourceManager::s_LightTexture = nullptr;
+	Shader* ResourceManager::s_DefaultFont = nullptr;
+
+	Model* ResourceManager::s_Square = nullptr;
+	Model* ResourceManager::s_Circle = nullptr;
+	Model* ResourceManager::s_Cube = nullptr;
+	Model* ResourceManager::s_Sphere = nullptr;
+	Model* ResourceManager::s_Plane = nullptr;
+
+	std::unordered_map<String, Texture2D*> ResourceManager::s_Texture2Ds = std::unordered_map<String, Texture2D*>();
+	std::unordered_map<String, Model*> ResourceManager::s_Models = std::unordered_map<String, Model*>();
+	std::unordered_map<String, Font*> ResourceManager::s_Fonts = std::unordered_map<String, Font*>();
+	std::unordered_map<String, Shader*> ResourceManager::s_Shaders = std::unordered_map<String, Shader*>();
+
+	void ResourceManager::Initialise()
 	{
-		LoadDefaultColor();
-		LoadDefaultTexture();
-		LoadLightColor();
-		LoadLightTexture();
-		LoadDefaultFont();
+		s_DefaultColor = LoadDefaultColor();
+		s_DefaultTexture = LoadDefaultTexture();
+		s_LightColor = LoadLightColor();
+		s_LightTexture = LoadLightTexture();
+		s_DefaultFont = LoadDefaultFont();
 
-		m_Square = CreateSquare();
-		m_Circle = CreateCircle();
-		m_Cube = CreateCube();
-		m_Sphere = CreateSphere();
-		m_Plane = CreatePlane();
+		s_Square = Model::Rectangle(1, 1);
+		s_Circle = Model::Ellipse(2, 2);
+		s_Cube = Model::Cuboid(1, 1, 1);
+		s_Sphere = Model::Sphere(1);
+		s_Plane = Model::Grid(1, 1, 2, 2);
 
-		Systems::Lighting().AddShader(m_LightColor);
-		Systems::Lighting().AddShader(m_LightTexture);
+		Systems::Lighting().AddShader(s_LightColor);
+		Systems::Lighting().AddShader(s_LightTexture);
 	}
 
 	void ResourceManager::Terminate()
 	{
-		delete &Instance();
+		delete s_DefaultColor;
+		delete s_DefaultTexture;
+		delete s_LightColor;
+		delete s_LightTexture;
+		delete s_DefaultFont;
+		delete s_Square;
+		delete s_Circle;
+		delete s_Cube;
+		delete s_Sphere;
+		delete s_Plane;
 	}
 
-	std::shared_ptr<Shader> ResourceManager::LoadShader(const String& shaderFile)
+	Shader* ResourceManager::DefaultColorShader()
 	{
-		Shader* shader = Shader::FromFile(shaderFile);
-		return std::shared_ptr<Shader>(shader);
+		return s_DefaultColor;
 	}
 
-	std::shared_ptr<Shader> ResourceManager::LoadShader(const String& vFile, const String& fFile)
+	Shader* ResourceManager::DefaultTextureShader()
 	{
-		Shader* shader = Shader::FromFile(vFile, fFile);
-		return std::shared_ptr<Shader>(shader);
+		return s_DefaultTexture;
 	}
 
-	std::shared_ptr<Shader> ResourceManager::CreateShader(const String& vSource, const String& fSource)
+	Shader* ResourceManager::LightingColorShader()
 	{
-		Shader* shader = Shader::FromSource(vSource, fSource);
-		return std::shared_ptr<Shader>(shader);
+		return s_LightColor;
 	}
 
-	std::shared_ptr<Shader> ResourceManager::CreateShader(const String& vSource, const String& gSource, const String& fSource)
+	Shader* ResourceManager::LightingTextureShader()
 	{
-		Shader* shader = Shader::FromSource(vSource, gSource, fSource);
-		return std::shared_ptr<Shader>(shader);
+		return s_LightTexture;
 	}
 
-	std::shared_ptr<Shader> ResourceManager::DefaultColorShader()
+	Shader* ResourceManager::DefaultFontShader()
 	{
-		return m_DefaultColor;
-	}
-
-	std::shared_ptr<Shader> ResourceManager::DefaultTextureShader()
-	{
-		return m_DefaultTexture;
-	}
-
-	std::shared_ptr<Shader> ResourceManager::LightingColorShader()
-	{
-		return m_LightColor;
-	}
-
-	std::shared_ptr<Shader> ResourceManager::LightingTextureShader()
-	{
-		return m_LightTexture;
-	}
-
-	std::shared_ptr<Shader> ResourceManager::DefaultFontShader()
-	{
-		return m_DefaultFont;
+		return s_DefaultFont;
 	}
 
 
-	std::shared_ptr<Texture2D> ResourceManager::LoadTexture2D(const String& textureFile, MipmapMode mipmap)
+	Model* ResourceManager::Square()
 	{
-		if (Texture2DExists(textureFile))
-		{
-			return m_Texture2Ds[textureFile];
-		}
-		return AddTexture2D(textureFile, new Texture2D(textureFile, mipmap));
+		return s_Square;
 	}
 
-	std::shared_ptr<Texture2D> ResourceManager::CreateBlankTexture2D(int width, int height, MipmapMode mipmap)
+	Model* ResourceManager::Circle()
 	{
-		return std::make_shared<Texture2D>(width, height, ImageFormat::Rgba, mipmap);
+		return s_Circle;
 	}
 
-	std::shared_ptr<Font> ResourceManager::LoadFont(const String& fontFile, float size)
+	Model* ResourceManager::Cube()
 	{
-		if (FontExists(fontFile + std::to_string(size)))
-		{
-			return m_Fonts[fontFile + std::to_string(size)];
-		}
-		return AddFont(fontFile + std::to_string(size), new Font(fontFile, size));
+		return s_Cube;
 	}
 
-
-	std::shared_ptr<Model> ResourceManager::LoadModel(const String& objModelFile)
+	Model* ResourceManager::Sphere()
 	{
-		Model* model = new Model(objModelFile);
-		return std::shared_ptr<Model>(model);
+		return s_Sphere;
 	}
 
-	std::shared_ptr<Model> ResourceManager::LoadTextModel(const String& text, const std::shared_ptr<Font>& font, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical)
+	Model* ResourceManager::Plane()
 	{
-		Model* model = font->CreateModel(text, color, horizontal, vertical);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreateSquare(const Color& color)
-	{
-		Model* model = Internal::Shapes::Rectangle(1, 1, color);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreateCircle(const Color& color)
-	{
-		Model* model = Internal::Shapes::Ellipse(2, 2, 100, color);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreateCube(const Color& color)
-	{
-		Model* model = Internal::Shapes::Cuboid(1, 1, 1, color);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreateSphere(const Color& color)
-	{
-		Model* model = Internal::Shapes::Sphere(1, 10, color);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreateGrid(int xVerts, int zVerts, const Color& color)
-	{
-		Model* model = Internal::Shapes::Grid(1, 1, xVerts, zVerts, color);
-		return std::shared_ptr<Model>(model);
-	}
-
-	std::shared_ptr<Model> ResourceManager::CreatePlane(const Color& color)
-	{
-		return CreateGrid(2, 2, color);
+		return s_Plane;
 	}
 
 
-	std::shared_ptr<Model> ResourceManager::Square()
+	Texture2D* ResourceManager::SetTexture2D(const String& name, Texture2D* texture)
 	{
-		return m_Square;
+		AB_ASSERT(!Texture2DExists(name), "Texture with name: " + name + " already exists");
+		s_Texture2Ds[name] = texture;
+		return s_Texture2Ds[name];
 	}
 
-	std::shared_ptr<Model> ResourceManager::Circle()
+	Model* ResourceManager::SetModel(const String& name, Model* model)
 	{
-		return m_Circle;
+		AB_ASSERT(!ModelExists(name), "Model with name: " + name + " already exists");
+		s_Models[name] = model;
+		return s_Models[name];
 	}
 
-	std::shared_ptr<Model> ResourceManager::Cube()
+	Font* ResourceManager::SetFont(const String& name, Font* font)
 	{
-		return m_Cube;
+		AB_ASSERT(!FontExists(name), "Font with name: " + name + " already exists");
+		s_Fonts[name] = font;
+		return s_Fonts[name];
 	}
 
-	std::shared_ptr<Model> ResourceManager::Sphere()
+	Shader* ResourceManager::SetShader(const String& name, Shader* shader)
 	{
-		return m_Sphere;
+		AB_ASSERT(!ShaderExists(name), "Shader with name: " + name + " already exists");
+		s_Shaders[name] = shader;
+		return s_Shaders[name];
 	}
 
-	std::shared_ptr<Model> ResourceManager::Plane()
+	Texture2D* ResourceManager::GetTexture2D(const String& name)
 	{
-		return m_Plane;
+		AB_ASSERT(Texture2DExists(name), "Texture with name: " + name + " does not exist");
+		return s_Texture2Ds[name];
+	}
+
+	Model* ResourceManager::GetModel(const String& name)
+	{
+		AB_ASSERT(ModelExists(name), "Model with name: " + name + " does not exist");
+		return s_Models[name];
+	}
+
+	Font* ResourceManager::GetFont(const String& name)
+	{
+		AB_ASSERT(FontExists(name), "Font with name: " + name + " does not exist");
+		return s_Fonts[name];
+	}
+
+	Shader* ResourceManager::GetShader(const String& name)
+	{
+		AB_ASSERT(ShaderExists(name), "Shader with name: " + name + " does not exist");
+		return s_Shaders[name];
 	}
 
 
 	bool ResourceManager::ModelExists(const String& filename)
 	{
-		return (m_Models.find(filename) != m_Models.end());
+		return (s_Models.find(filename) != s_Models.end());
 	}
 
 	bool ResourceManager::Texture2DExists(const String& filename)
 	{
-		return (m_Texture2Ds.find(filename) != m_Texture2Ds.end());
+		return (s_Texture2Ds.find(filename) != s_Texture2Ds.end());
 	}
 
 	bool ResourceManager::FontExists(const String& filename)
 	{
-		return (m_Fonts.find(filename) != m_Fonts.end());
+		return (s_Fonts.find(filename) != s_Fonts.end());
 	}
 
-	std::shared_ptr<Model> ResourceManager::AddModel(const String& filename, Model* model)
+	bool ResourceManager::ShaderExists(const String& filename)
 	{
-		std::shared_ptr<Model> m = std::shared_ptr<Model>(model);
-		m_Models[filename] = m;
-		return m;
+		return (s_Shaders.find(filename) != s_Shaders.end());
 	}
 
-	std::shared_ptr<Texture2D> ResourceManager::AddTexture2D(const String& filename, Texture2D* texture)
-	{
-		std::shared_ptr<Texture2D> tex = std::shared_ptr<Texture2D>(texture);
-		m_Texture2Ds[filename] = tex;
-		return tex;
-	}
-
-	std::shared_ptr<Font> ResourceManager::AddFont(const String& filename, Font* font)
-	{
-		std::shared_ptr<Font> f = std::shared_ptr<Font>(font);
-		m_Fonts[filename] = f;
-		return f;
-	}
-
-	void ResourceManager::LoadDefaultColor()
+	Shader* ResourceManager::LoadDefaultColor()
 	{
 		String vSource =
 #include "Shaders\Source\DefaultColor_v.glsl"
@@ -220,10 +187,10 @@ namespace Ablaze
 		String fSource =
 #include "Shaders\Source\DefaultColor_f.glsl"
 			;
-		m_DefaultColor = CreateShader(vSource, fSource);
+		return new Shader(vSource, fSource);
 	}
 
-	void ResourceManager::LoadDefaultTexture()
+	Shader* ResourceManager::LoadDefaultTexture()
 	{
 		String vSource =
 #include "Shaders\Source\DefaultTexture_v.glsl"
@@ -231,10 +198,10 @@ namespace Ablaze
 		String fSource =
 #include "Shaders\Source\DefaultTexture_f.glsl"
 			;
-		m_DefaultTexture = CreateShader(vSource, fSource);
+		return new Shader(vSource, fSource);
 	}
 
-	void ResourceManager::LoadLightColor()
+	Shader* ResourceManager::LoadLightColor()
 	{
 		String vSource =
 #include "Shaders\Source\LightColor_v.glsl"
@@ -242,10 +209,10 @@ namespace Ablaze
 		String fSource =
 #include "Shaders\Source\LightColor_f.glsl"
 			;
-		m_LightColor = CreateShader(vSource, fSource);
+		return new Shader(vSource, fSource);
 	}
 
-	void ResourceManager::LoadLightTexture()
+	Shader* ResourceManager::LoadLightTexture()
 	{
 		String vSource =
 #include "Shaders\Source\LightTexture_v.glsl"
@@ -253,10 +220,10 @@ namespace Ablaze
 		String fSource =
 #include "Shaders\Source\LightTexture_f.glsl"
 			;
-		m_LightTexture = CreateShader(vSource, fSource);
+		return new Shader(vSource, fSource);
 	}
 
-	void ResourceManager::LoadDefaultFont()
+	Shader* ResourceManager::LoadDefaultFont()
 	{
 		String vSource =
 #include "Shaders\Source\DefaultFont_v.glsl"
@@ -264,7 +231,7 @@ namespace Ablaze
 		String fSource =
 #include "Shaders\Source\DefaultFont_f.glsl"
 			;
-		m_DefaultFont = CreateShader(vSource, fSource);
+		return new Shader(vSource, fSource);
 	}
 
 }

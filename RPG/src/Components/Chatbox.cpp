@@ -1,6 +1,6 @@
 #include "Chatbox.h"
 
-Chatbox::Chatbox(float width, float height, const std::shared_ptr<Font>& font) : Component(),
+Chatbox::Chatbox(float width, float height, Font* font) : Component(),
 	m_Width(width), m_Height(height), m_Font(font)
 {
 
@@ -75,7 +75,7 @@ void Chatbox::Post(const String& message, const Color& color)
 		obj->transform().LocalPosition().y += size.y * 1.5f;
 		if (obj->transform().LocalPosition().y > m_Height / 2.0f - size.y)
 		{
-			obj->Destroy();
+			obj->Destroy(5);
 		}
 	}
 }

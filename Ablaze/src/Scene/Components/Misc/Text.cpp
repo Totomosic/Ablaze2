@@ -4,13 +4,13 @@
 namespace Ablaze
 {
 
-	Text::Text(const String& text, const std::shared_ptr<Font>& font, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical) : Component(),
+	Text::Text(const String& text, Font* font, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical) : Component(),
 		m_Font(font), m_Color(color), m_Text(text), m_ModelIndex(-1), m_hAlign(horizontal), m_vAlign(vertical)
 	{
 	
 	}
 
-	const std::shared_ptr<Font>& Text::GetFont() const
+	Font* Text::GetFont() const
 	{
 		return m_Font;
 	}
@@ -55,11 +55,11 @@ namespace Ablaze
 		if (m_GameObject->HasComponent<Mesh>())
 		{
 			m_ModelIndex = m_GameObject->mesh().ModelCount();
-			m_GameObject->mesh().AddModel(ResourceManager::Instance().LoadTextModel(m_Text, m_Font, Color::White(), m_hAlign, m_vAlign), std::make_shared<Material<Font>>(m_Color, ResourceManager::Instance().DefaultFontShader(), "Tex0", m_Font));
+			m_GameObject->mesh().AddModel(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material<Font>(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font), Maths::Matrix4d::Identity(), true, true);
 		}
 		else
 		{
-			m_GameObject->AddComponent(new Mesh(ResourceManager::Instance().LoadTextModel(m_Text, m_Font, Color::White(), m_hAlign, m_vAlign), std::make_shared<Material<Font>>(m_Color, ResourceManager::Instance().DefaultFontShader(), "Tex0", m_Font)));
+			m_GameObject->AddComponent(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material<Font>(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font), Maths::Matrix4d::Identity(), true, true));
 			m_ModelIndex = 0;
 		}
 		m_GameObject->mesh().GetMaterial(m_ModelIndex)->RenderSettings().UseDepthTest = false;
@@ -72,7 +72,7 @@ namespace Ablaze
 		UpdateModel();
 	}
 
-	void Text::SetFont(const std::shared_ptr<Font>& font)
+	void Text::SetFont(Font* font)
 	{
 		m_Font = font;
 		UpdateModel();
@@ -105,7 +105,7 @@ namespace Ablaze
 
 	void Text::UpdateModel()
 	{
-		m_GameObject->mesh().GetModel(m_ModelIndex) = ResourceManager::Instance().LoadTextModel(m_Text, m_Font, Color::White(), m_hAlign, m_vAlign);
+		m_GameObject->mesh().SetModel(m_ModelIndex, m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign));
 		m_Size = m_Font->GetSize(m_Text);
 	}
 

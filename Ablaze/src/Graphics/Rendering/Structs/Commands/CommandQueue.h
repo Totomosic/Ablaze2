@@ -20,6 +20,8 @@ namespace Ablaze
 		void ExecuteNext(Renderer& renderer);
 		void ExecuteAll(Renderer& renderer);
 
+		void Clear();
+
 		String ToString() const override;
 
 	};

@@ -100,37 +100,37 @@ name::name()	\
 	\
 vec4 name::Column(int index) const	\
 {	\
-	AB_ASSERT(index < 4);	\
+	AB_ASSERT(index < 4, "Index out of range");	\
 	return vec4(values[4 * index + 0], values[4 * index + 1], values[4 * index + 2], values[4 * index + 3]);	\
 }	\
 	\
 vec4 name::Row(int index) const	\
 {	\
-	AB_ASSERT(index < 4);	\
+	AB_ASSERT(index < 4, "Index out of range");	\
 	return vec4(values[4 * 0 + index], values[4 * 1 + index], values[4 * 2 + index], values[4 * 3 + index]);	\
 }	\
 	\
 const type name::Element(int index) const	\
 {	\
-	AB_ASSERT(index < 16);	\
+	AB_ASSERT(index < 16, "Index out of range");	\
 	return values[index];	\
 }	\
 	\
 type& name::Element(int index)	\
 {	\
-	AB_ASSERT(index < 16);	\
+	AB_ASSERT(index < 16, "Index out of range");	\
 	return values[index];	\
 }	\
 	\
 const type name::Element(int row, int col) const	\
 {	\
-	AB_ASSERT(row < 4 && col < 4);	\
+	AB_ASSERT(row < 4 && col < 4, "Index out of range");	\
 	return values[4 * col + row];	\
 }	\
 	\
 type& name::Element(int row, int col)	\
 {	\
-	AB_ASSERT(row < 4 && col < 4);	\
+	AB_ASSERT(row < 4 && col < 4, "Index out of range");	\
 	return values[4 * col + row];	\
 }	\
 	\
