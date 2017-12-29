@@ -4,14 +4,14 @@ namespace Ablaze
 {
 
 	VertexArray::VertexArray(RenderMode renderMode) : GLObject(),
-		m_VertexBuffers(), m_IndexBuffer(nullptr), m_RenderMode(renderMode), m_VertexCount(0), m_RenderCount(0)
+		m_VertexBuffers(), m_IndexBuffers(), m_RenderMode(renderMode), m_VertexCount(0), m_RenderCount(0), m_CurrentIndexBuffer(-1)
 	{
 		GL_CALL(glGenVertexArrays(1, &m_Id));
 	}
 
 	VertexArray::VertexArray(IndexBuffer* indexBuffer, RenderMode renderMode) : VertexArray(renderMode)
 	{
-		SetIndexBuffer(indexBuffer);
+		AddIndexBuffer(indexBuffer);
 	}
 
 	VertexArray::~VertexArray()
@@ -20,9 +20,9 @@ namespace Ablaze
 		{
 			delete vertexBuffer;
 		}
-		if (m_IndexBuffer != nullptr)
+		for (IndexBuffer* indexBuffer : m_IndexBuffers)
 		{
-			delete m_IndexBuffer;
+			delete indexBuffer;
 		}
 		GL_CALL(glDeleteVertexArrays(1, &m_Id));
 	}
@@ -32,9 +32,14 @@ namespace Ablaze
 		return m_VertexBuffers;
 	}
 
-	IndexBuffer* VertexArray::GetIndexBuffer() const
+	const std::vector<IndexBuffer*>& VertexArray::GetIndexBuffers() const
 	{
-		return m_IndexBuffer;
+		return m_IndexBuffers;
+	}
+
+	IndexBuffer* VertexArray::GetIndexBuffer(int index) const
+	{
+		return m_IndexBuffers[index];
 	}
 
 	VertexBuffer* VertexArray::GetVertexBuffer(int index) const
@@ -44,7 +49,7 @@ namespace Ablaze
 
 	bool VertexArray::HasIndexBuffer() const
 	{
-		return m_IndexBuffer != nullptr;
+		return m_IndexBuffers.size() != 0;
 	}
 
 	bool VertexArray::HasVertexBuffer() const
@@ -57,6 +62,11 @@ namespace Ablaze
 		return (int)m_VertexBuffers.size();
 	}
 
+	int VertexArray::IndexBufferCount() const
+	{
+		return (int)m_IndexBuffers.size();
+	}
+
 	int64 VertexArray::VertexCount() const
 	{
 		return m_VertexCount;
@@ -67,9 +77,20 @@ namespace Ablaze
 		return m_RenderCount;
 	}
 
+	int VertexArray::CurrentIndexBufferIndex() const
+	{
+		return m_CurrentIndexBuffer;
+	}
+
 	RenderMode VertexArray::GetRenderMode() const
 	{
 		return m_RenderMode;
+	}
+
+	void VertexArray::SetCurrentIndexBuffer(int index)
+	{
+		m_CurrentIndexBuffer = index;
+		DetermineRenderCount();
 	}
 
 	void VertexArray::Bind() const
@@ -77,7 +98,7 @@ namespace Ablaze
 		GL_CALL(glBindVertexArray(m_Id));
 		if (HasIndexBuffer())
 		{
-			m_IndexBuffer->Bind();
+			m_IndexBuffers[m_CurrentIndexBuffer]->Bind();
 		}
 	}
 
@@ -86,17 +107,22 @@ namespace Ablaze
 		// Does nothing
 	}
 
-	void VertexArray::SetIndexBuffer(IndexBuffer* indexBuffer)
+	void VertexArray::AddIndexBuffer(IndexBuffer* indexBuffer)
 	{
-		m_IndexBuffer = indexBuffer;
-		DetermineRenderCount();
+		m_IndexBuffers.push_back(indexBuffer);
+		if (m_CurrentIndexBuffer == -1)
+		{
+			m_CurrentIndexBuffer = 0;
+			DetermineRenderCount();
+		}		
 	}
 
-	void VertexArray::RemoveIndexBuffer()
+	void VertexArray::RemoveIndexBuffer(int index)
 	{
-		delete m_IndexBuffer;
-		m_IndexBuffer = nullptr;
-		DetermineRenderCount();
+		AB_ASSERT(index < m_IndexBuffers.size(), "Index Out of Range");
+		IndexBuffer* ibo = m_IndexBuffers[index];
+		m_IndexBuffers.erase(m_IndexBuffers.begin() + index);
+		delete ibo;
 	}
 
 	void VertexArray::AddVertexBuffer(VertexBuffer* vertexBuffer)
@@ -118,16 +144,33 @@ namespace Ablaze
 
 	void VertexArray::RemoveVertexBuffer(int index)
 	{
-		if (index < m_VertexBuffers.size())
-		{
-			auto it = std::find(m_VertexBuffers.begin(), m_VertexBuffers.end(), m_VertexBuffers[index]);
-			m_VertexBuffers.erase(it);
-		}
+		AB_ASSERT(index < m_VertexBuffers.size(), "Index Out of Range");
+		VertexBuffer* vbo = m_VertexBuffers.at(index);
+		m_VertexBuffers.erase(m_VertexBuffers.begin() + index);
+		delete vbo;
 	}
 
 	void VertexArray::SetRenderMode(RenderMode renderMode)
 	{
 		m_RenderMode = renderMode;
+		DetermineRenderCount();
+	}
+
+	void VertexArray::SetVertexBuffer(int index, VertexBuffer* buffer)
+	{
+		AB_ASSERT(index < m_VertexBuffers.size(), "Index Out of Range");
+		VertexBuffer* prev = m_VertexBuffers[index];
+		m_VertexBuffers[index] = buffer;
+		delete prev;
+		DetermineVertexCount(buffer);
+	}
+
+	void VertexArray::SetIndexBuffer(int index, IndexBuffer* buffer)
+	{
+		AB_ASSERT(index < m_IndexBuffers.size(), "Index Out of Range");
+		IndexBuffer* prev = m_IndexBuffers[index];
+		m_IndexBuffers[index] = buffer;
+		delete prev;
 		DetermineRenderCount();
 	}
 
@@ -148,14 +191,14 @@ namespace Ablaze
 	IndexBuffer* VertexArray::CreateIndexBuffer(int64 byteSize, IndexType type, BufferUsage usage)
 	{
 		IndexBuffer* ibo = new IndexBuffer(byteSize, type, usage);
-		SetIndexBuffer(ibo);
+		AddIndexBuffer(ibo);
 		return ibo;
 	}
 
 	IndexBuffer* VertexArray::CreateIndexBuffer(void* buffer, int64 byteSize, IndexType type, BufferUsage usage)
 	{
 		IndexBuffer* ibo = new IndexBuffer(buffer, byteSize, type, usage);
-		SetIndexBuffer(ibo);
+		AddIndexBuffer(ibo);
 		return ibo;
 	}
 
@@ -173,14 +216,14 @@ namespace Ablaze
 	{
 		if (HasIndexBuffer())
 		{
-			m_RenderCount = m_IndexBuffer->GetSize() / sizeof(GLuint);
+			m_RenderCount = m_IndexBuffers[m_CurrentIndexBuffer]->GetSize() / sizeof(GLuint);
 		}
 	}
 
 	void VertexArray::TestVertexCount(VertexBuffer* buffer)
 	{
 		int vertexCount = buffer->GetSize() / buffer->GetLayout().GetStride();
-		if (vertexCount != m_VertexCount)
+		if (vertexCount != m_VertexCount && m_VertexBuffers.size() > 1)
 		{
 			AB_WARN("Buffer added that does not match vertex count: " + std::to_string(m_VertexCount));
 		}

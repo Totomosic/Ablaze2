@@ -33,4 +33,6 @@ namespace Ablaze
 
 	};
 
+	GameObject* AddToScene(GameObject* object);
+
 }

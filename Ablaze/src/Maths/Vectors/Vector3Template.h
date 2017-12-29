@@ -68,6 +68,7 @@ public:	\
 	friend std::ostream& operator<<(std::ostream& stream, const name& vector);	\
 	\
 	vec2 xy() const;	\
+	vec2 xz() const;	\
 	\
 public:	\
 	static name Cross(const name& left, const name& right);	\
@@ -355,6 +356,11 @@ std::ostream& operator<<(std::ostream& stream, const name& vector)	\
 vec2 name::xy() const	\
 {	\
 	return vec2(x, y);	\
+}	\
+	\
+vec2 name::xz() const	\
+{	\
+	return vec2(x, z);	\
 }	\
 	\
 name name::Cross(const name& left, const name& right)	\

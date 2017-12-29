@@ -50,8 +50,8 @@ public:	\
 	static name FromColumns(const vec4& c0, const vec4& c1, const vec4& c2, const vec4& c3);	\
 	static name FromRows(const vec4& r0, const vec4& r1, const vec4& r2, const vec4& r3);	\
 	\
-	static name Orthographic(type left, type right, type bottom, type top, type near, type far);	\
-	static name Perspective(type fov, type aspect, type near, type far);	\
+	static name Orthographic(type left, type right, type bottom, type top, type nearPlane, type farPlane);	\
+	static name Perspective(type fov, type aspect, type nearPlane, type farPlane);	\
 	static name Translation(const vec4& translation);	\
 	static name Translation(const vec3& translation);	\
 	static name Translation(type x, type y, type z);	\

@@ -9,8 +9,8 @@ namespace Ablaze
 		return (OpenFlags)((int)l | (int)r);
 	}
 
-	File::File(const String& filename) : Object(),
-		m_Filename(filename)
+	File::File(const Filepath& path) : Object(),
+		m_Path(path)
 	{
 	
 	}
@@ -22,7 +22,12 @@ namespace Ablaze
 
 	const String& File::Filename() const
 	{
-		return m_Filename;
+		return m_Path.Path();
+	}
+
+	const Filepath& File::Path() const
+	{
+		return m_Path;
 	}
 
 	bool File::IsOpen() const
@@ -32,27 +37,21 @@ namespace Ablaze
 
 	int File::FileSize() const
 	{
-		return Filesystem::FileSize(m_Filename);
+		return Filesystem::FileSize(m_Path);
 	}
 
 	void File::Open(OpenFlags flags)
 	{
 		if (flags == OpenFlags::None)
 		{
-			m_Out.open(m_Filename.c_str());
-			m_In.open(m_Filename.c_str());
+			m_Out.open(Filename().c_str());
+			m_In.open(Filename().c_str());
 		}
 		else
 		{
-			m_Out.open(m_Filename.c_str(), (std::ios::openmode)flags);
-			m_In.open(m_Filename.c_str(), (std::ios::openmode)flags);
+			m_Out.open(Filename().c_str(), (std::ios::openmode)flags);
+			m_In.open(Filename().c_str(), (std::ios::openmode)flags);
 		}
-	}
-
-	void File::Open(const String& filename, OpenFlags flags)
-	{
-		m_Filename = filename;
-		Open(flags);
 	}
 
 	void File::Close()
@@ -61,14 +60,14 @@ namespace Ablaze
 		m_In.close();
 	}
 
-	void File::Rename(const String& newFilename)
+	void File::Rename(const Filepath& newFilename)
 	{
-		Filesystem::Rename(m_Filename, newFilename);
+		Filesystem::Rename(m_Path, newFilename);
 	}
 
 	void File::Clear()
 	{
-		Open(OpenFlags::None);
+		Open(OpenFlags::Override);
 	}
 
 	void File::Read(char* buffer, int size)
@@ -79,7 +78,7 @@ namespace Ablaze
 		}
 		else
 		{
-			AB_ERROR("File was not opened before reading from it. File: " + m_Filename);
+			AB_ERROR("File was not opened before reading from it. File: " + Filename());
 		}
 	}
 

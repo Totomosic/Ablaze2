@@ -1,5 +1,6 @@
 #include "Text.h"
-#include "Scene\Components\Mesh.h"
+#include "Scene\Components\MeshRenderer.h"
+#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
@@ -52,17 +53,17 @@ namespace Ablaze
 
 	void Text::Start()
 	{
-		if (m_GameObject->HasComponent<Mesh>())
+		if (m_GameObject->HasComponent<MeshRenderer>())
 		{
-			m_ModelIndex = m_GameObject->mesh().ModelCount();
-			m_GameObject->mesh().AddModel(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material<Font>(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font), Maths::Matrix4d::Identity(), true, true);
+			m_ModelIndex = m_GameObject->mesh().MeshCount();
+			m_GameObject->mesh().AddMesh(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font)));
 		}
 		else
 		{
-			m_GameObject->AddComponent(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material<Font>(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font), Maths::Matrix4d::Identity(), true, true));
+			m_GameObject->AddComponent(new MeshRenderer(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font))));
 			m_ModelIndex = 0;
 		}
-		m_GameObject->mesh().GetMaterial(m_ModelIndex)->RenderSettings().UseDepthTest = false;
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetDefaultMaterial()->RenderSettings().DepthFunc = DepthFunction::Lequal;
 		m_Size = m_Font->GetSize(m_Text);
 	}
 
@@ -81,7 +82,7 @@ namespace Ablaze
 	void Text::SetColor(const Color& color)
 	{
 		m_Color = color;
-		m_GameObject->mesh().GetMaterial(m_ModelIndex)->BaseColor() = m_Color;
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetDefaultMaterial()->BaseColor() = m_Color;
 	}
 
 	void Text::SetAlignment(TextAlignmentH horizontal, TextAlignmentV vertical)
@@ -105,7 +106,7 @@ namespace Ablaze
 
 	void Text::UpdateModel()
 	{
-		m_GameObject->mesh().SetModel(m_ModelIndex, m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign));
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->SetModel(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign));
 		m_Size = m_Font->GetSize(m_Text);
 	}
 

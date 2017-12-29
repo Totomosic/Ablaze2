@@ -3,24 +3,27 @@
 namespace Ablaze
 {
 
-	LayerMask::LayerMask(bool all)
-		: mask(0), all(all)
+	LayerMask::LayerMask()
+		: mask(0), all(true)
 	{
 	
 	}
 
-	LayerMask::LayerMask(const String& layerName) : LayerMask()
+	LayerMask::LayerMask(const String& layerName)
+		: all(false)
 	{
 		Select(layerName);
 	}
 
-	LayerMask::LayerMask(const String& l0, const String& l1) : LayerMask()
+	LayerMask::LayerMask(const String& l0, const String& l1)
+		: all(false)
 	{
 		Select(l0);
 		Select(l1);
 	}
 
-	LayerMask::LayerMask(const String& l0, const String& l1, const String& l2) : LayerMask()
+	LayerMask::LayerMask(const String& l0, const String& l1, const String& l2)
+		: all(false)
 	{
 		Select(l0);
 		Select(l1);
@@ -30,6 +33,7 @@ namespace Ablaze
 	void LayerMask::Select(const String& layerName)
 	{
 		m_LayerNames.push_back(layerName);
+		all = false;
 	}
 
 	void LayerMask::Deselect(const String& layerName)

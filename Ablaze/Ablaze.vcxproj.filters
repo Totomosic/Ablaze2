@@ -243,9 +243,6 @@
     <ClInclude Include="src\Scene\Components\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\Components\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -295,9 +292,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Systems\UpdateSystem.h">
@@ -513,6 +507,24 @@
     <ClInclude Include="src\Scene\Components\Terrain\TerrainData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\Components\MeshRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\SubModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Meshes\Materials\LightState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FileSystem\Filepath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\FileSystem\Directorypath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics\Window.cpp">
@@ -567,9 +579,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources\Meshes\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\System\Memory\Allocator.cpp">
@@ -653,9 +662,6 @@
     <ClCompile Include="src\Scene\Components\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\Components\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -681,9 +687,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Systems\UpdateSystem.cpp">
@@ -806,6 +809,36 @@
     <ClCompile Include="src\Scene\Components\Terrain\TerrainData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Components\MeshRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\SubModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Materials\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Materials\TextureSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Meshes\Materials\LightState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FileSystem\Filepath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\FileSystem\Directorypath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System\Memory\Memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Convention.md" />
@@ -822,5 +855,7 @@
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_f.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultFont_v.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultFont_f.glsl" />
+    <None Include="src\Resources\Shaders\Source\Headers\Lighting.glh" />
+    <None Include="src\Resources\Shaders\Source\Headers\Material.glh" />
   </ItemGroup>
 </Project>

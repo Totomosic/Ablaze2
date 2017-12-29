@@ -5,7 +5,7 @@ namespace Ablaze
 	namespace Internal
 	{
 
-		Model* Shapes::Rectangle(float width, float height, const Color& color)
+		VertexArray* Shapes::Rectangle(float width, float height, const Color& color)
 		{
 			VertexArray* vao = new VertexArray;
 			uint* indices = new uint[6]{ 0, 1, 2, 0, 2, 3 };
@@ -44,10 +44,10 @@ namespace Ablaze
 			
 			vbo->Unmap();
 
-			return new Model(vao);
+			return vao;
 		}
 
-		Model* Shapes::Ellipse(float width, float height, int vertexCount, const Color& color)
+		VertexArray* Shapes::Ellipse(float width, float height, int vertexCount, const Color& color)
 		{
 			VertexArray* vao = new VertexArray;
 			VertexBuffer* vbo = vao->CreateAttribute((vertexCount + 1) * sizeof(Vertex), BufferLayout::Vertex());
@@ -94,10 +94,10 @@ namespace Ablaze
 			indexBuffer->Unmap();
 			vbo->Unmap();
 
-			return new Model(vao);
+			return vao;
 		}
 
-		Model* Shapes::Cuboid(float width, float height, float depth, const Color& color)
+		VertexArray* Shapes::Cuboid(float width, float height, float depth, const Color& color)
 		{
 			float x = width / 2.0f;
 			float y = height / 2.0f;
@@ -305,10 +305,10 @@ namespace Ablaze
 
 			vbo->Unmap();
 
-			return new Model(vao);
+			return vao;
 		}
 		
-		Model* Shapes::Sphere(float radius, int vertexSpacing, const Color& color)
+		VertexArray* Shapes::Sphere(float radius, int vertexSpacing, const Color& color)
 		{
 			VertexArray* vao = new VertexArray;
 			VertexBuffer* vbo = vao->CreateAttribute((4 * (180 / vertexSpacing + 1) * ((360 - vertexSpacing) / vertexSpacing + 1)) * sizeof(Vertex), BufferLayout::Vertex());
@@ -392,10 +392,10 @@ namespace Ablaze
 			vbo->Unmap();
 			indexBuffer->Unmap();
 			vao->SetRenderMode(RenderMode::TriangleStrip);
-			return new Model(vao);
+			return vao;
 		}
 
-		Model* Shapes::Grid(float width, float depth, int xVertices, int zVertices, const Color& color)
+		VertexArray* Shapes::Grid(float width, float depth, int xVertices, int zVertices, const Color& color)
 		{
 			if (xVertices < 2 || zVertices < 2)
 			{
@@ -418,7 +418,7 @@ namespace Ablaze
 					ptr->normal = Maths::Vector3f(0.0f, 1.0f, 0.0f);
 					ptr->texCoord = Maths::Vector2f((float)j / (xVertices - 1), 1.0f - (float)i / (zVertices - 1));
 					ptr->color = color;
-					ptr->tangent = Maths::Vector3f(0.0, 0.0, -1.0);
+					ptr->tangent = Maths::Vector3f(0.0, 0.0, 1.0);
 					ptr++;
 
 					if (j != xVertices - 1 && i != zVertices - 1)
@@ -437,7 +437,7 @@ namespace Ablaze
 
 			ibo->Unmap();
 			vbo->Unmap();
-			return new Model(vao);
+			return vao;
 		}
 
 	}

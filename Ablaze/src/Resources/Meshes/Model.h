@@ -1,71 +1,61 @@
 #pragma once
 #include "Common.h"
-#include "ModelInfo.h"
-#include "Resources\Asset.h"
 #include "Graphics\Buffers\__Buffers__.h"
+#include "Resources\Asset.h"
+#include "SubModel.h"
 
 namespace Ablaze
 {
 
-	namespace Internal
+	struct AB_API VertexSet
 	{
-		class Shapes;
-	}
+		std::vector<Maths::Vector3f> positions;
+		std::vector<Maths::Vector3f> normals;
+		std::vector<Maths::Vector2f> uvs;
+	};
+
+	struct AB_API IndexSet
+	{
+		uint position;
+		uint uv;
+		uint normal;
+
+		bool operator==(const IndexSet& other) const
+		{
+			return position == other.position && uv == other.uv && normal == other.normal;
+		}
+
+		friend struct std::hash<IndexSet>;
+	};
+
+	class Mesh;
 
 	class AB_API Model : public Asset
 	{
-	public:
-		struct VertexSet
-		{
-			std::vector<Maths::Vector3f> positions, normals;
-			std::vector<Maths::Vector2f> uvs;
-		};
-
-		struct IndexSet
-		{
-			uint position;
-			uint uv;
-			uint normal;
-
-			bool operator==(const IndexSet& other) const
-			{
-				return position == other.position && uv == other.uv && normal == other.normal;
-			}
-
-			friend struct std::hash<IndexSet>;
-		};
-
 	private:
 		VertexArray* m_VertexArray;
+		std::vector<SubModel*> m_SubModels;
 
 	public:
-		Model();
 		Model(VertexArray* vertexArray);
-		Model(const String& filename);
-		Model(const Model& other) = delete;
-		~Model(); // Prevent stack objects and can only be deleted by ResourceManager
+		Model(VertexBuffer* vertices, SubModel* submodel);
+		Model(const String& objFile);
+		~Model() override;
 
-	public:
 		VertexArray* GetVertexArray() const;
+		SubModel* GetSubModel(int index) const;
+		int SubModelCount() const;
+		void AddSubModel(SubModel* model);
 
 		void Reload() override;
-		void Bind() const;
-		void Unbind() const;
-
-		ModelInfo Info() const;
-
 		String ToString() const override;
-
-		friend class ResourceManager;
-		friend class Internal::Shapes;
-		template<typename> friend class Resource;
 
 	public:
 		static Model* Rectangle(float width, float height, const Color& color = Color::White());
 		static Model* Ellipse(float width, float height, const Color& color = Color::White());
 		static Model* Cuboid(float width, float height, float depth, const Color& color = Color::White());
-		static Model* Sphere(float radius, int spacing = 10, const Color& color = Color::White());
-		static Model* Grid(float width, float depth, int xVerts, int zVerts, const Color& color = Color::White());
+		static Model* Sphere(float radius, const Color& color = Color::White());
+		static Model* Grid(float width, float depth, int xVertices, int zVertices, const Color& color = Color::White());
 
 	private:
 		void LoadOBJModel(const String& filename);

@@ -20,10 +20,12 @@ namespace Ablaze
 	{
 	private:
 		std::vector<VertexBuffer*> m_VertexBuffers;
-		IndexBuffer* m_IndexBuffer;
+		std::vector<IndexBuffer*> m_IndexBuffers;
 		RenderMode m_RenderMode;
 		int64 m_VertexCount;
 		int64 m_RenderCount;
+
+		int m_CurrentIndexBuffer;
 
 	public:
 		VertexArray(RenderMode renderMode = RenderMode::Triangles);
@@ -31,23 +33,29 @@ namespace Ablaze
 		~VertexArray() override;
 
 		const std::vector<VertexBuffer*>& GetVertexBuffers() const;
-		IndexBuffer* GetIndexBuffer() const;
+		const std::vector<IndexBuffer*>& GetIndexBuffers() const;
+		IndexBuffer* GetIndexBuffer(int index) const;
 		VertexBuffer* GetVertexBuffer(int index) const;
 		bool HasIndexBuffer() const;
 		bool HasVertexBuffer() const;
 		int VertexBufferCount() const;
+		int IndexBufferCount() const;
+		int CurrentIndexBufferIndex() const;
 		int64 VertexCount() const;
 		int64 RenderCount() const;
 		RenderMode GetRenderMode() const;
 
+		void SetCurrentIndexBuffer(int index);
 		void Bind() const override;
 		void Unbind() const override;
 
-		void SetIndexBuffer(IndexBuffer* indexBuffer);
-		void RemoveIndexBuffer();
+		void AddIndexBuffer(IndexBuffer* indexBuffer);
+		void RemoveIndexBuffer(int index);
 		void AddVertexBuffer(VertexBuffer* vertexBuffer);
 		void RemoveVertexBuffer(int index);
 		void SetRenderMode(RenderMode renderMode);
+		void SetVertexBuffer(int index, VertexBuffer* buffer);
+		void SetIndexBuffer(int index, IndexBuffer* buffer);
 
 		VertexBuffer* CreateAttribute(int64 byteSize, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);
 		VertexBuffer* CreateAttribute(void* buffer, int64 numBytes, const BufferLayout& layout = BufferLayout::Default(), BufferUsage usage = BufferUsage::StaticDraw);

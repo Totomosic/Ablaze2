@@ -1,11 +1,10 @@
 #include "Model.h"
-#include "Utils\FileSystem\__FileSystem__.h"
 #include "Shapes.h"
 
 template<>
-struct std::hash<Ablaze::Model::IndexSet>
+struct std::hash<Ablaze::IndexSet>
 {
-	const size_t operator()(const Ablaze::Model::IndexSet& key) const
+	const size_t operator()(const Ablaze::IndexSet& key) const
 	{
 		return (key.position) ^ (key.normal << 14) ^ (key.uv << 23);
 	}
@@ -14,26 +13,33 @@ struct std::hash<Ablaze::Model::IndexSet>
 namespace Ablaze
 {
 
-	Model::Model() : Model(nullptr)
-	{
-	
-	}
-
 	Model::Model(VertexArray* vertexArray) : Asset(),
-		m_VertexArray(vertexArray)
+		m_VertexArray(vertexArray), m_SubModels()
 	{
-	
+		for (IndexBuffer* ibo : vertexArray->GetIndexBuffers())
+		{
+			m_SubModels.push_back(new SubModel(ibo));
+		}
 	}
 
-	Model::Model(const String& filename) : Asset(),
-		m_VertexArray(nullptr)
+	Model::Model(VertexBuffer* vertices, SubModel* submodel) : Model(new VertexArray)
 	{
-		LoadOBJModel(filename);
+		m_VertexArray->AddVertexBuffer(vertices);
+		AddSubModel(submodel);
+	}
+
+	Model::Model(const String& objFile) : Model(new VertexArray)
+	{
+		LoadOBJModel(objFile);
 	}
 
 	Model::~Model()
 	{
 		delete m_VertexArray;
+		for (SubModel* m : m_SubModels)
+		{
+			delete m;
+		}
 	}
 
 	VertexArray* Model::GetVertexArray() const
@@ -41,33 +47,26 @@ namespace Ablaze
 		return m_VertexArray;
 	}
 
+	SubModel* Model::GetSubModel(int index) const
+	{
+		AB_ASSERT(index < m_SubModels.size(), "Index Out of Range");
+		return m_SubModels[index];
+	}
+
+	int Model::SubModelCount() const
+	{
+		return m_SubModels.size();
+	}
+
+	void Model::AddSubModel(SubModel* submodel)
+	{
+		m_SubModels.push_back(submodel);
+		m_VertexArray->AddIndexBuffer(submodel->GetIndexBuffer());
+	}
+
 	void Model::Reload()
 	{
 	
-	}
-
-	void Model::Bind() const
-	{
-		m_VertexArray->Bind();
-	}
-
-	void Model::Unbind() const
-	{
-		m_VertexArray->Unbind();
-	}
-
-	ModelInfo Model::Info() const
-	{
-		ModelInfo info;
-		info.Array = m_VertexArray;
-		info.Buffer = m_VertexArray->GetVertexBuffer(0);
-		info.Indices = m_VertexArray->GetIndexBuffer();
-		info.RenderCount = m_VertexArray->RenderCount();
-		info.VertexCount = m_VertexArray->VertexCount();
-		byte* buffer = new byte[info.Buffer->GetLayout().GetStride() * info.VertexCount];
-		info.Vertices = (const void*)buffer;
-		info.Buffer->Download((void*)buffer);
-		return info;
 	}
 
 	String Model::ToString() const
@@ -77,28 +76,29 @@ namespace Ablaze
 
 	Model* Model::Rectangle(float width, float height, const Color& color)
 	{
-		return Internal::Shapes::Rectangle(width, height, color);
+		return new Model(Internal::Shapes::Rectangle(width, height, color));
 	}
 
 	Model* Model::Ellipse(float width, float height, const Color& color)
 	{
-		return Internal::Shapes::Ellipse(width, height, 100, color);
+		return new Model(Internal::Shapes::Ellipse(width, height, 100, color));
 	}
 
 	Model* Model::Cuboid(float width, float height, float depth, const Color& color)
 	{
-		return Internal::Shapes::Cuboid(width, height, depth, color);
+		return new Model(Internal::Shapes::Cuboid(width, height, depth, color));
 	}
 
-	Model* Model::Sphere(float radius, int spacing, const Color& color)
+	Model* Model::Sphere(float radius, const Color& color)
 	{
-		return Internal::Shapes::Sphere(radius, spacing, color);
+		return new Model(Internal::Shapes::Sphere(radius, 10, color));
 	}
 
-	Model* Model::Grid(float width, float depth, int xVerts, int zVerts, const Color& color)
+	Model* Model::Grid(float width, float depth, int xVertices, int zVertices, const Color& color)
 	{
-		return Internal::Shapes::Grid(width, depth, xVerts, zVerts, color);
+		return new Model(Internal::Shapes::Grid(width, depth, xVertices, zVertices, color));
 	}
+
 
 	void UpdateMinMax(float x, float y, float z, float* minX, float* maxX, float* minY, float* maxY, float* minZ, float* maxZ)
 	{
@@ -279,7 +279,7 @@ namespace Ablaze
 									}
 									else
 									{
-										AB_ERROR("Skipped Loading Model Face");
+										AB_ERROR("Skipped Loading SubModel Face");
 										continue;
 									}
 								}
@@ -290,10 +290,10 @@ namespace Ablaze
 			}
 		}
 
-		m_VertexArray = new VertexArray;
 		VertexBuffer* vbo = m_VertexArray->CreateAttribute(vertices.size() * sizeof(Vertex), BufferLayout::Vertex());
 		vbo->Upload(&vertices[0], vertices.size() * sizeof(Vertex));
-		m_VertexArray->CreateIndexBuffer(&indices[0], indices.size() * sizeof(GLuint));
+		IndexBuffer* buffer = m_VertexArray->CreateIndexBuffer(&indices[0], indices.size() * sizeof(GLuint));
+		m_SubModels.push_back(new SubModel(buffer));
 	}
 
 	void Model::InsertVertex(std::vector<Vertex>& vertices, std::vector<uint>& indices, std::unordered_map<IndexSet, int>& mapping, VertexSet& inputVertices, IndexSet& indexSet)

@@ -39,9 +39,6 @@ namespace Ablaze
 	class AB_API Framebuffer : public GLObject
 	{
 	private:
-		static const Framebuffer* s_CurrentlyBound;
-
-	private:
 		Viewport m_Viewport;
 		Color m_ClearColor;
 		std::unordered_map<ColorBuffer, Texture2D*> m_Textures;
@@ -69,7 +66,7 @@ namespace Ablaze
 
 		Texture2D* GetTexture(ColorBuffer buffer) const;
 
-		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest);
+		void CopyToScreen(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest, ColorBuffer readBuffer = ColorBuffer::Color0) const;
 		void CreateColorTextureAttachment(Texture2D* texture, ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateColorTextureAttachment(ColorBuffer buffer = ColorBuffer::Color0);
 		void CreateDepthTextureAttachment(Texture2D* texture);

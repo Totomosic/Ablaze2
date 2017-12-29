@@ -16,16 +16,21 @@ namespace Ablaze
 	class AB_API RenderQueue : public Object
 	{
 	private:
+		RenderOrder m_Order;
 		std::deque<GameObject*> m_Queue;
 
 	public:
-		RenderQueue();
+		RenderQueue(RenderOrder order = RenderOrder::None);
 
 		void Enqueue(GameObject* object);
+		void Sort();
 		GameObject* Next();
 		void Clear();
 
 		String ToString() const override;
+
+	private:
+		static bool FToBSort(GameObject* left, GameObject* right);
 
 	};
 

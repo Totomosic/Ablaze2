@@ -8,16 +8,15 @@ namespace Ablaze
 	class Layer;
 	class ComponentSet;
 	class Transform;
-	class Mesh;
+	class MeshRenderer;
 
 	// Base class for all Objects in the game
 	class AB_API GameObject : public Object
 	{
 	protected:
 		ComponentSet* m_Components;
-		uint m_Id;
-		Layer* m_Layer;
 
+		Layer* m_Layer;
 		GameObject* m_Parent;
 		String m_Tag;
 		bool m_IsStatic;
@@ -50,7 +49,7 @@ namespace Ablaze
 		ComponentSet& Components();
 
 		Transform& transform() const;
-		Mesh& mesh() const;
+		MeshRenderer& mesh() const;
 
 		template<typename T>
 		T& GetComponent() const
@@ -65,15 +64,16 @@ namespace Ablaze
 		}
 
 		template<typename T>
-		void AddComponent(T* component)
+		GameObject* AddComponent(T* component)
 		{
 			m_Components->AddComponent(component);
+			return this;
 		}
 		
 		template<typename T>
-		void AddComponent()
+		GameObject* AddComponent()
 		{
-			AddComponent(new T);
+			return AddComponent(new T);
 		}
 
 		String ToString() const override;
@@ -89,7 +89,6 @@ namespace Ablaze
 		static GameObject* Instantiate(const String& name, float x, float y, float z);
 		static GameObject* Instantiate(const String& name, GameObject* prefab);
 		static GameObject* Instantiate(const String& name, GameObject* prefab, float x, float y, float z);
-		static GameObject* Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z);
 
 		static std::vector<GameObject*> GetAll();
 		static std::vector<GameObject*> GetAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled = true);

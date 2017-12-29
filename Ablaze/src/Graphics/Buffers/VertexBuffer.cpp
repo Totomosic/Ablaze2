@@ -52,4 +52,19 @@ namespace Ablaze
 		Unbind();
 	}
 
+	VertexBuffer* VertexBuffer::Combine(VertexBuffer* left, VertexBuffer* right, bool preserveData)
+	{
+		VertexBuffer* result = new VertexBuffer(left->GetSize() + right->GetSize(), left->GetLayout(), left->GetUsage());
+		if (preserveData)
+		{
+			byte* leftData = new byte[left->GetSize()];
+			byte* rightData = new byte[right->GetSize()];
+			left->Download((void*)leftData);
+			right->Download((void*)rightData);
+			result->Upload((const void*)leftData, left->GetSize());
+			result->Upload((const void*)rightData, right->GetSize(), left->GetSize());
+		}
+		return result;
+	}
+
 }

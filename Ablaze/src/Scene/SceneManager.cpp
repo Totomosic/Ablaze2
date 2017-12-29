@@ -64,4 +64,14 @@ namespace Ablaze
 		return *s;
 	}
 
+	
+
+
+	GameObject* AddToScene(GameObject* object)
+	{
+		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer(), "GameObject added with no active Scene/Layer");
+		SceneManager::Instance().CurrentScene().CurrentLayer().AddGameObject(object, object->Tag());
+		return object;
+	}
+
 }

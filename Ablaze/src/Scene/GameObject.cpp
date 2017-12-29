@@ -9,7 +9,7 @@ namespace Ablaze
 {
 
 	GameObject::GameObject() : Object(),
-		m_Components(new ComponentSet(this)), m_Id(0), m_Layer(nullptr), m_Parent(nullptr), m_Tag("")
+		m_Components(new ComponentSet(this)), m_Layer(nullptr), m_Parent(nullptr), m_Tag("")
 	{
 
 	}
@@ -120,9 +120,9 @@ namespace Ablaze
 		return GetComponent<Transform>();
 	}
 
-	Mesh& GameObject::mesh() const
+	MeshRenderer& GameObject::mesh() const
 	{
-		return GetComponent<Mesh>();
+		return GetComponent<MeshRenderer>();
 	}
 
 	String GameObject::ToString() const
@@ -149,7 +149,6 @@ namespace Ablaze
 
 	GameObject* GameObject::Empty(const String& name)
 	{
-		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer(), "GameObject created with no active Scene/Layer");
 		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name);
 	}
 
@@ -160,7 +159,6 @@ namespace Ablaze
 
 	GameObject* GameObject::Instantiate(const String& name, float x, float y, float z)
 	{
-		AB_ASSERT(SceneManager::Instance().HasScene() && SceneManager::Instance().CurrentScene().HasLayer(), "GameObject created with no active Scene/Layer");
 		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name, x, y, z);
 	}
 
@@ -180,14 +178,6 @@ namespace Ablaze
 	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, float x, float y, float z)
 	{
 		GameObject* object = Instantiate(name, prefab);
-		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
-		return object;
-	}
-
-	GameObject* GameObject::Instantiate(const String& name, GameObject* prefab, GameObject* parent, float x, float y, float z)
-	{
-		GameObject* object = Instantiate(name, prefab);
-		object->SetParent(parent);
 		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
 		return object;
 	}

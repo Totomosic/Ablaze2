@@ -3,19 +3,34 @@
 namespace Ablaze
 {
 
-	Asset::Asset() : Object()
+	Asset::Asset() : Object(),
+		m_RefCount(0)
 	{
 		
 	}
 
-	const int Asset::AssetID() const
+	Asset::~Asset()
 	{
-		return m_AssetID;
+
 	}
 
-	int& Asset::AssetID()
+	int Asset::GetRefCount() const
 	{
-		return m_AssetID;
+		return m_RefCount;
+	}
+
+	void Asset::Increment()
+	{
+		m_RefCount++;
+	}
+
+	void Asset::Decrement(bool deleteIfZero)
+	{
+		m_RefCount--;
+		if (deleteIfZero && (m_RefCount <= 0))
+		{
+			delete this;
+		}
 	}
 
 	void Asset::Serialize(JSONwriter& writer) const

@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	ForwardRenderer::ForwardRenderer() : Renderer(new ForwardRenderMethod)
+	ForwardRenderer::ForwardRenderer(RenderOrder order) : Renderer(new ForwardRenderMethod, order)
 	{
 		
 	}
@@ -17,6 +17,7 @@ namespace Ablaze
 			m_RenderQueue.Enqueue(object);
 			m_Commands.Enqueue(new RenderObjectCommand);
 		}
+		m_RenderQueue.Sort();
 		m_Commands.ExecuteAll(*this);
 		m_Method->End();
 		m_Commands.Clear();

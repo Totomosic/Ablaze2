@@ -1,0 +1,6 @@
+struct Material
+{
+	float Shininess;
+	float ShineDamper;
+	vec4 SpecularHighlight;
+};

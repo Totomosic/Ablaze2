@@ -42,6 +42,7 @@ namespace Ablaze
 		Maths::Ray ScreenToWorldRay(const Maths::Vector3f& screenPoint) const;
 
 		void UpdateProjectionMatrix();
+		void SetProjectionMatrix(const Maths::Matrix4d& projection);
 
 		String ToString() const override;
 		Component* Clone() const override;

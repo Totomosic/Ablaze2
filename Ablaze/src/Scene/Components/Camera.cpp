@@ -101,6 +101,11 @@ namespace Ablaze
 		CreateProjectionMatrix(0, Graphics::CurrentContext().Width(), 0, Graphics::CurrentContext().Height());
 	}
 
+	void Camera::SetProjectionMatrix(const Maths::Matrix4d& projection)
+	{
+		m_Projection = projection;
+	}
+
 	String Camera::ToString() const
 	{
 		return "Camera";

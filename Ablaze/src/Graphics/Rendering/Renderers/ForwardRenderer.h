@@ -8,7 +8,7 @@ namespace Ablaze
 	class AB_API ForwardRenderer : public Renderer
 	{
 	public:
-		ForwardRenderer();
+		ForwardRenderer(RenderOrder order = RenderOrder::None);
 
 		void PerformRenderPass(RenderPass& renderPass) override;
 

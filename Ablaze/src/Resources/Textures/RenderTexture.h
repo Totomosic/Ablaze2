@@ -39,6 +39,10 @@ namespace Ablaze
 		const Framebuffer& RenderTarget() const;
 		Framebuffer& RenderTarget();
 
+		void SetCamera(GameObject* camera);
+
+		void CopyToScreen();
+
 	};
 
 }

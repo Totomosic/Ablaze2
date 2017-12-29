@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Asset.h"
-#include "Meshes\Model.h"
+#include "Meshes\Mesh.h"
 #include "Meshes\Shapes.h"
 #include "Textures\Texture2D.h"
 #include "Textures\Fonts\__Fonts__.h"

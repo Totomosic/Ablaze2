@@ -5,8 +5,6 @@
 namespace Ablaze
 {
 
-	const Framebuffer* Framebuffer::s_CurrentlyBound = nullptr;
-
 	Framebuffer::Framebuffer(int width, int height)
 		: m_Viewport(Viewport(width, height)), m_ClearColor(Color::Black())
 	{
@@ -67,11 +65,7 @@ namespace Ablaze
 	void Framebuffer::Bind() const
 	{
 		m_Viewport.Bind();
-		if (s_CurrentlyBound != this)
-		{
-			GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, m_Id));
-			s_CurrentlyBound = this;
-		}
+		GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, m_Id));
 	}
 
 	void Framebuffer::Unbind() const
@@ -99,11 +93,11 @@ namespace Ablaze
 		return m_Textures.at(buffer);
 	}
 
-	void Framebuffer::CopyToScreen(ClearBuffer buffer, Filter filter)
+	void Framebuffer::CopyToScreen(ClearBuffer buffer, Filter filter, ColorBuffer readBuffer) const
 	{
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id));
-		GL_CALL(glReadBuffer(GL_COLOR_ATTACHMENT0));
+		GL_CALL(glReadBuffer((GLenum)readBuffer));
 		GL_CALL(glDrawBuffer(GL_FRONT_AND_BACK));
 		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext().Width(), Graphics::CurrentContext().Height(), (GLbitfield)buffer, (GLenum)filter));
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));

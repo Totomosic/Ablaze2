@@ -3,8 +3,6 @@
 namespace Ablaze
 {
 
-	const Buffer* Buffer::s_CurrentlyBound = nullptr;
-
 	Buffer::Buffer(int64 byteSize, BufferTarget target, BufferUsage usage) : GLObject(),
 		m_ByteSize(byteSize), m_Target(target), m_Usage(usage)
 	{

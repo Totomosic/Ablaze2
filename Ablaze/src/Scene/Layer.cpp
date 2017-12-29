@@ -7,7 +7,7 @@ namespace Ablaze
 {
 
 	Layer::Layer(const String& name, GameObject* camera) : Object(),
-		m_MaxGameObjects(100000), m_HighestID(0), m_GameObjects(new GameObject*[m_MaxGameObjects]), m_Name(name)
+		 m_GameObjects(), m_Name(name)
 	{
 		Init();
 		AddGameObject(camera);
@@ -15,21 +15,17 @@ namespace Ablaze
 	}
 
 	Layer::Layer(const String& name) : Object(),
-		m_MaxGameObjects(100000), m_HighestID(0), m_GameObjects(new GameObject*[m_MaxGameObjects]), m_Name(name), m_Camera(nullptr)
+		m_GameObjects(), m_Name(name), m_Camera(nullptr)
 	{
 		Init();
 	}
 
 	Layer::~Layer()
 	{
-		for (int i = 0; i < m_HighestID + 1; i++)
+		for (GameObject* object : m_GameObjects)
 		{
-			if (m_GameObjects[i] != nullptr)
-			{
-				delete m_GameObjects[i];
-			}
+			delete object;
 		}
-		delete[] m_GameObjects;
 	}
 
 	const String& Layer::GetName() const
@@ -37,9 +33,14 @@ namespace Ablaze
 		return m_Name;
 	}
 
-	GameObject* Layer::GetActiveCamera() const
+	const GameObject& Layer::GetActiveCamera() const
 	{
-		return m_Camera;
+		return *m_Camera;
+	}
+
+	GameObject& Layer::GetActiveCamera()
+	{
+		return *m_Camera;
 	}
 
 	bool Layer::HasCamera() const
@@ -47,18 +48,9 @@ namespace Ablaze
 		return m_Camera != nullptr;
 	}
 
-	std::vector<GameObject*> Layer::GameObjects() const
+	const std::vector<GameObject*>& Layer::GameObjects() const
 	{
-		std::vector<GameObject*> objects;
-		for (uint i = 0; i < m_HighestID + 1; i++)
-		{
-			if (m_GameObjects[i] == nullptr)
-			{
-				continue;
-			}
-			objects.push_back(m_GameObjects[i]);
-		}
-		return objects;
+		return m_GameObjects;
 	}
 
 	void Layer::SetActiveCamera(GameObject* camera)
@@ -68,10 +60,8 @@ namespace Ablaze
 
 	void Layer::AddGameObject(GameObject* gameObject)
 	{
-		uint id = GetNextID();
-		gameObject->m_Id = id;
-		m_GameObjects[id] = gameObject;
 		gameObject->m_Layer = this;
+		m_GameObjects.push_back(gameObject);
 	}
 
 	void Layer::AddGameObject(GameObject* gameObject, const String& tag)
@@ -83,14 +73,16 @@ namespace Ablaze
 	GameObject* Layer::CreateGameObject(const String& name)
 	{
 		GameObject* object = new GameObject;
-		AddGameObject(object, name);
+		object->AddComponent<Transform>();
+		object->AddComponent<MeshRenderer>();
+		object->SetTag(name);
 		return object;
 	}
 
 	GameObject* Layer::CreateGameObject(const String& name, float x, float y, float z)
 	{
 		GameObject* object = CreateGameObject(name);
-		object->AddComponent(new Transform(Maths::Vector3f(x, y, z)));
+		object->transform().SetLocalPosition(Maths::Vector3f(x, y, z));
 		return object;
 	}
 
@@ -104,7 +96,6 @@ namespace Ablaze
 		if (!TagExists(tag))
 		{
 			AB_ASSERT(false, "GameObject with tag: " + tag + " does not exist");
-			return *(GameObject*)nullptr;
 		}
 		return *m_NamedGameObjects.at(tag)[index];
 	}
@@ -124,16 +115,28 @@ namespace Ablaze
 		for (GameObjectContainer& container : m_NeedDelete)
 		{
 			GameObject* object = container.Obj;
-			if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
+			if (container.DeleteTime <= 0.0f)
 			{
-				auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
-				m_NamedGameObjects[object->m_Tag].erase(it);
+				if (m_NamedGameObjects.find(object->m_Tag) != m_NamedGameObjects.end())
+				{
+					auto it = std::find(m_NamedGameObjects[object->m_Tag].begin(), m_NamedGameObjects[object->m_Tag].end(), object);
+					m_NamedGameObjects[object->m_Tag].erase(it);
+				}
+				auto it = std::find(m_GameObjects.begin(), m_GameObjects.end(), object);
+				m_GameObjects.erase(it);
+				delete object;
 			}
-			uint id = object->m_Id;
-			delete object;
-			m_GameObjects[id] = nullptr;
+			else
+			{
+				container.DeleteTime -= Time::DeltaTime();
+				continues.push_back(container);
+			}
 		}
 		m_NeedDelete.clear();
+		for (GameObjectContainer& c : continues)
+		{
+			m_NeedDelete.push_back(c);
+		}
 	}
 
 	String Layer::ToString() const
@@ -143,33 +146,7 @@ namespace Ablaze
 
 	void Layer::Serialize(JSONwriter& writer) const
 	{
-		writer.BeginObject();
-		writer.WriteAttribute("Name", m_Name);
-		writer.BeginArray("GameObjects");
-		String filename = writer.Filename();
-		size_t slash = filename.find_last_of('/');
-
-		std::unordered_map<GameObject*, String> mapping;
-		String baseFilepath = filename.substr(0, slash) + "/" + GetName() + "/";
-		String cameraFile = "";
-
-		int count = 0;
-		for (int i = 0; i < m_HighestID + 1; i++)
-		{			
-			if (m_GameObjects[i] != nullptr)
-			{
-				String fullFilename = baseFilepath + "GameObject" + std::to_string(i) + ".gameobject";
-				SerializeGameObject(JSONwriter(fullFilename), m_GameObjects[i], mapping, baseFilepath, count);
-				writer.WriteElement(fullFilename);
-				if (m_GameObjects[i] == m_Camera)
-				{
-					cameraFile = fullFilename;
-				}
-			}
-		}
-		writer.EndArray();
-		writer.WriteAttribute("Camera", cameraFile);
-		writer.EndObject();
+		
 	}
 
 	void Layer::TagGameObject(GameObject* entity, const String& tag)
@@ -196,29 +173,9 @@ namespace Ablaze
 		return m_NamedGameObjects.find(tag) != m_NamedGameObjects.end();
 	}
 
-	uint Layer::GetNextID()
-	{
-		for (uint i = 0; i < m_HighestID + 2; i++)
-		{
-			if (m_GameObjects[i] == nullptr)
-			{
-				if (i > m_HighestID)
-				{
-					m_HighestID = i;
-				}
-				return i;
-			}
-		}
-		AB_ASSERT(false, "Unable to find available ID for GameObject");
-		return 0;
-	}
-
 	void Layer::Init()
 	{
-		for (uint i = 0; i < m_MaxGameObjects; i++)
-		{
-			m_GameObjects[i] = nullptr;
-		}
+		
 	}
 
 	String Layer::SerializeGameObject(JSONwriter& writer, GameObject* object, std::unordered_map<GameObject*, String>& mapping, const String& basePath, int& count) const

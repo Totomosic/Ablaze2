@@ -15,13 +15,15 @@ namespace Ablaze
 		static const int GeometryShader = 1;
 		static const int FragmentShader = 2;
 
+		static std::vector<Shader*> s_Shaders;
+
 	private:
 		mutable std::unordered_map<String, int> m_UniformLocations;
 
 	public:
 		Shader(const String& vertexSrc, const String& fragmentSrc);
 		Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
-		~Shader();
+		~Shader() override;
 
 	public:
 		void Bind() const override;
@@ -56,12 +58,14 @@ namespace Ablaze
 		friend class ResourceManager;
 		template<typename> friend class Resource;
 
-	private:
+	public:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);
 		static Shader* FromSource(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		static Shader* FromFile(const String& vertexFile, const String& fragmentFile);
 		static Shader* FromFile(const String& vertexFile, const String& geometryFile, const String& fragmentFile);
 		static Shader* FromFile(const String& shaderFile);
+
+		static const std::vector<Shader*>& GetAll();
 		
 	private:
 		void Create();
@@ -69,6 +73,10 @@ namespace Ablaze
 		void BuildProgram(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
 		uint AttachShader(const String& shaderSource, GLenum shaderType);
 		int GetUniformLocation(const String& uniformName) const;
+
+	private:
+		// Preprocessing
+		static String PreprocessShader(const String& shaderSource, const String& thisFilename);
 
 	};
 

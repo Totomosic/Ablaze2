@@ -3,8 +3,8 @@
 namespace Ablaze
 {
 
-	Renderer::Renderer(RenderMethod* method) : Object(),
-		m_RenderQueue(), m_Commands(), m_Method(method), m_CurrentRenderPass(nullptr)
+	Renderer::Renderer(RenderMethod* method, RenderOrder order) : Object(),
+		m_RenderQueue(order), m_Commands(), m_Method(method), m_CurrentRenderPass(nullptr)
 	{
 	
 	}
@@ -57,7 +57,7 @@ namespace Ablaze
 	void Renderer::RenderNextGameObject()
 	{
 		GameObject* obj = Queue().Next();
-		GameObject* camera = (m_CurrentRenderPass->CameraOverride() == nullptr) ? obj->GetLayer()->GetActiveCamera() : m_CurrentRenderPass->CameraOverride();
+		GameObject* camera = (m_CurrentRenderPass->CameraOverride() == nullptr) ? &obj->GetLayer()->GetActiveCamera() : m_CurrentRenderPass->CameraOverride();
 		m_Method->Render(obj, camera);
 	}
 

@@ -14,7 +14,7 @@ Pathing::Pathing(float speed) : Component(),
 
 bool Pathing::HasReachedTarget() const
 {
-	return Vector3f::Distance(m_GameObject->transform().Position(), m_Target) < 0.01f;
+	return Vector2f::Distance(m_GameObject->transform().Position().xz(), m_Target.xz()) < 0.01f;
 }
 
 void Pathing::Update(double elapsedSeconds)
@@ -23,8 +23,10 @@ void Pathing::Update(double elapsedSeconds)
 	{
 		return;
 	}
-	Vector3f direction = (m_Target - m_GameObject->transform().Position()).Normalize();
-	float mag = min((direction * m_Speed * elapsedSeconds).Length(), Vector3f::Distance(m_GameObject->transform().Position(), m_Target));
+	Vector3f direction = (m_Target - m_GameObject->transform().Position());
+	direction.y = 0.0f;
+	direction = direction.Normalize();
+	float mag = min((direction * m_Speed * elapsedSeconds).Length(), Vector2f::Distance(m_GameObject->transform().Position().xz(), m_Target.xz()));
 	m_GameObject->transform().LocalPosition() += direction * mag;
 }
 

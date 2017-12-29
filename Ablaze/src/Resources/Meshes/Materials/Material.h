@@ -1,73 +1,45 @@
 #pragma once
-#include "MaterialBase.h"
+#include "Common.h"
+#include "LightState.h"
+#include "RenderState.h"
 #include "TextureSet.h"
-#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
 
-	template<typename T = Texture2D>
-	class AB_API Material : public MaterialBase
+	class AB_API Material : public Asset
 	{
 	private:
-		TextureSet<T> m_Textures;
+		Color m_BaseColor;
+		Shader* m_Shader;
+		UniformManager m_Uniforms;
+		LightState m_LightState;
+		RenderState m_RenderState;
+		TextureSet m_Textures;
 
 	public:
-		Material(const Color& color, Shader* shader, const RenderState& renderState) : MaterialBase(color, shader, renderState),
-			m_Textures()
-		{
-			
-		}
+		Material(const Color& color, Shader* shader, const RenderState& renderState);
+		Material(const Color& color, Shader* shader, const String& sampler, Texture* texture);
+		Material(const Color& color, Shader* shader);
+		~Material();
 
-		Material(const Color& color, Shader* shader, const String& sampler, T* texture) : Material(color, shader, RenderState())
-		{
-			m_Textures.AddTexture(sampler, texture);
-		}
+		const Color& BaseColor() const;
+		Color& BaseColor();
+		const RenderState& RenderSettings() const;
+		RenderState& RenderSettings();
+		const LightState& LightSettings() const;
+		LightState& LightSettings();
+		Shader* ActiveShader() const;
+		const UniformManager& Uniforms() const;
+		UniformManager& Uniforms();
+		const TextureSet& Textures() const;
+		TextureSet& Textures();
 
-		Material(const Color& color, Shader* shader, const String& sampler, const String& textureFilename) : Material(color, shader, RenderState())
-		{
-			//m_Textures.AddTexture(sampler, ResourceManager::Load<T>(textureFilename));
-		}
+		void Reload() override;
+		void Apply() const;
 
-		Material(const Color& color, Shader* shader) : Material(color, shader, RenderState())
-		{
-		
-		}
-
-		const TextureSet<T>& Textures() const { return m_Textures; }
-		TextureSet<T>& Textures() { return m_Textures; }
-
-		void Apply() const override
-		{
-			m_Shader->Bind();
-			m_RenderState.Apply();
-			m_Uniforms.UploadAll(m_Shader);
-			m_Textures.BindAll(m_Shader);
-			m_Shader->Unbind();
-		}
-
-		String ToString() const
-		{
-			return "Material";
-		}
-
-		void Serialize(JSONwriter& writer) const override
-		{
-			writer.BeginObject();
-			writer.WriteAttribute("Type", CleanJSONString(typeid(T).name()));
-			writer.WriteObject("Color", m_BaseColor);
-			writer.WriteObject("RenderSettings", m_RenderState);
-			writer.WriteObject("Shader", m_Shader);
-			writer.WriteObject("Textures", m_Textures);
-			writer.EndObject();
-		}
-
-		MaterialBase* Clone() const override
-		{
-			Material<T>* mat = new Material<T>(BaseColor(), ActiveShader(), RenderSettings());
-			mat->Textures() = Textures();
-			return mat;
-		}
+		String ToString() const;
+		void Serialize(JSONwriter& writer) const;
 
 	};
 

@@ -32,7 +32,7 @@ namespace Ablaze
 	public:
 		Font(const String& filepath, float size);
 		Font(const FontFace& face, float size);
-		~Font();
+		~Font() override;
 
 	public:
 		float FontSize() const;

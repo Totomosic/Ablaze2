@@ -93,6 +93,13 @@ namespace Ablaze
 		delete[] data;
 	}
 
+	void TerrainData::SetRegion(int x, int z, int width, int depth, int srcXOff, int srcZOff, Heightfunction& function)
+	{
+		float* data = function(srcXOff, srcZOff, width, depth);
+		SetRegion(x, z, width, depth, data);
+		delete[] data;
+	}
+
 	void TerrainData::SetOwner(Terrain* terrain)
 	{
 		m_Owner = terrain;

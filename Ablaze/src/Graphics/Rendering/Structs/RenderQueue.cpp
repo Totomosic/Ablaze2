@@ -1,9 +1,11 @@
 #include "RenderQueue.h"
+#include "Scene\Components\__Components__.h"
 
 namespace Ablaze
 {
 
-	RenderQueue::RenderQueue() : Object()
+	RenderQueue::RenderQueue(RenderOrder order) : Object(),
+		m_Order(order)
 	{
 	
 	}
@@ -11,6 +13,14 @@ namespace Ablaze
 	void RenderQueue::Enqueue(GameObject* object)
 	{
 		m_Queue.push_back(object);
+	}
+
+	void RenderQueue::Sort()
+	{
+		if (m_Order == RenderOrder::FrontToBack)
+		{
+			std::sort(m_Queue.begin(), m_Queue.end(), RenderQueue::FToBSort);
+		}
 	}
 
 	GameObject* RenderQueue::Next()
@@ -28,6 +38,11 @@ namespace Ablaze
 	String RenderQueue::ToString() const
 	{
 		return "RenderQueue";
+	}
+
+	bool RenderQueue::FToBSort(GameObject* left, GameObject* right)
+	{
+		return (Maths::Vector3f::Distance(left->transform().Position(), left->GetLayer()->GetActiveCamera().transform().Position()) < Maths::Vector3f::Distance(right->transform().Position(), right->GetLayer()->GetActiveCamera().transform().Position()));
 	}
 
 }

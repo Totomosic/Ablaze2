@@ -24,6 +24,9 @@ namespace Ablaze
 
 		friend class VertexArray;
 
+	public:
+		static VertexBuffer* Combine(VertexBuffer* left, VertexBuffer* right, bool preserveData = true);
+
 	};
 
 }

@@ -5,11 +5,14 @@
 namespace Ablaze
 {
 
+	std::vector<Shader*> Shader::s_Shaders = std::vector<Shader*>();
+
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),
 		m_UniformLocations()
 	{
 		Create();
 		BuildProgram(vertexSrc, fragmentSrc);
+		s_Shaders.push_back(this);
 	}
 
 	Shader::Shader(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc) : GLObject(), Asset(),
@@ -17,6 +20,7 @@ namespace Ablaze
 	{
 		Create();
 		BuildProgram(vertexSrc, geometrySrc, fragmentSrc);
+		s_Shaders.push_back(this);
 	}
 
 	Shader::~Shader()
@@ -136,7 +140,7 @@ namespace Ablaze
 	{
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
 		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);		
-		Shader* shader = new Shader(vertexFile.ReadText(), fragmentFile.ReadText());
+		Shader* shader = new Shader(PreprocessShader(vertexFile.ReadText(), vertexPath), PreprocessShader(fragmentFile.ReadText(), fragmentPath));
 		vertexFile.Close();
 		fragmentFile.Close();
 		return shader;
@@ -147,7 +151,7 @@ namespace Ablaze
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
 		File geometryFile = Filesystem::OpenFile(geometryPath, OpenFlags::Read);
 		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);
-		Shader* shader = new Shader(vertexFile.ReadText(), geometryFile.ReadText(), fragmentFile.ReadText());
+		Shader* shader = new Shader(PreprocessShader(vertexFile.ReadText(), vertexPath), PreprocessShader(geometryFile.ReadText(), geometryPath), PreprocessShader(fragmentFile.ReadText(), fragmentPath));
 		vertexFile.Close();
 		geometryFile.Close();
 		fragmentFile.Close();
@@ -192,22 +196,27 @@ namespace Ablaze
 		}
 		if (!isGeometryShader)
 		{
-			Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
+			Shader* shader = new Shader(PreprocessShader(ss[VERTEX_SHADER_TYPE].str(), shaderFile), PreprocessShader(ss[FRAGMENT_SHADER_TYPE].str(), shaderFile));
 			return shader;
 		}
 		// Use Geometry Shader
-		Shader* shader = new Shader(ss[VERTEX_SHADER_TYPE].str(), ss[GEOMETRY_SHADER_TYPE].str(), ss[FRAGMENT_SHADER_TYPE].str());
+		Shader* shader = new Shader(PreprocessShader(ss[VERTEX_SHADER_TYPE].str(), shaderFile), PreprocessShader(ss[GEOMETRY_SHADER_TYPE].str(), shaderFile), PreprocessShader(ss[FRAGMENT_SHADER_TYPE].str(), shaderFile));
 		return shader;
 	}
 
 	Shader* Shader::FromSource(const String& vertexSrc, const String& fragmentSrc)
 	{
-		return new Shader(vertexSrc, fragmentSrc);
+		return new Shader(PreprocessShader(vertexSrc, ""), PreprocessShader(fragmentSrc, ""));
 	}
 
 	Shader* Shader::FromSource(const String& vertexSrc, const String& geometrySource, const String& fragmentSrc)
 	{
-		return new Shader(vertexSrc, geometrySource, fragmentSrc);
+		return new Shader(PreprocessShader(vertexSrc, ""), PreprocessShader(geometrySource, ""), PreprocessShader(fragmentSrc, ""));
+	}
+
+	const std::vector<Shader*>& Shader::GetAll()
+	{
+		return s_Shaders;
 	}
 
 	void Shader::Create()
@@ -282,6 +291,35 @@ namespace Ablaze
 			}
 		}
 		return location;
+	}
+
+	String Shader::PreprocessShader(const String& shaderSource, const String& thisFilename)
+	{
+		String INCLUDE_DIRECTIVE = "#include";
+
+		std::vector<String> lines = SplitString(shaderSource, "\n");
+		std::stringstream ss;
+		for (String line : lines)
+		{
+			if (strstr(line.c_str(), INCLUDE_DIRECTIVE.c_str()))
+			{
+				int beginIndex = line.find_first_of('\"');
+				int endIndex = line.find_last_of('\"');
+				String filename = line.substr(beginIndex + 1, endIndex - beginIndex - 1);				
+				if (!Filesystem::FileExists(filename))
+				{
+					int begin = thisFilename.find_last_of('/');
+					filename = thisFilename.substr(0, begin) + "/" + filename;
+				}
+				String data = PreprocessShader(Filesystem::OpenFile(filename).ReadText(), filename);
+				ss << data << '\n';
+			}
+			else
+			{
+				ss << line << '\n';
+			}
+		}
+		return ss.str();
 	}
 
 }

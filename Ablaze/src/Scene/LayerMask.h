@@ -14,7 +14,7 @@ namespace Ablaze
 		bool all;
 
 	public:
-		LayerMask(bool all = true);
+		LayerMask();
 		LayerMask(const String& layerName);
 		LayerMask(const String& l0, const String& l1);
 		LayerMask(const String& l0, const String& l1, const String& l2);

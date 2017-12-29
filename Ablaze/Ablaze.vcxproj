@@ -177,10 +177,12 @@
     <ClInclude Include="src\Maths\Vectors\Vector3Template.h" />
     <ClInclude Include="src\Maths\Vectors\Vector4Template.h" />
     <ClInclude Include="src\Maths\Vectors\__Vectors__.h" />
-    <ClInclude Include="src\Resources\Meshes\Materials\MaterialBase.h" />
+    <ClInclude Include="src\Resources\Meshes\Materials\LightState.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\RenderState.h" />
     <ClInclude Include="src\Resources\Meshes\Materials\TextureSet.h" />
+    <ClInclude Include="src\Resources\Meshes\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\ModelInfo.h" />
+    <ClInclude Include="src\Resources\Meshes\SubModel.h" />
     <ClInclude Include="src\Resources\ResourceFunctions.h" />
     <ClInclude Include="src\Resources\Shaders\ShaderProgram.h" />
     <ClInclude Include="src\Resources\Shaders\Uniforms\Uniform.h" />
@@ -191,12 +193,12 @@
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="src\Scene\Components\Colliders\__Colliders__.h" />
-    <ClInclude Include="src\Scene\Components\Mesh.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
     <ClInclude Include="src\Resources\Textures\TextureManager.h" />
     <ClInclude Include="src\Scene\Components\Camera.h" />
     <ClInclude Include="src\Scene\Components\Component.h" />
     <ClInclude Include="src\Scene\ComponentSet.h" />
+    <ClInclude Include="src\Scene\Components\MeshRenderer.h" />
     <ClInclude Include="src\Scene\Components\Misc\Text.h" />
     <ClInclude Include="src\Scene\Components\Misc\__Misc__.h" />
     <ClInclude Include="src\Scene\Components\Motion\RigidBody.h" />
@@ -288,7 +290,9 @@
     <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Utils\Debug\Debugger.h" />
     <ClInclude Include="src\Utils\Debug\__Debug__.h" />
+    <ClInclude Include="src\Utils\FileSystem\Directorypath.h" />
     <ClInclude Include="src\Utils\FileSystem\File.h" />
+    <ClInclude Include="src\Utils\FileSystem\Filepath.h" />
     <ClInclude Include="src\Utils\FileSystem\Filesystem.h" />
     <ClInclude Include="src\Utils\FileSystem\__FileSystem__.h" />
     <ClInclude Include="src\Utils\Functions.h" />
@@ -325,20 +329,25 @@
     <ClCompile Include="src\Graphics\Rendering\Structs\RenderQueue.cpp" />
     <ClCompile Include="src\Graphics\Rendering\Structs\RenderSchedule.cpp" />
     <ClCompile Include="src\Logging.cpp" />
-    <ClCompile Include="src\Resources\Meshes\Materials\MaterialBase.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\LightState.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\Material.cpp" />
     <ClCompile Include="src\Resources\Meshes\Materials\RenderState.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Materials\TextureSet.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Mesh.cpp" />
+    <ClCompile Include="src\Resources\Meshes\Model.cpp" />
+    <ClCompile Include="src\Resources\Meshes\SubModel.cpp" />
     <ClCompile Include="src\Resources\ResourceFunctions.cpp" />
     <ClCompile Include="src\Resources\Shaders\ShaderProgram.cpp" />
     <ClCompile Include="src\Resources\Shaders\Uniforms\Uniform.cpp" />
     <ClCompile Include="src\Resources\Shaders\Uniforms\UniformManager.cpp" />
     <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp" />
     <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp" />
-    <ClCompile Include="src\Scene\Components\Mesh.cpp" />
     <ClCompile Include="src\Resources\Meshes\Shapes.cpp" />
     <ClCompile Include="src\Resources\Textures\TextureManager.cpp" />
     <ClCompile Include="src\Scene\Components\Camera.cpp" />
     <ClCompile Include="src\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Scene\ComponentSet.cpp" />
+    <ClCompile Include="src\Scene\Components\MeshRenderer.cpp" />
     <ClCompile Include="src\Scene\Components\Misc\Text.cpp" />
     <ClCompile Include="src\Scene\Components\Motion\RigidBody.cpp" />
     <ClCompile Include="src\Scene\GameObject.cpp" />
@@ -361,7 +370,6 @@
     <ClCompile Include="src\Maths\Vectors\Vector3.cpp" />
     <ClCompile Include="src\Maths\Vectors\Vector4.cpp" />
     <ClCompile Include="src\Resources\Asset.cpp" />
-    <ClCompile Include="src\Resources\Meshes\Model.cpp" />
     <ClCompile Include="src\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Resources\Shaders\Shader.cpp" />
     <ClCompile Include="src\Resources\Textures\RenderTexture.cpp" />
@@ -393,8 +401,11 @@
     <ClCompile Include="src\System\BytecodeVM\VMStack.cpp" />
     <ClCompile Include="src\System\Engine.cpp" />
     <ClCompile Include="src\System\Memory\Allocator.cpp" />
+    <ClCompile Include="src\System\Memory\Memory.cpp" />
     <ClCompile Include="src\Utils\Debug\Debugger.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\Directorypath.cpp" />
     <ClCompile Include="src\Utils\FileSystem\File.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\Filepath.cpp" />
     <ClCompile Include="src\Utils\FileSystem\Filesystem.cpp" />
     <ClCompile Include="src\Utils\Functions.cpp" />
     <ClCompile Include="src\Utils\JSON\JSONloader.cpp" />
@@ -443,6 +454,7 @@
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_f.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_g.glsl" />
     <None Include="src\Resources\Shaders\Source\DefaultWireframe_v.glsl" />
+    <None Include="src\Resources\Shaders\Source\Headers\Material.glh" />
     <None Include="src\Resources\Shaders\Source\LightColor_f.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -455,6 +467,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="src\Resources\Shaders\Source\Headers\Lighting.glh" />
     <None Include="src\Resources\Shaders\Source\LightTexture_f.glsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

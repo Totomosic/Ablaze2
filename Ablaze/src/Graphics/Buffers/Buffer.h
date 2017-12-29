@@ -32,9 +32,6 @@ namespace Ablaze
 
 	class AB_API Buffer : public GLObject
 	{
-	private:
-		static const Buffer* s_CurrentlyBound;
-
 	protected:
 		int64 m_ByteSize;
 		BufferTarget m_Target;

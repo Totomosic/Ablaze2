@@ -1,0 +1,33 @@
+#include "Material.glh"
+
+struct Light
+{
+	vec3 Position;
+	vec4 Color;
+	float Ambient;
+};
+
+vec4 CalculateDiffuseColor(Light light, Material material, vec3 worldPosition, vec3 worldNormal)
+{
+	vec3 toLightVector = light.Position - worldPosition;
+	vec3 unitToLightVector = normalize(toLightVector);
+	vec3 unitNormal = normalize(worldNormal);
+	float nDotV = dot(unitNormal, unitToLightVector);
+	vec4 color = light.Color * max(nDotV, light.Ambient);
+	color.a = light.Color.a;
+	return color;
+}
+
+vec4 CalculateSpecularColor(Light light, Material material, vec3 worldPosition, vec3 worldNormal, vec3 cameraPosition)
+{
+	vec3 toLightVector = light.Position - worldPosition;
+	vec3 unitToLightVector = normalize(toLightVector);
+	vec3 unitNormal = normalize(worldNormal);
+	vec3 toCameraVector = cameraPosition - worldPosition;
+	vec3 unitToCameraVector = normalize(toCameraVector);
+	vec3 lightDirection = -unitToLightVector;
+	vec3 reflectedLightDirection = reflect(lightDirection, unitNormal);
+	float specularFactor = max(dot(reflectedLightDirection, unitToCameraVector), 0.0);
+    float dampedSpecularFactor = pow(specularFactor, material.ShineDamper); 
+	return light.Color * dampedSpecularFactor * material.Shininess * material.SpecularHighlight;
+}

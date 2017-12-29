@@ -17,7 +17,7 @@ namespace Ablaze
 		RenderPass* m_CurrentRenderPass;
 
 	public:
-		Renderer(RenderMethod* renderMethod);
+		Renderer(RenderMethod* renderMethod, RenderOrder order);
 		virtual ~Renderer();
 
 		const RenderQueue& Queue() const;

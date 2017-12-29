@@ -2,6 +2,7 @@
 #include "Maths\__Maths__.h"
 #include "Object.h"
 #include "Logging.h"
+#include "Filepath.h"
 
 namespace Ablaze
 {
@@ -19,22 +20,22 @@ namespace Ablaze
 	class AB_API File : public Object
 	{
 	private:
-		String m_Filename;
+		Filepath m_Path;
 		std::ofstream m_Out;
 		std::ifstream m_In;
 
 	public:
 		File();
-		File(const String& filename);
+		File(const Filepath& filepath);
 
 		const String& Filename() const;
+		const Filepath& Path() const;
 		bool IsOpen() const;
 		int FileSize() const;
 
 		void Open(OpenFlags flags = OpenFlags::Read);
-		void Open(const String& filename, OpenFlags flags = OpenFlags::Read);
 		void Close();
-		void Rename(const String& newFilename);
+		void Rename(const Filepath& newFilename);
 		void Clear();
 
 		void Read(char* buffer, int size);
@@ -57,7 +58,7 @@ namespace Ablaze
 			}
 			else
 			{
-				AB_ERROR("File was not opened. File: " + m_Filename);
+				AB_ERROR("File was not opened. File: " + Filename());
 			}
 			return *this;
 		}
@@ -71,7 +72,7 @@ namespace Ablaze
 			}
 			else
 			{
-				AB_ERROR("File was not opened. File: " + m_Filename);
+				AB_ERROR("File was not opened. File: " + Filename());
 			}
 			return *this;
 		}

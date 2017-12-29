@@ -1,4 +1,5 @@
 #include "RenderTexture.h"
+#include "Graphics\Rendering\Graphics.h"
 
 namespace Ablaze
 {
@@ -66,6 +67,16 @@ namespace Ablaze
 	Framebuffer& RenderTexture::RenderTarget()
 	{
 		return m_Framebuffer;
+	}
+
+	void RenderTexture::SetCamera(GameObject* camera)
+	{
+		m_Camera = camera;
+	}
+
+	void RenderTexture::CopyToScreen()
+	{
+		m_Framebuffer.CopyToScreen(ClearBuffer::Color | ClearBuffer::Depth, Filter::Nearest, m_Buffer);
 	}
 
 }

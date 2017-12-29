@@ -15,9 +15,7 @@ namespace Ablaze
 		};
 
 	private:
-		uint m_MaxGameObjects;
-		uint m_HighestID;
-		GameObject** m_GameObjects;
+		std::vector<GameObject*> m_GameObjects;
 
 		String m_Name;
 		std::unordered_map<String, std::vector<GameObject*>> m_NamedGameObjects;
@@ -34,9 +32,10 @@ namespace Ablaze
 	public:
 		const String& GetName() const;
 		bool HasCamera() const;
-		std::vector<GameObject*> GameObjects() const;
+		const std::vector<GameObject*>& GameObjects() const;
 		
-		GameObject* GetActiveCamera() const;
+		const GameObject& GetActiveCamera() const;
+		GameObject& GetActiveCamera();
 		void SetActiveCamera(GameObject* camera);
 
 		const GameObject& GetNamedGameObject(const String& tag, int index = 0) const;
@@ -73,7 +72,6 @@ namespace Ablaze
 		void TagGameObject(GameObject* entity, const String& tag);
 		bool TagExists(const String& tag) const;
 
-		uint GetNextID();
 		void Init();
 		void DestroyGameObject(GameObject* object, float delay = 0.0f);
 

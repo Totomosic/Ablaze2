@@ -62,7 +62,7 @@ namespace Ablaze
 	public:
 		Texture(const String& filepath, TextureTarget target);
 		Texture(uint width, uint height, TextureTarget target, ImageFormat format);
-		virtual ~Texture(); // Prevent stack objects and can only be deleted by ResourceManager
+		~Texture() override;
 
 	public:
 		uint GetWidth() const;

@@ -19,8 +19,9 @@ void Chatbox::Start()
 {
 	SceneManager::Instance().CurrentScene().SetCurrentLayer(m_GameObject->GetLayer());
 	Vector2f size = m_Font->GetSize("pT");
-	m_CurrentText = GameObject::Instantiate("CurrentText", nullptr, m_GameObject, -(m_Width / 2.0f) + 5, -(m_Height / 2.0f) + 5, 10);
-	m_CurrentText->AddComponent(new Text(m_CurrentString, m_Font, Color::Black(), TextAlignmentH::Left, TextAlignmentV::Bottom));
+	m_CurrentText = AddToScene(GameObject::Instantiate("CurrentText", -(m_Width / 2.0f) + 5, -(m_Height / 2.0f) + 5, 3))
+		->AddComponent(new Text(m_CurrentString, m_Font, Color::Black(), TextAlignmentH::Left, TextAlignmentV::Bottom));
+	m_CurrentText->MakeChildOf(m_GameObject);
 
 	m_Other = &Time::CreateNewTimer(0.3, METHOD_0(Chatbox::ActivateBackspace));
 	m_Other->Stop();
@@ -67,15 +68,16 @@ void Chatbox::Post(const String& message, const Color& color)
 {
 	SceneManager::Instance().CurrentScene().SetCurrentLayer(m_GameObject->GetLayer());
 	Vector2f size = m_Font->GetSize("pT");
-	GameObject* newText = GameObject::Instantiate("__CHAT__MESSAGES__", nullptr, m_GameObject, -(m_Width / 2.0f) + 5, -(m_Height / 2.0f) + 5, 2);
-	newText->AddComponent(new Text(message, m_Font, color, TextAlignmentH::Left, TextAlignmentV::Bottom));
+	GameObject* newText = AddToScene(GameObject::Instantiate("__CHAT__MESSAGES__", -(m_Width / 2.0f) + 5, -(m_Height / 2.0f) + 5, 2))
+		->AddComponent(new Text(message, m_Font, color, TextAlignmentH::Left, TextAlignmentV::Bottom));
+	newText->MakeChildOf(m_GameObject);
 
 	for (GameObject* obj : SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObjects("__CHAT__MESSAGES__"))
 	{		
 		obj->transform().LocalPosition().y += size.y * 1.5f;
 		if (obj->transform().LocalPosition().y > m_Height / 2.0f - size.y)
 		{
-			obj->Destroy(5);
+			obj->Destroy();
 		}
 	}
 }

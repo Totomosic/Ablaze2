@@ -109,6 +109,7 @@ namespace Ablaze
 	Texture2D* ResourceManager::SetTexture2D(const String& name, Texture2D* texture)
 	{
 		AB_ASSERT(!Texture2DExists(name), "Texture with name: " + name + " already exists");
+		texture->Increment();
 		s_Texture2Ds[name] = texture;
 		return s_Texture2Ds[name];
 	}
@@ -116,6 +117,7 @@ namespace Ablaze
 	Model* ResourceManager::SetModel(const String& name, Model* model)
 	{
 		AB_ASSERT(!ModelExists(name), "Model with name: " + name + " already exists");
+		model->Increment();
 		s_Models[name] = model;
 		return s_Models[name];
 	}
@@ -123,6 +125,7 @@ namespace Ablaze
 	Font* ResourceManager::SetFont(const String& name, Font* font)
 	{
 		AB_ASSERT(!FontExists(name), "Font with name: " + name + " already exists");
+		font->Increment();
 		s_Fonts[name] = font;
 		return s_Fonts[name];
 	}
@@ -130,6 +133,7 @@ namespace Ablaze
 	Shader* ResourceManager::SetShader(const String& name, Shader* shader)
 	{
 		AB_ASSERT(!ShaderExists(name), "Shader with name: " + name + " already exists");
+		shader->Increment();
 		s_Shaders[name] = shader;
 		return s_Shaders[name];
 	}

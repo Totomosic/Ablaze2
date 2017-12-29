@@ -85,7 +85,7 @@ namespace Ablaze
 
 	void Application::Render()
 	{
-		Graphics::CurrentContext().Update();
+		
 	}
 
 	void Application::Run()

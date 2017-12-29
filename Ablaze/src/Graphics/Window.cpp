@@ -76,11 +76,6 @@ namespace Ablaze
 		m_Framebuffer.Clear(buffer);
 	}
 
-	void Window::Update() const
-	{
-		
-	}
-
 	void Window::SwapBuffers() const
 	{
 		glfwSwapBuffers(m_WindowPtr);

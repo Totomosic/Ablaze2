@@ -33,6 +33,7 @@ namespace Ablaze
 		void SetRegion(int x, int z, int width, int depth, float height);
 		void SetRegion(int x, int z, int width, int depth, float* heights);
 		void SetRegion(int x, int z, int width, int depth, Heightfunction& function);
+		void SetRegion(int x, int z, int width, int depth, int srcXOff, int srcYOff, Heightfunction& function);
 
 		void SetOwner(Terrain* owner);
 

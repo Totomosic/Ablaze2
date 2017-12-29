@@ -18,11 +18,11 @@ public:
 		Scene& scene = SceneManager::Instance().CreateScene();
 		scene.CreateLayer("Canvas");
 
-		GameObject* camera = GameObject::Instantiate("Camera", 0, 0, 10);
+		GameObject* camera = AddToScene(GameObject::Instantiate("Camera", 0, 0, 10));
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
-		GameObject* canvas = GameObject::Instantiate("Canvas", WindowWidth() / 2, WindowHeight() / 2, 0);
-		canvas->AddComponent(new Mesh(ResourceManager::Square(), std::make_shared<Material<>>(Color::White(), ResourceManager::LoadShader("res/Metaballs.shader"))));
+		GameObject* canvas = AddToScene(GameObject::Instantiate("Canvas", WindowWidth() / 2, WindowHeight() / 2, 0));
+		canvas->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), new Material(Color::White(), Shader::FromFile("res/Metaballs.shader")))));
 		canvas->transform().LocalScale() = Maths::Vector3f(WindowWidth(), WindowHeight(), 1);
 
 		scene.CurrentLayer().SetActiveCamera(camera);
@@ -37,7 +37,7 @@ public:
 
 	void AddMetaball()
 	{
-		GameObject* ball = GameObject::Instantiate("Metaball", Input::MousePosition().x, Input::MousePosition().y, 0);
+		GameObject* ball = AddToScene(GameObject::Instantiate("Metaball", Input::MousePosition().x, Input::MousePosition().y, 0));
 		ball->AddComponent<RigidBody>();
 		Color c = Color::Random();
 		//Color c = Color::White();
@@ -70,7 +70,7 @@ public:
 		}
 
 		GameObject& canvas = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObject("Canvas");
-		Material<Texture2D>* material = (Material<Texture2D>*)canvas.mesh().GetMaterial(0).get();
+		Material* material = canvas.mesh().GetMesh(0)->GetDefaultMaterial();
 
 		std::vector<GameObject*> metaballs = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObjects("Metaball");
 		int index = 0;
@@ -104,7 +104,7 @@ public:
 			}
 
 			material->Uniforms().AddUniform("Metaballs[" + std::to_string(index) + "].Position", ball->transform().Position().xy(), UniformUploadMode::Once);
-			material->Uniforms().AddUniform<float>("Metaballs[" + std::to_string(index) + "].Radius", ball->GetComponent<Radius>().radius, UniformUploadMode::Once);
+			material->Uniforms().AddUniform("Metaballs[" + std::to_string(index) + "].Radius", ball->GetComponent<Radius>().radius, UniformUploadMode::Once);
 			material->Uniforms().AddUniform("Metaballs[" + std::to_string(index) + "].Color", ball->GetComponent<Radius>().color, UniformUploadMode::Once);
 			index++;
 		}

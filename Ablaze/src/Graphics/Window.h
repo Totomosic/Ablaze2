@@ -29,7 +29,6 @@ namespace Ablaze
 		bool ShouldClose() const;
 		void Close() const;
 		void Clear(ClearBuffer clearBuffer = ClearBuffer::Color | ClearBuffer::Depth) const;
-		void Update() const;
 		void SwapBuffers() const;
 
 		void EnableVSync() const;

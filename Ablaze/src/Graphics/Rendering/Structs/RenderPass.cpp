@@ -17,12 +17,12 @@ namespace Ablaze
 	
 	}
 
-	RenderPass::RenderPass(const String& name, Framebuffer* renderTarget, GameObject* cameraOverride) : RenderPass(name, LayerMask(true), renderTarget, cameraOverride)
+	RenderPass::RenderPass(const String& name, Framebuffer* renderTarget, GameObject* cameraOverride) : RenderPass(name, LayerMask(), renderTarget, cameraOverride)
 	{
 	
 	}
 
-	RenderPass::RenderPass(const String& name, GameObject* cameraOverride) : RenderPass(name, LayerMask(true), cameraOverride)
+	RenderPass::RenderPass(const String& name, GameObject* cameraOverride) : RenderPass(name, LayerMask(), cameraOverride)
 	{
 	
 	}
@@ -86,7 +86,7 @@ namespace Ablaze
 			{
 				for (GameObject* object : layer->GameObjects())
 				{
-					if (object->HasComponent<Transform>() && object->HasComponent<Mesh>())
+					if (object->HasComponent<Transform>() && object->HasComponent<MeshRenderer>())
 					{
 						objects.push_back(object);
 					}
@@ -100,6 +100,11 @@ namespace Ablaze
 	{
 		m_RenderTarget->Bind();
 		m_RenderTarget->Clear();
+		for (Shader* shader : Shader::GetAll())
+		{
+			shader->Bind();
+			m_Uniforms.UploadAll(shader);
+		}
 	}
 
 	void RenderPass::End()
