@@ -60,7 +60,7 @@ namespace Ablaze
 		mutable int m_BindPort;
 
 	public:
-		Texture(const String& filepath, TextureTarget target);
+		Texture(TextureTarget target);
 		Texture(uint width, uint height, TextureTarget target, ImageFormat format);
 		~Texture() override;
 

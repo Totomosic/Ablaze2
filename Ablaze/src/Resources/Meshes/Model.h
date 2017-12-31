@@ -39,7 +39,7 @@ namespace Ablaze
 	public:
 		Model(VertexArray* vertexArray);
 		Model(VertexBuffer* vertices, SubModel* submodel);
-		Model(const String& objFile);
+		Model(const Filepath& objFile);
 		~Model() override;
 
 		VertexArray* GetVertexArray() const;

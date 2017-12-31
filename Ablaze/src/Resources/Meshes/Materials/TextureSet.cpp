@@ -14,6 +14,23 @@ namespace Ablaze
 		AddTexture(sampler, texture);
 	}
 
+	TextureSet::TextureSet(const TextureSet& other)
+	{
+		for (int i = 0; i < other.m_Textures.size(); i++)
+		{
+			AddTexture(other.m_Lookup.at(i), other.m_Textures[i]);
+		}
+	}
+
+	TextureSet& TextureSet::operator=(const TextureSet& other)
+	{
+		for (int i = 0; i < other.m_Textures.size(); i++)
+		{
+			AddTexture(other.m_Lookup.at(i), other.m_Textures[i]);
+		}
+		return *this;
+	}
+
 	TextureSet::~TextureSet()
 	{
 		for (Texture* tex : m_Textures)
@@ -56,6 +73,27 @@ namespace Ablaze
 		{
 			shader->SetTexture(m_Lookup.at(i), m_Textures[i]);
 		}
+	}
+
+	bool TextureSet::operator==(const TextureSet& other) const
+	{
+		if (other.m_Textures.size() != m_Textures.size())
+		{
+			return false;
+		}
+		for (int i = 0; i < m_Textures.size(); i++)
+		{
+			if (m_Textures[i] != other.m_Textures[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool TextureSet::operator!=(const TextureSet& other) const
+	{
+		return !(*this == other);
 	}
 
 	String TextureSet::ToString() const

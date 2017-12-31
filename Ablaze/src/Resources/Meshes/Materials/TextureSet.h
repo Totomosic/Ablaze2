@@ -15,6 +15,8 @@ namespace Ablaze
 	public:
 		TextureSet();
 		TextureSet(const String& sampler, Texture* texture);
+		TextureSet(const TextureSet& other);
+		TextureSet& operator=(const TextureSet& other);
 		~TextureSet();
 
 		const String& GetSampler(int index) const;
@@ -25,6 +27,9 @@ namespace Ablaze
 		void RemoveTexture(int index);
 
 		void BindAll(Shader* shader) const;
+
+		bool operator==(const TextureSet& other) const;
+		bool operator!=(const TextureSet& other) const;
 
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;

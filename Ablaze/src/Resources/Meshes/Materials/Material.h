@@ -7,7 +7,7 @@
 namespace Ablaze
 {
 
-	class AB_API Material : public Asset
+	class AB_API Material : public Object
 	{
 	private:
 		Color m_BaseColor;
@@ -21,7 +21,11 @@ namespace Ablaze
 		Material(const Color& color, Shader* shader, const RenderState& renderState);
 		Material(const Color& color, Shader* shader, const String& sampler, Texture* texture);
 		Material(const Color& color, Shader* shader);
+		Material();
+		Material(const Material& other);
 		~Material();
+
+		Material& operator=(const Material& other);
 
 		const Color& BaseColor() const;
 		Color& BaseColor();
@@ -35,10 +39,12 @@ namespace Ablaze
 		const TextureSet& Textures() const;
 		TextureSet& Textures();
 
-		void Reload() override;
 		void Apply() const;
 
-		String ToString() const;
+		bool operator==(const Material& other) const;
+		bool operator!=(const Material& other) const;
+
+		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
 
 	};

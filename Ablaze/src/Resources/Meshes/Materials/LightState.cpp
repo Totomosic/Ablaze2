@@ -22,4 +22,14 @@ namespace Ablaze
 		Apply(shader);
 	}
 
+	bool LightState::operator==(const LightState& other) const
+	{
+		return (Shininess == other.Shininess && ShineDamper == other.ShineDamper && SpecularHighlight == other.SpecularHighlight);
+	}
+
+	bool LightState::operator!=(const LightState& other) const
+	{
+		return !(*this == other);
+	}
+
 }

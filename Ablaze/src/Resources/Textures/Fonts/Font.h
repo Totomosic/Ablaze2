@@ -30,7 +30,7 @@ namespace Ablaze
 		FontFace m_FontFace;
 
 	public:
-		Font(const String& filepath, float size);
+		Font(const Filepath& filepath, float size);
 		Font(const FontFace& face, float size);
 		~Font() override;
 

@@ -24,7 +24,10 @@ namespace Ablaze
 
 	public:
 		UniformManager();
+		UniformManager(const UniformManager& other);
 		~UniformManager();
+
+		UniformManager& operator=(const UniformManager& other);
 
 		const std::vector<UniformInfo>& Uniforms() const;
 		std::vector<UniformInfo>& Uniforms();
@@ -44,6 +47,9 @@ namespace Ablaze
 		}
 
 		void UploadAll(Shader* shader) const;
+
+		bool operator==(const UniformManager& other) const;
+		bool operator!=(const UniformManager& other) const;
 
 		String ToString() const override;
 

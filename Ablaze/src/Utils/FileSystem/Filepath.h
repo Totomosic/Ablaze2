@@ -22,9 +22,12 @@ namespace Ablaze
 		String Extension() const;
 
 		String ToString() const override;
+		
+		friend std::ostream& operator<<(std::ostream& stream, const Filepath& path);
 
 	private:
 		String ParseFile(const String& path);
+		void CleanPath(String& path);
 
 	};
 

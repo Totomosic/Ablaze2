@@ -58,7 +58,7 @@ namespace Ablaze
 		static void RenderScene();
 
 		static void DrawString(float x, float y, const String& text, Font* font, const Color& color = Color::White());
-		static void DrawRectangle(float x, float y, float w, float h, Material* material);
+		static void DrawRectangle(float x, float y, float w, float h, const Material& material);
 		static void DrawRectangle(float x, float y, float w, float h, const Color& color);
 		static void DrawImage(float x, float y, float w, float h, Texture2D* image);
 

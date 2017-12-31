@@ -22,7 +22,7 @@ public:
 		camera->AddComponent(new Camera(Projection::Orthographic));
 
 		GameObject* canvas = AddToScene(GameObject::Instantiate("Canvas", WindowWidth() / 2, WindowHeight() / 2, 0));
-		canvas->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), new Material(Color::White(), Shader::FromFile("res/Metaballs.shader")))));
+		canvas->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), Shader::FromFile("res/Metaballs.shader")))));
 		canvas->transform().LocalScale() = Maths::Vector3f(WindowWidth(), WindowHeight(), 1);
 
 		scene.CurrentLayer().SetActiveCamera(camera);
@@ -70,7 +70,7 @@ public:
 		}
 
 		GameObject& canvas = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObject("Canvas");
-		Material* material = canvas.mesh().GetMesh(0)->GetDefaultMaterial();
+		Material* material = &canvas.mesh().GetMesh(0)->GetMaterial();
 
 		std::vector<GameObject*> metaballs = SceneManager::Instance().CurrentScene().CurrentLayer().GetNamedGameObjects("Metaball");
 		int index = 0;

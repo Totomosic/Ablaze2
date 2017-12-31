@@ -47,7 +47,7 @@ namespace Ablaze
 		std::cout << "Ablaze:     " << message << std::endl;
 		if (level <= AB_LOG_LEVEL_ERROR) // Only log errors or fatals
 		{
-			File f = Filesystem::OpenFile(AB_LOG_FILE, OpenFlags::Read);
+			File f = Filesystem::OpenFile(AB_LOG_FILE, OpenFlags::Append);
 			f.WriteText("[" + LevelToString(level) + "] " + message + "\n");
 			f.Close();
 		}
@@ -56,7 +56,7 @@ namespace Ablaze
 
 	void ClearLogFile()
 	{
-		File f = Filesystem::OpenFile(AB_LOG_FILE);
+		File f = Filesystem::OpenFile(AB_LOG_FILE, OpenFlags::Override);
 		f.Close();
 	}
 

@@ -11,10 +11,10 @@ namespace Ablaze
 	private:
 		TerrainData m_TerrainData;
 		int m_ModelIndex;
-		Material* m_Material;
+		Material m_Material;
 
 	public:
-		Terrain(float width, float height, int xVerts, int yVerts, Material* material);
+		Terrain(float width, float height, int xVerts, int yVerts, const Material& material);
 
 		void Start() override;
 

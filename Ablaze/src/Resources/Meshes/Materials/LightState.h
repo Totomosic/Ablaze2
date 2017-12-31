@@ -18,6 +18,9 @@ namespace Ablaze
 		void Apply(Shader* shader) const;
 		void operator()(Shader* shader) const;
 
+		bool operator==(const LightState& other) const;
+		bool operator!=(const LightState& other) const;
+
 	};
 
 }

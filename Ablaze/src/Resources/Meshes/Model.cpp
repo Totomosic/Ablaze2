@@ -28,9 +28,10 @@ namespace Ablaze
 		AddSubModel(submodel);
 	}
 
-	Model::Model(const String& objFile) : Model(new VertexArray)
+	Model::Model(const Filepath& objFile) : Model(new VertexArray)
 	{
-		LoadOBJModel(objFile);
+		AB_ASSERT(objFile.Exists(), "OBJ File: " + objFile.Path() + " could not be found");
+		LoadOBJModel(objFile.Path());
 	}
 
 	Model::~Model()

@@ -4,6 +4,13 @@
 namespace Ablaze
 {
 
+	DirectoryPath Filesystem::s_WorkingDirectory = DirectoryPath();
+
+	const DirectoryPath& Filesystem::WorkingDirectory()
+	{
+		return s_WorkingDirectory;
+	}
+
 	int Filesystem::FileSize(const Filepath& filename)
 	{
 		return std::experimental::filesystem::file_size(filename.Path());
@@ -66,6 +73,13 @@ namespace Ablaze
 	bool Filesystem::Delete(const File& file)
 	{
 		return Delete(file.Filename());
+	}
+
+	void Filesystem::Initialise()
+	{
+		char buff[FILENAME_MAX];
+		AB_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
+		s_WorkingDirectory = DirectoryPath(String(buff) + '\\');
 	}
 
 }

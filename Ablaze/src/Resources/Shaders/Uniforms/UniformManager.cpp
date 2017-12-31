@@ -8,12 +8,29 @@ namespace Ablaze
 	
 	}
 
+	UniformManager::UniformManager(const UniformManager& other)
+	{
+		for (const auto& uniform : other.m_Uniforms)
+		{
+			AddUniform(uniform.uniform->Clone(), uniform.mode);
+		}
+	}
+
 	UniformManager::~UniformManager()
 	{
 		for (UniformInfo& info : m_Uniforms)
 		{
 			delete info.uniform;
 		}
+	}
+
+	UniformManager& UniformManager::operator=(const UniformManager& other)
+	{
+		for (const auto& uniform : other.m_Uniforms)
+		{
+			AddUniform(uniform.uniform->Clone(), uniform.mode);
+		}
+		return *this;
 	}
 
 	const std::vector<UniformInfo>& UniformManager::Uniforms() const
@@ -91,6 +108,27 @@ namespace Ablaze
 		{
 			RemoveUniform(i);
 		}
+	}
+
+	bool UniformManager::operator==(const UniformManager& other) const
+	{
+		if (m_Uniforms.size() != other.m_Uniforms.size())
+		{
+			return false;
+		}
+		for (int i = 0; i < m_Uniforms.size(); i++)
+		{
+			if ((*m_Uniforms[i].uniform) != (*other.m_Uniforms[i].uniform))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool UniformManager::operator!=(const UniformManager& other) const
+	{
+		return !(*this == other);
 	}
 
 	String UniformManager::ToString() const

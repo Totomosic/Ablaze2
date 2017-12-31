@@ -13,7 +13,7 @@ namespace Ablaze
 		mutable WrapMode m_WrapMode;
 
 	public:
-		Texture2D(const String& filepath, MipmapMode mm);
+		Texture2D(const Filepath& filepath, MipmapMode mm);
 		Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm);
 
 	public:

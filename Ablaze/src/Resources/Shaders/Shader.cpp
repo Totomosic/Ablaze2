@@ -136,7 +136,7 @@ namespace Ablaze
 		return "Shader";
 	}
 
-	Shader* Shader::FromFile(const String& vertexPath, const String& fragmentPath)
+	Shader* Shader::FromFile(const Filepath& vertexPath, const Filepath& fragmentPath)
 	{
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
 		File fragmentFile = Filesystem::OpenFile(fragmentPath, OpenFlags::Read);		
@@ -146,7 +146,7 @@ namespace Ablaze
 		return shader;
 	}
 
-	Shader* Shader::FromFile(const String& vertexPath, const String& geometryPath, const String& fragmentPath)
+	Shader* Shader::FromFile(const Filepath& vertexPath, const Filepath& geometryPath, const Filepath& fragmentPath)
 	{
 		File vertexFile = Filesystem::OpenFile(vertexPath, OpenFlags::Read);
 		File geometryFile = Filesystem::OpenFile(geometryPath, OpenFlags::Read);
@@ -158,7 +158,7 @@ namespace Ablaze
 		return shader;
 	}
 
-	Shader* Shader::FromFile(const String& shaderFile)
+	Shader* Shader::FromFile(const Filepath& shaderFile)
 	{
 		const int NONE_SHADER_TYPE = -1;
 		const int VERTEX_SHADER_TYPE = 0;
@@ -293,7 +293,7 @@ namespace Ablaze
 		return location;
 	}
 
-	String Shader::PreprocessShader(const String& shaderSource, const String& thisFilename)
+	String Shader::PreprocessShader(const String& shaderSource, const Filepath& thisFilename)
 	{
 		String INCLUDE_DIRECTIVE = "#include";
 
@@ -308,8 +308,8 @@ namespace Ablaze
 				String filename = line.substr(beginIndex + 1, endIndex - beginIndex - 1);				
 				if (!Filesystem::FileExists(filename))
 				{
-					int begin = thisFilename.find_last_of('/');
-					filename = thisFilename.substr(0, begin) + "/" + filename;
+					int begin = thisFilename.Path().find_last_of('/');
+					filename = thisFilename.Path().substr(0, begin) + "/" + filename;
 				}
 				String data = PreprocessShader(Filesystem::OpenFile(filename).ReadText(), filename);
 				ss << data << '\n';

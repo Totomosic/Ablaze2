@@ -7,7 +7,7 @@
 namespace Ablaze
 {
 
-	Terrain::Terrain(float width, float height, int xVerts, int zVerts, Material* material) : Component(),
+	Terrain::Terrain(float width, float height, int xVerts, int zVerts, const Material& material) : Component(),
 		m_TerrainData(this, width, height, xVerts, zVerts), m_ModelIndex(-1), m_Material(material)
 	{
 		

@@ -9,10 +9,15 @@ namespace CubeWave
 	
 	}
 
+	void Wave::Start()
+	{
+		
+	}
+
 	void Wave::Update(double elapsedSeconds)
 	{
 		Matrix4d& transform = m_GameObject->mesh().GetTransform(0);
-		float distance = Vector3f::Distance(m_GameObject->transform().Position(), m_Center->transform().Position());
+		float distance = Vector2f::Distance(m_GameObject->transform().Position().xz(), m_Center->transform().Position().xz());
 		float offset = Map(distance, 0, m_MaxDist, 0, m_Offset);
 		float yScale = Map(sin(m_Angle + offset), -1.0f, 1.0f, m_Min, m_Max);
 		transform = Matrix4d::Scale(1, yScale, 1);

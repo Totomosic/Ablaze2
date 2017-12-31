@@ -1,9 +1,10 @@
 #include "Material.h"
+#include "Resources\ResourceManager.h"
 
 namespace Ablaze
 {
 
-	Material::Material(const Color& color, Shader* shader, const RenderState& renderState) : Asset(),
+	Material::Material(const Color& color, Shader* shader, const RenderState& renderState) : Object(),
 		m_BaseColor(color), m_Shader(shader), m_RenderState(renderState), m_Textures()
 	{
 		shader->Increment();
@@ -19,9 +20,36 @@ namespace Ablaze
 
 	}
 
+	Material::Material() : Material(Color::White(), ResourceManager::DefaultColorShader())
+	{
+	
+	}
+
+	Material::Material(const Material& other)
+		: m_BaseColor(other.m_BaseColor), m_RenderState(other.m_RenderState), m_LightState(other.m_LightState)
+	{
+		m_Shader = other.m_Shader;
+		m_Shader->Increment();
+		m_Textures = other.m_Textures;
+		m_Uniforms = other.m_Uniforms;
+	}
+
 	Material::~Material()
 	{
-		m_Shader->Decrement();
+		if (m_Shader->GetRefCount() > 0)
+			m_Shader->Decrement();
+	}
+
+	Material& Material::operator=(const Material& other)
+	{
+		m_BaseColor = other.m_BaseColor;
+		m_RenderState = other.m_RenderState;
+		m_LightState = other.m_LightState;
+		m_Shader = other.m_Shader;
+		m_Shader->Increment();
+		m_Textures = other.m_Textures;
+		m_Uniforms = other.m_Uniforms;
+		return *this;
 	}
 
 	const Color& Material::BaseColor() const
@@ -89,9 +117,14 @@ namespace Ablaze
 		m_Shader->Unbind();
 	}
 
-	void Material::Reload()
+	bool Material::operator==(const Material& other) const
 	{
-	
+		return (m_BaseColor == other.m_BaseColor && m_LightState == other.m_LightState && m_Textures == other.m_Textures && m_Shader == other.m_Shader && m_Uniforms == other.m_Uniforms && m_RenderState == other.m_RenderState);
+	}
+
+	bool Material::operator!=(const Material& other) const
+	{
+		return !(*this == other);
 	}
 
 	String Material::ToString() const

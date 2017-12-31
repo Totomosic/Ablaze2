@@ -14,7 +14,8 @@ namespace Ablaze
 	DirectoryPath::DirectoryPath(const String& path) : Object(),
 		m_Path(path)
 	{
-		m_ParentPath = ParseDirectory(path);
+		CleanPath(m_Path);
+		m_ParentPath = ParseDirectory(m_Path);
 	}
 
 	DirectoryPath::DirectoryPath(const char* path) : DirectoryPath(String(path))
@@ -47,6 +48,12 @@ namespace Ablaze
 		return m_Path;
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const DirectoryPath& path)
+	{
+		stream << path.ToString();
+		return stream;
+	}
+
 	String DirectoryPath::ParseDirectory(const String& path)
 	{
 		int index = path.find_last_of('/');
@@ -56,6 +63,11 @@ namespace Ablaze
 		}
 		String parentPath = path.substr(0, index) + '/';
 		return parentPath;
+	}
+
+	void DirectoryPath::CleanPath(String& path)
+	{
+		std::replace(path.begin(), path.end(), '\\', '/');
 	}
 
 }

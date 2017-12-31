@@ -56,14 +56,14 @@ namespace Ablaze
 		if (m_GameObject->HasComponent<MeshRenderer>())
 		{
 			m_ModelIndex = m_GameObject->mesh().MeshCount();
-			m_GameObject->mesh().AddMesh(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font)));
+			m_GameObject->mesh().AddMesh(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font)));
 		}
 		else
 		{
-			m_GameObject->AddComponent(new MeshRenderer(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), new Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font))));
+			m_GameObject->AddComponent(new MeshRenderer(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font))));
 			m_ModelIndex = 0;
 		}
-		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetDefaultMaterial()->RenderSettings().DepthFunc = DepthFunction::Lequal;
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetMaterial().RenderSettings().DepthFunc = DepthFunction::Lequal;
 		m_Size = m_Font->GetSize(m_Text);
 	}
 
@@ -82,7 +82,7 @@ namespace Ablaze
 	void Text::SetColor(const Color& color)
 	{
 		m_Color = color;
-		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetDefaultMaterial()->BaseColor() = m_Color;
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetMaterial().BaseColor() = m_Color;
 	}
 
 	void Text::SetAlignment(TextAlignmentH horizontal, TextAlignmentV vertical)

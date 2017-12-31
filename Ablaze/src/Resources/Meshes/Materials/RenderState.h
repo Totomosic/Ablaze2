@@ -20,6 +20,9 @@ namespace Ablaze
 		void Apply() const;
 		void operator()() const;
 
+		bool operator==(const RenderState& other) const;
+		bool operator!=(const RenderState& other) const;
+
 		void Serialize(JSONwriter& writer) const;
 
 	};

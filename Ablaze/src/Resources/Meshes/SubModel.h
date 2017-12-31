@@ -13,21 +13,25 @@ namespace Ablaze
 	{
 	private:
 		IndexBuffer* m_IndexBuffer; // Vertex array of Mesh will own this IndexBuffer
-		Material* m_Material;
+		Material m_Material;
+		bool m_HasOwnMaterial;
 
 	public:
-		SubModel(IndexBuffer* indexBuffer, Material* material = nullptr);
+		SubModel(IndexBuffer* indexBuffer, const Material& material);
+		SubModel(IndexBuffer* indexBuffer);
 		SubModel(const SubModel& other) = delete;
 		SubModel(const SubModel&& other) = delete;
 		SubModel& operator=(const SubModel& other) = delete;
+
 		~SubModel();
 
 	public:
 		IndexBuffer* GetIndexBuffer() const;
-		Material* GetMaterial() const;
+		const Material& GetMaterial() const;
+		Material& GetMaterial();
 		bool HasOwnMaterial() const;
 
-		void SetMaterial(Material* material);
+		void SetMaterial(const Material& material);
 
 		String ToString() const override;
 

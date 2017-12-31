@@ -3,17 +3,20 @@
 namespace Ablaze
 {
 
-	Mesh::Mesh(Model* model, Material* material) : Asset(),
+	Mesh::Mesh(Model* model, const Material& material) : Asset(),
 		m_Model(model), m_DefaultMaterial(material)
 	{
 		model->Increment();
-		material->Increment();
+	}
+
+	Mesh::Mesh(Model* model) : Mesh(model, Material())
+	{
+	
 	}
 
 	Mesh::~Mesh()
 	{
 		m_Model->Decrement();
-		m_DefaultMaterial->Decrement();
 	}
 
 	void Mesh::Reload()
@@ -26,7 +29,12 @@ namespace Ablaze
 		return m_Model;
 	}
 
-	Material* Mesh::GetDefaultMaterial() const
+	const Material& Mesh::GetMaterial() const
+	{
+		return m_DefaultMaterial;
+	}
+
+	Material& Mesh::GetMaterial()
 	{
 		return m_DefaultMaterial;
 	}
@@ -38,11 +46,9 @@ namespace Ablaze
 		m_Model->Increment();
 	}
 
-	void Mesh::SetDefaultMaterial(Material* material)
+	void Mesh::SetMaterial(const Material& material)
 	{
-		m_DefaultMaterial->Decrement();
 		m_DefaultMaterial = material;
-		m_DefaultMaterial->Increment();
 	}
 
 	String Mesh::ToString() const
@@ -50,27 +56,27 @@ namespace Ablaze
 		return "Mesh";
 	}
 
-	Mesh* Mesh::Rectangle(float width, float height, Material* material)
+	Mesh* Mesh::Rectangle(float width, float height, const Material& material)
 	{
 		return new Mesh(Model::Rectangle(width, height), material);
 	}
 
-	Mesh* Mesh::Ellipse(float width, float height, Material* material)
+	Mesh* Mesh::Ellipse(float width, float height, const Material& material)
 	{
 		return new Mesh(Model::Ellipse(width, height), material);
 	}
 
-	Mesh* Mesh::Cuboid(float width, float height, float depth, Material* material)
+	Mesh* Mesh::Cuboid(float width, float height, float depth, const Material& material)
 	{
 		return new Mesh(Model::Cuboid(width, height, depth), material);
 	}
 
-	Mesh* Mesh::Sphere(float radius, Material* material)
+	Mesh* Mesh::Sphere(float radius, const Material& material)
 	{
 		return new Mesh(Model::Sphere(radius), material);
 	}
 
-	Mesh* Mesh::Grid(float width, float height, int xVerts, int zVerts, Material* material)
+	Mesh* Mesh::Grid(float width, float height, int xVerts, int zVerts, const Material& material)
 	{
 		return new Mesh(Model::Grid(width, height, xVerts, zVerts), material);
 	}

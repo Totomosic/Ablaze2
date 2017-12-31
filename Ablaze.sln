@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Metaballs", "Metaballs\Meta
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CubeWave", "CubeWave\CubeWave.vcxproj", "{7245BE85-6225-4CD7-8C70-9BDA2A34EB2C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AbSketch", "AbSketch\AbSketch.vcxproj", "{9F9FF616-B46A-4080-B99D-EF347935384B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{7245BE85-6225-4CD7-8C70-9BDA2A34EB2C}.Release|x64.Build.0 = Release|x64
 		{7245BE85-6225-4CD7-8C70-9BDA2A34EB2C}.Release|x86.ActiveCfg = Release|Win32
 		{7245BE85-6225-4CD7-8C70-9BDA2A34EB2C}.Release|x86.Build.0 = Release|Win32
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Debug|x64.ActiveCfg = Debug|x64
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Debug|x64.Build.0 = Debug|x64
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Debug|x86.ActiveCfg = Debug|Win32
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Debug|x86.Build.0 = Debug|Win32
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Release|x64.ActiveCfg = Release|x64
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Release|x64.Build.0 = Release|x64
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Release|x86.ActiveCfg = Release|Win32
+		{9F9FF616-B46A-4080-B99D-EF347935384B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

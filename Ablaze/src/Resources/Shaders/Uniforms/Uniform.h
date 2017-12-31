@@ -20,6 +20,10 @@ namespace Ablaze
 			const String& UniformLocation() const;
 			String& UniformLocation();
 
+			virtual Internal::Uniform* Clone() const = 0;
+			virtual bool operator==(const Uniform& other) const = 0;
+			virtual bool operator!=(const Uniform& other) const = 0;
+
 		};
 
 	}
@@ -27,7 +31,7 @@ namespace Ablaze
 	template<typename T>
 	class AB_API Uniform : public Internal::Uniform
 	{
-	private:
+	protected:
 		T m_Value;
 
 	public:
@@ -48,6 +52,22 @@ namespace Ablaze
 		String ToString() const override
 		{
 			return "Uniform";
+		}
+
+		Internal::Uniform* Clone() const override
+		{
+			Uniform<T>* uniform = new Uniform<T>(m_UniformLocation, m_Value);
+			return uniform;
+		}
+
+		bool operator==(const Internal::Uniform& other) const override
+		{
+			return (m_Value == (*(Uniform<T>*)&other).m_Value && UniformLocation() == other.UniformLocation());
+		}
+
+		bool operator!=(const Internal::Uniform& other) const override
+		{
+			return !(*this == other);
 		}
 
 	};

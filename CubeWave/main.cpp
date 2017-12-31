@@ -30,10 +30,10 @@ namespace CubeWave
 			GameObject* light = AddToScene(GameObject::Instantiate("Light", 0, 50, 20))
 				->AddComponent<Light>();
 
-			int width = 13;
+			int width = 25;
 			GameObject* center = AddToScene(GameObject::Instantiate("Center", 0, 0, 0))
-				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Cube(), new Material(Color(0, 119, 190), ResourceManager::LightingColorShader()))));
-			center->AddComponent(new Wave(center, -5.0f, 10.0f, 1.0f, 6.0f, sqrt(2 * (width / 2) * (width / 2))));
+				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Cube(), Material(Color(0, 119, 190), ResourceManager::LightingColorShader()))));
+			center->AddComponent(new Wave(center, -4.0f, PI * 5, 1.0f, 6.0f, sqrt(2 * (width / 2) * (width / 2))));
 
 			for (int i = 0; i < width; i++)
 			{
@@ -64,7 +64,13 @@ namespace CubeWave
 		void Update() override
 		{
 			Transform& center = scene->GetLayer("World").GetNamedGameObject("Center").transform();
-			center.Rotate(PI / 4.0 * Time::DeltaTime(), Vector3f::Up(), Space::Local);
+
+			if (Input::MouseButtonDown(MouseButton::Middle))
+			{
+				center.Rotate(-Input::RelMousePosition().x * 0.5f * Time::DeltaTime(), Vector3f::Up(), Space::Local);
+				center.Rotate(Input::RelMousePosition().y * 0.5f * Time::DeltaTime(), Vector3f::Right(), Space::World);
+			}
+			center.LocalPosition() += -Vector3f::Forward() * Input::RelMouseScroll().y * Time::DeltaTime();
 
 			Application::Update();
 		}

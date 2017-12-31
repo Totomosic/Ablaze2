@@ -25,9 +25,11 @@ namespace Ablaze
 		DirectoryPath Parent() const;
 
 		String ToString() const override;
+		friend std::ostream& operator<<(std::ostream& stream, const DirectoryPath& path);
 
 	private:
 		String ParseDirectory(const String& path);
+		void CleanPath(String& path);
 
 	};
 

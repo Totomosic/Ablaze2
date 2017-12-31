@@ -4,11 +4,6 @@
 namespace Ablaze
 {
 
-	OpenFlags operator|(OpenFlags l, OpenFlags r)
-	{
-		return (OpenFlags)((int)l | (int)r);
-	}
-
 	File::File(const Filepath& path) : Object(),
 		m_Path(path)
 	{
@@ -49,8 +44,8 @@ namespace Ablaze
 		}
 		else
 		{
-			m_Out.open(Filename().c_str(), (std::ios::openmode)flags);
-			m_In.open(Filename().c_str(), (std::ios::openmode)flags);
+			m_Out.open(Filename().c_str(), (std::ios::openmode)FlagsToValue(flags));
+			m_In.open(Filename().c_str(), (std::ios::openmode)FlagsToValue(flags));
 		}
 	}
 
@@ -130,6 +125,22 @@ namespace Ablaze
 	String File::ToString() const
 	{
 		return "File";
+	}
+
+	int File::FlagsToValue(OpenFlags flag)
+	{
+		switch (flag)
+		{
+		case OpenFlags::None:
+			return 0;
+		case OpenFlags::Override:
+			return (int)std::ios::trunc;
+		case OpenFlags::Append:
+			return (int)std::ios::app;
+		case OpenFlags::Read:
+			return (int)std::ios::app;
+		}
+		return 0;
 	}
 
 }

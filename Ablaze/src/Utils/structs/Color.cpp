@@ -82,6 +82,16 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
+	bool Color::operator==(const Color& other) const
+	{
+		return (r == other.r && g == other.g && b == other.b && a == other.a);
+	}
+
+	bool Color::operator!=(const Color& other) const
+	{
+		return !(*this == other);
+	}
+
 	float* Color::ToFloat() const
 	{
 		return new float[4]{ r, g, b, a };
@@ -90,6 +100,21 @@ namespace Ablaze
 	byte* Color::ToByte() const
 	{
 		return new byte[4]{ (byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255) };
+	}
+
+	Color operator+(const Color& left, const Color& right)
+	{
+		return Color::FromFloats(left.r + right.r, left.g + right.g, left.b + right.b, left.a + right.a);
+	}
+
+	Color operator+(const Color& left, float right)
+	{
+		return Color::FromFloats(left.r + right, left.g + right, left.b + right, left.a + right);
+	}
+
+	Color operator+(float left, const Color& right)
+	{
+		return right + left;
 	}
 
 	Color operator*(const Color& left, const Color& right)

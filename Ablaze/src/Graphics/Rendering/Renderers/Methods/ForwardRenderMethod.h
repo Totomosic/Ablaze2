@@ -7,7 +7,12 @@ namespace Ablaze
 
 	class ForwardRenderMethod : public RenderMethod
 	{
+	private:
+		Material m_CurrentMaterial;
+
 	public:
+		ForwardRenderMethod();
+
 		void Begin() override;
 		void Render(GameObject* object, GameObject* camera) override;
 		void End() override;

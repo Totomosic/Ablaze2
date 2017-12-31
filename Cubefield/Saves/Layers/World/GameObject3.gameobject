@@ -1,1 +1,0 @@
-{"Tag" : "Sun", "Components" : {"classAblazeTransform" : {"Position" : {"x" : 0, "y" : 100, "z" : -10}, "Rotation" : {"x" : 0, "y" : 0, "z" : 0, "w" : 1}, "Scale" : {"x" : 1, "y" : 1, "z" : 1}}, "classAblazeLight" : {"Type" : 0, "Color" : {"r" : 1, "g" : 1, "b" : 1, "a" : 1}, "Ambient" : 0.3, "Attenuation" : {"x" : 1, "y" : 0, "z" : 0}}}}

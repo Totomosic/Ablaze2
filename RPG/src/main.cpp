@@ -21,6 +21,8 @@ public:
 		Graphics::Initialise(window);
 		Graphics::EnableCull();
 
+		AB_INFO(Filesystem::WorkingDirectory());
+
 		glEnable(GL_CLIP_PLANE0);
 
 		Shader* waterShader = Shader::FromFile("res/Water.shader");
@@ -40,7 +42,7 @@ public:
 		SetTexture2D("CanyonTerrain", new Texture2D("res/canyonTerrain.png", MipmapMode::Enabled));
 
 		GameObject* player = AddToScene(GameObject::Instantiate("Player", 0, 0, 0))
-			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Cube(), new Material(Color::White(), ResourceManager::LightingTextureShader(), "Tex0", GetTexture2D("CanyonTerrain")))))
+			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Cube(), Material(Color::White(), ResourceManager::LightingTextureShader(), "Tex0", GetTexture2D("CanyonTerrain")))))
 			->AddComponent(new BoxCollider(OBB(Maths::Vector3f(1, 1, 1))))
 			->AddComponent(new Pathing(50));
 		GameObject* playerOrientation = AddToScene(GameObject::Instantiate("PlayerOrientation", 0, 0, 0));
@@ -48,7 +50,7 @@ public:
 		playerOrientation->transform().Rotate(-Maths::PI / 2.0, Vector3f::Right());
 
 		GameObject* terrain = AddToScene(GameObject::Instantiate("Terrain", 0, 0, 0))
-			->AddComponent(new Terrain(256, 256, 512, 512, new Material(Color(50, 255, 140), ResourceManager::LightingColorShader())));
+			->AddComponent(new Terrain(256, 256, 512, 512, Material(Color(50, 255, 140), ResourceManager::LightingColorShader())));
 
 		TerrainData& data = terrain->GetComponent<Terrain>().BeginEditing();
 		data.SetRegion(0, 0, 512, 512, 0, 0, HeightmapFunction("res/canyonTerrain.png", -25, 25));
@@ -67,16 +69,16 @@ public:
 		Layer& waterLayer = scene.CreateLayer("Water");
 		scene.SetCurrentLayer("Water");
 
-		Material* waterMaterial = new Material(Color(150, 180, 255), waterShader);
-		waterMaterial->Textures().AddTexture("DUDV", GetTexture2D("WaterDUDV"));
-		waterMaterial->Textures().AddTexture("Normal", GetTexture2D("WaterNormal"));
-		waterMaterial->Textures().AddTexture("Reflection", waterReflect);
-		waterMaterial->Textures().AddTexture("Refraction", waterRefract);
-		waterMaterial->Uniforms().AddUniform("moveFactor", 0.0f);
+		Material waterMaterial = Material(Color(150, 180, 255), waterShader);
+		waterMaterial.Textures().AddTexture("DUDV", GetTexture2D("WaterDUDV"));
+		waterMaterial.Textures().AddTexture("Normal", GetTexture2D("WaterNormal"));
+		waterMaterial.Textures().AddTexture("Reflection", waterReflect);
+		waterMaterial.Textures().AddTexture("Refraction", waterRefract);
+		waterMaterial.Uniforms().AddUniform("moveFactor", 0.0f);
 		GameObject* water = AddToScene(GameObject::Instantiate("Water", 0, 0, 0))
 			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Plane(), waterMaterial), Maths::Matrix4d::Scale(512, 1, 512)));
-		water->mesh().GetMesh(0)->GetDefaultMaterial()->LightSettings().Shininess = 1.0f;
-		water->mesh().GetMesh(0)->GetDefaultMaterial()->LightSettings().ShineDamper = 10.0f;
+		water->mesh().GetMesh(0)->GetMaterial().LightSettings().Shininess = 1.0f;
+		water->mesh().GetMesh(0)->GetMaterial().LightSettings().ShineDamper = 10.0f;
 
 		waterLayer.SetActiveCamera(camera);
 
@@ -84,12 +86,12 @@ public:
 		scene.SetCurrentLayer("UI");
 
 		GameObject* chatbox = AddToScene(GameObject::Instantiate("Chatbox", 255, 105, 0))
-			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), new Material(Color(240, 240, 230), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(500, 200, 1)));
+			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color(240, 240, 230), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(500, 200, 1)));
 		GameObject* chatboxBorder = AddToScene(GameObject::Instantiate("ChatboxBorder", 0, 0, -1))
-			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), new Material(Color::Red(), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(510, 210, 1)));
+			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::Red(), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(510, 210, 1)));
 		chatboxBorder->MakeChildOf(chatbox);
 		GameObject* chatbar = AddToScene(GameObject::Instantiate("Chatbar", 0, -90, 1))
-			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), new Material(Color(220, 200, 220), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(500, 20, 1)));
+			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color(220, 200, 220), ResourceManager::DefaultColorShader())), Maths::Matrix4d::Scale(500, 20, 1)));
 		chatbar->MakeChildOf(chatbox);
 		chatbox->AddComponent(new Chatbox(500, 200, SetFont("Arial16", new Font("res/Arial.ttf", 16))));
 
@@ -102,7 +104,7 @@ public:
 		SetFont("Roboto24", new Font("res/Roboto-Black.ttf", 24));
 
 		GameObject* worldCanvas = AddToScene(GameObject::Instantiate("WorldCanvas", WindowWidth() / 2, WindowHeight() / 2, -10))
-			->AddComponent(new MeshRenderer(new Mesh(Model::Rectangle(WindowWidth(), WindowHeight()), new Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", texture))));
+			->AddComponent(new MeshRenderer(new Mesh(Model::Rectangle(WindowWidth(), WindowHeight()), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", texture))));
 
 		GameObject* fpsText = AddToScene(GameObject::Instantiate("FPSText", 5, WindowHeight() - 5, 1))
 			->AddComponent(new Text("fps 60", GetFont("Roboto24"), Color::Black(), TextAlignmentH::Left, TextAlignmentV::Top));
@@ -179,7 +181,7 @@ public:
 			transform.Rotate(-Input::RelMousePosition().y * Time::DeltaTime() * 0.5f, Vector3f::Right(), Space::Local);
 		}
 
-		((Uniform<float>*)SceneManager::Instance().CurrentScene()["Water"].GetNamedGameObject("Water").mesh().GetMesh(0)->GetDefaultMaterial()->Uniforms().Get("moveFactor"))->Value() += Time::DeltaTime() * 0.1f;
+		((Uniform<float>*)SceneManager::Instance().CurrentScene()["Water"].GetNamedGameObject("Water").mesh().GetMesh(0)->GetMaterial().Uniforms().Get("moveFactor"))->Value() += Time::DeltaTime() * 0.1f;
 
 		Application::Update();
 	}

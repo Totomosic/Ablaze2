@@ -10,12 +10,10 @@ namespace Ablaze
 	enum class OpenFlags : int
 	{
 		None,
-		Override = std::ios::trunc,
-		Read = std::ios::app,
-		Append = std::ios::app
+		Override,
+		Read,
+		Append
 	};
-
-	OpenFlags operator|(OpenFlags l, OpenFlags r);
 
 	class AB_API File : public Object
 	{
@@ -80,6 +78,9 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class Filesystem;
+
+	private:
+		int FlagsToValue(OpenFlags flags);
 
 	};
 

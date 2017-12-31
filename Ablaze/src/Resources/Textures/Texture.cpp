@@ -4,7 +4,7 @@
 namespace Ablaze
 {
 
-	Texture::Texture(const String& filepath, TextureTarget target) : Asset(), GLObject(),
+	Texture::Texture(TextureTarget target) : Asset(), GLObject(),
 		m_Target(target), m_Mipmap(MipmapMode::Disabled), m_BindPort(-1)
 	{
 		Create();

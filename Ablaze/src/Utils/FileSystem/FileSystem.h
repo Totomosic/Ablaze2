@@ -3,13 +3,20 @@
 #include "File.h"
 #include "Filepath.h"
 
+#define AB_GET_CURRENT_DIRECTORY _getcwd
+
 namespace Ablaze
 {
 
 	class AB_API Filesystem
 	{
+	private:
+		static DirectoryPath s_WorkingDirectory; // Includes trailing backslash
+
 	public:
 		Filesystem() = delete;
+
+		static const DirectoryPath& WorkingDirectory();
 
 		static int FileSize(const Filepath& filename);
 		static bool FileExists(const Filepath& filename);
@@ -25,6 +32,11 @@ namespace Ablaze
 
 		static bool Delete(const Filepath& filename);
 		static bool Delete(const File& file);
+
+		friend class Engine;
+
+	private:
+		static void Initialise();
 
 	};
 

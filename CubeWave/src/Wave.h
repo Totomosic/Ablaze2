@@ -21,6 +21,7 @@ namespace CubeWave
 	public:
 		Wave(GameObject* center, float speed, float offset, float min, float max, float maxDist);
 
+		void Start() override;
 		void Update(double elapsedSeconds) override;
 
 		Component* Clone() const override;

@@ -24,6 +24,16 @@ namespace Ablaze
 		Apply();
 	}
 
+	bool RenderState::operator==(const RenderState& other) const
+	{
+		return UseDepthTest == other.UseDepthTest && UseBlend == other.UseBlend && DepthFunc == other.DepthFunc && BlendSrcFunc == other.BlendSrcFunc && BlendDstFunc == other.BlendDstFunc;
+	}
+
+	bool RenderState::operator!=(const RenderState& other) const
+	{
+		return !(*this == other);
+	}
+
 	void RenderState::Serialize(JSONwriter& writer) const
 	{
 		writer.BeginObject();

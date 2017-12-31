@@ -7,7 +7,7 @@ namespace Ablaze
 	struct AB_API FontFace
 	{
 	public:
-		String FontFile;
+		Filepath FontFile;
 	};
 
 }

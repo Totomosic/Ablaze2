@@ -5,6 +5,8 @@
 namespace Ablaze
 {
 
+	class Filepath;
+
 	int Bit(int bit);
 	bool IsBitSet(int bitfield, int bit);
 
@@ -20,10 +22,10 @@ namespace Ablaze
 	String CleanJSONString(const String& str);
 
 	// Image loading
-	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, int desiredComponents, bool flipImage = true);
-	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int desiredComponents, bool flipImage = true);
-	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage = true);
-	byte* LoadImageFile(const String& imageFile, uint* outWidth, uint* outHeight, bool flipImage = true);
+	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, int desiredComponents, bool flipImage = true);
+	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int desiredComponents, bool flipImage = true);
+	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage = true);
+	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, bool flipImage = true);
 	void FreeImageData(byte* imageData);
 
 }

@@ -3,6 +3,12 @@
 namespace Ablaze
 {
 
+	ForwardRenderMethod::ForwardRenderMethod() : RenderMethod(),
+		m_CurrentMaterial()
+	{
+	
+	}
+
 	void ForwardRenderMethod::Begin()
 	{
 	
@@ -22,10 +28,10 @@ namespace Ablaze
 			VertexArray* vao = model->GetVertexArray();
 			for (int j = 0; j < model->SubModelCount(); j++)
 			{
-				Material* mat = model->GetSubModel(i)->GetMaterial();
-				if (mat == nullptr)
+				Material* mat = &model->GetSubModel(i)->GetMaterial();
+				if (!model->GetSubModel(i)->HasOwnMaterial())
 				{
-					mat = set.mesh->GetDefaultMaterial();
+					mat = &set.mesh->GetMaterial();
 				}
 				Shader* shader = mat->ActiveShader();
 				shader->Bind();
@@ -33,7 +39,11 @@ namespace Ablaze
 				shader->SetUniform("viewMatrix", cameraTransform.ToMatrix().Inverse());
 				shader->SetUniform("projectionMatrix", cameraComp.ProjectionMatrix());
 				shader->SetUniform("color", mat->BaseColor());
-				mat->Apply();
+				if (m_CurrentMaterial != *mat)
+				{
+					mat->Apply();
+					m_CurrentMaterial = *mat;
+				}
 				vao->SetCurrentIndexBuffer(j);
 				vao->Bind();
 				GL_CALL(glDrawElements((GLenum)vao->GetRenderMode(), vao->RenderCount(), (GLenum)vao->GetIndexBuffer(j)->DataType(), nullptr));

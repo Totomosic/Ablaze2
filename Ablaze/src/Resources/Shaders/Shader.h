@@ -61,9 +61,9 @@ namespace Ablaze
 	public:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);
 		static Shader* FromSource(const String& vertexSrc, const String& geometrySrc, const String& fragmentSrc);
-		static Shader* FromFile(const String& vertexFile, const String& fragmentFile);
-		static Shader* FromFile(const String& vertexFile, const String& geometryFile, const String& fragmentFile);
-		static Shader* FromFile(const String& shaderFile);
+		static Shader* FromFile(const Filepath& vertexFile, const Filepath& fragmentFile);
+		static Shader* FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile);
+		static Shader* FromFile(const Filepath& shaderFile);
 
 		static const std::vector<Shader*>& GetAll();
 		
@@ -76,7 +76,7 @@ namespace Ablaze
 
 	private:
 		// Preprocessing
-		static String PreprocessShader(const String& shaderSource, const String& thisFilename);
+		static String PreprocessShader(const String& shaderSource, const Filepath& thisFilename);
 
 	};
 

@@ -16,6 +16,7 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLEW");
 			return false;
 		}
+		Filesystem::Initialise();
 		Random::Initialise();
 		Input::Initialise();
 		VM::VirtualMachine::Initialise();

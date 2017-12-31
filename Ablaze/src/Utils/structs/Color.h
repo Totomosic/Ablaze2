@@ -37,6 +37,12 @@ namespace Ablaze
 		String ToString() const;
 		void Serialize(JSONwriter& writer) const;
 
+		bool operator==(const Color& other) const;
+		bool operator!=(const Color& other) const;
+
+		friend Color operator+(const Color& left, const Color& right);
+		friend Color operator+(const Color& left, float right);
+		friend Color operator+(float left, const Color& right);
 		friend Color operator*(const Color& left, const Color& right);
 		friend Color operator*(const Color& left, float right);
 		friend Color operator*(float left, const Color& right);

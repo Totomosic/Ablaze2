@@ -42,11 +42,11 @@ namespace Ablaze
 
 	void ResourceManager::Terminate()
 	{
-		delete s_DefaultColor;
-		delete s_DefaultTexture;
-		delete s_LightColor;
-		delete s_LightTexture;
-		delete s_DefaultFont;
+		s_DefaultColor->Decrement();
+		s_DefaultTexture->Decrement();
+		s_LightColor->Decrement();
+		s_LightTexture->Decrement();
+		s_DefaultFont->Decrement();
 		delete s_Square;
 		delete s_Circle;
 		delete s_Cube;

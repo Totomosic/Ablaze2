@@ -13,7 +13,8 @@ namespace Ablaze
 	Filepath::Filepath(const String& path) : Object(),
 		m_Path(path)
 	{
-		m_Directory = DirectoryPath(ParseFile(path));
+		CleanPath(m_Path);
+		m_Directory = DirectoryPath(ParseFile(m_Path));
 	}
 
 	Filepath::Filepath(const char* path) : Filepath(String(path))
@@ -53,10 +54,21 @@ namespace Ablaze
 		return Path();
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const Filepath& path)
+	{
+		stream << path.ToString();
+		return stream;
+	}
+
 	String Filepath::ParseFile(const String& path)
 	{
 		int index = m_Path.find_last_of('/');
 		return m_Path.substr(0, index + 1);
+	}
+
+	void Filepath::CleanPath(String& path)
+	{
+		std::replace(path.begin(), path.end(), '\\', '/');
 	}
 
 }

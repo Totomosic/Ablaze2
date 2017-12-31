@@ -12,6 +12,8 @@
 #include <memory>
 #include <typeindex>
 #include <typeinfo>
+#include <stdio.h>
+#include <direct.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

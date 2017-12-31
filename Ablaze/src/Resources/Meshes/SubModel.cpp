@@ -6,21 +6,20 @@
 namespace Ablaze
 {
 
-	SubModel::SubModel(IndexBuffer* indexBuffer, Material* material) : Object(),
-		m_IndexBuffer(indexBuffer), m_Material(material)
+	SubModel::SubModel(IndexBuffer* indexBuffer, const Material& material) : Object(),
+		m_IndexBuffer(indexBuffer), m_Material(material), m_HasOwnMaterial(true)
 	{
-		if (m_Material != nullptr)
-		{
-			m_Material->Increment();
-		}
+
+	}
+
+	SubModel::SubModel(IndexBuffer* indexBuffer) : SubModel(indexBuffer, Material())
+	{
+		m_HasOwnMaterial = false;
 	}
 
 	SubModel::~SubModel()
 	{
-		if (m_Material != nullptr)
-		{
-			m_Material->Decrement();
-		}
+	
 	}
 
 	IndexBuffer* SubModel::GetIndexBuffer() const
@@ -28,24 +27,25 @@ namespace Ablaze
 		return m_IndexBuffer;
 	}
 
-	Material* SubModel::GetMaterial() const
+	const Material& SubModel::GetMaterial() const
+	{
+		return m_Material;
+	}
+
+	Material& SubModel::GetMaterial()
 	{
 		return m_Material;
 	}
 
 	bool SubModel::HasOwnMaterial() const
 	{
-		return m_Material != nullptr;
+		return m_HasOwnMaterial;
 	}
 
-	void SubModel::SetMaterial(Material* material)
+	void SubModel::SetMaterial(const Material& material)
 	{
-		m_Material->Decrement();
 		m_Material = material;
-		if (m_Material != nullptr)
-		{
-			m_Material->Increment();
-		}
+		m_HasOwnMaterial = true;
 	}
 
 	String SubModel::ToString() const

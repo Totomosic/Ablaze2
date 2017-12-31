@@ -4,9 +4,9 @@
 namespace Ablaze
 {
 
-	Texture2D::Texture2D(const String& filepath, MipmapMode mm) : Texture(filepath, TextureTarget::Texture2D)
+	Texture2D::Texture2D(const Filepath& filepath, MipmapMode mm) : Texture(TextureTarget::Texture2D)
 	{
-		AB_ASSERT(Filesystem::FileExists(filepath), "File: " + filepath + " was not found");
+		AB_ASSERT(filepath.Exists(), "File: " + filepath.Path() + " was not found");
 
 		m_Format = ImageFormat::Rgba;
 
