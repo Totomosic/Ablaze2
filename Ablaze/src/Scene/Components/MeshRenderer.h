@@ -9,7 +9,7 @@ namespace Ablaze
 	{
 	public:
 		Mesh* mesh;
-		Maths::Matrix4d transform;
+		Maths::Matrix4f transform;
 
 	};
 
@@ -20,20 +20,20 @@ namespace Ablaze
 		
 	public:
 		MeshRenderer();
-		MeshRenderer(Mesh* mesh, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
+		MeshRenderer(Mesh* mesh, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
 		~MeshRenderer() override;
 
 		int MeshCount() const;
 		const MeshSet& GetMeshSet(int index) const;
 		MeshSet& GetMeshSet(int index);
 		Mesh* GetMesh(int index) const;
-		const Maths::Matrix4d& GetTransform(int index) const;
-		Maths::Matrix4d& GetTransform(int index);
+		const Maths::Matrix4f& GetTransform(int index) const;
+		Maths::Matrix4f& GetTransform(int index);
 
-		void AddMesh(Mesh* mesh, const Maths::Matrix4d& transform = Maths::Matrix4d::Identity());
+		void AddMesh(Mesh* mesh, const Maths::Matrix4f& transform = Maths::Matrix4f::Identity());
 
 		void SetMesh(int index, Mesh* mesh);
-		void SetTransform(int index, const Maths::Matrix4d& transform);
+		void SetTransform(int index, const Maths::Matrix4f& transform);
 
 		String ToString() const override;
 		Component* Clone() const override;

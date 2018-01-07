@@ -26,6 +26,7 @@ namespace Ablaze
 		static DepthFunction s_DepthFunction;
 		static BlendSrc s_BlendSrcFunction;
 		static BlendDst s_BlendDstFunction;
+		static bool s_ClippingPlanes[10];
 
 	private:
 		static std::vector<GraphicsPipeline> s_Pipelines;
@@ -44,6 +45,7 @@ namespace Ablaze
 		static DepthFunction GetDepthFunction();
 		static BlendSrc GetBlendSrcFunction();
 		static BlendDst GetBlendDstFunction();
+		static bool IsClipPlaneEnabled(int index);
 
 		static void Initialise(Window* window, GraphicsAPI api = GraphicsAPI::OpenGL);
 		static void Terminate();
@@ -67,6 +69,7 @@ namespace Ablaze
 		static void SetDepth(bool enabled);
 		static void SetBlend(bool enabled);
 		static void SetCull(bool enabled);
+		static void SetClipPlane(int index, bool enabled);
 		static void SetDepthFunction(DepthFunction depthFunction);
 		static void SetBlendSrcFunction(BlendSrc blendFunction);
 		static void SetBlendDstFunction(BlendDst blendFunction);
@@ -76,6 +79,8 @@ namespace Ablaze
 		static void DisableBlend();
 		static void EnableCull();
 		static void DisableCull();
+		static void EnableClipPlane(int index);
+		static void DisableClipPlane(int index);
 
 		friend class Window;
 

@@ -22,6 +22,7 @@ namespace Ablaze
 
 	public:
 		bool HasLayer() const;
+		bool HasLayer(const String& layerName) const;
 		const Layer& CurrentLayer() const;
 		Layer& CurrentLayer();
 		const Layer& GetLayer(const String& layer) const;
@@ -30,7 +31,7 @@ namespace Ablaze
 		Layer& GetLayer(int index);
 		const std::vector<Layer*>& GetLayers() const;
 		std::vector<Layer*> GetLayers(int layerMask) const;
-		std::vector<Layer*> GetLayers(LayerMask& layerMask) const;
+		std::vector<Layer*> GetLayers(const LayerMask& layerMask) const;
 		int GetMask(Layer* layer) const;
 		int GetMask(const String& layerName) const;
 

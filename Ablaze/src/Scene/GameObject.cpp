@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "ComponentSet.h"
 #include "Components\__Components__.h"
+#include "LayerMask.h"
 
 #include "Resources\Meshes\Materials\__Materials__.h"
 
@@ -17,6 +18,10 @@ namespace Ablaze
 	GameObject::~GameObject()
 	{
 		delete m_Components;
+		if (m_Parent != nullptr)
+		{
+			m_Parent->RemoveChild(this);
+		}
 	}
 
 	GameObject* GameObject::Parent() const
@@ -27,6 +32,27 @@ namespace Ablaze
 	bool GameObject::HasParent() const
 	{
 		return m_Parent != nullptr;
+	}
+
+	bool GameObject::HasChild() const
+	{
+		return ChildCount() != 0;
+	}
+
+	const std::vector<GameObject*> GameObject::Children() const
+	{
+		return m_Children;
+	}
+
+	GameObject* GameObject::GetChild(int index) const
+	{
+		AB_ASSERT(index < ChildCount(), "Index Out of range");
+		return m_Children[index];
+	}
+
+	int GameObject::ChildCount() const
+	{
+		return m_Children.size();
 	}
 
 	Layer* GameObject::GetLayer() const
@@ -78,6 +104,7 @@ namespace Ablaze
 	void GameObject::SetParent(GameObject* parent)
 	{
 		m_Parent = parent;
+		parent->AddChild(this);
 	}
 
 	void GameObject::MakeChildOf(GameObject* parent)
@@ -147,6 +174,18 @@ namespace Ablaze
 		writer.EndObject();
 	}
 
+	void GameObject::AddChild(GameObject* object)
+	{
+		m_Children.push_back(object);
+	}
+
+	void GameObject::RemoveChild(GameObject* object)
+	{
+		auto it = std::find(m_Children.begin(), m_Children.end(), object);
+		AB_ASSERT(it != m_Children.end(), "Child did not exist");
+		m_Children.erase(it);
+	}
+
 	GameObject* GameObject::Empty(const String& name)
 	{
 		return SceneManager::Instance().CurrentScene().CurrentLayer().CreateGameObject(name);
@@ -182,12 +221,12 @@ namespace Ablaze
 		return object;
 	}
 
-	std::vector<GameObject*> GameObject::GetAll()
+	std::vector<GameObject*> GameObject::GetAll(const LayerMask& mask)
 	{
 		std::vector<GameObject*> objects;
 		if (SceneManager::Instance().HasScene())
 		{
-			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers(mask))
 			{
 				for (GameObject* object : layer->GameObjects())
 				{
@@ -198,12 +237,17 @@ namespace Ablaze
 		return objects;
 	}
 
-	std::vector<GameObject*> GameObject::GetAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled)
+	std::vector<GameObject*> GameObject::GetAll()
+	{
+		return GetAll(LayerMask());
+	}
+
+	std::vector<GameObject*> GameObject::FindAllWith(const std::vector<std::type_index>& componentTypes, const LayerMask& mask, bool onlyIfEnabled)
 	{
 		std::vector<GameObject*> objects;
 		if (SceneManager::Instance().HasScene())
 		{
-			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers())
+			for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers(mask))
 			{
 				for (GameObject* object : layer->GameObjects())
 				{
@@ -224,6 +268,39 @@ namespace Ablaze
 			}
 		}
 		return objects;
+	}
+
+	std::vector<GameObject*> GameObject::FindAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled)
+	{
+		return FindAllWith(componentTypes, LayerMask(), onlyIfEnabled);
+	}
+
+	std::vector<GameObject*> GameObject::FindAllWithTag(const String& tag, const LayerMask& mask)
+	{
+		std::vector<GameObject*> result;
+		for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers(mask))
+		{
+			std::vector<GameObject*> objects = layer->GetNamedGameObjects(tag);
+			result.insert(result.end(), objects.begin(), objects.end());
+		}
+		return result;
+	}
+
+	std::vector<GameObject*> GameObject::FindAllWithTag(const String& tag)
+	{
+		return FindAllWithTag(tag, LayerMask());
+	}
+
+	GameObject* GameObject::FindWithTag(const String& tag, const LayerMask& mask)
+	{
+		for (Layer* layer : SceneManager::Instance().CurrentScene().GetLayers(mask))
+		{
+			if (layer->HasNamedGameObject(tag))
+			{
+				return &layer->GetNamedGameObject(tag);
+			}
+		}
+		return nullptr;
 	}
 
 }

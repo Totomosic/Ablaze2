@@ -24,6 +24,13 @@ namespace Ablaze
 
 	TextureSet& TextureSet::operator=(const TextureSet& other)
 	{
+		for (int i = m_Textures.size() - 1; i >= 0; i--)
+		{
+			Texture* texture = m_Textures[i];
+			texture->Decrement();
+			m_Textures.erase(m_Textures.begin() + i);
+		}
+		m_Lookup.clear();
 		for (int i = 0; i < other.m_Textures.size(); i++)
 		{
 			AddTexture(other.m_Lookup.at(i), other.m_Textures[i]);

@@ -9,7 +9,7 @@ namespace Ablaze
 
 	}
 
-	MeshRenderer::MeshRenderer(Mesh* mesh, const Maths::Matrix4d& transform) : MeshRenderer()
+	MeshRenderer::MeshRenderer(Mesh* mesh, const Maths::Matrix4f& transform) : MeshRenderer()
 	{
 		AddMesh(mesh, transform);
 	}
@@ -44,17 +44,17 @@ namespace Ablaze
 		return GetMeshSet(index).mesh;
 	}
 
-	const Maths::Matrix4d& MeshRenderer::GetTransform(int index) const
+	const Maths::Matrix4f& MeshRenderer::GetTransform(int index) const
 	{
 		return GetMeshSet(index).transform;
 	}
 
-	Maths::Matrix4d& MeshRenderer::GetTransform(int index)
+	Maths::Matrix4f& MeshRenderer::GetTransform(int index)
 	{
 		return GetMeshSet(index).transform;
 	}
 
-	void MeshRenderer::AddMesh(Mesh* mesh, const Maths::Matrix4d& transform)
+	void MeshRenderer::AddMesh(Mesh* mesh, const Maths::Matrix4f& transform)
 	{
 		m_Meshes.push_back({ mesh, transform });
 		mesh->Increment();
@@ -68,7 +68,7 @@ namespace Ablaze
 		prev->Decrement();
 	}
 
-	void MeshRenderer::SetTransform(int index, const Maths::Matrix4d& transform)
+	void MeshRenderer::SetTransform(int index, const Maths::Matrix4f& transform)
 	{
 		AB_ASSERT(index < MeshCount(), "Index Out of Range");
 		m_Meshes[index].transform = transform;

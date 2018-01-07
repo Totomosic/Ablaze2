@@ -55,4 +55,9 @@ namespace Ablaze
 	
 	}
 
+	void Component::LateUpdate(double elapsedSeconds)
+	{
+	
+	}
+
 }

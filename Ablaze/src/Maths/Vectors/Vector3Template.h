@@ -73,6 +73,7 @@ public:	\
 public:	\
 	static name Cross(const name& left, const name& right);	\
 	static type Distance(const name& left, const name& right);	\
+	static void OrthoNormalize(name* normal, name* tangent);	\
 	static name Right();	\
 	static name Up();	\
 	static name Forward();
@@ -371,6 +372,14 @@ name name::Cross(const name& left, const name& right)	\
 type name::Distance(const name& left, const name& right)	\
 {	\
 	return (left - right).Length();	\
+}	\
+	\
+void name::OrthoNormalize(name* normal, name* tangent)	\
+{	\
+	*normal = normal->Normalize();	\
+	name v = name::Cross(*normal, *tangent);	\
+	v = v.Normalize();	\
+	*tangent = name::Cross(v, *normal);	\
 }	\
 	\
 name name::Right()	\

@@ -19,6 +19,7 @@ namespace Ablaze
 		Filesystem::Initialise();
 		Random::Initialise();
 		Input::Initialise();
+		Shader::Initialise();
 		VM::VirtualMachine::Initialise();
 		Systems::Initialise();
 		return true;

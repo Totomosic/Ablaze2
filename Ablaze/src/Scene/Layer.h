@@ -38,26 +38,17 @@ namespace Ablaze
 		GameObject& GetActiveCamera();
 		void SetActiveCamera(GameObject* camera);
 
+		bool HasNamedGameObject(const String& tag) const;
 		const GameObject& GetNamedGameObject(const String& tag, int index = 0) const;
 		GameObject& GetNamedGameObject(const String& tag, int index = 0);
+		const GameObject& operator[](const String& tag) const;
+		GameObject& operator[](const String& tag);
 		std::vector<GameObject*> GetNamedGameObjects(const String& tag) const;
 
 		void AddGameObject(GameObject* gameObject);
 		void AddGameObject(GameObject* gameObject, const String& tag);
 		GameObject* CreateGameObject(const String& name);
 		GameObject* CreateGameObject(const String& name, float x, float y, float z);
-
-		template<typename T>
-		const T& GetNamedGameObject(const String& tag, int index = 0) const
-		{
-			return *((T*)&GetNamedGameObject(tag, index));
-		}
-
-		template<typename T>
-		T& GetNamedGameObject(const String& tag, int index = 0)
-		{
-			return *((T*)&GetNamedGameObject(tag, index));
-		}
 
 		void Clean();
 

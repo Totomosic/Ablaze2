@@ -16,6 +16,7 @@ namespace Ablaze
 		static const int FragmentShader = 2;
 
 		static std::vector<Shader*> s_Shaders;
+		static std::unordered_map<String, String> s_DefaultHeaders;
 
 	private:
 		mutable std::unordered_map<String, int> m_UniformLocations;
@@ -43,7 +44,7 @@ namespace Ablaze
 		void SetUniform(const String& uniformName, const Maths::Vector4i& value) const;
 		void SetUniform(const String& uniformName, const Maths::Plane& value) const;
 		void SetUniform(const String& uniformName, const Maths::Ray& value) const;
-		void SetUniform(const String& uniformName, const Maths::Matrix4d& value) const;
+		void SetUniform(const String& uniformName, const Maths::Matrix4f& value) const;
 		void SetUniform(const String& uniformName, const Color& value) const;
 
 		template<typename T>
@@ -56,7 +57,7 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class ResourceManager;
-		template<typename> friend class Resource;
+		friend class Engine;
 
 	public:
 		static Shader* FromSource(const String& vertexSrc, const String& fragmentSrc);
@@ -75,7 +76,10 @@ namespace Ablaze
 		int GetUniformLocation(const String& uniformName) const;
 
 	private:
-		// Preprocessing
+		static void Initialise();
+		static void AddHeader(const String& headerName, const String& source);
+		static bool HeaderExists(const String& headerName);
+		static String& GetHeader(const String& headerName);
 		static String PreprocessShader(const String& shaderSource, const Filepath& thisFilename);
 
 	};

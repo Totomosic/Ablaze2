@@ -146,9 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Components\Chatbox.cpp" />
-    <ClCompile Include="src\Components\Pathing.cpp" />
+    <ClCompile Include="src\Components\CameraController.cpp" />
+    <ClCompile Include="src\Components\CharacterController.cpp" />
+    <ClCompile Include="src\Components\Follow.cpp" />
+    <ClCompile Include="src\Components\NPCController.cpp" />
     <ClCompile Include="src\Components\PlayerController.cpp" />
+    <ClCompile Include="src\Components\Seeker.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,9 +160,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\Chatbox.h" />
-    <ClInclude Include="src\Components\Pathing.h" />
+    <ClInclude Include="src\Components\AblazeInclude.h" />
+    <ClInclude Include="src\Components\CameraController.h" />
+    <ClInclude Include="src\Components\CharacterController.h" />
+    <ClInclude Include="src\Components\Follow.h" />
+    <ClInclude Include="src\Components\NPCController.h" />
     <ClInclude Include="src\Components\PlayerController.h" />
+    <ClInclude Include="src\Components\Seeker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

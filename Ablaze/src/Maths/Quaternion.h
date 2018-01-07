@@ -23,7 +23,7 @@ namespace Ablaze
 			Quaternion(float x, float y, float z, float w);
 			Quaternion(const Quaternion& other);
 
-			Matrix4d ToMatrix4d() const;
+			Matrix4f ToMatrix4f() const;
 			Vector4f ToAngleAxis() const;
 			float GetLength() const;
 			float GetLengthSqrd() const;
@@ -71,7 +71,8 @@ namespace Ablaze
 			static Quaternion Identity();
 			static Quaternion FromAngleAxis(float angle, const Vector3f& axis);
 			static Quaternion FromEuler(float pitch, float yaw, float roll);
-			static Quaternion FromRotationMat(const Matrix4d& rotation);
+			static Quaternion FromRotationMat(const Matrix4f& rotation);
+			static Quaternion LookAt(const Vector3f& forward, const Vector3f& up = Vector3f::Up());
 
 			friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
 

@@ -1,4 +1,4 @@
-#include "Material.glh"
+R"(#include "Material.glh"
 
 struct Light
 {
@@ -30,4 +30,4 @@ vec4 CalculateSpecularColor(Light light, Material material, vec3 worldPosition, 
 	float specularFactor = max(dot(reflectedLightDirection, unitToCameraVector), 0.0);
     float dampedSpecularFactor = pow(specularFactor, material.ShineDamper); 
 	return light.Color * dampedSpecularFactor * material.Shininess * material.SpecularHighlight;
-}
+})"

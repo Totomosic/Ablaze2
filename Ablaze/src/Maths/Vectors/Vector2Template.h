@@ -147,7 +147,7 @@ type name::Dot(const name& other) const	\
 	\
 name name::Normalize() const	\
 {	\
-	return *this / Length();	\
+	return (*this) / Length();	\
 }	\
 	\
 name name::Add(const name& other) const	\

@@ -6,6 +6,7 @@ namespace Ablaze
 {
 
 	std::vector<Shader*> Shader::s_Shaders = std::vector<Shader*>();
+	std::unordered_map<String, String> Shader::s_DefaultHeaders = std::unordered_map<String, String>();
 
 	Shader::Shader(const String& vertexSrc, const String& fragmentSrc) : GLObject(), Asset(),
 		m_UniformLocations()
@@ -114,7 +115,7 @@ namespace Ablaze
 		GL_CALL(glUniform3f(GetUniformLocation(uniformName), value.Direction.x, value.Direction.y, value.Direction.z));
 	}
 
-	void Shader::SetUniform(const String& uniformName, const Maths::Matrix4d& value) const
+	void Shader::SetUniform(const String& uniformName, const Maths::Matrix4f& value) const
 	{
 		Bind();
 		float values[16];
@@ -293,6 +294,31 @@ namespace Ablaze
 		return location;
 	}
 
+	void Shader::Initialise()
+	{
+		AddHeader("Material.glh",
+#include "Source\Headers\Material.glh"
+		);
+		AddHeader("Lighting.glh",
+#include "Source\Headers\Lighting.glh"
+		);
+	}
+
+	void Shader::AddHeader(const String& headerName, const String& headerSource)
+	{
+		s_DefaultHeaders[headerName] = PreprocessShader(headerSource, Filepath());
+	}
+
+	bool Shader::HeaderExists(const String& headerName)
+	{
+		return s_DefaultHeaders.find(headerName) != s_DefaultHeaders.end();
+	}
+
+	String& Shader::GetHeader(const String& headerName)
+	{
+		return s_DefaultHeaders[headerName];
+	}
+
 	String Shader::PreprocessShader(const String& shaderSource, const Filepath& thisFilename)
 	{
 		String INCLUDE_DIRECTIVE = "#include";
@@ -305,13 +331,21 @@ namespace Ablaze
 			{
 				int beginIndex = line.find_first_of('\"');
 				int endIndex = line.find_last_of('\"');
-				String filename = line.substr(beginIndex + 1, endIndex - beginIndex - 1);				
-				if (!Filesystem::FileExists(filename))
+				String filename = line.substr(beginIndex + 1, endIndex - beginIndex - 1);
+				String data = "";
+				if (HeaderExists(filename))
 				{
-					int begin = thisFilename.Path().find_last_of('/');
-					filename = thisFilename.Path().substr(0, begin) + "/" + filename;
+					data = GetHeader(filename);
 				}
-				String data = PreprocessShader(Filesystem::OpenFile(filename).ReadText(), filename);
+				else
+				{
+					if (!Filesystem::FileExists(filename))
+					{
+						int begin = thisFilename.Path().find_last_of('/');
+						filename = thisFilename.Path().substr(0, begin) + "/" + filename;
+					}
+					data = PreprocessShader(Filesystem::OpenFile(filename).ReadText(), filename);
+				}
 				ss << data << '\n';
 			}
 			else

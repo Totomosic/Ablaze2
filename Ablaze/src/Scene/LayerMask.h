@@ -10,7 +10,7 @@ namespace Ablaze
 		std::vector<String> m_LayerNames;
 
 	public:
-		int mask;
+		mutable int mask;
 		bool all;
 
 	public:
@@ -23,11 +23,11 @@ namespace Ablaze
 		void Deselect(const String& layerName);
 		void Clear();
 
-		void Evaluate(const Scene& scene);
+		void Evaluate(const Scene& scene) const;
 		void operator()(const Scene& scene);
 
 	private:
-		void AddLayer(int layerMask);
+		void AddLayer(int layerMask) const;
 
 	};
 

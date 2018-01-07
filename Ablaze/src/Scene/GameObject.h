@@ -6,6 +6,7 @@ namespace Ablaze
 {
 
 	class Layer;
+	struct LayerMask;
 	class ComponentSet;
 	class Transform;
 	class MeshRenderer;
@@ -18,6 +19,7 @@ namespace Ablaze
 
 		Layer* m_Layer;
 		GameObject* m_Parent;
+		std::vector<GameObject*> m_Children;
 		String m_Tag;
 		bool m_IsStatic;
 
@@ -28,6 +30,10 @@ namespace Ablaze
 	public:
 		GameObject* Parent() const;
 		bool HasParent() const;
+		bool HasChild() const;
+		const std::vector<GameObject*> Children() const;
+		GameObject* GetChild(int index) const;
+		int ChildCount() const;
 		Layer* GetLayer() const;
 		const String& Tag() const;
 		bool IsStatic() const;
@@ -83,6 +89,10 @@ namespace Ablaze
 		friend class Layer;
 		friend class Engine;
 
+	private:
+		void AddChild(GameObject* object);
+		void RemoveChild(GameObject* object);
+
 	public:
 		static GameObject* Empty(const String& name);
 		static GameObject* Instantiate(const String& name);
@@ -90,37 +100,73 @@ namespace Ablaze
 		static GameObject* Instantiate(const String& name, GameObject* prefab);
 		static GameObject* Instantiate(const String& name, GameObject* prefab, float x, float y, float z);
 
+		static std::vector<GameObject*> GetAll(const LayerMask& mask);
 		static std::vector<GameObject*> GetAll();
-		static std::vector<GameObject*> GetAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled = true);
+		static std::vector<GameObject*> FindAllWith(const std::vector<std::type_index>& componentTypes, const LayerMask& mask, bool onlyIfEnabled = true);
+		static std::vector<GameObject*> FindAllWith(const std::vector<std::type_index>& componentTypes, bool onlyIfEnabled = true);
+		static std::vector<GameObject*> FindAllWithTag(const String& tag, const LayerMask& mask);
+		static std::vector<GameObject*> FindAllWithTag(const String& tag);
+		static GameObject* FindWithTag(const String& tag, const LayerMask& mask);
+		static GameObject* FindWithTag(const String& tag);
 
 		template<typename T0>
-		static std::vector<GameObject*> GetAllWith(bool onlyIfEnabled = true)
+		static std::vector<GameObject*> FindAllWith(const LayerMask& mask, bool onlyIfEnabled = true)
 		{
-			return GetAllWith({ typeid(T0) }, onlyIfEnabled);
+			return FindAllWith({ typeid(T0) }, mask, onlyIfEnabled);
 		}
 
 		template<typename T0, typename T1>
-		static std::vector<GameObject*> GetAllWith(bool onlyIfEnabled = true)
+		static std::vector<GameObject*> FindAllWith(const LayerMask& mask, bool onlyIfEnabled = true)
 		{
-			return GetAllWith({ typeid(T0), typeid(T1) }, onlyIfEnabled);
+			return FindAllWith({ typeid(T0), typeid(T1) }, mask, onlyIfEnabled);
 		}
 
 		template<typename T0, typename T1, typename T2>
-		static std::vector<GameObject*> GetAllWith(bool onlyIfEnabled = true)
+		static std::vector<GameObject*> FindAllWith(const LayerMask& mask, bool onlyIfEnabled = true)
 		{
-			return GetAllWith({ typeid(T0), typeid(T1), typeid(T2) }, onlyIfEnabled);
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2) }, mask, onlyIfEnabled);
 		}
 
 		template<typename T0, typename T1, typename T2, typename T3>
-		static std::vector<GameObject*> GetAllWith(bool onlyIfEnabled = true)
+		static std::vector<GameObject*> FindAllWith(const LayerMask& mask, bool onlyIfEnabled = true)
 		{
-			return GetAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3) }, onlyIfEnabled);
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3) }, mask, onlyIfEnabled);
 		}
 
 		template<typename T0, typename T1, typename T2, typename T3, typename T4>
-		static std::vector<GameObject*> GetAllWith(bool onlyIfEnabled = true)
+		static std::vector<GameObject*> FindAllWith(const LayerMask& mask, bool onlyIfEnabled = true)
 		{
-			return GetAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3), typeid(T4) }, onlyIfEnabled);
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3), typeid(T4) }, mask, onlyIfEnabled);
+		}
+
+		template<typename T0>
+		static std::vector<GameObject*> FindAllWith(bool onlyIfEnabled = true)
+		{
+			return FindAllWith({ typeid(T0) }, onlyIfEnabled);
+		}
+
+		template<typename T0, typename T1>
+		static std::vector<GameObject*> FindAllWith(bool onlyIfEnabled = true)
+		{
+			return FindAllWith({ typeid(T0), typeid(T1) }, onlyIfEnabled);
+		}
+
+		template<typename T0, typename T1, typename T2>
+		static std::vector<GameObject*> FindAllWith(bool onlyIfEnabled = true)
+		{
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2) }, onlyIfEnabled);
+		}
+
+		template<typename T0, typename T1, typename T2, typename T3>
+		static std::vector<GameObject*> FindAllWith(bool onlyIfEnabled = true)
+		{
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3) }, onlyIfEnabled);
+		}
+
+		template<typename T0, typename T1, typename T2, typename T3, typename T4>
+		static std::vector<GameObject*> FindAllWith(bool onlyIfEnabled = true)
+		{
+			return FindAllWith({ typeid(T0), typeid(T1), typeid(T2), typeid(T3), typeid(T4) }, onlyIfEnabled);
 		}
 
 	};

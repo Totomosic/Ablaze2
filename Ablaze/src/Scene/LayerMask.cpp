@@ -50,11 +50,12 @@ namespace Ablaze
 		m_LayerNames.clear();
 	}
 
-	void LayerMask::Evaluate(const Scene& scene)
+	void LayerMask::Evaluate(const Scene& scene) const
 	{
 		mask = 0;
-		for (String& s : m_LayerNames)
+		for (const String& s : m_LayerNames)
 		{
+			AB_ASSERT(scene.HasLayer(s), "Unable to find layer with name: " + s);
 			int layerMask = scene.GetMask(s);
 			AddLayer(layerMask);
 		}
@@ -65,7 +66,7 @@ namespace Ablaze
 		Evaluate(scene);
 	}
 
-	void LayerMask::AddLayer(int layerMask)
+	void LayerMask::AddLayer(int layerMask) const
 	{
 		mask |= layerMask;
 	}

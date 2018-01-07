@@ -26,6 +26,12 @@ namespace Ablaze
 
 	UniformManager& UniformManager::operator=(const UniformManager& other)
 	{
+		for (int i = m_Uniforms.size() - 1; i >= 0; i--)
+		{
+			UniformInfo& info = m_Uniforms[i];
+			delete info.uniform;
+			m_Uniforms.erase(m_Uniforms.begin() + i);
+		}
 		for (const auto& uniform : other.m_Uniforms)
 		{
 			AddUniform(uniform.uniform->Clone(), uniform.mode);

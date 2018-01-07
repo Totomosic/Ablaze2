@@ -1,5 +1,5 @@
 #include "Quaternion.h"
-#include "Utils\JSON\__JSON__.h"
+#include "Utils\Filesystem\JSON\__JSON__.h"
 
 namespace Ablaze
 {
@@ -27,9 +27,9 @@ namespace Ablaze
 		
 		}
 
-		Matrix4d Quaternion::ToMatrix4d() const
+		Matrix4f Quaternion::ToMatrix4f() const
 		{
-			return Matrix4d::FromRows(
+			return Matrix4f::FromRows(
 				Vector4f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y), 0.0f),
 				Vector4f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x), 0.0f),
 				Vector4f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y), 0.0f),
@@ -332,7 +332,7 @@ namespace Ablaze
 			return Quaternion((float)x, (float)y, (float)z, (float)w);
 		}
 
-		Quaternion Quaternion::FromRotationMat(const Matrix4d& rotation)
+		Quaternion Quaternion::FromRotationMat(const Matrix4f& rotation)
 		{
 			int rotationLookup[] = { 1, 2, 0 };
 			float t_trace = rotation.Row(0).x + rotation.Row(1).y + rotation.Row(2).z;
@@ -367,6 +367,63 @@ namespace Ablaze
 				t_return[k] = (rotation.Row(k).Get(i) + rotation.Row(i).Get(k)) * t_root;
 				return t_return;
 			}
+		}
+
+		Quaternion Quaternion::LookAt(const Vector3f& lookDirection, const Vector3f& upVector)
+		{
+			Vector3f forward = -lookDirection.Normalize();
+			Vector3f right = Vector3f::Cross(upVector, forward).Normalize();
+			Vector3f up = upVector;
+			float m00 = right.x;
+			float m01 = right.y;
+			float m02 = right.z;
+			float m10 = up.x;
+			float m11 = up.y;
+			float m12 = up.z;
+			float m20 = forward.x;
+			float m21 = forward.y;
+			float m22 = forward.z;
+
+
+			float num8 = (m00 + m11) + m22;
+			Quaternion quaternion;
+			if (num8 > 0.0f)
+			{
+				float num = sqrt(num8 + 1.0f);
+				quaternion.w = num * 0.5f;
+				num = 0.5f / num;
+				quaternion.x = (m12 - m21) * num;
+				quaternion.y = (m20 - m02) * num;
+				quaternion.z = (m01 - m10) * num;
+				return quaternion;
+			}
+			if ((m00 >= m11) && (m00 >= m22))
+			{
+				float num7 = (float)sqrt(((1.0f + m00) - m11) - m22);
+				float num4 = 0.5f / num7;
+				quaternion.x = 0.5f * num7;
+				quaternion.y = (m01 + m10) * num4;
+				quaternion.z = (m02 + m20) * num4;
+				quaternion.w = (m12 - m21) * num4;
+				return quaternion;
+			}
+			if (m11 > m22)
+			{
+				float num6 = (float)sqrt(((1.0f + m11) - m00) - m22);
+				float num3 = 0.5f / num6;
+				quaternion.x = (m10 + m01) * num3;
+				quaternion.y = 0.5f * num6;
+				quaternion.z = (m21 + m12) * num3;
+				quaternion.w = (m20 - m02) * num3;
+				return quaternion;
+			}
+			float num5 = (float)sqrt(((1.0f + m22) - m00) - m11);
+			float num2 = 0.5f / num5;
+			quaternion.x = (m20 + m02) * num2;
+			quaternion.y = (m21 + m12) * num2;
+			quaternion.z = 0.5f * num5;
+			quaternion.w = (m01 - m10) * num2;
+			return quaternion;
 		}
 
 		std::ostream& operator<<(std::ostream& stream, const Quaternion& q)

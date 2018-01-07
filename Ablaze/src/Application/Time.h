@@ -11,7 +11,11 @@ namespace Ablaze
 	private:
 		static double s_TotalSeconds;
 		static double s_LastSeconds;
+		static double s_TotalRealSeconds;
+		static double s_LastRealSeconds;
+
 		static double s_ElapsedSeconds;
+		static double s_TimeScale;
 
 		static std::vector<double> s_Frames;
 		static double s_AvgFps;
@@ -26,6 +30,7 @@ namespace Ablaze
 		static double ElapsedTime();
 		static double DeltaTime();
 		static double CurrentTime();
+		static double& TimeScale();
 
 		static double FramesPerSecond();
 		static double AvgFPS();

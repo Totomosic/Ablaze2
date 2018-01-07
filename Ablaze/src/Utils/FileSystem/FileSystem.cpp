@@ -64,6 +64,32 @@ namespace Ablaze
 		return std::experimental::filesystem::is_directory(path.Path());
 	}
 
+	std::vector<DirectoryPath> Filesystem::EnumerateDirectories(const DirectoryPath& path)
+	{
+		std::vector<DirectoryPath> result;
+		for (auto file : std::experimental::filesystem::directory_iterator(path.Path()))
+		{
+			if (std::experimental::filesystem::is_directory(file))
+			{
+				result.emplace_back(file.path().string());
+			}
+		}
+		return result;
+	}
+
+	std::vector<Filepath> Filesystem::EnumerateFiles(const DirectoryPath& path)
+	{
+		std::vector<Filepath> result;
+		for (auto file : std::experimental::filesystem::directory_iterator(path.Path()))
+		{
+			if (!std::experimental::filesystem::is_directory(file))
+			{
+				result.emplace_back(file.path().string());
+			}
+		}
+		return result;
+	}
+
 	bool Filesystem::Delete(const Filepath& filename)
 	{
 		int result = std::remove(filename.Path().c_str());

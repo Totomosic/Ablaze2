@@ -31,6 +31,11 @@ namespace Ablaze
 		return m_CurrentLayer != nullptr;
 	}
 
+	bool Scene::HasLayer(const String& layerName) const
+	{
+		return m_Layers.find(layerName) != m_Layers.end();
+	}
+
 	const Layer& Scene::CurrentLayer() const
 	{
 		return *m_CurrentLayer;
@@ -79,7 +84,7 @@ namespace Ablaze
 		return layers;
 	}
 
-	std::vector<Layer*> Scene::GetLayers(LayerMask& layerMask) const
+	std::vector<Layer*> Scene::GetLayers(const LayerMask& layerMask) const
 	{		
 		if (!layerMask.all)
 		{

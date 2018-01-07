@@ -35,12 +35,12 @@ namespace Ablaze
 		return m_ClearColor;
 	}
 
-	int Framebuffer::GetWidth() const
+	int Framebuffer::Width() const
 	{
 		return m_Viewport.GetWidth();
 	}
 
-	int Framebuffer::GetHeight() const
+	int Framebuffer::Height() const
 	{
 		return m_Viewport.GetHeight();
 	}
@@ -99,7 +99,7 @@ namespace Ablaze
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id));
 		GL_CALL(glReadBuffer((GLenum)readBuffer));
 		GL_CALL(glDrawBuffer(GL_FRONT_AND_BACK));
-		GL_CALL(glBlitFramebuffer(0, 0, GetWidth(), GetHeight(), 0, 0, Graphics::CurrentContext().Width(), Graphics::CurrentContext().Height(), (GLbitfield)buffer, (GLenum)filter));
+		GL_CALL(glBlitFramebuffer(0, 0, Width(), Height(), 0, 0, Graphics::CurrentContext().Width(), Graphics::CurrentContext().Height(), (GLbitfield)buffer, (GLenum)filter));
 		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	}
@@ -119,7 +119,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
 	{
-		CreateColorTextureAttachment(new Texture2D(GetWidth(), GetHeight(), ImageFormat::Rgba, MipmapMode::Disabled), buffer);
+		CreateColorTextureAttachment(new Texture2D(Width(), Height(), ImageFormat::Rgba, MipmapMode::Disabled), buffer);
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment(Texture2D* texture)
@@ -136,7 +136,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateDepthTextureAttachment()
 	{
-		CreateDepthTextureAttachment(new Texture2D(GetWidth(), GetHeight(), ImageFormat::Rgba, MipmapMode::Disabled));
+		CreateDepthTextureAttachment(new Texture2D(Width(), Height(), ImageFormat::Rgba, MipmapMode::Disabled));
 	}
 
 	String Framebuffer::ToString() const

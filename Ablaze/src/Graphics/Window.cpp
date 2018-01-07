@@ -23,12 +23,12 @@ namespace Ablaze
 
 	int Window::Width() const
 	{
-		return m_Framebuffer.GetWidth();
+		return m_Framebuffer.Width();
 	}
 
 	int Window::Height() const
 	{
-		return m_Framebuffer.GetHeight();
+		return m_Framebuffer.Height();
 	}
 
 	Maths::Vector2i Window::Size() const

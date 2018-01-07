@@ -30,6 +30,9 @@ namespace Ablaze
 		static void CreateNewDirectory(const DirectoryPath& directoryPath);
 		static bool DirectoryExists(const DirectoryPath& path);
 
+		static std::vector<DirectoryPath> EnumerateDirectories(const DirectoryPath& path);
+		static std::vector<Filepath> EnumerateFiles(const DirectoryPath& path);
+		
 		static bool Delete(const Filepath& filename);
 		static bool Delete(const File& file);
 

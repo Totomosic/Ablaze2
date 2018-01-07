@@ -9,8 +9,7 @@ namespace Ablaze
 	{
 	private:
 		Font* m_Font;
-		Color m_Color;
-		String m_Text;
+		ColorFormattedString m_Text;
 		int m_ModelIndex;
 
 		Maths::Vector2f m_Size;
@@ -18,11 +17,11 @@ namespace Ablaze
 		TextAlignmentV m_vAlign;
 
 	public:
-		Text(const String& text, Font* font, const Color& color = Color::Black(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
+		Text(const ColorFormattedString& text, Font* font, TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center);
 
 		Font* GetFont() const;
-		const Color& FontColor() const;
-		const String& RawString() const;
+		const ColorFormattedString& FormattedString() const;
+		String RawString() const;
 		const Maths::Vector2f& Size() const;
 		float Width() const;
 		float Height() const;
@@ -31,9 +30,8 @@ namespace Ablaze
 
 		void Start() override;
 
-		void SetText(const String& text);
+		void SetText(const ColorFormattedString& text);
 		void SetFont(Font* font);
-		void SetColor(const Color& color);
 		void SetAlignment(TextAlignmentH horizontal, TextAlignmentV vertical);
 
 		Component* Clone() const override;

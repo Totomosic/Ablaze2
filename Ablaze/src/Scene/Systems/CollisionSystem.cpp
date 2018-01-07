@@ -10,8 +10,8 @@ namespace Ablaze
 
 	void CollisionSystem::Execute()
 	{
-		std::vector<GameObject*> dynamicObjects = GameObject::GetAllWith<Transform, BoxCollider, RigidBody>();
-		std::vector<GameObject*> staticObjects = GameObject::GetAllWith<Transform, BoxCollider>();
+		std::vector<GameObject*> dynamicObjects = GameObject::FindAllWith<Transform, BoxCollider, RigidBody>();
+		std::vector<GameObject*> staticObjects = GameObject::FindAllWith<Transform, BoxCollider>();
 		for (GameObject* dynamic : dynamicObjects)
 		{
 			Transform& dTransform = dynamic->transform();

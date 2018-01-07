@@ -3,13 +3,16 @@
 namespace Ablaze
 {
 	
-	double Time::s_TotalSeconds = 0;
-	double Time::s_LastSeconds = 0;
-	double Time::s_ElapsedSeconds = 0;
+	double Time::s_TotalSeconds = 0.0;
+	double Time::s_LastSeconds = 0.0;
+	double Time::s_TotalRealSeconds = 0.0;
+	double Time::s_LastRealSeconds = 0.0;
+	double Time::s_ElapsedSeconds = 0.0;
+	double Time::s_TimeScale = 1.0;
 
 	std::vector<double> Time::s_Frames;
-	double Time::s_AvgFps = 60;
-	double Time::s_AvgTimer = 0;
+	double Time::s_AvgFps = 60.0;
+	double Time::s_AvgTimer = 0.0;
 
 	std::vector<Timer*> Time::s_ActiveTimers = std::vector<Timer*>();
 
@@ -25,7 +28,17 @@ namespace Ablaze
 
 	double Time::CurrentTime()
 	{
-		return glfwGetTime();
+		s_TotalRealSeconds = glfwGetTime();
+		double realElapsed = s_TotalRealSeconds - s_LastRealSeconds;
+		double scaledElapsed = realElapsed * TimeScale();
+		s_TotalSeconds += scaledElapsed;
+		s_LastRealSeconds = s_TotalRealSeconds;
+		return s_TotalSeconds;
+	}
+
+	double& Time::TimeScale()
+	{
+		return s_TimeScale;
 	}
 
 	double Time::FramesPerSecond()
@@ -70,9 +83,9 @@ namespace Ablaze
 
 	void Time::Update()
 	{
-		s_TotalSeconds = glfwGetTime();
+		s_TotalSeconds = CurrentTime();
 		s_ElapsedSeconds = s_TotalSeconds - s_LastSeconds;
-		s_LastSeconds = s_TotalSeconds;
+		s_LastSeconds = CurrentTime();
 
 		s_Frames.push_back(FramesPerSecond());
 		s_AvgTimer += s_ElapsedSeconds;

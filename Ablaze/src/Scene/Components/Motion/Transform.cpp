@@ -161,13 +161,13 @@ namespace Ablaze
 		m_Rotation *= quaternion;
 	}
 
-	Maths::Matrix4d Transform::ToMatrix() const
+	Maths::Matrix4f Transform::ToMatrix() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())
 		{
-			return Maths::Matrix4d::Translation(m_Position) * m_Rotation.ToMatrix4d() * Maths::Matrix4d::Scale(m_Scale);
+			return Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
 		}
-		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Matrix4d::Translation(m_Position) * m_Rotation.ToMatrix4d() * Maths::Matrix4d::Scale(m_Scale);
+		return m_GameObject->Parent()->GetComponent<Transform>().ToMatrix() * Maths::Matrix4f::Translation(m_Position) * m_Rotation.ToMatrix4f() * Maths::Matrix4f::Scale(m_Scale);
 	}
 
 	String Transform::ToString() const

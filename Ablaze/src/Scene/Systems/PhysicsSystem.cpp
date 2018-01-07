@@ -31,7 +31,7 @@ namespace Ablaze
 
 	void PhysicsSystem::Execute()
 	{
-		std::vector<GameObject*> objects = GameObject::GetAllWith<Transform, RigidBody>();
+		std::vector<GameObject*> objects = GameObject::FindAllWith<Transform, RigidBody>();
 		for (GameObject* object : objects)
 		{
 			Transform& transform = object->transform();
@@ -46,10 +46,10 @@ namespace Ablaze
 			transform.Translate(rb.Velocity() * Time::DeltaTime());
 			rb.Acceleration() = Maths::Vector3f(0.0f);
 
-			rb.RotationAcceleration() += rb.RotationVelocity() * Time::DeltaTime();
-			transform.Rotate(rb.RotationVelocity().x * Time::DeltaTime(), Maths::Vector3f(1, 0, 0));
-			transform.Rotate(rb.RotationVelocity().y * Time::DeltaTime(), Maths::Vector3f(0, 1, 0));
-			transform.Rotate(rb.RotationVelocity().z * Time::DeltaTime(), Maths::Vector3f(0, 0, 1));
+			rb.RotationVelocity() += rb.RotationAcceleration() * Time::DeltaTime();
+			transform.Rotate(rb.RotationVelocity().x * Time::DeltaTime(), Maths::Vector3f(1, 0, 0), Space::Local);
+			transform.Rotate(rb.RotationVelocity().y * Time::DeltaTime(), Maths::Vector3f(0, 1, 0), Space::Local);
+			transform.Rotate(rb.RotationVelocity().z * Time::DeltaTime(), Maths::Vector3f(0, 0, 1), Space::Local);
 			rb.RotationAcceleration() = Maths::Vector3f(0.0f);
 		}
 	}

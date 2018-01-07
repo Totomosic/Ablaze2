@@ -4,7 +4,7 @@
 namespace Ablaze
 {
 
-	RaycastHit Physics::Raycast(const Maths::Ray& ray, LayerMask& mask)
+	RaycastHit Physics::Raycast(const Maths::Ray& ray, const LayerMask& mask)
 	{
 		RaycastHit result;
 		result.Ray = ray;

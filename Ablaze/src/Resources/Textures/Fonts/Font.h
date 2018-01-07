@@ -43,7 +43,7 @@ namespace Ablaze
 		float GetHeight(const String& text) const;
 		Maths::Vector2f GetSize(const String& text) const;
 
-		Model* CreateModel(const String& text, const Color& color = Color::White(), TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center) const;
+		Model* CreateModel(const ColorFormattedString& text, TextAlignmentH horizontal = TextAlignmentH::Center, TextAlignmentV vertical = TextAlignmentV::Center) const;
 
 		void Reload() override;
 

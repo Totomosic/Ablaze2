@@ -16,6 +16,7 @@ namespace Ablaze
 	DepthFunction Graphics::s_DepthFunction = DepthFunction::Less;
 	BlendSrc Graphics::s_BlendSrcFunction = BlendSrc::SrcAlpha;
 	BlendDst Graphics::s_BlendDstFunction = BlendDst::OneMinusSrcAlpha;
+	bool Graphics::s_ClippingPlanes[10] = { false, false, false, false, false, false, false, false, false, false };
 
 	std::vector<GraphicsPipeline> Graphics::s_Pipelines = std::vector<GraphicsPipeline>();
 	GraphicsPipeline* Graphics::s_CurrentPipeline = nullptr;
@@ -52,6 +53,12 @@ namespace Ablaze
 	bool Graphics::IsCullEnabled()
 	{
 		return s_CullEnabled;
+	}
+
+	bool Graphics::IsClipPlaneEnabled(int index)
+	{
+		AB_ASSERT(index < 10, "Index out of range");
+		return s_ClippingPlanes[index];
 	}
 
 	DepthFunction Graphics::GetDepthFunction()
@@ -222,6 +229,23 @@ namespace Ablaze
 		}
 	}
 
+	void Graphics::SetClipPlane(int index, bool enabled)
+	{
+		AB_ASSERT(index < 10, "Index out of range");
+		if (s_ClippingPlanes[index] != enabled)
+		{
+			s_ClippingPlanes[index] = enabled;
+			if (enabled)
+			{
+				GL_CALL(glEnable(GL_CLIP_DISTANCE0 + index));
+			}
+			else
+			{
+				GL_CALL(glDisable(GL_CLIP_DISTANCE0 + index));
+			}
+		}
+	}
+
 	void Graphics::SetDepthFunction(DepthFunction depthFunction)
 	{
 		if (s_DepthFunction != depthFunction)
@@ -277,6 +301,16 @@ namespace Ablaze
 	void Graphics::DisableCull()
 	{
 		SetCull(false);
+	}
+
+	void Graphics::EnableClipPlane(int index)
+	{
+		SetClipPlane(index, true);
+	}
+
+	void Graphics::DisableClipPlane(int index)
+	{
+		SetClipPlane(index, false);
 	}
 
 	void Graphics::ApplyGLStates()

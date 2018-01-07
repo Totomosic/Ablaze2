@@ -1,35 +1,24 @@
 #pragma once
-#include "Ablaze.h"
+#include "AblazeInclude.h"
+#include "CharacterController.h"
 
-using namespace Ablaze;
-
-class PlayerController : public Component
+namespace Game
 {
-private:
-	Keycode m_Forward;
-	Keycode m_Back;
-	Keycode m_Left;
-	Keycode m_Right;
-	Keycode m_Up;
-	Keycode m_Down;
-	float m_Speed;
 
-public:
-	PlayerController(float speed);
-	PlayerController();
+	class PlayerController : public CharacterController
+	{
+	private:
+		float m_Speed;
+		float m_RotateSpeed;
 
-	float& Speed();
+	public:
+		PlayerController(float speed, float rotateSpeed);
 
-	Keycode& Forward();
-	Keycode& Back();
-	Keycode& Left();
-	Keycode& Right();
-	Keycode& Up();
-	Keycode& Down();
+		void Update(double elapsedSeconds) override;
 
-	void Update(double elapsedSeconds) override;
+		String ToString() const override;
+		Component* Clone() const override;
 
-	Component* Clone() const override;
-	String ToString() const override;
+	};
 
-};
+}

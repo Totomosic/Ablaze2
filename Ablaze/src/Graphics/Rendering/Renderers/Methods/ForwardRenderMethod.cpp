@@ -28,21 +28,21 @@ namespace Ablaze
 			VertexArray* vao = model->GetVertexArray();
 			for (int j = 0; j < model->SubModelCount(); j++)
 			{
-				Material* mat = &model->GetSubModel(i)->GetMaterial();
+				Material mat = model->GetSubModel(i)->GetMaterial();
 				if (!model->GetSubModel(i)->HasOwnMaterial())
 				{
-					mat = &set.mesh->GetMaterial();
+					mat = set.mesh->GetMaterial();
 				}
-				Shader* shader = mat->ActiveShader();
+				Shader* shader = mat.ActiveShader();
 				shader->Bind();
 				shader->SetUniform("modelMatrix", transform.ToMatrix() * set.transform);
-				shader->SetUniform("viewMatrix", cameraTransform.ToMatrix().Inverse());
+				shader->SetUniform("viewMatrix", cameraComp.ViewMatrix());
 				shader->SetUniform("projectionMatrix", cameraComp.ProjectionMatrix());
-				shader->SetUniform("color", mat->BaseColor());
-				if (m_CurrentMaterial != *mat)
+				shader->SetUniform("color", mat.BaseColor());
+				if (m_CurrentMaterial != mat)
 				{
-					mat->Apply();
-					m_CurrentMaterial = *mat;
+					mat.Apply();
+					m_CurrentMaterial = mat;
 				}
 				vao->SetCurrentIndexBuffer(j);
 				vao->Bind();

@@ -51,8 +51,8 @@ namespace Ablaze
 		~Framebuffer() override;
 
 		const Color& GetClearColor() const;
-		int GetWidth() const;
-		int GetHeight() const;
+		int Width() const;
+		int Height() const;
 		float GetAspect() const;
 		const Viewport& GetViewport() const;
 

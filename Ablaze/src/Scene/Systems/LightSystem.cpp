@@ -10,7 +10,7 @@ namespace Ablaze
 
 	void LightSystem::Execute()
 	{
-		std::vector<GameObject*> lights = GameObject::GetAllWith<Transform, Light>();
+		std::vector<GameObject*> lights = GameObject::FindAllWith<Transform, Light>();
 		int lightCount = lights.size();
 		for (Shader* shader : m_Shaders)
 		{

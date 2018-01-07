@@ -5,8 +5,8 @@
 namespace Ablaze
 {
 
-	Text::Text(const String& text, Font* font, const Color& color, TextAlignmentH horizontal, TextAlignmentV vertical) : Component(),
-		m_Font(font), m_Color(color), m_Text(text), m_ModelIndex(-1), m_hAlign(horizontal), m_vAlign(vertical)
+	Text::Text(const ColorFormattedString& text, Font* font, TextAlignmentH horizontal, TextAlignmentV vertical) : Component(),
+		m_Font(font), m_Text(text), m_ModelIndex(-1), m_hAlign(horizontal), m_vAlign(vertical)
 	{
 	
 	}
@@ -16,14 +16,14 @@ namespace Ablaze
 		return m_Font;
 	}
 
-	const Color& Text::FontColor() const
-	{
-		return m_Color;
-	}
-
-	const String& Text::RawString() const
+	const ColorFormattedString& Text::FormattedString() const
 	{
 		return m_Text;
+	}
+
+	String Text::RawString() const
+	{
+		return m_Text.RawString();
 	}
 
 	const Maths::Vector2f& Text::Size() const
@@ -56,18 +56,18 @@ namespace Ablaze
 		if (m_GameObject->HasComponent<MeshRenderer>())
 		{
 			m_ModelIndex = m_GameObject->mesh().MeshCount();
-			m_GameObject->mesh().AddMesh(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font)));
+			m_GameObject->mesh().AddMesh(new Mesh(m_Font->CreateModel(m_Text, m_hAlign, m_vAlign), Material(Color::White(), ResourceManager::DefaultFontShader(), "Tex0", m_Font)));
 		}
 		else
 		{
-			m_GameObject->AddComponent(new MeshRenderer(new Mesh(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign), Material(m_Color, ResourceManager::DefaultFontShader(), "Tex0", m_Font))));
+			m_GameObject->AddComponent(new MeshRenderer(new Mesh(m_Font->CreateModel(m_Text, m_hAlign, m_vAlign), Material(Color::White(), ResourceManager::DefaultFontShader(), "Tex0", m_Font))));
 			m_ModelIndex = 0;
 		}
 		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetMaterial().RenderSettings().DepthFunc = DepthFunction::Lequal;
-		m_Size = m_Font->GetSize(m_Text);
+		m_Size = m_Font->GetSize(m_Text.RawString());
 	}
 
-	void Text::SetText(const String& text)
+	void Text::SetText(const ColorFormattedString& text)
 	{
 		m_Text = text;
 		UpdateModel();
@@ -79,12 +79,6 @@ namespace Ablaze
 		UpdateModel();
 	}
 
-	void Text::SetColor(const Color& color)
-	{
-		m_Color = color;
-		m_GameObject->mesh().GetMesh(m_ModelIndex)->GetMaterial().BaseColor() = m_Color;
-	}
-
 	void Text::SetAlignment(TextAlignmentH horizontal, TextAlignmentV vertical)
 	{
 		m_hAlign = horizontal;
@@ -94,7 +88,7 @@ namespace Ablaze
 
 	Component* Text::Clone() const
 	{
-		Text* t = new Text(m_Text, m_Font, m_Color, m_hAlign, m_vAlign);
+		Text* t = new Text(m_Text, m_Font, m_hAlign, m_vAlign);
 		t->m_ModelIndex = m_ModelIndex;
 		return t;
 	}
@@ -106,8 +100,8 @@ namespace Ablaze
 
 	void Text::UpdateModel()
 	{
-		m_GameObject->mesh().GetMesh(m_ModelIndex)->SetModel(m_Font->CreateModel(m_Text, Color::White(), m_hAlign, m_vAlign));
-		m_Size = m_Font->GetSize(m_Text);
+		m_GameObject->mesh().GetMesh(m_ModelIndex)->SetModel(m_Font->CreateModel(m_Text, m_hAlign, m_vAlign));
+		m_Size = m_Font->GetSize(m_Text.RawString());
 	}
 
 }

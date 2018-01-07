@@ -14,5 +14,5 @@ layout(location = 0) out vec4 finalColor;
 void main(void)
 {
 	finalColor = color * f_Color;
-	finalColor.a = texture(Tex0, f_TexCoord).r;
+	finalColor.a = texture(Tex0, f_TexCoord).r * color.a * f_Color.a;
 })"

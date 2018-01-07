@@ -164,7 +164,7 @@ namespace Ablaze
 		float heightR = GetHeight(x + 1, y);
 		float heightD = GetHeight(x, y - 1);
 		float heightU = GetHeight(x, y + 1);
-		return Maths::Vector3f(heightL - heightR, 2.0, heightD - heightU).Normalize();
+		return Maths::Vector3f(heightL - heightR, 2.0f, heightD - heightU).Normalize();
 	}
 
 }

@@ -1,101 +1,68 @@
 #include "PlayerController.h"
+#include "Seeker.h"
 
-PlayerController::PlayerController(float speed) : Component()
-{
-	m_Speed = speed;
-	m_Forward = Keycode::W;
-	m_Back = Keycode::S;
-	m_Left = Keycode::A;
-	m_Right = Keycode::D;
-	m_Up = Keycode::None;
-	m_Down = Keycode::None;
-}
-
-PlayerController::PlayerController() : PlayerController(1)
+namespace Game
 {
 
-}
-
-float& PlayerController::Speed()
-{
-	return m_Speed;
-}
-
-Keycode& PlayerController::Forward()
-{
-	return m_Forward;
-}
-
-Keycode& PlayerController::Back()
-{
-	return m_Back;
-}
-
-Keycode& PlayerController::Left()
-{
-	return m_Left;
-}
-
-Keycode& PlayerController::Right()
-{
-	return m_Right;
-}
-
-Keycode& PlayerController::Up()
-{
-	return m_Up;
-}
-
-Keycode& PlayerController::Down()
-{
-	return m_Down;
-}
-
-void PlayerController::Update(double elapsedSeconds)
-{
-	if (Owner()->HasComponent<Transform>())
+	PlayerController::PlayerController(float speed, float rotateSpeed) : CharacterController(),
+		m_Speed(speed), m_RotateSpeed(rotateSpeed)
 	{
-		Transform& t = Owner()->transform();
-		if (Input::KeyDown(m_Forward))
+	
+	}
+
+	void PlayerController::Update(double elapsedSeconds)
+	{
+		Transform& t = m_GameObject->transform();
+		if (Input::KeyDown(Keycode::A))
 		{
-			t.LocalPosition() += t.Forward() * Speed() * elapsedSeconds;
+			t.LocalPosition() += -Vector3f::Right() * m_Speed * Time::DeltaTime();
 		}
-		if (Input::KeyDown(m_Back))
+		if (Input::KeyDown(Keycode::D))
 		{
-			t.LocalPosition() -= t.Forward() * Speed() * elapsedSeconds;
+			t.LocalPosition() += Vector3f::Right() * m_Speed * Time::DeltaTime();
 		}
-		if (Input::KeyDown(m_Right))
+		if (Input::KeyDown(Keycode::W))
 		{
-			t.LocalPosition() += t.Right() * Speed() * elapsedSeconds;
+			t.LocalPosition() += Vector3f::Forward() * m_Speed * Time::DeltaTime();
 		}
-		if (Input::KeyDown(m_Left))
+		if (Input::KeyDown(Keycode::S))
 		{
-			t.LocalPosition() -= t.Right() * Speed() * elapsedSeconds;
+			t.LocalPosition() += -Vector3f::Forward() * m_Speed * Time::DeltaTime();
 		}
-		if (Input::KeyDown(m_Up))
+
+		if (Input::MouseButtonPressed(MouseButton::Left))
 		{
-			t.LocalPosition() += t.Up() * Speed() * elapsedSeconds;
+			Fire(m_Speed * 5, m_GameObject->transform().Forward());
 		}
-		if (Input::KeyDown(m_Down))
+
+		if (Input::MouseButtonPressed(MouseButton::Right))
 		{
-			t.LocalPosition() -= t.Up() * Speed() * elapsedSeconds;
+			ShotgunFire(m_Speed * 2, 10, m_GameObject->transform().Forward(), PI / 45.0f);
+		}
+
+		if (Input::KeyPressed(Keycode::R))
+		{
+			Vector3f mousePosition = Input::MousePosition();
+			GameObject& camera = m_GameObject->GetLayer()->GetActiveCamera();
+			mousePosition.z = camera.transform().LocalPosition().z;
+			Vector3f worldPoint = camera.GetComponent<Camera>().ScreenToWorldPoint(mousePosition);
+			Rockets(m_Speed * 3, 10, worldPoint);
+		}
+
+		if (Input::KeyPressed(Keycode::SPACE))
+		{
+			GameObject* sphere = Fire(m_Speed * 0.5f, m_GameObject->transform().Forward(), ResourceManager::Sphere(), 0.0f, 1.5f, ResourceManager::LightingColorShader(), Color(50));
 		}
 	}
-}
 
-Component* PlayerController::Clone() const
-{
-	PlayerController* p = new PlayerController;
-	p->m_Forward = m_Forward;
-	p->m_Back = m_Back;
-	p->m_Left = m_Left;
-	p->m_Right = m_Right;
-	p->m_Up = m_Up;
-	p->m_Down = m_Down;
-	return p;
-}
+	String PlayerController::ToString() const
+	{
+		return "PlayerController";
+	}
 
-String PlayerController::ToString() const
-{
-	return "PlayerController";
+	Component* PlayerController::Clone() const
+	{
+		return new PlayerController(m_Speed, m_RotateSpeed);
+	}
+
 }

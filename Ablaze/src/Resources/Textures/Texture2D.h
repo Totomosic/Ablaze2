@@ -39,7 +39,6 @@ namespace Ablaze
 		String ToString() const override;
 
 		friend class ResourceManager;
-		template<typename> friend class Resource;
 
 	private:
 		void Populate(byte* pixelData) override;

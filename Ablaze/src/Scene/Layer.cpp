@@ -35,11 +35,13 @@ namespace Ablaze
 
 	const GameObject& Layer::GetActiveCamera() const
 	{
+		AB_ASSERT(m_Camera != nullptr, "Layer had no active Camera");
 		return *m_Camera;
 	}
 
 	GameObject& Layer::GetActiveCamera()
 	{
+		AB_ASSERT(m_Camera != nullptr, "Layer had no active Camera");
 		return *m_Camera;
 	}
 
@@ -86,6 +88,11 @@ namespace Ablaze
 		return object;
 	}
 
+	bool Layer::HasNamedGameObject(const String& tag) const
+	{
+		return m_NamedGameObjects.find(tag) != m_NamedGameObjects.end();
+	}
+
 	const GameObject& Layer::GetNamedGameObject(const String& tag, int index) const
 	{
 		return *m_NamedGameObjects.at(tag)[index];
@@ -98,6 +105,16 @@ namespace Ablaze
 			AB_ASSERT(false, "GameObject with tag: " + tag + " does not exist");
 		}
 		return *m_NamedGameObjects.at(tag)[index];
+	}
+
+	const GameObject& Layer::operator[](const String& tag) const
+	{
+		return GetNamedGameObject(tag);
+	}
+
+	GameObject& Layer::operator[](const String& tag)
+	{
+		return GetNamedGameObject(tag);
 	}
 
 	std::vector<GameObject*> Layer::GetNamedGameObjects(const String& tag) const
@@ -128,7 +145,7 @@ namespace Ablaze
 			}
 			else
 			{
-				container.DeleteTime -= Time::DeltaTime();
+				container.DeleteTime -= (float)Time::DeltaTime();
 				continues.push_back(container);
 			}
 		}

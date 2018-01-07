@@ -31,10 +31,15 @@ namespace Ablaze
 		s_DefaultFont = LoadDefaultFont();
 
 		s_Square = Model::Rectangle(1, 1);
+		SetModel("_RESOURCE_SQUARE_", s_Square);
 		s_Circle = Model::Ellipse(2, 2);
+		SetModel("_RESOURCE_CIRCLE_", s_Circle);
 		s_Cube = Model::Cuboid(1, 1, 1);
+		SetModel("_RESOURCE_CUBE_", s_Cube);
 		s_Sphere = Model::Sphere(1);
+		SetModel("_RESOURCE_SPHERE_", s_Sphere);
 		s_Plane = Model::Grid(1, 1, 2, 2);
+		SetModel("_RESOURCE_PLANE_", s_Plane);
 
 		Systems::Lighting().AddShader(s_LightColor);
 		Systems::Lighting().AddShader(s_LightTexture);

@@ -48,7 +48,7 @@ void main(void)
 
 #shader fragment
 #version 430 core
-#include "../../Ablaze/src/Resources/Shaders/Source/Headers/Lighting.glh"
+#include "Lighting.glh"
 
 const int MAX_LIGHTS = 5;
 

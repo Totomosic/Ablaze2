@@ -25,6 +25,7 @@ namespace Ablaze
 
 		virtual void Start();
 		virtual void Update(double elapsedSeconds);
+		virtual void LateUpdate(double elapsedSeconds);
 
 		virtual Component* Clone() const = 0;
 		virtual void Serialize(JSONwriter& writer) const;
