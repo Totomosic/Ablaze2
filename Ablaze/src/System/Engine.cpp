@@ -5,6 +5,8 @@
 #include "Scene\Systems\Systems.h"
 #include "Resources\ResourceManager.h"
 
+#include "Networking\NetworkIncludes.h"
+
 namespace Ablaze
 {
 
@@ -29,6 +31,7 @@ namespace Ablaze
 	{
 		ResourceManager::Terminate();
 		Graphics::Terminate();
+		WSACleanup();
 		glfwTerminate();
 		return true;
 	}

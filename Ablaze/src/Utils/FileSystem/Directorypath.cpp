@@ -67,6 +67,10 @@ namespace Ablaze
 
 	void DirectoryPath::CleanPath(String& path)
 	{
+		if (path.length() == 0)
+		{
+			return;
+		}
 		std::replace(path.begin(), path.end(), '\\', '/');
 		if (*(path.end() - 1) != '/')
 		{

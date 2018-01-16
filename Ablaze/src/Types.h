@@ -12,6 +12,7 @@
 #include <memory>
 #include <typeindex>
 #include <typeinfo>
+#include <thread>
 #include <stdio.h>
 #include <direct.h>
 

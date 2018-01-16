@@ -5,7 +5,9 @@
 namespace Ablaze
 {
 
-	JSONnode* LoadJSONFile(const String& filename);
-	JSONnode* LoadJSONSource(String source);
+	class Filepath;
+
+	JSONnode* LoadJSONFile(const Filepath& filename);
+	JSONnode* LoadJSONSource(const String& src);
 
 }

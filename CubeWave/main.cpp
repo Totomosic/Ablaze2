@@ -3,6 +3,7 @@
 using namespace Ablaze;
 using namespace Ablaze::Maths;
 using namespace Ablaze::VM;
+using namespace Ablaze::Networking;
 
 #include "src\Wave.h"
 
@@ -20,34 +21,19 @@ namespace CubeWave
 			Window* window = new Window(1280, 720, "Sketch", Color::CornflowerBlue());
 			Graphics::Initialise(window);
 
-			scene = &SceneManager::Instance().CreateScene();
-			Layer& worldLayer = scene->CreateLayer("World");
-			scene->SetCurrentLayer("World");
+			SocketAddress addr("localhost", 8000);
+			UDPsocket* server = CreateUDPSocket();
+			UDPsocket* client = CreateUDPSocket();
 
-			GameObject* camera = AddToScene(GameObject::Instantiate("Camera", 0, 0, 25))
-				->AddComponent(new Camera());
-			worldLayer.SetActiveCamera(camera);
-			GameObject* light = AddToScene(GameObject::Instantiate("Light", 0, 50, 20))
-				->AddComponent<Light>();
+			server->Bind(addr);
+			Vector3f send(5, 0, -5);
+			client->SendTo(&send, sizeof(Vector3f), addr);
+			Vector3f recv;
+			server->ReceiveFrom(&recv, sizeof(Vector3f), nullptr);
+			AB_INFO(recv);
 
-			int width = 25;
-			GameObject* center = AddToScene(GameObject::Instantiate("Center", 0, 0, 0))
-				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Cube(), Material(Color(0, 119, 190), ResourceManager::LightingColorShader()))));
-			center->AddComponent(new Wave(center, -4.0f, PI * 5, 1.0f, 6.0f, sqrt(2 * (width / 2) * (width / 2))));
-
-			for (int i = 0; i < width; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-					if (i == width / 2 && j == width / 2) continue;
-
-					GameObject* cube = AddToScene(GameObject::Instantiate("Cube", center, j - width / 2, 0, i - width / 2));
-					cube->MakeChildOf(center);
-				}
-			}
-
-			center->transform().Rotate(PI / 4.0, Vector3f::Up());
-			center->transform().Rotate(atan(1 / sqrt(2)), Vector3f::Right());
+			delete server;
+			delete client;
 
 			GraphicsPipeline g;
 			g.Renderer = new ForwardRenderer;
@@ -58,20 +44,11 @@ namespace CubeWave
 
 		void Tick() override
 		{
-			AB_INFO(Time::AvgFPS());
+			
 		}
 
 		void Update() override
 		{
-			Transform& center = scene->GetLayer("World").GetNamedGameObject("Center").transform();
-
-			if (Input::MouseButtonDown(MouseButton::Middle))
-			{
-				center.Rotate(-Input::RelMousePosition().x * 0.5f * Time::DeltaTime(), Vector3f::Up(), Space::Local);
-				center.Rotate(Input::RelMousePosition().y * 0.5f * Time::DeltaTime(), Vector3f::Right(), Space::World);
-			}
-			center.LocalPosition() += -Vector3f::Forward() * Input::RelMouseScroll().y * Time::DeltaTime();
-
 			Application::Update();
 		}
 

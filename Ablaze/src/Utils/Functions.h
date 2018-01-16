@@ -19,7 +19,7 @@ namespace Ablaze
 	std::vector<String> SplitString(const String& str, const String& delimeter);
 	std::vector<String> SplitStringOnce(const String& str, const String& delimeter);
 	String CleanString(const String& str);
-	String CleanJSONString(const String& str);
+	String CleanString(const String& str, const std::vector<char>& remove);
 
 	// Image loading
 	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, int desiredComponents, bool flipImage = true);

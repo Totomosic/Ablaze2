@@ -1,11 +1,12 @@
 #include "JSONloader.h"
-#include "Utils\FileSystem\__FileSystem__.h"
+#include "Utils\Filesystem\Filepath.h"
+#include "Utils\Filesystem\Filesystem.h"
 #include "Utils\Functions.h"
 
 namespace Ablaze
 {
 
-	JSONnode* LoadJSONFile(const String& filename)
+	JSONnode* LoadJSONFile(const Filepath& filename)
 	{
 		File file = Filesystem::OpenFile(filename, OpenFlags::Read);
 		String source = file.ReadText();
@@ -13,9 +14,9 @@ namespace Ablaze
 		return LoadJSONSource(source);
 	}
 
-	JSONnode* LoadJSONSource(String source)
+	JSONnode* LoadJSONSource(const String& src)
 	{
-		source = CleanString(source);
+		String source = CleanString(src);
 
 		JSONnode* root = new JSONnode({ "", source });
 		JSONnode* current = root;

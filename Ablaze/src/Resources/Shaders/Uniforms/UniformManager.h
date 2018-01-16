@@ -36,6 +36,7 @@ namespace Ablaze
 		void AddUniform(Internal::Uniform* uniform, UniformUploadMode mode = UniformUploadMode::Repeat);
 		void RemoveUniform(int index) const;
 		void RemoveUniform(const String& uniformLocation) const;
+		void Clear();
 
 		Internal::Uniform* Get(const String& uniformLocation) const;
 		Internal::Uniform* operator[](const String& uniformLocation) const;

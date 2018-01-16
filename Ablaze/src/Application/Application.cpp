@@ -5,6 +5,8 @@
 
 #include "Scene\Components\__Components__.h"
 
+#include "System\Networking\NetworkIncludes.h"
+
 namespace Ablaze
 {
 
@@ -26,6 +28,13 @@ namespace Ablaze
 			AB_FATAL("Failed to initialise GLFW");
 		}
 		SetupConsole(AB_LOG_LEVEL_INFO);
+
+		// Initialise socket libraries
+		WSADATA data;
+		if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
+		{
+			AB_FATAL("Failed to initalise WinSock2");
+		}
 
 		double time = Time::CurrentTime();
 		Init();

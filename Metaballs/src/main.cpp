@@ -115,7 +115,6 @@ public:
 
 	void Render()
 	{
-		Application::Render();
 		Graphics::Clear();
 		Graphics::RenderScene();
 		Graphics::Present();

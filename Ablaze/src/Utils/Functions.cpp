@@ -75,24 +75,15 @@ namespace Ablaze
 
 	String CleanString(const String& str)
 	{
-		std::stringstream ss;
-		for (auto chr : str)
-		{
-			if (chr != '\n' && chr != ' ' && chr != '\r' && chr != '\t')
-			{
-				ss << chr;
-			}
-		}
-		String s = ss.str();
-		return s;
+		return CleanString(str, { '\n', ' ', '\r', '\t' });
 	}
 
-	String CleanJSONString(const String& str)
+	String CleanString(const String& str, const std::vector<char>& remove)
 	{
 		std::stringstream ss;
 		for (auto chr : str)
 		{
-			if (chr != '\n' && chr != ' ' && chr != '\r' && chr != '\t' && chr != ':')
+			if (!(std::find(remove.begin(), remove.end(), chr) != remove.end()))
 			{
 				ss << chr;
 			}

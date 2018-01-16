@@ -26,12 +26,7 @@ namespace Ablaze
 
 	UniformManager& UniformManager::operator=(const UniformManager& other)
 	{
-		for (int i = m_Uniforms.size() - 1; i >= 0; i--)
-		{
-			UniformInfo& info = m_Uniforms[i];
-			delete info.uniform;
-			m_Uniforms.erase(m_Uniforms.begin() + i);
-		}
+		Clear();
 		for (const auto& uniform : other.m_Uniforms)
 		{
 			AddUniform(uniform.uniform->Clone(), uniform.mode);
@@ -58,7 +53,7 @@ namespace Ablaze
 	{
 		m_Uniforms.push_back({ uniform, mode });
 	}
-
+	
 	void UniformManager::RemoveUniform(int index) const
 	{
 		Internal::Uniform* ptr = m_Uniforms[index].uniform;
@@ -77,6 +72,14 @@ namespace Ablaze
 			}
 		}
 		AB_WARN("Unable to find uniform with UniformLocation: " + uniformLocation);
+	}
+
+	void UniformManager::Clear()
+	{
+		for (int i = m_Uniforms.size() - 1; i >= 0; i--)
+		{
+			RemoveUniform(i);
+		}
 	}
 
 	Internal::Uniform* UniformManager::Get(const String& uniformLocation) const
@@ -99,20 +102,13 @@ namespace Ablaze
 
 	void UniformManager::UploadAll(Shader* shader) const
 	{
-		std::vector<int> remove;
-		int count = 0;
-		for (UniformInfo& info : m_Uniforms)
+		for (int i = (int)m_Uniforms.size() - 1; i >= 0; i--)
 		{
-			info.uniform->Upload(shader);
-			if (info.mode == UniformUploadMode::Once)
+			m_Uniforms[i].uniform->Upload(shader);
+			if (m_Uniforms[i].mode == UniformUploadMode::Once)
 			{
-				remove.push_back(count);
+				RemoveUniform(i);
 			}
-			count++;
-		}
-		for (int i = remove.size() - 1; i >= 0; i--)
-		{
-			RemoveUniform(i);
 		}
 	}
 

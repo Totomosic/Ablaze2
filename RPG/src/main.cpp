@@ -49,8 +49,6 @@ namespace Game
 			main.GetNamedGameObject("PlayerOrientation").AddComponent(new Follow(&main.GetNamedGameObject("Player"), 100));
 			main.GetActiveCamera().MakeChildOf(&main.GetNamedGameObject("PlayerOrientation"));
 
-			main.GetNamedGameObject("Player").transform().LocalRotation() = Quaternion::LookAt(Vector3f::Forward(), Vector3f::Up());
-
 			Layer& ui = scene.CreateLayer("UI");
 			scene.SetCurrentLayer("UI");
 
