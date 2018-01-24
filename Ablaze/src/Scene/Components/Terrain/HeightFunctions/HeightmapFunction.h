@@ -7,9 +7,7 @@ namespace Ablaze
 	struct AB_API HeightmapFunction : public Heightfunction
 	{
 	private:
-		uint m_Width;
-		uint m_Height;
-		byte* m_Image;
+		Image m_Image;
 
 		float m_MinHeight;
 		float m_MaxHeight;

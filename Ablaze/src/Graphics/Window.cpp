@@ -93,13 +93,13 @@ namespace Ablaze
 
 	void Window::SetWidth(int width)
 	{
-		m_Framebuffer.SetWidth(width);
+		m_Framebuffer.GetViewport().SetWidth(width);
 		glfwSetWindowSize(m_WindowPtr, Width(), Height());
 	}
 
 	void Window::SetHeight(int height)
 	{
-		m_Framebuffer.SetHeight(height);
+		m_Framebuffer.GetViewport().SetHeight(height);
 		glfwSetWindowSize(m_WindowPtr, Width(), Height());
 	}
 
@@ -116,16 +116,13 @@ namespace Ablaze
 
 	void Window::SetIcon(const String& filename)
 	{
-		uint width;
-		uint height;
-		int comp;
-		byte* pixelData = LoadImageFile(filename, &width, &height, &comp, false);
+		Image result = LoadImageFile(filename, false);
 		GLFWimage image;
-		image.width = width;
-		image.height = height;
-		image.pixels = pixelData;
+		image.width = result.Width;
+		image.height = result.Height;
+		image.pixels = result.Pixels;
 		glfwSetWindowIcon(m_WindowPtr, 1, &image);
-		FreeImageData(pixelData);
+		FreeImageData(result);
 	}
 
 	String Window::ToString() const

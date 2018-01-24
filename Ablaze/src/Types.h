@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include <array>
 #include <map>
 #include <unordered_map>
 #include <deque>
@@ -15,6 +16,7 @@
 #include <thread>
 #include <stdio.h>
 #include <direct.h>
+#include <limits>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

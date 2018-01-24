@@ -187,10 +187,10 @@
     <ClInclude Include="src\Resources\Textures\Fonts\Font.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\FontFace.h" />
     <ClInclude Include="src\Resources\Textures\Fonts\__Fonts__.h" />
+    <ClInclude Include="src\Resources\Textures\TextureAtlas.h" />
     <ClInclude Include="src\Scene\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="src\Scene\Components\Colliders\__Colliders__.h" />
     <ClInclude Include="src\Resources\Meshes\Shapes.h" />
-    <ClInclude Include="src\Resources\Textures\TextureManager.h" />
     <ClInclude Include="src\Scene\Components\Camera.h" />
     <ClInclude Include="src\Scene\Components\Component.h" />
     <ClInclude Include="src\Scene\ComponentSet.h" />
@@ -334,6 +334,7 @@
     <ClInclude Include="src\Utils\FileSystem\JSON\__JSON__.h" />
     <ClInclude Include="src\Utils\structs\Color.h" />
     <ClInclude Include="src\Utils\structs\ColorFormattedString.h" />
+    <ClInclude Include="src\Utils\structs\Image.h" />
     <ClInclude Include="src\Utils\structs\Singleton.h" />
     <ClInclude Include="src\Utils\structs\String.h" />
     <ClInclude Include="src\Utils\structs\Vertex.h" />
@@ -375,9 +376,9 @@
     <ClCompile Include="src\Resources\Shaders\Uniforms\Uniform.cpp" />
     <ClCompile Include="src\Resources\Shaders\Uniforms\UniformManager.cpp" />
     <ClCompile Include="src\Resources\Textures\Fonts\Font.cpp" />
+    <ClCompile Include="src\Resources\Textures\TextureAtlas.cpp" />
     <ClCompile Include="src\Scene\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="src\Resources\Meshes\Shapes.cpp" />
-    <ClCompile Include="src\Resources\Textures\TextureManager.cpp" />
     <ClCompile Include="src\Scene\Components\Camera.cpp" />
     <ClCompile Include="src\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Scene\ComponentSet.cpp" />

@@ -78,7 +78,7 @@ namespace Ablaze
 	{
 		for (int i = 0; i < TextureCount(); i++)
 		{
-			shader->SetTexture(m_Lookup.at(i), m_Textures[i]);
+			shader->SetTexture(m_Lookup.at(i), m_Textures[i], i);
 		}
 	}
 

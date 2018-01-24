@@ -103,8 +103,15 @@ namespace Ablaze
 
 	void GameObject::SetParent(GameObject* parent)
 	{
+		if (parent == nullptr && m_Parent != nullptr)
+		{
+			m_Parent->RemoveChild(this);
+		}
 		m_Parent = parent;
-		parent->AddChild(this);
+		if (parent != nullptr)
+		{
+			parent->AddChild(this);
+		}
 	}
 
 	void GameObject::MakeChildOf(GameObject* parent)
@@ -301,6 +308,11 @@ namespace Ablaze
 			}
 		}
 		return nullptr;
+	}
+
+	GameObject* GameObject::FindWithTag(const String& tag)
+	{
+		return FindWithTag(tag, LayerMask());
 	}
 
 }

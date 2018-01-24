@@ -92,39 +92,23 @@ namespace Ablaze
 		return s;
 	}
 
-	byte* LoadImageFile(const Filepath& filename, uint* outWidth, uint* outHeight, int* outCompCount, int desiredCompCount, bool flipImage)
+	Image LoadImageFile(const Filepath& filename, int desiredComponents, bool flipImage)
 	{
 		AB_ASSERT(filename.Exists(), "File: " + filename.Path() + " could not be found");
-
-		int width;
-		int height;
-		int comp;
+		Image result;
 		stbi_set_flip_vertically_on_load(flipImage);
-		byte* data = stbi_load(filename.Path().c_str(), &width, &height, &comp, desiredCompCount);
-		if (outWidth) *outWidth = (uint)width;
-		if (outHeight) *outHeight = (uint)height;
-		if (outCompCount) *outCompCount = comp;
-		return data;
+		result.Pixels = stbi_load(filename.Path().c_str(), &result.Width, &result.Height, &result.Components, desiredComponents);
+		return result;
 	}
 
-	byte* LoadImageFile(const Filepath& filename, uint* outWidth, uint* outHeight, int desiredCompCount, bool flipImage)
+	Image LoadImageFile(const Filepath& filename, bool flipImage)
 	{
-		return LoadImageFile(filename, outWidth, outHeight, nullptr, desiredCompCount, flipImage);
+		return LoadImageFile(filename, 4, flipImage);
 	}
 
-	byte* LoadImageFile(const Filepath& filename, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage)
+	void FreeImageData(Image& imageData)
 	{
-		return LoadImageFile(filename, outWidth, outHeight, outCompCount, 4, flipImage);
-	}
-
-	byte* LoadImageFile(const Filepath& filename, uint* outWidth, uint* outHeight, bool flipImage)
-	{
-		return LoadImageFile(filename, outWidth, outHeight, nullptr, flipImage);
-	}
-
-	void FreeImageData(byte* imageData)
-	{
-		stbi_image_free(imageData);
+		stbi_image_free(imageData.Pixels);
 	}
 
 }

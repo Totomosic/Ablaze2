@@ -1,24 +1,22 @@
 #include "Texture.h"
-#include "TextureManager.h"
 
 namespace Ablaze
 {
 
 	Texture::Texture(TextureTarget target) : Asset(), GLObject(),
-		m_Target(target), m_Mipmap(MipmapMode::Disabled), m_BindPort(-1)
+		m_Target(target), m_Mipmap(MipmapMode::Disabled)
 	{
 		Create();
 	}
 
-	Texture::Texture(uint width, uint height, TextureTarget target, ImageFormat format) : Asset(), GLObject(),
-		m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmap(MipmapMode::Disabled), m_BindPort(-1)
+	Texture::Texture(uint width, uint height, TextureTarget target) : Asset(), GLObject(),
+		m_Width(width), m_Height(height), m_Target(target), m_Mipmap(MipmapMode::Disabled)
 	{
 		Create();
 	}
 
 	Texture::~Texture()
 	{
-		TextureManager::Instance().Delete(m_BindPort);
 		glDeleteTextures(1, &m_Id);
 	}
 
@@ -37,36 +35,21 @@ namespace Ablaze
 		return (float)GetWidth() / GetHeight();
 	}
 
-	ImageFormat Texture::GetFormat() const
-	{
-		return m_Format;
-	}
-
 	TextureTarget Texture::GetTarget() const
 	{
 		return m_Target;
 	}
 
-	int Texture::GetBindPort() const
-	{
-		return m_BindPort;
-	}
-
 	void Texture::GenerateMipmaps()
 	{
 		m_Mipmap = MipmapMode::Enabled;
-		Bind();
+		Bind(0);
 		GL_CALL(glGenerateMipmap((GLenum)m_Target));
 	}
 
 	void Texture::Create()
 	{
 		GL_CALL(glGenTextures(1, &m_Id));
-	}
-
-	void Texture::SetBindPort(int port)
-	{
-		m_BindPort = port;
 	}
 
 }

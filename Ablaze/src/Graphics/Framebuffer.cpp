@@ -55,6 +55,11 @@ namespace Ablaze
 		return m_Viewport;
 	}
 
+	Viewport& Framebuffer::GetViewport()
+	{
+		return m_Viewport;
+	}
+
 	void Framebuffer::Clear(ClearBuffer buffer) const
 	{
 		Bind();
@@ -76,16 +81,6 @@ namespace Ablaze
 	void Framebuffer::SetClearColor(const Color& clearColor)
 	{
 		m_ClearColor = clearColor;
-	}
-
-	void Framebuffer::SetWidth(int width)
-	{
-		m_Viewport.SetWidth(width);
-	}
-
-	void Framebuffer::SetHeight(int height)
-	{
-		m_Viewport.SetHeight(height);
 	}
 
 	Texture2D* Framebuffer::GetTexture(ColorBuffer buffer) const
@@ -119,7 +114,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateColorTextureAttachment(ColorBuffer buffer)
 	{
-		CreateColorTextureAttachment(new Texture2D(Width(), Height(), ImageFormat::Rgba, MipmapMode::Disabled), buffer);
+		CreateColorTextureAttachment(new Texture2D(Width(), Height(), MipmapMode::Disabled), buffer);
 	}
 
 	void Framebuffer::CreateDepthTextureAttachment(Texture2D* texture)
@@ -136,7 +131,7 @@ namespace Ablaze
 
 	void Framebuffer::CreateDepthTextureAttachment()
 	{
-		CreateDepthTextureAttachment(new Texture2D(Width(), Height(), ImageFormat::Rgba, MipmapMode::Disabled));
+		CreateDepthTextureAttachment(new Texture2D(Width(), Height(), MipmapMode::Disabled));
 	}
 
 	String Framebuffer::ToString() const

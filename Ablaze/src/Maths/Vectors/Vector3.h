@@ -317,6 +317,31 @@ namespace Ablaze
 				v = v.Normalize();	
 				*tangent = Cross(v, *normal);	
 			}	
+
+			static Vector3<T> SmoothDamp(const Vector3<T>& current, const Vector3<T>& end, Vector3<T>* currentVelocity, T smoothTime, T deltaTime, T maxSpeed = std::numeric_limits<T>::infinity())
+			{
+				smoothTime = max((T)0.0001, smoothTime);
+				float num = 2.0f / smoothTime;
+				float num2 = num * deltaTime;
+				float d = 1.0f / (1.0f + num2 + 0.48f * num2 * num2 + 0.235f * num2 * num2 * num2);
+				Vector3<T> vector = current - end;
+				Vector3<T> vector2 = end;
+				float maxLength = maxSpeed * smoothTime;
+				if (vector.Length() > maxSpeed)
+				{
+					vector = vector.Normalize() * maxSpeed;
+				}
+				Vector3<T> target = current - vector;
+				Vector3<T> vector3 = (*currentVelocity + num * vector) * deltaTime;
+				*currentVelocity = (*currentVelocity - num * vector3) * d;
+				Vector3<T> vector4 = target + (vector + vector3) * d;
+				if ((vector2 - current).Dot(vector4 - vector2) > 0.0f)
+				{
+					vector4 = vector2;
+					*currentVelocity = (vector4 - vector2) / deltaTime;
+				}
+				return vector4;
+			}
 						
 			static Vector3<T> Right()
 			{	

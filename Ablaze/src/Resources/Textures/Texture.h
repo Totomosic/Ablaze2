@@ -55,13 +55,11 @@ namespace Ablaze
 		uint m_Width;
 		uint m_Height;
 		TextureTarget m_Target;
-		ImageFormat m_Format;
 		MipmapMode m_Mipmap;
-		mutable int m_BindPort;
 
 	public:
 		Texture(TextureTarget target);
-		Texture(uint width, uint height, TextureTarget target, ImageFormat format);
+		Texture(uint width, uint height, TextureTarget target);
 		~Texture() override;
 
 	public:
@@ -69,8 +67,8 @@ namespace Ablaze
 		uint GetHeight() const;
 		float GetAspect() const;
 		TextureTarget GetTarget() const;
-		ImageFormat GetFormat() const;
-		int GetBindPort() const;
+
+		virtual void Bind(int bindPort) const = 0;
 
 		virtual void GenerateMipmaps();
 		virtual void SetMinFilter(MinFilter filter) const = 0;
@@ -78,11 +76,9 @@ namespace Ablaze
 		virtual void SetWrapMode(WrapMode mode) const = 0;
 
 		friend class ResourceManager;
-		friend class TextureManager;
 
 	private:
 		void Create();
-		void SetBindPort(int port);
 		virtual void Populate(byte* pixelData) = 0;
 
 	};

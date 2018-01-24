@@ -1,17 +1,17 @@
 #include "Texture2D.h"
-#include "TextureManager.h"
 
 namespace Ablaze
 {
 
-	Texture2D::Texture2D(const Filepath& filepath, MipmapMode mm) : Texture(TextureTarget::Texture2D)
+	Texture2D::Texture2D(const Filepath& filepath, MipmapMode mm) : Texture(TextureTarget::Texture2D),
+		Pixels(nullptr)
 	{
 		AB_ASSERT(filepath.Exists(), "File: " + filepath.Path() + " was not found");
 
-		m_Format = ImageFormat::Rgba;
-
-		byte* imageData = LoadImageFile(filepath, &m_Width, &m_Height);
-		Populate(imageData);
+		Image imageData = LoadImageFile(filepath);
+		m_Width = (uint)imageData.Width;
+		m_Height = (uint)imageData.Height;
+		Populate(imageData.Pixels);
 		FreeImageData(imageData);
 
 		if (mm == MipmapMode::Enabled)
@@ -21,9 +21,16 @@ namespace Ablaze
 		}
 	}
 
-	Texture2D::Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm) : Texture(width, height, TextureTarget::Texture2D, format)
+	Texture2D::Texture2D(uint width, uint height, MipmapMode mm) : Texture(width, height, TextureTarget::Texture2D),
+		Pixels(nullptr)
 	{
-	
+		Bind();
+		Populate((byte*)Pixels); 
+		if (mm == MipmapMode::Enabled)
+		{
+			GenerateMipmaps();
+			SetMinFilter(MinFilter::Linear);
+		}
 	}
 
 	byte* Texture2D::GetImage(int mipmap) const
@@ -76,24 +83,53 @@ namespace Ablaze
 
 	int Texture2D::GetMipmapCount() const
 	{
-		int count = 1;
-		int max = max(m_Width, m_Height);
-		while (max > 1)
+		if (m_Mipmap == MipmapMode::Disabled)
 		{
-			max /= 2;
-			count += 1;
+			return 1;
 		}
-		return count;
+		return log2(max(m_Width, m_Height));
 	}
 
 	void Texture2D::Bind() const
 	{
-		TextureManager::Instance().Bind(this);
+		GL_CALL(glActiveTexture(GL_TEXTURE0));
+		GL_CALL(glBindTexture((GLenum)m_Target, m_Id));
 	}
 	
 	void Texture2D::Unbind() const
 	{
 		// Does nothing
+	}
+
+	void Texture2D::Bind(int bindPort) const
+	{
+		GL_CALL(glActiveTexture(GL_TEXTURE0 + bindPort));
+		GL_CALL(glBindTexture((GLenum)m_Target, m_Id));
+	}
+
+	void Texture2D::LoadPixels()
+	{
+		if (Pixels != nullptr)
+		{
+			delete[] Pixels;
+		}
+		Pixels = new Color[m_Width * m_Height];
+		Bind();
+		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_FLOAT, Pixels));
+	}
+
+	void Texture2D::UpdatePixels()
+	{
+		Bind();
+		GL_CALL(glTexSubImage2D((GLenum)m_Target, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_FLOAT, Pixels));
+		for (int i = 1; i < GetMipmapCount(); i++)
+		{
+			float* pixelData = Compress<float>((float*)Pixels, m_Width, m_Height, i);
+			GL_CALL(glTexSubImage2D((GLenum)m_Target, i, 0, 0, m_Width / pow(2, i), m_Height / pow(2, i), GL_RGBA, GL_FLOAT, pixelData));
+			delete[] pixelData;
+		}
+		delete[] Pixels;
+		Pixels = nullptr;
 	}
 
 	void Texture2D::GenerateMipmaps()
@@ -229,14 +265,11 @@ namespace Ablaze
 
 	void Texture2D::Populate(byte* pixelData)
 	{
-		if (m_Format == ImageFormat::Rgba)
-		{
-			Bind();
-			SetMinFilter(MinFilter::Linear);
-			SetMagFilter(MagFilter::Linear);
-			GL_CALL(glTexImage2D((GLenum)m_Target, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData));
-			Unbind();
-		}
+		Bind();
+		SetMinFilter(MinFilter::Linear);
+		SetMagFilter(MagFilter::Linear);
+		GL_CALL(glTexImage2D((GLenum)m_Target, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData));
+		Unbind();
 	}
 
 }

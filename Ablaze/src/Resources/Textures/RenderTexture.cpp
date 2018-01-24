@@ -4,7 +4,7 @@
 namespace Ablaze
 {
 
-	RenderTexture::RenderTexture(int width, int height, const LayerMask& layers, GameObject* camera, CreateMode mode, ColorBuffer buffer) : Texture2D(width, height, ImageFormat::Rgba, MipmapMode::Enabled),
+	RenderTexture::RenderTexture(int width, int height, const LayerMask& layers, GameObject* camera, CreateMode mode, ColorBuffer buffer) : Texture2D(width, height, MipmapMode::Disabled),
 		m_Layers(layers), m_Camera(camera), m_Mode(mode), m_Framebuffer(Framebuffer(width, height, false))
 	{
 		if (buffer == ColorBuffer::Depth)

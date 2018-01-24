@@ -3,7 +3,7 @@
 namespace Ablaze
 {
 
-	Font::Font(const Filepath& filepath, float size) : Texture2D(512, 512, ImageFormat::Red, MipmapMode::Disabled),
+	Font::Font(const Filepath& filepath, float size) : Texture2D(512, 512, MipmapMode::Disabled),
 		m_Size(size), m_FontFace({ filepath })
 	{
 		AB_ASSERT(filepath.Exists(), "File: " + filepath.Path() + " was not found");

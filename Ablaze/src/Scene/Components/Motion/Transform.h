@@ -54,6 +54,8 @@ namespace Ablaze
 		void Rotate(float angle, const Maths::Vector3f& axis, Space space = Space::World, Angle angleType = Angle::Radians);
 		void Rotate(const Maths::Quaternion& quaternion);
 
+		void Reset();
+
 		Maths::Matrix4f ToMatrix() const;
 		String ToString() const override;
 

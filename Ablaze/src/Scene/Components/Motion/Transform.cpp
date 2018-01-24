@@ -161,6 +161,13 @@ namespace Ablaze
 		m_Rotation *= quaternion;
 	}
 
+	void Transform::Reset()
+	{
+		m_Rotation = Maths::Quaternion::Identity();
+		m_Position = Maths::Vector3f(0, 0, 0);
+		m_Scale = Maths::Vector3f(1, 1, 1);
+	}
+
 	Maths::Matrix4f Transform::ToMatrix() const
 	{
 		if (m_GameObject == nullptr || !m_GameObject->HasParent() || !m_GameObject->Parent()->HasComponent<Transform>())

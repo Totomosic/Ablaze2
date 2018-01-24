@@ -55,14 +55,13 @@ namespace Ablaze
 		int Height() const;
 		float GetAspect() const;
 		const Viewport& GetViewport() const;
+		Viewport& GetViewport();
 
 		void Clear(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth) const;
 		void Bind() const override;
 		void Unbind() const override;
 
 		void SetClearColor(const Color& clearColor);
-		void SetWidth(int width);
-		void SetHeight(int height);
 
 		Texture2D* GetTexture(ColorBuffer buffer) const;
 

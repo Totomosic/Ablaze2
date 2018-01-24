@@ -48,10 +48,10 @@ namespace Ablaze
 		void SetUniform(const String& uniformName, const Color& value) const;
 
 		template<typename T>
-		void SetTexture(const String& samplerName, T* texture)
+		void SetTexture(const String& samplerName, T* texture, int bindPort)
 		{
-			texture->Bind();
-			SetUniform(samplerName, (int)texture->GetBindPort());
+			texture->Bind(bindPort);
+			SetUniform(samplerName, bindPort);
 		}
 
 		String ToString() const override;

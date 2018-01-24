@@ -1,6 +1,7 @@
 #pragma once
 #include "Maths\__Maths__.h"
 #include "Object.h"
+#include "structs\Image.h"
 
 namespace Ablaze
 {
@@ -22,10 +23,8 @@ namespace Ablaze
 	String CleanString(const String& str, const std::vector<char>& remove);
 
 	// Image loading
-	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, int desiredComponents, bool flipImage = true);
-	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int desiredComponents, bool flipImage = true);
-	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, int* outCompCount, bool flipImage = true);
-	byte* LoadImageFile(const Filepath& imageFile, uint* outWidth, uint* outHeight, bool flipImage = true);
-	void FreeImageData(byte* imageData);
+	Image LoadImageFile(const Filepath& imageFile, int desiredComponents, bool flipImage = true);
+	Image LoadImageFile(const Filepath& imageFile, bool flipImage = true);
+	void FreeImageData(Image& imageData);
 
 }

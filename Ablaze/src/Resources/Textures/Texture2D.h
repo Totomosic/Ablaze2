@@ -13,8 +13,11 @@ namespace Ablaze
 		mutable WrapMode m_WrapMode;
 
 	public:
-		Texture2D(const Filepath& filepath, MipmapMode mm);
-		Texture2D(uint width, uint height, ImageFormat format, MipmapMode mm);
+		Color* Pixels;
+
+	public:
+		Texture2D(const Filepath& filepath, MipmapMode mm = MipmapMode::Enabled);
+		Texture2D(uint width, uint height, MipmapMode mm = MipmapMode::Enabled);
 
 	public:
 		byte* GetImage(int mipmap = 0) const;
@@ -24,6 +27,10 @@ namespace Ablaze
 
 		void Bind() const override;
 		void Unbind() const override;
+		void Bind(int bindPort) const override;
+
+		void LoadPixels();
+		void UpdatePixels();
 
 		void GenerateMipmaps() override;
 
@@ -42,6 +49,44 @@ namespace Ablaze
 
 	private:
 		void Populate(byte* pixelData) override;
+
+		template<typename T>
+		T* Compress(T* pixelData, int width, int height, int compressions = 1, MinFilter filter = MinFilter::Nearest) const
+		{
+			if (filter == MinFilter::Nearest)
+			{
+				return CompressNearest<T>(pixelData, width, height, compressions);
+			}
+			return CompressLinear<T>(pixelData, width, height, compressions);
+		}
+
+		template<typename T>
+		T* CompressNearest(T* pixelData, int width, int height, int compressions) const
+		{
+			int indexMultiplier = pow(2, compressions);
+			int newWidth = width / indexMultiplier;
+			int newHeight = height / indexMultiplier;
+			T* newData = new T[newWidth * newHeight * 4];
+			for (int x = 0; x < newWidth; x++)
+			{
+				for (int y = 0; y < newHeight; y++)
+				{
+					int index = x + y * newWidth;
+					int secondIndex = x * indexMultiplier + y * indexMultiplier * newWidth;
+					newData[index * 4 + 0] = pixelData[secondIndex * 4 + 0];
+					newData[index * 4 + 1] = pixelData[secondIndex * 4 + 1];
+					newData[index * 4 + 2] = pixelData[secondIndex * 4 + 2];
+					newData[index * 4 + 3] = pixelData[secondIndex * 4 + 3];
+				}
+			}
+			return newData;
+		}
+
+		template<typename T>
+		T* CompressLinear(T* pixelData, int width, int height, int compressions) const
+		{
+			return pixelData;
+		}
 
 	};
 

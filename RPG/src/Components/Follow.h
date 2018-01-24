@@ -9,6 +9,7 @@ namespace Game
 	private:
 		GameObject* m_Target;
 		float m_Speed;
+		Vector3f m_Velocity;
 
 	public:
 		Follow(GameObject* target, float speed);

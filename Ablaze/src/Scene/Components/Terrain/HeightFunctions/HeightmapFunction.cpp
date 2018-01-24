@@ -7,7 +7,7 @@ namespace Ablaze
 		m_MinHeight(minHeight), m_MaxHeight(maxHeight)
 	{
 		int comp;
-		m_Image = LoadImageFile(heightmap, &m_Width, &m_Height, &comp, false);
+		m_Image = LoadImageFile(heightmap, false);
 	}
 
 	HeightmapFunction::~HeightmapFunction()
@@ -23,7 +23,7 @@ namespace Ablaze
 		{
 			for (int j = x; j < x + width; j++)
 			{
-				float brightness = (m_Image[(j + i * m_Width) * 4 + 0] + m_Image[(j + i * m_Width) * 4 + 1] + m_Image[(j + i * m_Width) * 4 + 2]) / (3 * 255.0f);
+				float brightness = (m_Image.Pixels[(j + i * m_Image.Width) * 4 + 0] + m_Image.Pixels[(j + i * m_Image.Width) * 4 + 1] + m_Image.Pixels[(j + i * m_Image.Width) * 4 + 2]) / (3 * 255.0f);
 				float height = Map(brightness, 0, 1, m_MinHeight, m_MaxHeight);
 				data[index] = height;
 				index++;

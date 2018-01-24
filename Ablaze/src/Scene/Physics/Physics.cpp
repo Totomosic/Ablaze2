@@ -19,7 +19,9 @@ namespace Ablaze
 			{
 				if (object->HasComponent<Transform>() && object->HasComponent<BoxCollider>())
 				{
-					RaycastHit thisHit = IndividualRaycast(ray, object->GetComponent<BoxCollider>().Box(), object->transform().Position());
+					OBB box = object->GetComponent<BoxCollider>().Box();
+					box.Orientation = object->transform().Rotation();
+					RaycastHit thisHit = IndividualRaycast(ray, box, object->transform().Position());
 					if (thisHit.DidHit)
 					{
 						hits.push_back({ object, thisHit.HitLocations[0] });

@@ -148,7 +148,7 @@ namespace Ablaze
 	{
 		float h = hue * 360;
 		float c = brightness * saturation;
-		float x = c * (1 - abs(((int)h / 60) % 2 - 1));
+		float x = c * (1 - abs((int)(h / 60) % 2 - 1));
 		float m = brightness - c;
 
 		float rd = 0;
