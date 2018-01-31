@@ -24,6 +24,8 @@ namespace Ablaze
 
 		Component* GetComponent(const std::type_index& type) const;
 		bool HasComponent(const std::type_index& type) const;
+		void RemoveComponent(Component* component, float delay = 0.0f);
+		void RemoveComponent(const std::type_index& type, float delay = 0.0f);
 
 		template<typename T>
 		T* GetComponent() const
@@ -43,6 +45,12 @@ namespace Ablaze
 			AddComponent(typeid(*component), component);
 		}
 
+		template<typename T>
+		void RemoveComponent(float delay = 0.0f)
+		{
+			RemoveComponent(typeid(T), delay);
+		}
+
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
 
@@ -51,6 +59,7 @@ namespace Ablaze
 	private:
 		void AddComponent(const std::type_index& type, Component* component);
 		bool HasComponentType(const std::type_index& type) const;
+		void DeleteComponent(Component* component);
 
 	};
 

@@ -75,11 +75,10 @@ namespace Ablaze
 		Maths::Vector4f ndc;
 		ndc.x = (2.0f * (screenPoint.x - Graphics::CurrentContext().Width() / 2.0f)) / Graphics::CurrentContext().Width();
 		ndc.y = (2.0f * (screenPoint.y - Graphics::CurrentContext().Height() / 2.0f)) / Graphics::CurrentContext().Height();
-		ndc.z = -1.0f;
+		ndc.z = 1.0f;
 		ndc.w = 1.0f;
 		Maths::Vector4f viewPoint = ProjectionMatrix().Inverse() * ndc;
 		Maths::Vector4f direction = ViewMatrix().Inverse() * viewPoint;
-		direction.z *= -1;
 		return Maths::Ray(origin, direction.xyz());
 	}
 

@@ -55,7 +55,9 @@ namespace Ablaze
 	{
 		glfwSetTime(0.0);
 		s_TotalSeconds = 0;
+		s_TotalRealSeconds = 0;
 		s_LastSeconds = 0;
+		s_LastRealSeconds = 0;
 		s_ElapsedSeconds = 0;
 		s_AvgTimer = 0;
 		s_AvgFps = 60;

@@ -57,6 +57,27 @@ namespace Ablaze
 		return HasComponentType(type);
 	}
 
+	void ComponentSet::RemoveComponent(Component* component, float delay)
+	{
+		for (auto& pair : m_Components)
+		{
+			if (pair.second == component)
+			{
+				m_GameObject->DestroyComponent(component, delay);
+				return;
+			}
+		}
+		AB_ASSERT(false, "GameObject did not have this component");
+	}
+
+	void ComponentSet::RemoveComponent(const std::type_index& component, float delay)
+	{
+		AB_ASSERT(HasComponent(component), "GameObject does not have a component of type: " + String(component.name()));
+		Component* c = m_Components[component];
+		c->Disable();
+		m_GameObject->DestroyComponent(c, delay);
+	}
+
 	String ComponentSet::ToString() const
 	{
 		return "ComponentSet";
@@ -81,6 +102,19 @@ namespace Ablaze
 	bool ComponentSet::HasComponentType(const std::type_index& type) const
 	{
 		return m_Components.find(type) != m_Components.end();
+	}
+
+	void ComponentSet::DeleteComponent(Component* component)
+	{
+		for (auto& pair : m_Components)
+		{
+			if (pair.second == component)
+			{
+				m_Components.erase(pair.first);
+				delete component;
+				return;
+			}
+		}
 	}
 
 }

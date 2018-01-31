@@ -1,6 +1,7 @@
 #include "AblazeInclude.h"
 
 #include "Components\__Components__.h"
+#include "GameManager.h"
 
 namespace Presidents
 {
@@ -8,11 +9,12 @@ namespace Presidents
 	class Game : public Application
 	{
 	public:
+		GameManager Manager;
 
 	public:
 		void Init() override
 		{
-			Window* window = new Window(1280, 720, "Presidents");
+			Window* window = new Window(1280, 720, "Presidents", Color(10, 108, 3));
 			Graphics::Initialise(window);
 
 			LoadCardTextures();
@@ -21,13 +23,28 @@ namespace Presidents
 			Layer& gameBoard = scene.CreateLayer("GameBoard");
 			scene.SetCurrentLayer(&gameBoard);
 
-			GameObject* deck = AddToScene(GameObject::Instantiate("Deck", 200, WindowHeight() / 2, 0))
-				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", GetTexture2D("CARD_BACK"))), Matrix4f::Scale(Card::WIDTH, Card::HEIGHT, 1)))
-				->AddComponent<Deck>();
+			Manager.Initialise();
+
+			GameObject* cardMat = AddToScene(GameObject::Instantiate("CardMat", 0, 0, -5))
+				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", GetTexture2D("CARD_MAT"))), Matrix4f::Scale(8, 6, 1)))
+				->AddComponent(new BoxCollider(Vector3f(8, 6, 0)))
+				->AddComponent(new PlayField(RankRules::GreaterThan));
+
+			GameObject* deck = AddToScene(GameObject::Instantiate("Deck", 0, 0, 0))
+				->AddComponent(new Deck(1));
+
+			Manager.AddPlayer(PlayerType::Human);
+			Manager.AddPlayer(PlayerType::Computer);
+			Manager.AddPlayer(PlayerType::Computer);
+			Manager.AddPlayer(PlayerType::Computer);
+
+			Manager.SetCurrentPlayer(0);
 
 			GameObject* camera = AddToScene(GameObject::Instantiate("Camera", 0, 0, 10))
-				->AddComponent(new Camera(Projection::Orthographic));
+				->AddComponent(new Camera(Projection::Perspective));
 			gameBoard.SetActiveCamera(camera);
+
+			Reset();
 
 			GraphicsPipeline g;
 			g.Renderer = new ForwardRenderer;
@@ -39,6 +56,8 @@ namespace Presidents
 		void LoadCardTextures()
 		{
 			SetTexture2D("CARD_BACK", new Texture2D("res/CardBack.jpg"));
+			SetTexture2D("CARD_MAT", new Texture2D("res/BlackMat.png"));
+
 			SetTexture2D("ACE_HEARTS", new Texture2D("res/Cards/ace_of_hearts.png"));
 			SetTexture2D("TWO_HEARTS", new Texture2D("res/Cards/2_of_hearts.png"));
 			SetTexture2D("THREE_HEARTS", new Texture2D("res/Cards/3_of_hearts.png"));
@@ -95,35 +114,112 @@ namespace Presidents
 			SetTexture2D("JOKER_BLACK", new Texture2D("res/Cards/black_joker.png"));
 		}
 
-		GameObject* CreateCard(Card* card)
+		GameObject* CreateCard(Card* card, float depth)
 		{
-			GameObject* newCard = AddToScene(GameObject::Instantiate("PlayingCard", 400, WindowHeight() / 2, 0))
-				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", card->GetTexture())), Matrix4f::Scale(Card::WIDTH, Card::HEIGHT, 1)))
-				->AddComponent(card);
+			Texture2D* texture = card->GetTexture();
+			GameObject* newCard = AddToScene(GameObject::Instantiate("PlayingCard", -8, 0, depth))
+				->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", texture)), Matrix4f::Scale(Card::WIDTH, Card::HEIGHT, 1)))
+				->AddComponent(card)
+				->AddComponent(new BoxCollider(Vector3f(Card::WIDTH, Card::HEIGHT, 0)));
 			return newCard;
 		}
 
 		void Update() override
 		{
-			static float depth = -500;
-			
-			if (Input::MouseButtonPressed(MouseButton::Left))
+			Manager.Update();
+
+			if (Input::KeyPressed(Keycode::R))
 			{
-				GameObject* deck = GameObject::FindWithTag("Deck");
-				if (deck->GetComponent<Deck>().CardCount() > 0)
+				Reset();
+			}
+
+			Graphics::CurrentContext().SetTitle("Presidents " + std::to_string((int)Time::AvgFPS()));
+			GameObject* hand = GameObject::FindWithTag("Hand");
+			Hand& handComp = hand->GetComponent<Hand>();
+			Camera& camera = GameObject::FindWithTag("Camera")->GetComponent<Camera>();
+			Ray r = camera.ScreenToWorldRay(Input::MousePosition());
+			RaycastHit hit = Physics::Raycast(r);
+
+			PlayField& playField = GameObject::FindWithTag("CardMat")->GetComponent<PlayField>();
+
+			if (Input::KeyPressed(Keycode::O))
+			{
+				handComp.Order();
+			}
+			if (Input::KeyPressed(Keycode::P) && Manager.IsThisTurn(&handComp))
+			{
+				Manager.Pass(&handComp);
+			}
+
+			Vector3f mousePosition = camera.ScreenToWorldPoint(Input::MousePosition() + Vector3f(0, 0, 9));
+			if (Manager.CardCount() > 0 && !hit.DidHit && handComp.CardCount() > 0)
+			{
+				int index = handComp.CalcIndex(mousePosition.x);				
+				if (handComp.IsOpen() && (handComp.OpenIndex() != index))
 				{
-					GameObject* card = CreateCard(deck->GetComponent<Deck>().TakeTop());
-					card->transform().LocalPosition().z = depth;
-					depth += 1.0f;
+					handComp.CloseAt();
+				}
+				if (!handComp.IsOpen() && (handComp.OpenIndex() != index))
+				{
+					handComp.OpenAt(index);
+				}
+			}
+			else if (handComp.IsOpen())
+			{
+				handComp.CloseAt();
+			}
+
+			handComp.DehighlightAll();
+			if (hit.DidHit)
+			{				
+				GameObject* object = hit.GameObjects[0];
+				if (Input::MouseButtonPressed(MouseButton::Left))
+				{
+					if (object->HasComponent<Card>())
+					{						
+						if (handComp.ContainsCard(object) && (Manager.CardCount() == 0 || object->GetComponent<Card>().Rank() == Manager.HeldCards()[0]->GetComponent<Card>().Rank()))
+						{
+							handComp.RemoveCard(object);
+							Manager.AddHeldCard(object);
+						}
+					}
+					else if (object->HasComponent<PlayField>() && Manager.IsThisTurn(&handComp))
+					{
+						if (Manager.CardCount() > 0 && playField.CanBeAdded(Manager.HeldCards()))
+						{
+							std::vector<GameObject*> cards = Manager.HeldCards();
+							Manager.RemoveAllHeldCards();
+							playField.PushCards(cards);							
+							Manager.NextPlayer();
+						}
+					}
 				}
 				else
 				{
-					for (GameObject* deleteCard : GameObject::FindAllWithTag("PlayingCard"))
+					if (object->HasComponent<Card>() && handComp.ContainsCard(object))
 					{
-						deleteCard->Destroy();
+						handComp.HighlightCard(object, 1);
 					}
-					deck->GetComponent<Deck>().Reset();
-					deck->GetComponent<Deck>().Shuffle();
+				}
+			}
+			else if (Manager.CardCount() > 0)
+			{
+				if (Input::MouseButtonPressed(0))
+				{
+					std::vector<GameObject*> heldCards = Manager.HeldCards();
+					Manager.RemoveAllHeldCards();
+					int index = (handComp.OpenIndex() < 0) ? 0 : handComp.OpenIndex();
+					for (int i = heldCards.size() - 1; i >= 0; i--)
+					{
+						handComp.AddCard(heldCards[i], index);
+					}
+				}
+				else if (Input::MouseButtonPressed(MouseButton::Right))
+				{
+					int index = (handComp.OpenIndex() < 0) ? 0 : handComp.OpenIndex();
+					GameObject* card = Manager.HeldCards()[0];
+					Manager.RemoveHeldCard(card);
+					handComp.AddCard(card, index);
 				}
 			}
 
@@ -135,6 +231,30 @@ namespace Presidents
 			Graphics::Clear();
 			Graphics::RenderScene();
 			Graphics::Present();
+		}
+
+		void Reset()
+		{
+			GameObject::FindAllWith<PlayField>()[0]->GetComponent<PlayField>().Clear();
+			Manager.RemoveAllHeldCards();
+			for (GameObject* hand : GameObject::FindAllWith<Hand>())
+			{
+				hand->GetComponent<Hand>().ClearAll();
+			}
+
+			GameObject* deck = GameObject::FindWithTag("Deck");
+			deck->GetComponent<Deck>().Reset();
+			deck->GetComponent<Deck>().Shuffle();
+
+			std::vector<Hand*> hands;
+			for (GameObject* c : GameObject::FindAllWith<Hand>())
+			{
+				if (c->Tag() != "Mouse")
+				{
+					hands.push_back(&c->GetComponent<Hand>());
+				}
+			}
+			deck->GetComponent<Deck>().DealTo(hands, 10, 20);
 		}
 
 	};

@@ -3,6 +3,9 @@
 namespace Presidents
 {
 
+	const float Card::WIDTH = 500.0f / 250.0f;
+	const float Card::HEIGHT = 726.0f / 250.0f;
+
 	Card::Card(CardSuit suit, CardRank rank) : Component(),
 		m_Suit(suit), m_Rank(rank)
 	{

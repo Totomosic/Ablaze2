@@ -141,6 +141,7 @@ namespace Ablaze
 				}
 				auto it = std::find(m_GameObjects.begin(), m_GameObjects.end(), object);
 				m_GameObjects.erase(it);
+				object->Clean();
 				delete object;
 			}
 			else
@@ -153,6 +154,10 @@ namespace Ablaze
 		for (GameObjectContainer& c : continues)
 		{
 			m_NeedDelete.push_back(c);
+		}
+		for (GameObject* object : m_GameObjects)
+		{
+			object->Clean();
 		}
 	}
 

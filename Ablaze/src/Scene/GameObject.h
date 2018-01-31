@@ -5,6 +5,7 @@
 namespace Ablaze
 {
 
+	class Component;
 	class Layer;
 	struct LayerMask;
 	class ComponentSet;
@@ -14,6 +15,13 @@ namespace Ablaze
 	// Base class for all Objects in the game
 	class AB_API GameObject : public Object
 	{
+	private:
+		struct AB_API ComponentContainer
+		{
+			Component* Comp;
+			float DeleteTime;
+		};
+
 	protected:
 		ComponentSet* m_Components;
 
@@ -22,6 +30,8 @@ namespace Ablaze
 		std::vector<GameObject*> m_Children;
 		String m_Tag;
 		bool m_IsStatic;
+
+		std::vector<ComponentContainer> m_NeedDelete;
 
 	protected:
 		GameObject();
@@ -82,16 +92,26 @@ namespace Ablaze
 			return AddComponent(new T);
 		}
 
+		template<typename T>
+		void RemoveComponent()
+		{
+			return m_Components->RemoveComponent<T>();
+		}
+
 		String ToString() const override;
 		void Serialize(JSONwriter& writer) const;
 		void Serialize(JSONwriter& writer, const String& parentFile) const;
 
 		friend class Layer;
 		friend class Engine;
+		friend class ComponentSet;
 
 	private:
 		void AddChild(GameObject* object);
 		void RemoveChild(GameObject* object);
+
+		void Clean();
+		void DestroyComponent(Component* component, float deleteTime = 0.0f);
 
 	public:
 		static GameObject* Empty(const String& name);

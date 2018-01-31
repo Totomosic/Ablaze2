@@ -33,8 +33,8 @@ namespace Presidents
 	class Card : public Component
 	{
 	public:
-		static const int WIDTH = 500 / 4;
-		static const int HEIGHT = 726 / 4;
+		static const float WIDTH;
+		static const float HEIGHT;
 
 	private:
 		CardSuit m_Suit;

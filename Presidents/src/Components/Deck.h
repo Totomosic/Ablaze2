@@ -1,6 +1,7 @@
 #pragma once
 #include "AblazeInclude.h"
 #include "Card.h"
+#include "Hand.h"
 
 namespace Presidents
 {
@@ -9,9 +10,10 @@ namespace Presidents
 	{
 	private:
 		std::deque<Card*> m_Cards;
+		int m_DeckCount;
 
 	public:
-		Deck();
+		Deck(int deckCount = 1);
 		~Deck() override;
 
 		void Start() override;
@@ -27,9 +29,13 @@ namespace Presidents
 		
 		void Shuffle();
 		void Reset();
+		void DealTo(const std::vector<Hand*>& hands, int cps, int maxCards = 10000);
 
 		String ToString() const override;
 		Component* Clone() const override;
+
+	private:
+		GameObject* CreateCard(Card* card);
 
 	};
 

@@ -146,8 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\AI.cpp" />
+    <ClCompile Include="src\Components\Animators\AttachToMouse.cpp" />
+    <ClCompile Include="src\Components\Animators\Dealer.cpp" />
+    <ClCompile Include="src\Components\Animators\RotateTo.cpp" />
     <ClCompile Include="src\Components\Card.cpp" />
     <ClCompile Include="src\Components\Deck.cpp" />
+    <ClCompile Include="src\Components\Hand.cpp" />
+    <ClCompile Include="src\Components\Animators\MoveToLocation.cpp" />
+    <ClCompile Include="src\Components\PlayField.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Presidents.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,9 +165,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AblazeInclude.h" />
+    <ClInclude Include="src\Components\AI.h" />
+    <ClInclude Include="src\Components\Animators\AttachToMouse.h" />
+    <ClInclude Include="src\Components\Animators\Dealer.h" />
+    <ClInclude Include="src\Components\Animators\RotateTo.h" />
+    <ClInclude Include="src\Components\Animators\__Animators__.h" />
     <ClInclude Include="src\Components\Card.h" />
     <ClInclude Include="src\Components\Deck.h" />
+    <ClInclude Include="src\Components\Hand.h" />
+    <ClInclude Include="src\Components\Animators\MoveToLocation.h" />
+    <ClInclude Include="src\Components\PlayField.h" />
     <ClInclude Include="src\Components\__Components__.h" />
+    <ClInclude Include="src\GameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

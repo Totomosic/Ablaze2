@@ -3,6 +3,7 @@
 #include "ComponentSet.h"
 #include "Components\__Components__.h"
 #include "LayerMask.h"
+#include "Application\Time.h"
 
 #include "Resources\Meshes\Materials\__Materials__.h"
 
@@ -126,7 +127,11 @@ namespace Ablaze
 
 	void GameObject::Destroy(float delay)
 	{
-		AB_ASSERT(m_Layer, "GameObject had no layer");
+		if (m_Layer == nullptr)
+		{
+			delete this;
+			return;
+		}
 		m_Layer->DestroyGameObject(this, delay);
 	}
 
@@ -191,6 +196,41 @@ namespace Ablaze
 		auto it = std::find(m_Children.begin(), m_Children.end(), object);
 		AB_ASSERT(it != m_Children.end(), "Child did not exist");
 		m_Children.erase(it);
+	}
+
+	void GameObject::Clean()
+	{
+		std::vector<ComponentContainer> continues;
+		for (ComponentContainer& container : m_NeedDelete)
+		{
+			Component* object = container.Comp;
+			if (container.DeleteTime <= 0.0f)
+			{
+				m_Components->DeleteComponent(object);
+			}
+			else
+			{
+				container.DeleteTime -= (float)Time::DeltaTime();
+				continues.push_back(container);
+			}
+		}
+		m_NeedDelete.clear();
+		for (ComponentContainer& c : continues)
+		{
+			m_NeedDelete.push_back(c);
+		}
+	}
+
+	void GameObject::DestroyComponent(Component* component, float deleteTime)
+	{
+		for (ComponentContainer& c : m_NeedDelete)
+		{
+			if (c.Comp == component)
+			{
+				return;
+			}
+		}
+		m_NeedDelete.push_back({ component, deleteTime });
 	}
 
 	GameObject* GameObject::Empty(const String& name)

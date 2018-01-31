@@ -1,9 +1,12 @@
 #include "Deck.h"
+#include "Card.h"
+#include "Animators\Dealer.h"
 
 namespace Presidents
 {
 
-	Deck::Deck() : Component()
+	Deck::Deck(int deckCount) : Component(),
+		m_DeckCount(deckCount)
 	{
 	
 	}
@@ -65,18 +68,40 @@ namespace Presidents
 		{
 			TakeTop();
 		}
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < m_DeckCount; i++)
 		{
-			for (int j = 0; j < 13; j++)
+			for (int i = 0; i < 4; i++)
 			{
-				Card* card = new Card((CardSuit)i, (CardRank)j);
-				AddToTop(card);
+				for (int j = 0; j < 13; j++)
+				{
+					Card* card = new Card((CardSuit)i, (CardRank)j);
+					AddToTop(card);
+				}
 			}
+			Card* j0 = new Card(CardSuit::Clubs, CardRank::Joker);
+			Card* j1 = new Card(CardSuit::Hearts, CardRank::Joker);
+			AddToTop(j0);
+			AddToTop(j1);
 		}
-		Card* j0 = new Card(CardSuit::Clubs, CardRank::Joker);
-		Card* j1 = new Card(CardSuit::Hearts, CardRank::Joker);
-		AddToTop(j0);
-		AddToTop(j1);
+	}
+
+	void Deck::DealTo(const std::vector<Hand*>& hands, int cps, int maxCards)
+	{
+		std::vector<Dealer*> dealers;
+		for (int i = 0; i < hands.size(); i++)
+		{
+			dealers.push_back(new Dealer(cps));
+			hands[i]->Owner()->AddComponent(dealers[i]);
+		}
+		int cardCount = 0;
+		while (cardCount < maxCards && CardCount() > 0)
+		{
+			for (int i = 0; i < hands.size(); i++)
+			{
+				dealers[i]->AddCard(CreateCard(TakeTop()));
+			}
+			cardCount++;
+		}
 	}
 
 	String Deck::ToString() const
@@ -86,8 +111,18 @@ namespace Presidents
 
 	Component* Deck::Clone() const
 	{
-		Deck* deck = new Deck;
+		Deck* deck = new Deck(m_DeckCount);
 		return deck;
+	}
+
+	GameObject* Deck::CreateCard(Card* card)
+	{
+		Texture2D* texture = card->GetTexture();
+		GameObject* newCard = AddToScene(GameObject::Instantiate("PlayingCard", -10000, 0, 0))
+			->AddComponent(new MeshRenderer(new Mesh(ResourceManager::Square(), Material(Color::White(), ResourceManager::DefaultTextureShader(), "Tex0", texture)), Matrix4f::Scale(Card::WIDTH, Card::HEIGHT, 1)))
+			->AddComponent(card)
+			->AddComponent(new BoxCollider(Vector3f(Card::WIDTH, Card::HEIGHT, 0)));
+		return newCard;
 	}
 
 }
