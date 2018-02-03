@@ -10,6 +10,11 @@ namespace Ablaze
 	
 	}
 
+	int RenderQueue::Size() const
+	{
+		return m_Queue.size();
+	}
+
 	void RenderQueue::Enqueue(GameObject* object)
 	{
 		m_Queue.push_back(object);

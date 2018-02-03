@@ -300,6 +300,7 @@
     <ClInclude Include="src\System\Networking\Structs\UDPSocket.h" />
     <ClInclude Include="src\System\Networking\Structs\__Structs__.h" />
     <ClInclude Include="src\System\Networking\__Networking__.h" />
+    <ClInclude Include="src\Utils\FileSystem\Directory.h" />
     <ClInclude Include="src\Utils\Reflection\Reflectable.h" />
     <ClInclude Include="src\Utils\Reflection\ReflectionDefines.h" />
     <ClInclude Include="src\Utils\Reflection\ReflectionEngine.h" />
@@ -448,6 +449,7 @@
     <ClCompile Include="src\System\Streams\MemoryStream.cpp" />
     <ClCompile Include="src\System\Streams\OutputMemoryStream.cpp" />
     <ClCompile Include="src\Utils\Debug\Debugger.cpp" />
+    <ClCompile Include="src\Utils\FileSystem\Directory.cpp" />
     <ClCompile Include="src\Utils\FileSystem\Directorypath.cpp" />
     <ClCompile Include="src\Utils\FileSystem\File.cpp" />
     <ClCompile Include="src\Utils\FileSystem\Filepath.cpp" />

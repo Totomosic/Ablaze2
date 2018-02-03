@@ -26,6 +26,8 @@ namespace Ablaze
 
 		friend DirectoryPath operator+(const DirectoryPath& left, const DirectoryPath& right);
 		DirectoryPath& operator+=(const DirectoryPath& other);
+		bool operator==(const DirectoryPath& other) const;
+		bool operator!=(const DirectoryPath& other) const;
 
 		String ToString() const override;
 		friend std::ostream& operator<<(std::ostream& stream, const DirectoryPath& path);

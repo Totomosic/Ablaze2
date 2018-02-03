@@ -11,7 +11,7 @@ namespace Ablaze
 	class AB_API Filesystem
 	{
 	private:
-		static DirectoryPath s_WorkingDirectory; // Includes trailing backslash
+		static DirectoryPath s_WorkingDirectory;
 
 	public:
 		Filesystem() = delete;

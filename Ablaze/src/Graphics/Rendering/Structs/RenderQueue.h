@@ -22,6 +22,8 @@ namespace Ablaze
 	public:
 		RenderQueue(RenderOrder order = RenderOrder::None);
 
+		int Size() const;
+
 		void Enqueue(GameObject* object);
 		void Sort();
 		GameObject* Next();

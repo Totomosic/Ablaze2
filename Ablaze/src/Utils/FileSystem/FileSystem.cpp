@@ -105,7 +105,7 @@ namespace Ablaze
 	{
 		char buff[FILENAME_MAX];
 		AB_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = DirectoryPath(String(buff) + '\\');
+		s_WorkingDirectory = DirectoryPath(String(buff) + '/');
 	}
 
 }

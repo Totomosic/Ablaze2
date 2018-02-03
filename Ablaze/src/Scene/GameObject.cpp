@@ -35,11 +35,6 @@ namespace Ablaze
 		return m_Parent != nullptr;
 	}
 
-	bool GameObject::HasChild() const
-	{
-		return ChildCount() != 0;
-	}
-
 	const std::vector<GameObject*> GameObject::Children() const
 	{
 		return m_Children;
@@ -54,6 +49,11 @@ namespace Ablaze
 	int GameObject::ChildCount() const
 	{
 		return m_Children.size();
+	}
+
+	bool GameObject::HasChild(GameObject* child) const
+	{
+		return std::find(m_Children.begin(), m_Children.end(), child) != m_Children.end();
 	}
 
 	Layer* GameObject::GetLayer() const
@@ -104,14 +104,14 @@ namespace Ablaze
 
 	void GameObject::SetParent(GameObject* parent)
 	{
-		if (parent == nullptr && m_Parent != nullptr)
+		if (m_Parent != nullptr && m_Parent->HasChild(this))
 		{
 			m_Parent->RemoveChild(this);
 		}
 		m_Parent = parent;
-		if (parent != nullptr)
+		if (m_Parent != nullptr)
 		{
-			parent->AddChild(this);
+			m_Parent->AddChild(this);
 		}
 	}
 

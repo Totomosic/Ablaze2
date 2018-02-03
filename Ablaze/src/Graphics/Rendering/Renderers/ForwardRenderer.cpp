@@ -15,12 +15,13 @@ namespace Ablaze
 		for (GameObject* object : pass.GetGameObjects())
 		{
 			m_RenderQueue.Enqueue(object);
-			m_Commands.Enqueue(new RenderObjectCommand);
 		}
 		m_RenderQueue.Sort();
-		m_Commands.ExecuteAll(*this);
+		while (m_RenderQueue.Size() > 0)
+		{
+			RenderNextGameObject();
+		}
 		m_Method->End();
-		m_Commands.Clear();
 		m_RenderQueue.Clear();
 	}
 

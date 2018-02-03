@@ -43,6 +43,26 @@ namespace Ablaze
 		return DirectoryPath(m_ParentPath);
 	}
 
+	DirectoryPath operator+(const DirectoryPath& left, const DirectoryPath& right)
+	{
+	
+	}
+
+	DirectoryPath& DirectoryPath::operator+=(const DirectoryPath& left)
+	{
+	
+	}
+
+	bool DirectoryPath::operator==(const DirectoryPath& other) const
+	{
+	
+	}
+
+	bool DirectoryPath::operator!=(const DirectoryPath& other) const
+	{
+	
+	}
+
 	String DirectoryPath::ToString() const
 	{
 		return m_Path;

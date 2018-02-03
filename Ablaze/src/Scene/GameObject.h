@@ -40,10 +40,10 @@ namespace Ablaze
 	public:
 		GameObject* Parent() const;
 		bool HasParent() const;
-		bool HasChild() const;
 		const std::vector<GameObject*> Children() const;
 		GameObject* GetChild(int index) const;
 		int ChildCount() const;
+		bool HasChild(GameObject* child) const;
 		Layer* GetLayer() const;
 		const String& Tag() const;
 		bool IsStatic() const;
